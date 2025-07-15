@@ -45,7 +45,6 @@ npm run setup                   # Install all dependencies
 
 ### Legacy/Unused Files
 - `fabric-integration.js` - Original sequential processing (backup only)
-- `fabric-mcp-integration.js` - MCP server approach (abandoned due to reliability issues)
 
 ## Processing Architecture
 
@@ -64,9 +63,8 @@ The application uses a revolutionary approach:
 
 ### Fallback Hierarchy
 1. Transcript-first with fabric CLI (primary)
-2. Legacy MCP approach (rarely used)
-3. Original sequential processing (backup)
-4. Simulation mode (no fabric installation)
+2. Original sequential processing (backup)
+3. Simulation mode (no fabric installation)
 
 ## API Endpoints
 
