@@ -1,10 +1,10 @@
 # YouTube Fabric Processor
 
-A high-performance web application that processes YouTube videos through 13 fabric patterns to extract insights, summaries, and knowledge. Achieves 70-second processing times through revolutionary "transcript-first" architecture.
+A high-performance web application that processes YouTube videos through 13 fabric patterns to extract insights, summaries, and knowledge. Achieves 70-second processing times through "transcript-first" architecture.
 
 ## Features
 
-- **Lightning Fast**: Process 13 fabric patterns in ~70 seconds (vs. hours with traditional methods)
+- **Lightning Fast**: Process 13 fabric patterns in ~70 seconds
 - **Transcript-First Architecture**: Download transcript once, process all patterns in parallel
 - **Real-Time Progress**: WebSocket-powered progress tracking with live updates
 - **Professional Output**: 13 markdown files plus enhanced metadata and ZIP download
@@ -22,7 +22,7 @@ A high-performance web application that processes YouTube videos through 13 fabr
 
 ### 1. Clone and Install
 ```bash
-git clone <repository-url>
+git clone https://github.com/joseph-fajen/youtube-fabric-processor.git
 cd youtube-fabric-processor
 npm install
 ```
@@ -98,14 +98,8 @@ The processing generates 13 text files with professional markdown formatting:
 - **Output**: Enhanced metadata, 13 markdown files, and ZIP download
 - **Management**: Built-in server controls, process monitoring, and cleanup tools
 
-## Performance Breakthrough
+## Performance
 
-### Before Optimization
-- **Time**: 5+ hours (often failed)
-- **Method**: Sequential URL-based processing
-- **Success Rate**: ~0% (patterns failing)
-
-### After Optimization  
 - **Time**: 70 seconds average
 - **Method**: Transcript-first parallel processing
 - **Success Rate**: 100% (13/13 patterns)
