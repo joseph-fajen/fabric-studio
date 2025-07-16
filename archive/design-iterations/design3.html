@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Japanese Gardens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cherry-blossom: #ffc0cb;
+            --bamboo-green: #7ba428;
+            --charcoal: #36454f;
+            --cream: #f5f5dc;
+            --gold: #d4af37;
+            --shadow: rgba(54, 69, 79, 0.3);
+            --gradient-bg: linear-gradient(135deg, #f5f5dc 0%, #e6e6d4 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: var(--gradient-bg);
+            color: var(--charcoal);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Cherry Blossom Animation */
+        .cherry-blossom {
+            position: fixed;
+            top: -10px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .petal {
+            width: 8px;
+            height: 8px;
+            background: var(--cherry-blossom);
+            border-radius: 50% 0 50% 0;
+            animation: fall linear infinite;
+            opacity: 0.7;
+            transform-origin: center;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Bamboo Pattern Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 0%, transparent 95%, var(--bamboo-green) 95%, var(--bamboo-green) 100%),
+                linear-gradient(0deg, transparent 0%, transparent 98%, var(--bamboo-green) 98%, var(--bamboo-green) 100%);
+            background-size: 50px 50px;
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow);
+            border: 2px solid var(--cherry-blossom);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🌸';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            font-size: 3rem;
+            animation: gentle-sway 4s ease-in-out infinite;
+        }
+
+        header::after {
+            content: '🎋';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 3rem;
+            animation: gentle-sway 4s ease-in-out infinite reverse;
+        }
+
+        @keyframes gentle-sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow);
+            position: relative;
+        }
+
+        h1::before {
+            content: '🌸';
+            margin-right: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--bamboo-green);
+            font-style: italic;
+        }
+
+        /* Main Content */
+        main {
+            display: grid;
+            gap: 2rem;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--shadow);
+            border: 1px solid var(--cherry-blossom);
+            position: relative;
+        }
+
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--cherry-blossom) 0%, var(--bamboo-green) 50%, var(--cherry-blossom) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            font-size: 1.1rem;
+        }
+
+        input[type="url"] {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--cherry-blossom);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--cream);
+            transition: all 0.3s ease;
+        }
+
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--bamboo-green);
+            box-shadow: 0 0 0 3px rgba(123, 164, 40, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .process-btn {
+            background: linear-gradient(45deg, var(--bamboo-green), var(--cherry-blossom));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-btn::before {
+            content: '🌸';
+            margin-right: 0.5rem;
+        }
+
+        .process-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .process-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Status Section */
+        .status-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--shadow);
+            border: 1px solid var(--bamboo-green);
+            position: relative;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .status-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--charcoal);
+            font-size: 1.8rem;
+        }
+
+        .status-header h2::before {
+            content: '🎋';
+            margin-right: 0.5rem;
+        }
+
+        .status-badge {
+            background: var(--bamboo-green);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: var(--cream);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--cherry-blossom);
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--bamboo-green), var(--cherry-blossom));
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            margin-top: 0.5rem;
+            text-align: center;
+            color: var(--charcoal);
+            font-weight: 600;
+        }
+
+        /* Current Step */
+        .current-step {
+            background: rgba(255, 192, 203, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--cherry-blossom);
+            margin-bottom: 2rem;
+        }
+
+        .current-step h3 {
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .pattern-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .pattern-name {
+            font-weight: 600;
+            color: var(--bamboo-green);
+        }
+
+        .pattern-description {
+            color: var(--charcoal);
+            font-style: italic;
+        }
+
+        /* Phases Grid */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .phase-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--cherry-blossom);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bamboo-green);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .phase-card h4 {
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .phase-patterns {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .pattern-item {
+            padding: 0.75rem;
+            background: var(--cream);
+            border-radius: 8px;
+            border: 1px solid var(--cherry-blossom);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pattern-item:hover {
+            background: var(--cherry-blossom);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .pattern-item.completed {
+            background: var(--bamboo-green);
+            color: white;
+        }
+
+        .pattern-item.completed::after {
+            content: '🌸';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--shadow);
+            border: 1px solid var(--gold);
+            text-align: center;
+        }
+
+        .results-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--charcoal);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .results-header h2::before {
+            content: '🌸';
+            margin-right: 0.5rem;
+        }
+
+        .results-summary {
+            font-size: 1.2rem;
+            color: var(--bamboo-green);
+            margin-bottom: 2rem;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, var(--gold), var(--cherry-blossom));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .download-btn::before {
+            content: '🎋';
+            margin-right: 0.5rem;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .download-info {
+            color: var(--charcoal);
+            font-style: italic;
+        }
+
+        /* Error Section */
+        .error-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--shadow);
+            border: 2px solid #ff6b6b;
+            text-align: center;
+        }
+
+        .error-header h2 {
+            color: #ff6b6b;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--charcoal);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .retry-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--shadow);
+            border: 1px solid var(--cherry-blossom);
+        }
+
+        .system-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: var(--charcoal);
+        }
+
+        .separator {
+            color: var(--cherry-blossom);
+            font-weight: bold;
+        }
+
+        .management-toggle {
+            background: var(--bamboo-green);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .management-toggle:hover {
+            background: var(--cherry-blossom);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--cream);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 80vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px var(--shadow);
+            border: 2px solid var(--cherry-blossom);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--cherry-blossom);
+        }
+
+        .modal-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--charcoal);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--charcoal);
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--cherry-blossom);
+            color: white;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pattern-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .system-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .modal-content {
+                max-width: 95vw;
+                max-height: 90vh;
+                padding: 1rem;
+            }
+        }
+
+        /* Water Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 192, 203, 0.3);
+            transform: translate(-50%, -50%);
+            animation: ripple-animation 2s infinite;
+        }
+
+        @keyframes ripple-animation {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                width: 200px;
+                height: 200px;
+                opacity: 0;
+            }
+        }
+
+        /* Zen Garden Decorative Elements */
+        .zen-decoration {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Tab Styles for Management Panel */
+        .management-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--cherry-blossom);
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--charcoal);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--bamboo-green);
+            border-bottom-color: var(--bamboo-green);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--cherry-blossom);
+        }
+
+        .status-card h3 {
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--bamboo-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Cherry Blossom Petals -->
+    <div class="cherry-blossom" id="cherry-blossom"></div>
+    
+    <!-- Zen Garden Decoration -->
+    <div class="zen-decoration">🏮</div>
+
+    <div class="container">
+        <header>
+            <h1>YouTube Fabric Processor</h1>
+            <p>Transform videos into wisdom through the ancient art of fabric pattern analysis</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="input-group">
+                    <label for="youtube-url">YouTube Video URL</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        required
+                    >
+                </div>
+                
+                <button id="process-btn" class="process-btn ripple">
+                    Begin Sacred Analysis
+                </button>
+            </section>
+
+            <section id="status-section" class="status-section hidden">
+                <div class="status-header">
+                    <h2>Analysis Status</h2>
+                    <div id="status-badge" class="status-badge">Preparing Garden</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-current">0</span> of <span id="progress-total">13</span> patterns
+                    </div>
+                </div>
+
+                <div class="current-step">
+                    <h3>Current Pattern Weaving</h3>
+                    <div id="current-pattern" class="pattern-info">
+                        <span class="pattern-name">Cultivating Serenity...</span>
+                        <span class="pattern-description">Preparing the sacred analysis chamber</span>
+                    </div>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <h4>🌸 Phase 1: Spring Awakening</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="youtube_summary">youtube_summary</div>
+                            <div class="pattern-item" data-pattern="extract_core_message">extract_core_message</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="2">
+                        <h4>🎋 Phase 2: Summer Contemplation</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_wisdom">extract_wisdom</div>
+                            <div class="pattern-item" data-pattern="extract_insights">extract_insights</div>
+                            <div class="pattern-item" data-pattern="extract_ideas">extract_ideas</div>
+                            <div class="pattern-item" data-pattern="extract_patterns">extract_patterns</div>
+                            <div class="pattern-item" data-pattern="extract_recommendations">extract_recommendations</div>
+                            <div class="pattern-item" data-pattern="extract_predictions">extract_predictions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="3">
+                        <h4>🍂 Phase 3: Autumn Reflection</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_references">extract_references</div>
+                            <div class="pattern-item" data-pattern="extract_questions">extract_questions</div>
+                            <div class="pattern-item" data-pattern="create_tags">create_tags</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="4">
+                        <h4>❄️ Phase 4: Winter Synthesis</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="create_5_sentence_summary">create_5_sentence_summary</div>
+                            <div class="pattern-item" data-pattern="to_flashcards">to_flashcards</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="results-section" class="results-section hidden">
+                <div class="results-header">
+                    <h2>Wisdom Harvested</h2>
+                    <div class="results-summary">
+                        <span id="results-count">13</span> sacred scrolls prepared
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button id="download-btn" class="download-btn ripple">
+                        Receive Sacred Scrolls
+                    </button>
+                    <p class="download-info">
+                        Files are provided as text scrolls (.txt) with elegant markdown formatting
+                    </p>
+                </div>
+            </section>
+
+            <section id="error-section" class="error-section hidden">
+                <div class="error-header">
+                    <h2>Garden Disturbance</h2>
+                </div>
+                <div id="error-message" class="error-message">
+                    The harmony has been disrupted during processing.
+                </div>
+                <button id="retry-btn" class="retry-btn">Restore Balance</button>
+            </section>
+        </main>
+
+        <footer>
+            <div class="system-info">
+                <span id="fabric-status">Checking garden harmony...</span>
+                <span class="separator">🌸</span>
+                <span>13 fabric patterns available</span>
+                <span class="separator">🌸</span>
+                <button id="management-toggle" class="management-toggle">Garden Management</button>
+            </div>
+        </footer>
+
+        <!-- Management Panel Modal -->
+        <div id="management-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🏮 Garden Management</h2>
+                    <button id="close-management" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="management-tabs">
+                        <button class="tab-btn active" data-tab="status">🌸 Status</button>
+                        <button class="tab-btn" data-tab="history">🎋 History</button>
+                        <button class="tab-btn" data-tab="cleanup">🧹 Cleanup</button>
+                    </div>
+
+                    <!-- Status Tab -->
+                    <div id="status-tab" class="tab-content active">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <h3>Garden Status</h3>
+                                <div class="status-item">
+                                    <span class="label">Uptime:</span>
+                                    <span id="server-uptime">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Memory Usage:</span>
+                                    <span id="memory-usage">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Fabric Available:</span>
+                                    <span id="fabric-available">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <h3>Active Meditations</h3>
+                                <div class="status-item">
+                                    <span class="label">Running:</span>
+                                    <span id="active-processes">-</span>
+                                </div>
+                                <div id="process-list" class="process-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="history-tab" class="tab-content">
+                        <div class="history-controls">
+                            <button id="refresh-history" class="refresh-btn">🔄 Refresh</button>
+                            <span class="history-count">Loading...</span>
+                        </div>
+                        <div id="history-list" class="history-list">
+                            <div class="loading">Loading history...</div>
+                        </div>
+                    </div>
+
+                    <!-- Cleanup Tab -->
+                    <div id="cleanup-tab" class="tab-content">
+                        <div class="cleanup-section">
+                            <h3>🧹 Garden Cleanup</h3>
+                            <p>Remove old analysis files to maintain garden harmony</p>
+                            
+                            <div class="cleanup-controls">
+                                <div class="cleanup-option">
+                                    <label for="cleanup-days">Remove files older than:</label>
+                                    <select id="cleanup-days">
+                                        <option value="7">7 days</option>
+                                        <option value="30" selected>30 days</option>
+                                        <option value="90">90 days</option>
+                                    </select>
+                                    <button id="cleanup-old-btn" class="cleanup-btn">Remove Old Files</button>
+                                </div>
+                            </div>
+                            
+                            <div class="cleanup-warning">
+                                <p><strong>⚠️ Warning:</strong> This action cannot be undone. Files will be permanently removed from the garden.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cherry Blossom Animation
+        function createCherryBlossom() {
+            const container = document.getElementById('cherry-blossom');
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            petal.style.opacity = Math.random();
+            container.appendChild(petal);
+
+            // Remove petal after animation
+            setTimeout(() => {
+                petal.remove();
+            }, 5000);
+        }
+
+        // Create cherry blossoms periodically
+        setInterval(createCherryBlossom, 300);
+
+        // Ripple effect
+        document.querySelectorAll('.ripple').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple-effect');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Application Logic
+        let currentStep = 0;
+        let isProcessing = false;
+        let totalPatterns = 13;
+
+        const patterns = [
+            { name: 'youtube_summary', description: 'Extracting video essence', phase: 1 },
+            { name: 'extract_core_message', description: 'Finding central wisdom', phase: 1 },
+            { name: 'extract_wisdom', description: 'Gathering ancient knowledge', phase: 2 },
+            { name: 'extract_insights', description: 'Discovering hidden truths', phase: 2 },
+            { name: 'extract_ideas', description: 'Collecting creative sparks', phase: 2 },
+            { name: 'extract_patterns', description: 'Weaving pattern connections', phase: 2 },
+            { name: 'extract_recommendations', description: 'Crafting guidance', phase: 2 },
+            { name: 'extract_predictions', description: 'Foreseeing possibilities', phase: 2 },
+            { name: 'extract_references', description: 'Gathering source materials', phase: 3 },
+            { name: 'extract_questions', description: 'Formulating inquiries', phase: 3 },
+            { name: 'create_tags', description: 'Creating classification labels', phase: 3 },
+            { name: 'create_5_sentence_summary', description: 'Crafting concise wisdom', phase: 4 },
+            { name: 'to_flashcards', description: 'Preparing knowledge cards', phase: 4 }
+        ];
+
+        // DOM Elements
+        const processBtn = document.getElementById('process-btn');
+        const statusSection = document.getElementById('status-section');
+        const resultsSection = document.getElementById('results-section');
+        const errorSection = document.getElementById('error-section');
+        const progressFill = document.getElementById('progress-fill');
+        const progressCurrent = document.getElementById('progress-current');
+        const progressTotal = document.getElementById('progress-total');
+        const statusBadge = document.getElementById('status-badge');
+        const currentPatternName = document.querySelector('.pattern-name');
+        const currentPatternDesc = document.querySelector('.pattern-description');
+        const urlInput = document.getElementById('youtube-url');
+        const downloadBtn = document.getElementById('download-btn');
+        const retryBtn = document.getElementById('retry-btn');
+        const managementToggle = document.getElementById('management-toggle');
+        const managementModal = document.getElementById('management-modal');
+        const closeManagement = document.getElementById('close-management');
+
+        // Set total patterns
+        progressTotal.textContent = totalPatterns;
+
+        // Process button click
+        processBtn.addEventListener('click', startProcessing);
+        retryBtn.addEventListener('click', startProcessing);
+
+        function startProcessing() {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+
+            if (isProcessing) return;
+
+            isProcessing = true;
+            currentStep = 0;
+            
+            // Hide other sections
+            resultsSection.classList.add('hidden');
+            errorSection.classList.add('hidden');
+            
+            // Show status section
+            statusSection.classList.remove('hidden');
+            
+            // Reset progress
+            progressFill.style.width = '0%';
+            progressCurrent.textContent = '0';
+            statusBadge.textContent = 'Cultivating Serenity...';
+            
+            // Reset pattern items
+            document.querySelectorAll('.pattern-item').forEach(item => {
+                item.classList.remove('completed');
+            });
+
+            // Start processing simulation
+            processNextPattern();
+        }
+
+        function processNextPattern() {
+            if (currentStep >= patterns.length) {
+                completeProcessing();
+                return;
+            }
+
+            const pattern = patterns[currentStep];
+            
+            // Update current pattern display
+            currentPatternName.textContent = pattern.name;
+            currentPatternDesc.textContent = pattern.description;
+            
+            // Update progress
+            const progress = ((currentStep + 1) / totalPatterns) * 100;
+            progressFill.style.width = progress + '%';
+            progressCurrent.textContent = currentStep + 1;
+            
+            // Update status badge
+            statusBadge.textContent = `Processing ${pattern.name}`;
+            
+            // Mark pattern as completed
+            const patternElement = document.querySelector(`[data-pattern="${pattern.name}"]`);
+            if (patternElement) {
+                patternElement.classList.add('completed');
+            }
+
+            currentStep++;
+            
+            // Continue to next pattern after delay
+            setTimeout(processNextPattern, Math.random() * 2000 + 1000);
+        }
+
+        function completeProcessing() {
+            isProcessing = false;
+            statusSection.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            
+            // Update results count
+            document.getElementById('results-count').textContent = totalPatterns;
+        }
+
+        // Download button
+        downloadBtn.addEventListener('click', () => {
+            // Simulate download
+            const link = document.createElement('a');
+            link.href = 'data:text/plain;charset=utf-8,Sacred analysis complete!';
+            link.download = 'sacred-analysis.txt';
+            link.click();
+        });
+
+        // Management modal
+        managementToggle.addEventListener('click', () => {
+            managementModal.classList.remove('hidden');
+        });
+
+        closeManagement.addEventListener('click', () => {
+            managementModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        managementModal.addEventListener('click', (e) => {
+            if (e.target === managementModal) {
+                managementModal.classList.add('hidden');
+            }
+        });
+
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId + '-tab').classList.add('active');
+            });
+        });
+
+        // Initialize fabric status
+        document.getElementById('fabric-status').textContent = 'Garden is in harmony';
+        document.getElementById('server-uptime').textContent = '24h 15m';
+        document.getElementById('memory-usage').textContent = '45%';
+        document.getElementById('fabric-available').textContent = 'Yes';
+        document.getElementById('active-processes').textContent = '0';
+    </script>
+</body>
+</html>

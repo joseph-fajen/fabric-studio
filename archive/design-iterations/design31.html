@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Bioluminescent Deep Sea</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Bioluminescent Deep Sea Color Palette */
+            --deep-ocean-primary: #0A1628;
+            --deep-ocean-secondary: #0D2444;
+            --deep-ocean-tertiary: #1A3A5C;
+            --deep-ocean-surface: #2B5A8C;
+            
+            /* Bioluminescent Colors */
+            --bio-cyan: rgba(0, 255, 255, 0.9);
+            --bio-cyan-light: rgba(0, 255, 255, 0.6);
+            --bio-cyan-dim: rgba(0, 255, 255, 0.3);
+            --bio-cyan-faint: rgba(0, 255, 255, 0.1);
+            
+            --bio-blue: rgba(64, 224, 255, 0.8);
+            --bio-blue-light: rgba(64, 224, 255, 0.5);
+            --bio-blue-dim: rgba(64, 224, 255, 0.2);
+            
+            --bio-teal: rgba(0, 255, 192, 0.7);
+            --bio-teal-light: rgba(0, 255, 192, 0.4);
+            --bio-teal-dim: rgba(0, 255, 192, 0.15);
+            
+            /* Glass Ocean Effects */
+            --glass-ocean-primary: rgba(13, 36, 68, 0.85);
+            --glass-ocean-secondary: rgba(26, 58, 92, 0.7);
+            --glass-ocean-tertiary: rgba(43, 90, 140, 0.6);
+            --glass-ocean-elevated: rgba(26, 58, 92, 0.9);
+            
+            /* Text Colors */
+            --text-primary: rgba(240, 248, 255, 0.95);
+            --text-secondary: rgba(176, 224, 255, 0.85);
+            --text-tertiary: rgba(135, 206, 235, 0.7);
+            --text-muted: rgba(135, 206, 235, 0.5);
+            --text-bioluminescent: var(--bio-cyan);
+            
+            /* Borders and Shadows */
+            --border-ocean: rgba(0, 255, 255, 0.2);
+            --border-ocean-strong: rgba(0, 255, 255, 0.4);
+            --border-ocean-subtle: rgba(0, 255, 255, 0.1);
+            
+            --shadow-depth: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-bioluminescent: 0 0 20px rgba(0, 255, 255, 0.3);
+            --shadow-heavy: 0 16px 64px rgba(0, 0, 0, 0.6);
+            
+            /* Blur Effects */
+            --blur-light: blur(12px);
+            --blur-medium: blur(20px);
+            --blur-heavy: blur(32px);
+            
+            /* Dimensions */
+            --radius-small: 12px;
+            --radius-medium: 16px;
+            --radius-large: 24px;
+            --radius-xl: 32px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: linear-gradient(180deg, 
+                var(--deep-ocean-primary) 0%, 
+                var(--deep-ocean-secondary) 30%, 
+                var(--deep-ocean-tertiary) 70%, 
+                var(--deep-ocean-surface) 100%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Bioluminescent Particle Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 25%, var(--bio-cyan-faint) 0%, transparent 40%),
+                radial-gradient(circle at 85% 15%, var(--bio-blue-dim) 0%, transparent 35%),
+                radial-gradient(circle at 25% 75%, var(--bio-teal-dim) 0%, transparent 45%),
+                radial-gradient(circle at 75% 85%, var(--bio-cyan-faint) 0%, transparent 30%),
+                radial-gradient(circle at 45% 45%, var(--bio-blue-dim) 0%, transparent 25%);
+            animation: bioluminescentPulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        /* Floating Plankton Effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, var(--bio-cyan-faint) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, var(--bio-blue-dim) 0.5px, transparent 0.5px),
+                radial-gradient(circle at 40% 60%, var(--bio-teal-dim) 0.8px, transparent 0.8px),
+                radial-gradient(circle at 70% 30%, var(--bio-cyan-faint) 0.6px, transparent 0.6px),
+                radial-gradient(circle at 30% 90%, var(--bio-blue-dim) 1.2px, transparent 1.2px);
+            background-size: 120px 120px, 80px 80px, 150px 150px, 100px 100px, 180px 180px;
+            animation: floatingPlankton 25s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes bioluminescentPulse {
+            0%, 100% { 
+                opacity: 0.8; 
+                transform: scale(1); 
+            }
+            25% { 
+                opacity: 1; 
+                transform: scale(1.1); 
+            }
+            50% { 
+                opacity: 0.6; 
+                transform: scale(0.95); 
+            }
+            75% { 
+                opacity: 0.9; 
+                transform: scale(1.05); 
+            }
+        }
+
+        @keyframes floatingPlankton {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg); 
+            }
+            20% { 
+                transform: translateY(-15px) translateX(5px) rotate(2deg); 
+            }
+            40% { 
+                transform: translateY(8px) translateX(-3px) rotate(-1deg); 
+            }
+            60% { 
+                transform: translateY(-5px) translateX(8px) rotate(1.5deg); 
+            }
+            80% { 
+                transform: translateY(12px) translateX(-5px) rotate(-2deg); 
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Bioluminescent Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--bio-cyan-dim) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: var(--blur-heavy);
+            animation: headerGlow 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, 
+                var(--text-primary) 0%, 
+                var(--bio-cyan) 30%, 
+                var(--bio-blue) 60%, 
+                var(--bio-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px var(--bio-cyan-dim);
+            animation: titleBioluminescence 4s ease-in-out infinite;
+        }
+
+        @keyframes titleBioluminescence {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px var(--bio-cyan-dim)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 40px var(--bio-cyan-light)); }
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Ocean Glass Card */
+        .ocean-glass-card {
+            background: var(--glass-ocean-secondary);
+            backdrop-filter: var(--blur-medium);
+            -webkit-backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--border-ocean);
+            border-radius: var(--radius-large);
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-depth), var(--shadow-bioluminescent);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ocean-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--bio-cyan-light) 30%, 
+                var(--bio-blue-light) 50%, 
+                var(--bio-teal-light) 70%, 
+                transparent 100%);
+            animation: topGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes topGlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .ocean-glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                var(--bio-cyan-faint) 0%, 
+                transparent 30%, 
+                transparent 70%, 
+                var(--bio-teal-faint) 100%);
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .ocean-glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-heavy), 
+                        0 0 40px var(--bio-cyan-dim);
+            border-color: var(--border-ocean-strong);
+            background: var(--glass-ocean-tertiary);
+        }
+
+        /* Input Styling */
+        .input-group {
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-shadow: 0 0 10px var(--bio-cyan-dim);
+        }
+
+        .ocean-input {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 1.1rem;
+            background: var(--glass-ocean-primary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 1px solid var(--border-ocean);
+            border-radius: var(--radius-medium);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-family: inherit;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .ocean-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .ocean-input:focus {
+            outline: none;
+            border-color: var(--bio-cyan-light);
+            background: var(--glass-ocean-secondary);
+            box-shadow: 0 0 0 3px var(--bio-cyan-faint),
+                        inset 0 2px 8px rgba(0, 0, 0, 0.3),
+                        0 0 20px var(--bio-cyan-dim);
+            transform: translateY(-2px);
+        }
+
+        /* Bioluminescent Buttons */
+        .bio-button {
+            background: linear-gradient(135deg, 
+                var(--bio-cyan-light) 0%, 
+                var(--bio-blue-light) 50%, 
+                var(--bio-teal-light) 100%);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 1px solid var(--bio-cyan-light);
+            border-radius: var(--radius-medium);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 18px 36px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow-depth), 
+                        0 0 20px var(--bio-cyan-dim);
+            position: relative;
+            overflow: hidden;
+            margin-right: 16px;
+        }
+
+        .bio-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .bio-button:hover::before {
+            left: 100%;
+        }
+
+        .bio-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-heavy), 
+                        0 0 40px var(--bio-cyan-light);
+            border-color: var(--bio-cyan);
+            background: linear-gradient(135deg, 
+                var(--bio-cyan) 0%, 
+                var(--bio-blue) 50%, 
+                var(--bio-teal) 100%);
+        }
+
+        .bio-button:active {
+            transform: translateY(-1px);
+        }
+
+        .bio-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .bio-button-secondary {
+            background: var(--glass-ocean-secondary);
+            border-color: var(--border-ocean);
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-depth);
+        }
+
+        .bio-button-secondary:hover {
+            background: var(--glass-ocean-tertiary);
+            border-color: var(--border-ocean-strong);
+            box-shadow: var(--shadow-depth), 
+                        0 0 20px var(--bio-cyan-faint);
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .progress-section.visible {
+            display: block;
+            animation: oceanRise 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes oceanRise {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .progress-header h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-bioluminescent);
+            text-shadow: 0 0 20px var(--bio-cyan-dim);
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { text-shadow: 0 0 20px var(--bio-cyan-dim); }
+            50% { text-shadow: 0 0 30px var(--bio-cyan-light); }
+        }
+
+        .progress-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Phase Cards Grid */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .phase-card {
+            background: var(--glass-ocean-primary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 1px solid var(--border-ocean-subtle);
+            border-radius: var(--radius-medium);
+            padding: 24px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                var(--bio-cyan-faint) 0%, 
+                transparent 25%, 
+                transparent 75%, 
+                var(--bio-teal-faint) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .phase-card.active {
+            border-color: var(--bio-cyan-light);
+            background: var(--glass-ocean-secondary);
+            box-shadow: 0 0 30px var(--bio-cyan-dim);
+            transform: scale(1.02);
+        }
+
+        .phase-card.active::before {
+            opacity: 0.3;
+        }
+
+        .phase-card.completed {
+            border-color: var(--bio-teal-light);
+            background: var(--glass-ocean-tertiary);
+            box-shadow: 0 0 25px var(--bio-teal-dim);
+        }
+
+        .phase-card.completed::before {
+            background: linear-gradient(45deg, 
+                var(--bio-teal-faint) 0%, 
+                transparent 50%, 
+                var(--bio-teal-faint) 100%);
+            opacity: 0.4;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .phase-status {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-ocean-secondary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid var(--border-ocean);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .phase-card.active .phase-status {
+            background: var(--bio-cyan-light);
+            border-color: var(--bio-cyan);
+            color: var(--text-primary);
+            box-shadow: 0 0 20px var(--bio-cyan-dim);
+            animation: phasePulse 2s ease-in-out infinite;
+        }
+
+        .phase-card.completed .phase-status {
+            background: var(--bio-teal-light);
+            border-color: var(--bio-teal);
+            color: var(--text-primary);
+            box-shadow: 0 0 15px var(--bio-teal-dim);
+        }
+
+        @keyframes phasePulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 20px var(--bio-cyan-dim); 
+            }
+            50% { 
+                transform: scale(1.1); 
+                box-shadow: 0 0 30px var(--bio-cyan-light); 
+            }
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Pattern List */
+        .patterns-list {
+            list-style: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pattern-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-ocean-subtle);
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+        }
+
+        .pattern-item.active .pattern-status {
+            background: var(--bio-cyan);
+            box-shadow: 0 0 15px var(--bio-cyan-light);
+            animation: patternPulse 1.5s ease-in-out infinite;
+        }
+
+        .pattern-item.completed .pattern-status {
+            background: var(--bio-teal);
+            box-shadow: 0 0 10px var(--bio-teal-light);
+        }
+
+        @keyframes patternPulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1); 
+                box-shadow: 0 0 15px var(--bio-cyan-light); 
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.3); 
+                box-shadow: 0 0 25px var(--bio-cyan); 
+            }
+        }
+
+        .pattern-name {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.active .pattern-name,
+        .pattern-item.completed .pattern-name {
+            color: var(--text-primary);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .results-section.visible {
+            display: block;
+            animation: oceanRise 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .results-card {
+            background: var(--glass-ocean-elevated);
+            backdrop-filter: var(--blur-medium);
+            -webkit-backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--bio-teal-light);
+            border-radius: var(--radius-large);
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow-depth), 
+                        0 0 40px var(--bio-teal-dim);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                var(--bio-teal-faint) 0%, 
+                transparent 50%, 
+                var(--bio-cyan-faint) 100%);
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .results-header {
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .results-header h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--bio-teal);
+            text-shadow: 0 0 20px var(--bio-teal-dim);
+            animation: completionGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes completionGlow {
+            0%, 100% { 
+                color: var(--bio-teal); 
+                text-shadow: 0 0 20px var(--bio-teal-dim); 
+            }
+            50% { 
+                color: var(--bio-cyan); 
+                text-shadow: 0 0 30px var(--bio-cyan-light); 
+            }
+        }
+
+        .results-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, 
+                var(--bio-teal) 0%, 
+                var(--bio-cyan-light) 100%);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 1px solid var(--bio-teal);
+            border-radius: var(--radius-medium);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 20px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--shadow-depth), 
+                        0 0 25px var(--bio-teal-dim);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-heavy), 
+                        0 0 40px var(--bio-teal-light);
+            background: linear-gradient(135deg, 
+                var(--bio-cyan) 0%, 
+                var(--bio-teal) 100%);
+        }
+
+        /* Management Section */
+        .management-section {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .management-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--glass-ocean-secondary);
+            backdrop-filter: var(--blur-medium);
+            -webkit-backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--border-ocean);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-depth);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .management-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-depth), 
+                        0 0 20px var(--bio-cyan-dim);
+            border-color: var(--bio-cyan-light);
+            color: var(--bio-cyan);
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: var(--blur-heavy);
+            -webkit-backdrop-filter: var(--blur-heavy);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.visible {
+            display: flex;
+            animation: modalFadeIn 0.4s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--glass-ocean-elevated);
+            backdrop-filter: var(--blur-heavy);
+            -webkit-backdrop-filter: var(--blur-heavy);
+            border: 1px solid var(--border-ocean-strong);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-heavy), 
+                        0 0 60px var(--bio-cyan-dim);
+            animation: modalSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                var(--bio-cyan-faint) 0%, 
+                transparent 50%, 
+                var(--bio-teal-faint) 100%);
+            border-radius: var(--radius-xl);
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-bioluminescent);
+            text-shadow: 0 0 15px var(--bio-cyan-dim);
+        }
+
+        .close-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--glass-ocean-secondary);
+            border: 1px solid var(--border-ocean);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .close-btn:hover {
+            background: var(--glass-ocean-tertiary);
+            border-color: var(--bio-cyan-light);
+            color: var(--bio-cyan);
+            box-shadow: 0 0 15px var(--bio-cyan-dim);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-ocean);
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--bio-cyan);
+            border-bottom-color: var(--bio-cyan);
+            text-shadow: 0 0 10px var(--bio-cyan-dim);
+        }
+
+        .tab:hover:not(.active) {
+            color: var(--text-secondary);
+        }
+
+        .tab-content {
+            display: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: tabFadeIn 0.3s ease;
+        }
+
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Management Content */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .status-item {
+            background: var(--glass-ocean-primary);
+            border: 1px solid var(--border-ocean-subtle);
+            border-radius: var(--radius-small);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .status-item:hover {
+            border-color: var(--border-ocean);
+            box-shadow: 0 0 15px var(--bio-cyan-faint);
+        }
+
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--bio-cyan);
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px var(--bio-cyan-dim);
+        }
+
+        .status-label {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .history-item {
+            background: var(--glass-ocean-primary);
+            border: 1px solid var(--border-ocean-subtle);
+            border-radius: var(--radius-small);
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            border-color: var(--border-ocean);
+            box-shadow: 0 0 10px var(--bio-cyan-faint);
+        }
+
+        .history-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .history-meta {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+        }
+
+        .cleanup-options {
+            display: grid;
+            gap: 16px;
+        }
+
+        .cleanup-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: var(--glass-ocean-primary);
+            border: 1px solid var(--border-ocean-subtle);
+            border-radius: var(--radius-small);
+            transition: all 0.3s ease;
+        }
+
+        .cleanup-option:hover {
+            border-color: var(--border-ocean);
+            box-shadow: 0 0 15px var(--bio-cyan-faint);
+        }
+
+        .cleanup-info {
+            flex: 1;
+        }
+
+        .cleanup-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .cleanup-desc {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+        }
+
+        .control-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .control-item {
+            background: var(--glass-ocean-primary);
+            border: 1px solid var(--border-ocean-subtle);
+            border-radius: var(--radius-small);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .control-item:hover {
+            border-color: var(--border-ocean);
+            box-shadow: 0 0 15px var(--bio-cyan-faint);
+        }
+
+        .control-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .control-desc {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .ocean-glass-card {
+                padding: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .bio-button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 12px;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .management-section {
+                position: static;
+                display: flex;
+                justify-content: center;
+                margin-top: 32px;
+            }
+
+            .modal-content {
+                margin: 16px;
+                padding: 24px;
+            }
+
+            .status-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Loading and Shimmer Effects */
+        .loading-shimmer {
+            background: linear-gradient(90deg,
+                var(--bio-cyan-faint) 0%,
+                var(--bio-cyan-light) 50%,
+                var(--bio-cyan-faint) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Current Effect */
+        .current-flow {
+            position: relative;
+        }
+
+        .current-flow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                var(--bio-cyan-light) 50%,
+                transparent 100%);
+            transform: skewX(-15deg);
+            transition: left 0.8s ease;
+            pointer-events: none;
+        }
+
+        .current-flow:hover::after {
+            left: 150%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Dive deep into YouTube content with 13 bioluminescent fabric patterns that illuminate insights from the ocean of information</p>
+        </header>
+
+        <main class="ocean-glass-card">
+            <div class="input-group">
+                <label for="youtube-url" class="input-label">YouTube URL</label>
+                <input 
+                    type="url" 
+                    id="youtube-url" 
+                    class="ocean-input" 
+                    placeholder="https://www.youtube.com/watch?v=..."
+                />
+            </div>
+
+            <div class="button-group">
+                <button id="process-btn" class="bio-button current-flow">Process Video</button>
+                <button id="clear-btn" class="bio-button bio-button-secondary">Clear</button>
+            </div>
+
+            <div id="progress-section" class="progress-section">
+                <div class="progress-header">
+                    <h3>Processing Video</h3>
+                    <p>Analyzing content through 13 bioluminescent fabric patterns in 4 oceanic phases</p>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <div class="phase-header">
+                            <div class="phase-status">1</div>
+                            <span class="phase-title">Phase 1: Foundation</span>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="extract_wisdom">Extract Wisdom</li>
+                            <li class="pattern-item" data-pattern="summarize">Summarize</li>
+                            <li class="pattern-item" data-pattern="analyze_claims">Analyze Claims</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="2">
+                        <div class="phase-header">
+                            <div class="phase-status">2</div>
+                            <span class="phase-title">Phase 2: Analysis</span>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="find_logical_fallacies">Find Logical Fallacies</li>
+                            <li class="pattern-item" data-pattern="extract_ideas">Extract Ideas</li>
+                            <li class="pattern-item" data-pattern="get_youtube_rss">Get YouTube RSS</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="3">
+                        <div class="phase-header">
+                            <div class="phase-status">3</div>
+                            <span class="phase-title">Phase 3: Insights</span>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="create_quiz">Create Quiz</li>
+                            <li class="pattern-item" data-pattern="extract_questions">Extract Questions</li>
+                            <li class="pattern-item" data-pattern="extract_references">Extract References</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="4">
+                        <div class="phase-header">
+                            <div class="phase-status">4</div>
+                            <span class="phase-title">Phase 4: Knowledge</span>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="create_keynote">Create Keynote</li>
+                            <li class="pattern-item" data-pattern="extract_poc">Extract POC</li>
+                            <li class="pattern-item" data-pattern="create_security_update">Create Security Update</li>
+                            <li class="pattern-item" data-pattern="create_investigation_visualization">Create Investigation Visualization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results-section" class="results-section">
+                <div class="results-card">
+                    <div class="results-header">
+                        <h3>Processing Complete</h3>
+                        <p>Your video has been successfully analyzed through all 13 bioluminescent fabric patterns</p>
+                    </div>
+                    <button id="download-btn" class="download-btn current-flow">Download Results</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="management-section">
+        <button id="management-btn" class="management-btn">
+            ⚙️
+        </button>
+    </div>
+
+    <div id="management-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Management Console</h2>
+                <button id="close-modal" class="close-btn">×</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="status">Status</button>
+                <button class="tab" data-tab="history">History</button>
+                <button class="tab" data-tab="cleanup">Cleanup</button>
+                <button class="tab" data-tab="control">Control</button>
+            </div>
+
+            <div id="status-tab" class="tab-content active">
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-value">Online</div>
+                        <div class="status-label">Server Status</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">0</div>
+                        <div class="status-label">Active Processes</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">2.1 GB</div>
+                        <div class="status-label">Memory Usage</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">98.5%</div>
+                        <div class="status-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history-tab" class="tab-content">
+                <div class="history-item">
+                    <div class="history-title">Machine Learning Fundamentals</div>
+                    <div class="history-meta">Processed 2 hours ago • 13 patterns • Success</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-title">Web Development Best Practices</div>
+                    <div class="history-meta">Processed 5 hours ago • 13 patterns • Success</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-title">Data Science Tutorial</div>
+                    <div class="history-meta">Processed yesterday • 13 patterns • Success</div>
+                </div>
+            </div>
+
+            <div id="cleanup-tab" class="tab-content">
+                <div class="cleanup-options">
+                    <div class="cleanup-option">
+                        <div class="cleanup-info">
+                            <div class="cleanup-title">Clean Old Files</div>
+                            <div class="cleanup-desc">Remove processing files older than 7 days</div>
+                        </div>
+                        <button class="bio-button bio-button-secondary">Clean</button>
+                    </div>
+                    <div class="cleanup-option">
+                        <div class="cleanup-info">
+                            <div class="cleanup-title">Clear Cache</div>
+                            <div class="cleanup-desc">Clear temporary files and cached data</div>
+                        </div>
+                        <button class="bio-button bio-button-secondary">Clear</button>
+                    </div>
+                    <div class="cleanup-option">
+                        <div class="cleanup-info">
+                            <div class="cleanup-title">Reset All</div>
+                            <div class="cleanup-desc">Remove all processing data and reset system</div>
+                        </div>
+                        <button class="bio-button bio-button-secondary">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="control-tab" class="tab-content">
+                <div class="control-grid">
+                    <div class="control-item">
+                        <div class="control-title">Restart Server</div>
+                        <div class="control-desc">Gracefully restart the processing server</div>
+                        <button class="bio-button bio-button-secondary">Restart</button>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-title">Stop Server</div>
+                        <div class="control-desc">Safely shutdown the server after current tasks</div>
+                        <button class="bio-button bio-button-secondary">Stop</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const processBtn = document.getElementById('process-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const urlInput = document.getElementById('youtube-url');
+        const progressSection = document.getElementById('progress-section');
+        const resultsSection = document.getElementById('results-section');
+        const downloadBtn = document.getElementById('download-btn');
+        const managementBtn = document.getElementById('management-btn');
+        const managementModal = document.getElementById('management-modal');
+        const closeModal = document.getElementById('close-modal');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // State
+        let currentProcessId = null;
+        let isProcessing = false;
+
+        // Event Listeners
+        processBtn.addEventListener('click', startProcessing);
+        clearBtn.addEventListener('click', clearForm);
+        downloadBtn.addEventListener('click', downloadResults);
+        managementBtn.addEventListener('click', openManagement);
+        closeModal.addEventListener('click', closeManagement);
+        managementModal.addEventListener('click', (e) => {
+            if (e.target === managementModal) closeManagement();
+        });
+
+        // URL input enter key
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !isProcessing) {
+                startProcessing();
+            }
+        });
+
+        // Tab handling
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+        });
+
+        // Escape key for modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeManagement();
+            }
+        });
+
+        // Processing simulation
+        async function startProcessing() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showAlert('Please enter a YouTube URL');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showAlert('Please enter a valid YouTube URL');
+                return;
+            }
+
+            if (isProcessing) {
+                return;
+            }
+
+            isProcessing = true;
+            currentProcessId = 'bio-process-' + Date.now();
+
+            // Disable form
+            processBtn.disabled = true;
+            processBtn.textContent = 'Processing...';
+            urlInput.disabled = true;
+
+            // Show progress section
+            progressSection.classList.add('visible');
+            resultsSection.classList.remove('visible');
+
+            // Simulate processing
+            await simulateProcessing();
+        }
+
+        function clearForm() {
+            if (isProcessing) {
+                return;
+            }
+
+            urlInput.value = '';
+            urlInput.disabled = false;
+            processBtn.disabled = false;
+            processBtn.textContent = 'Process Video';
+            progressSection.classList.remove('visible');
+            resultsSection.classList.remove('visible');
+            resetProgress();
+        }
+
+        function downloadResults() {
+            // Simulate download
+            showAlert('Downloading bioluminescent analysis results...');
+        }
+
+        function openManagement() {
+            managementModal.classList.add('visible');
+        }
+
+        function closeManagement() {
+            managementModal.classList.remove('visible');
+        }
+
+        function switchTab(tabName) {
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+            return youtubeRegex.test(url);
+        }
+
+        async function simulateProcessing() {
+            const phases = [1, 2, 3, 4];
+            const patterns = [
+                'extract_wisdom', 'summarize', 'analyze_claims',
+                'find_logical_fallacies', 'extract_ideas', 'get_youtube_rss',
+                'create_quiz', 'extract_questions', 'extract_references',
+                'create_keynote', 'extract_poc', 'create_security_update', 'create_investigation_visualization'
+            ];
+
+            let currentPhase = 0;
+            let currentPattern = 0;
+
+            // Add delay for initialization
+            await sleep(1500);
+
+            async function processNextPattern() {
+                if (currentPattern >= patterns.length) {
+                    // Processing complete
+                    setTimeout(() => {
+                        progressSection.classList.remove('visible');
+                        resultsSection.classList.add('visible');
+                        processBtn.disabled = false;
+                        processBtn.textContent = 'Process Video';
+                        urlInput.disabled = false;
+                        isProcessing = false;
+                    }, 1000);
+                    return;
+                }
+
+                // Update phase if needed
+                if (currentPattern === 0 || currentPattern === 3 || currentPattern === 6 || currentPattern === 9) {
+                    if (currentPhase > 0) {
+                        // Mark previous phase as completed
+                        const prevPhaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                        prevPhaseCard.classList.remove('active');
+                        prevPhaseCard.classList.add('completed');
+                    }
+                    
+                    currentPhase++;
+                    const phaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                    phaseCard.classList.add('active');
+                }
+
+                // Mark current pattern as active
+                const patternElement = document.querySelector(`[data-pattern="${patterns[currentPattern]}"]`);
+                patternElement.classList.add('active');
+
+                // Simulate pattern processing time with oceanic rhythm
+                const processingTime = Math.random() * 2500 + 1500; // 1.5-4 seconds per pattern
+                await sleep(processingTime);
+
+                patternElement.classList.remove('active');
+                patternElement.classList.add('completed');
+                currentPattern++;
+                
+                // Continue with next pattern
+                await processNextPattern();
+            }
+
+            await processNextPattern();
+        }
+
+        function resetProgress() {
+            document.querySelectorAll('.phase-card').forEach(card => {
+                card.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.pattern-item').forEach(pattern => {
+                pattern.classList.remove('active', 'completed');
+            });
+        }
+
+        function showAlert(message) {
+            // Simple alert for demo - in real app would use a custom modal
+            alert(message);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Auto-focus URL input
+        urlInput.focus();
+
+        // Add some dynamic background effects
+        function addDynamicEffects() {
+            // Create floating particles
+            const particleCount = 15;
+            for (let i = 0; i < particleCount; i++) {
+                setTimeout(() => {
+                    createFloatingParticle();
+                }, Math.random() * 5000);
+            }
+        }
+
+        function createFloatingParticle() {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                width: ${Math.random() * 4 + 1}px;
+                height: ${Math.random() * 4 + 1}px;
+                background: var(--bio-cyan);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: -1;
+                left: ${Math.random() * 100}vw;
+                top: 100vh;
+                box-shadow: 0 0 ${Math.random() * 10 + 5}px var(--bio-cyan);
+                opacity: ${Math.random() * 0.6 + 0.2};
+            `;
+            
+            document.body.appendChild(particle);
+            
+            // Animate upward
+            const duration = Math.random() * 10000 + 15000; // 15-25 seconds
+            const drift = Math.random() * 200 - 100; // -100 to 100px horizontal drift
+            
+            particle.animate([
+                { transform: 'translateY(0px) translateX(0px)', opacity: particle.style.opacity },
+                { transform: `translateY(-100vh) translateX(${drift}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'linear'
+            }).onfinish = () => {
+                particle.remove();
+                // Create a new particle to maintain count
+                setTimeout(createFloatingParticle, Math.random() * 5000);
+            };
+        }
+
+        // Initialize dynamic effects
+        addDynamicEffects();
+    </script>
+</body>
+</html>

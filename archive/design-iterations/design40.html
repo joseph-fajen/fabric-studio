@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Sunken Treasure Chamber</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Sunken Treasure Color Palette */
+            --treasure-gold: #D4AF37;
+            --treasure-gold-dark: #B8941F;
+            --treasure-bronze: #CD7F32;
+            --treasure-emerald: #50C878;
+            --treasure-pearl: #F8F6F0;
+            --treasure-obsidian: #0B1426;
+            --treasure-sapphire: #0F3460;
+            --treasure-amber: #FFBF00;
+            
+            /* Deep Sea Background Layers */
+            --sea-depths: #0A1628;
+            --sea-abyss: #0D1B2A;
+            --sea-twilight: #1B263B;
+            --sea-current: #415A77;
+            --sea-surface: #778DA9;
+            
+            /* Treasure Glass Effects */
+            --treasure-glass-primary: rgba(212, 175, 55, 0.15);
+            --treasure-glass-secondary: rgba(212, 175, 55, 0.25);
+            --treasure-glass-tertiary: rgba(212, 175, 55, 0.35);
+            --treasure-glass-elevated: rgba(248, 246, 240, 0.12);
+            --treasure-glass-modal: rgba(248, 246, 240, 0.18);
+            
+            /* Metallic Borders */
+            --treasure-border-gold: rgba(212, 175, 55, 0.4);
+            --treasure-border-bronze: rgba(205, 127, 50, 0.3);
+            --treasure-border-pearl: rgba(248, 246, 240, 0.2);
+            --treasure-border-emerald: rgba(80, 200, 120, 0.3);
+            
+            /* Text Colors */
+            --text-pearl: rgba(248, 246, 240, 0.95);
+            --text-gold: rgba(212, 175, 55, 0.9);
+            --text-bronze: rgba(205, 127, 50, 0.85);
+            --text-muted: rgba(248, 246, 240, 0.6);
+            --text-accent: rgba(80, 200, 120, 0.8);
+            
+            /* Treasure Shadows */
+            --shadow-treasure-light: 0 4px 20px rgba(212, 175, 55, 0.1);
+            --shadow-treasure-medium: 0 8px 32px rgba(212, 175, 55, 0.15);
+            --shadow-treasure-heavy: 0 16px 48px rgba(212, 175, 55, 0.25);
+            --shadow-obsidian: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-ambient-gold: 0 0 40px rgba(212, 175, 55, 0.2);
+            --shadow-ambient-emerald: 0 0 32px rgba(80, 200, 120, 0.1);
+            
+            /* Blur Effects */
+            --blur-treasure-light: blur(16px);
+            --blur-treasure-medium: blur(24px);
+            --blur-treasure-heavy: blur(36px);
+            --blur-treasure-extreme: blur(48px);
+            
+            /* Dimensions */
+            --radius-small: 8px;
+            --radius-medium: 16px;
+            --radius-large: 24px;
+            --radius-ornate: 32px;
+        }
+
+        body {
+            font-family: 'Cinzel', 'Cormorant Garamond', 'Playfair Display', serif;
+            background: linear-gradient(135deg, 
+                var(--sea-depths) 0%, 
+                var(--sea-abyss) 25%, 
+                var(--sea-twilight) 50%, 
+                var(--sea-current) 75%, 
+                var(--sea-surface) 100%);
+            background-attachment: fixed;
+            color: var(--text-pearl);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Treasure Chamber Ambience */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 25%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 70%, rgba(80, 200, 120, 0.06) 0%, transparent 45%),
+                radial-gradient(circle at 45% 85%, rgba(205, 127, 50, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 75% 15%, rgba(255, 191, 0, 0.04) 0%, transparent 35%);
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        /* Floating Treasure Particles */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.03) 2px, transparent 2px),
+                radial-gradient(circle at 70% 60%, rgba(248, 246, 240, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, rgba(80, 200, 120, 0.02) 1.5px, transparent 1.5px),
+                radial-gradient(circle at 90% 20%, rgba(205, 127, 50, 0.02) 1px, transparent 1px);
+            background-size: 150px 150px, 200px 200px, 250px 250px, 100px 100px;
+            animation: treasureFloat 25s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes treasureFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            50% { transform: translateY(-8px) rotate(-1deg); }
+            75% { transform: translateY(-12px) rotate(1.5deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Ornate Header */
+        .header {
+            text-align: center;
+            margin-bottom: 70px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: var(--blur-treasure-medium);
+            z-index: -1;
+            animation: treasureGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes treasureGlow {
+            0% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .header h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, 
+                var(--text-pearl) 0%, 
+                var(--treasure-gold) 30%, 
+                var(--treasure-amber) 60%, 
+                var(--text-pearl) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+            position: relative;
+            font-family: 'Cinzel', serif;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            font-weight: 400;
+            max-width: 650px;
+            margin: 0 auto;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            font-style: italic;
+        }
+
+        /* Treasure Chest Card */
+        .treasure-card {
+            background: var(--treasure-glass-secondary);
+            backdrop-filter: var(--blur-treasure-medium);
+            -webkit-backdrop-filter: var(--blur-treasure-medium);
+            border: 2px solid var(--treasure-border-gold);
+            border-radius: var(--radius-ornate);
+            padding: 48px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-treasure-medium), var(--shadow-ambient-gold), var(--shadow-obsidian);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .treasure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(212, 175, 55, 0.6) 25%, 
+                rgba(255, 191, 0, 0.8) 50%, 
+                rgba(212, 175, 55, 0.6) 75%, 
+                transparent 100%);
+        }
+
+        .treasure-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(248, 246, 240, 0.08) 0%, 
+                transparent 30%, 
+                rgba(212, 175, 55, 0.04) 70%, 
+                transparent 100%);
+            pointer-events: none;
+            border-radius: var(--radius-ornate);
+        }
+
+        .treasure-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-treasure-heavy), var(--shadow-ambient-gold), var(--shadow-obsidian);
+            border-color: var(--treasure-gold);
+            background: var(--treasure-glass-tertiary);
+        }
+
+        /* Ornate Input Section */
+        .input-group {
+            margin-bottom: 36px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-gold);
+            margin-bottom: 16px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            font-family: 'Cinzel', serif;
+        }
+
+        .treasure-input {
+            width: 100%;
+            padding: 24px 28px;
+            font-size: 1.2rem;
+            background: var(--treasure-glass-primary);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 2px solid var(--treasure-border-bronze);
+            border-radius: var(--radius-medium);
+            color: var(--text-pearl);
+            transition: all 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+            box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .treasure-input::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .treasure-input:focus {
+            outline: none;
+            border-color: var(--treasure-gold);
+            background: var(--treasure-glass-secondary);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.25),
+                        inset 0 3px 10px rgba(0, 0, 0, 0.2),
+                        var(--shadow-treasure-light);
+            transform: translateY(-2px);
+        }
+
+        /* Ornate Button */
+        .treasure-button {
+            background: linear-gradient(135deg, 
+                var(--treasure-gold) 0%, 
+                var(--treasure-amber) 50%, 
+                var(--treasure-gold-dark) 100%);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 2px solid rgba(212, 175, 55, 0.7);
+            border-radius: var(--radius-medium);
+            color: var(--treasure-obsidian);
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 24px 48px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-treasure-light), 
+                        0 0 25px rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .treasure-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .treasure-button:hover::before {
+            left: 100%;
+        }
+
+        .treasure-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-treasure-medium), 
+                        0 0 40px rgba(212, 175, 55, 0.5);
+            border-color: var(--treasure-amber);
+            background: linear-gradient(135deg, 
+                var(--treasure-amber) 0%, 
+                var(--treasure-gold) 50%, 
+                var(--treasure-gold-dark) 100%);
+        }
+
+        .treasure-button:active {
+            transform: translateY(-1px);
+        }
+
+        .treasure-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 50px;
+        }
+
+        .progress-section.active {
+            display: block;
+            animation: treasureReveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes treasureReveal {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Phase Cards */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 50px;
+        }
+
+        .phase-card {
+            background: var(--treasure-glass-primary);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 1px solid var(--treasure-border-pearl);
+            border-radius: var(--radius-large);
+            padding: 28px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(248, 246, 240, 0.3) 50%, 
+                transparent 100%);
+        }
+
+        .phase-card.active {
+            border-color: var(--treasure-border-gold);
+            background: var(--treasure-glass-secondary);
+            box-shadow: var(--shadow-treasure-light), var(--shadow-ambient-gold);
+            transform: translateY(-4px);
+        }
+
+        .phase-card.completed {
+            border-color: var(--treasure-border-emerald);
+            background: rgba(80, 200, 120, 0.08);
+            box-shadow: var(--shadow-treasure-light), var(--shadow-ambient-emerald);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .phase-ornament {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, 
+                var(--treasure-bronze) 0%, 
+                var(--treasure-gold) 100%);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 2px solid var(--treasure-border-bronze);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--treasure-obsidian);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            box-shadow: var(--shadow-treasure-light);
+        }
+
+        .phase-card.active .phase-ornament {
+            background: linear-gradient(135deg, 
+                var(--treasure-gold) 0%, 
+                var(--treasure-amber) 100%);
+            border-color: var(--treasure-gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            animation: treasurePulse 2s ease-in-out infinite;
+        }
+
+        .phase-card.completed .phase-ornament {
+            background: linear-gradient(135deg, 
+                var(--treasure-emerald) 0%, 
+                rgba(80, 200, 120, 0.8) 100%);
+            border-color: var(--treasure-emerald);
+            color: white;
+        }
+
+        @keyframes treasurePulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-gold);
+            font-family: 'Cinzel', serif;
+        }
+
+        .patterns-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(248, 246, 240, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-gem {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .pattern-item.processing .pattern-gem {
+            background: var(--treasure-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+            animation: gemGlow 1.8s ease-in-out infinite;
+        }
+
+        .pattern-item.completed .pattern-gem {
+            background: var(--treasure-emerald);
+            box-shadow: 0 0 10px rgba(80, 200, 120, 0.5);
+        }
+
+        @keyframes gemGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.3); }
+        }
+
+        .pattern-name {
+            font-weight: 500;
+            color: var(--text-muted);
+            flex: 1;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .pattern-item.processing .pattern-name {
+            color: var(--text-gold);
+        }
+
+        .pattern-item.completed .pattern-name {
+            color: var(--text-accent);
+        }
+
+        /* Overall Progress */
+        .overall-progress {
+            margin-bottom: 40px;
+            padding: 32px;
+            background: var(--treasure-glass-elevated);
+            backdrop-filter: var(--blur-treasure-medium);
+            -webkit-backdrop-filter: var(--blur-treasure-medium);
+            border: 1px solid var(--treasure-border-pearl);
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow-treasure-light);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-gold);
+            font-family: 'Cinzel', serif;
+        }
+
+        .progress-percentage {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--treasure-amber);
+            text-shadow: 0 0 10px rgba(255, 191, 0, 0.5);
+        }
+
+        .progress-bar-container {
+            height: 12px;
+            background: var(--treasure-glass-primary);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--treasure-border-bronze);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                var(--treasure-gold) 0%, 
+                var(--treasure-amber) 50%, 
+                var(--treasure-gold) 100%);
+            border-radius: 6px;
+            transition: width 0.6s ease;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            animation: treasureShimmer 2.5s ease-in-out infinite;
+        }
+
+        @keyframes treasureShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 24px 28px;
+            border-radius: var(--radius-medium);
+            margin-bottom: 28px;
+            font-weight: 500;
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 2px solid;
+            transition: all 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+        }
+
+        .status-message.info {
+            background: rgba(212, 175, 55, 0.12);
+            border-color: var(--treasure-border-gold);
+            color: var(--treasure-gold);
+            box-shadow: var(--shadow-treasure-light);
+        }
+
+        .status-message.success {
+            background: rgba(80, 200, 120, 0.12);
+            border-color: var(--treasure-border-emerald);
+            color: var(--text-accent);
+            box-shadow: var(--shadow-ambient-emerald);
+        }
+
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: rgba(239, 68, 68, 0.9);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: treasureReveal 0.8s ease-out;
+        }
+
+        .treasure-chest {
+            background: var(--treasure-glass-elevated);
+            backdrop-filter: var(--blur-treasure-heavy);
+            -webkit-backdrop-filter: var(--blur-treasure-heavy);
+            border: 2px solid var(--treasure-gold);
+            border-radius: var(--radius-ornate);
+            padding: 48px;
+            text-align: center;
+            box-shadow: var(--shadow-treasure-heavy), 
+                        var(--shadow-ambient-gold),
+                        var(--shadow-obsidian);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .treasure-chest::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(212, 175, 55, 0.1) 0%, 
+                transparent 50%, 
+                rgba(248, 246, 240, 0.05) 100%);
+            border-radius: var(--radius-ornate);
+            pointer-events: none;
+        }
+
+        .treasure-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-gold);
+            margin-bottom: 16px;
+            font-family: 'Cinzel', serif;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .treasure-description {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 1.2rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+        }
+
+        .download-treasure {
+            background: linear-gradient(135deg, 
+                var(--treasure-emerald) 0%, 
+                rgba(80, 200, 120, 0.8) 100%);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 2px solid rgba(80, 200, 120, 0.6);
+            border-radius: var(--radius-medium);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 20px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--shadow-treasure-light), 
+                        var(--shadow-ambient-emerald);
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .download-treasure:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-treasure-medium), 
+                        0 0 40px rgba(80, 200, 120, 0.4);
+        }
+
+        .process-another {
+            background: var(--treasure-glass-secondary);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 1px solid var(--treasure-border-bronze);
+            border-radius: var(--radius-medium);
+            color: var(--text-bronze);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 16px 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .process-another:hover {
+            background: var(--treasure-glass-tertiary);
+            border-color: var(--treasure-bronze);
+            transform: translateY(-2px);
+        }
+
+        /* Management Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: var(--blur-treasure-heavy);
+            -webkit-backdrop-filter: var(--blur-treasure-heavy);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: modalAppear 0.4s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .treasure-modal {
+            background: var(--treasure-glass-modal);
+            backdrop-filter: var(--blur-treasure-extreme);
+            -webkit-backdrop-filter: var(--blur-treasure-extreme);
+            border: 2px solid var(--treasure-border-gold);
+            border-radius: var(--radius-ornate);
+            padding: 48px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-treasure-heavy), 
+                        var(--shadow-ambient-gold),
+                        0 0 80px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .treasure-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(248, 246, 240, 0.12) 0%, 
+                transparent 50%, 
+                rgba(212, 175, 55, 0.08) 100%);
+            border-radius: var(--radius-ornate);
+            pointer-events: none;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-gold);
+            font-family: 'Cinzel', serif;
+        }
+
+        .modal-close {
+            background: var(--treasure-glass-primary);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 1px solid var(--treasure-border-bronze);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-bronze);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .modal-close:hover {
+            background: var(--treasure-glass-secondary);
+            border-color: var(--treasure-gold);
+            color: var(--text-gold);
+            transform: scale(1.1);
+        }
+
+        .modal-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .management-section {
+            margin-bottom: 36px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--treasure-border-pearl);
+        }
+
+        .management-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-gold);
+            margin-bottom: 20px;
+            font-family: 'Cinzel', serif;
+        }
+
+        .management-button {
+            background: var(--treasure-glass-secondary);
+            backdrop-filter: var(--blur-treasure-light);
+            -webkit-backdrop-filter: var(--blur-treasure-light);
+            border: 1px solid var(--treasure-border-bronze);
+            border-radius: var(--radius-small);
+            color: var(--text-bronze);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 14px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 16px;
+            margin-bottom: 16px;
+            display: inline-block;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .management-button:hover {
+            background: var(--treasure-glass-tertiary);
+            border-color: var(--treasure-gold);
+            color: var(--text-gold);
+            transform: translateY(-2px);
+        }
+
+        .management-button.danger {
+            border-color: rgba(239, 68, 68, 0.4);
+            color: rgba(239, 68, 68, 0.9);
+        }
+
+        .management-button.danger:hover {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.6);
+        }
+
+        /* Management Toggle */
+        .management-toggle {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--treasure-glass-secondary);
+            backdrop-filter: var(--blur-treasure-medium);
+            -webkit-backdrop-filter: var(--blur-treasure-medium);
+            border: 2px solid var(--treasure-border-gold);
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-gold);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: var(--shadow-treasure-light), var(--shadow-ambient-gold);
+        }
+
+        .management-toggle:hover {
+            background: var(--treasure-glass-tertiary);
+            border-color: var(--treasure-amber);
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: var(--shadow-treasure-medium), var(--shadow-ambient-gold);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px 20px;
+            }
+
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .treasure-card {
+                padding: 32px;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .treasure-modal {
+                padding: 32px;
+                margin: 20px;
+            }
+
+            .management-toggle {
+                width: 56px;
+                height: 56px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--treasure-glass-primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--treasure-gold), var(--treasure-bronze));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--treasure-amber), var(--treasure-gold));
+        }
+    </style>
+</head>
+<body>
+    <div class="management-toggle" onclick="openManagementModal()" title="Treasure Chamber Management">
+        ⚙️
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Unlock the hidden treasures within YouTube videos through 13 mystical fabric patterns</p>
+        </header>
+
+        <div class="treasure-card">
+            <div class="input-group">
+                <label for="youtubeUrl" class="input-label">YouTube Video URL</label>
+                <input 
+                    type="url" 
+                    id="youtubeUrl" 
+                    class="treasure-input"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    required
+                >
+            </div>
+            
+            <button onclick="processVideo()" class="treasure-button" id="processBtn">
+                Commence Treasure Hunt
+            </button>
+        </div>
+
+        <div id="progressSection" class="progress-section">
+            <div class="treasure-card">
+                <div class="overall-progress">
+                    <div class="progress-header">
+                        <span class="progress-title">Excavation Progress</span>
+                        <span class="progress-percentage" id="progressPercentage">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="statusMessage" class="status-message info">
+                    Preparing the treasure chamber...
+                </div>
+
+                <div class="phases-grid" id="phasesGrid">
+                    <!-- Phases will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section">
+            <div class="treasure-card">
+                <div class="treasure-chest">
+                    <h3 class="treasure-title">Treasure Successfully Unearthed!</h3>
+                    <p class="treasure-description">Your YouTube video has been transformed through all 13 mystical fabric patterns. Claim your treasure trove of insights below.</p>
+                    <a href="#" id="downloadLink" class="download-treasure">Claim Your Treasure</a>
+                    <br>
+                    <button onclick="processAnother()" class="process-another">Seek Another Treasure</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal-overlay">
+        <div class="treasure-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Treasure Chamber Management</h2>
+                <button class="modal-close" onclick="closeManagementModal()">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="management-section">
+                    <h3 class="section-title">Chamber Status</h3>
+                    <button onclick="checkServerStatus()" class="management-button">Inspect Chamber</button>
+                    <button onclick="viewProcessingHistory()" class="management-button">View Expedition Log</button>
+                </div>
+                
+                <div class="management-section">
+                    <h3 class="section-title">Chamber Maintenance</h3>
+                    <button onclick="cleanupOldFiles()" class="management-button">Clear Old Artifacts</button>
+                    <button onclick="restartServer()" class="management-button danger">Rebuild Chamber</button>
+                </div>
+                
+                <div class="management-section">
+                    <h3 class="section-title">Chamber Archives</h3>
+                    <div id="systemInfo" style="color: var(--text-muted); font-size: 0.95rem; font-family: 'Cormorant Garamond', serif;">
+                        Loading chamber archives...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fabric patterns configuration
+        const FABRIC_PATTERNS = [
+            // Phase 1: Foundation
+            { phase: 1, name: "extract_wisdom", description: "Ancient Wisdom Extraction", filename: "01-extract_wisdom.txt" },
+            { phase: 1, name: "summarize", description: "Chronicle Summarization", filename: "02-summarize.txt" },
+            { phase: 1, name: "analyze_claims", description: "Truth Assessment", filename: "03-analyze_claims.txt" },
+            
+            // Phase 2: Analysis
+            { phase: 2, name: "find_logical_fallacies", description: "Logic Flaw Detection", filename: "04-find_logical_fallacies.txt" },
+            { phase: 2, name: "extract_ideas", description: "Idea Crystallization", filename: "05-extract_ideas.txt" },
+            { phase: 2, name: "get_youtube_rss", description: "Channel Mapping", filename: "06-get_youtube_rss.txt" },
+            
+            // Phase 3: Insights
+            { phase: 3, name: "create_quiz", description: "Knowledge Trial Creation", filename: "07-create_quiz.txt" },
+            { phase: 3, name: "extract_questions", description: "Mystery Question Mining", filename: "08-extract_questions.txt" },
+            { phase: 3, name: "extract_references", description: "Reference Cataloging", filename: "09-extract_references.txt" },
+            
+            // Phase 4: Knowledge
+            { phase: 4, name: "create_keynote", description: "Presentation Forging", filename: "10-create_keynote.txt" },
+            { phase: 4, name: "extract_poc", description: "Proof of Concept Extraction", filename: "11-extract_poc.txt" },
+            { phase: 4, name: "create_security_update", description: "Security Intelligence Brief", filename: "12-create_security_update.txt" },
+            { phase: 4, name: "create_investigation_visualization", description: "Investigation Map", filename: "13-create_investigation_visualization.txt" }
+        ];
+
+        const PHASE_DESCRIPTIONS = {
+            1: "Foundation Chamber",
+            2: "Analysis Vault", 
+            3: "Insight Repository",
+            4: "Knowledge Sanctum"
+        };
+
+        let currentProcessId = null;
+        let socket = null;
+        let currentPattern = 0;
+        let completedPatterns = 0;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePhasesGrid();
+            initializeWebSocket();
+            loadSystemInfo();
+        });
+
+        function initializePhasesGrid() {
+            const phasesGrid = document.getElementById('phasesGrid');
+            const phases = {};
+            
+            // Group patterns by phase
+            FABRIC_PATTERNS.forEach(pattern => {
+                if (!phases[pattern.phase]) {
+                    phases[pattern.phase] = [];
+                }
+                phases[pattern.phase].push(pattern);
+            });
+
+            // Create phase cards
+            Object.keys(phases).forEach(phaseNum => {
+                const phaseCard = document.createElement('div');
+                phaseCard.className = 'phase-card';
+                phaseCard.id = `phase-${phaseNum}`;
+                
+                const patterns = phases[phaseNum];
+                const patternsList = patterns.map(pattern => 
+                    `<li class="pattern-item" data-pattern="${pattern.name}">
+                        <div class="pattern-gem"></div>
+                        <div class="pattern-name">${pattern.description}</div>
+                    </li>`
+                ).join('');
+
+                phaseCard.innerHTML = `
+                    <div class="phase-header">
+                        <div class="phase-ornament">${phaseNum}</div>
+                        <div class="phase-title">${PHASE_DESCRIPTIONS[phaseNum]}</div>
+                    </div>
+                    <ul class="patterns-list">
+                        ${patternsList}
+                    </ul>
+                `;
+                
+                phasesGrid.appendChild(phaseCard);
+            });
+        }
+
+        function initializeWebSocket() {
+            // Simulate WebSocket connection for demo
+            console.log('Treasure chamber communication established');
+        }
+
+        async function processVideo() {
+            const urlInput = document.getElementById('youtubeUrl');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please enter a YouTube URL to begin the treasure hunt', 'error');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showStatus('Please enter a valid YouTube URL for the expedition', 'error');
+                return;
+            }
+
+            // Reset state
+            currentPattern = 0;
+            completedPatterns = 0;
+            currentProcessId = 'treasure-' + Date.now();
+
+            // Show progress section
+            document.getElementById('progressSection').classList.add('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Disable process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = true;
+            processBtn.textContent = 'Excavating...';
+
+            // Reset all patterns
+            const patternItems = document.querySelectorAll('.pattern-item');
+            patternItems.forEach(item => {
+                item.className = 'pattern-item';
+            });
+
+            const phaseCards = document.querySelectorAll('.phase-card');
+            phaseCards.forEach(card => {
+                card.className = 'phase-card';
+            });
+
+            // Start processing simulation
+            showStatus('Preparing mystical instruments and opening treasure chamber...', 'info');
+            await simulateProcessing();
+        }
+
+        async function simulateProcessing() {
+            // Simulate processing with realistic timing
+            showStatus('Downloading sacred transcript from the depths...', 'info');
+            await sleep(2500);
+
+            showStatus('Channeling ancient fabric patterns through parallel mystical conduits...', 'info');
+            
+            for (let i = 0; i < FABRIC_PATTERNS.length; i++) {
+                const pattern = FABRIC_PATTERNS[i];
+                const phaseCard = document.getElementById(`phase-${pattern.phase}`);
+                const patternElement = document.querySelector(`[data-pattern="${pattern.name}"]`);
+                
+                // Mark phase as active
+                phaseCard.classList.add('active');
+                
+                // Mark pattern as processing
+                patternElement.classList.add('processing');
+                
+                showStatus(`Invoking ${pattern.description} pattern...`, 'info');
+                
+                // Simulate processing time (4-9 seconds per pattern)
+                await sleep(Math.random() * 5000 + 4000);
+                
+                // Mark pattern as completed
+                patternElement.classList.remove('processing');
+                patternElement.classList.add('completed');
+                
+                completedPatterns++;
+                updateProgress();
+                
+                // Check if phase is completed
+                const phasePatterns = Array.from(phaseCard.querySelectorAll('.pattern-item'));
+                const completedInPhase = phasePatterns.filter(p => p.classList.contains('completed')).length;
+                
+                if (completedInPhase === phasePatterns.length) {
+                    phaseCard.classList.remove('active');
+                    phaseCard.classList.add('completed');
+                }
+            }
+
+            processingComplete();
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((completedPatterns / FABRIC_PATTERNS.length) * 100);
+            
+            document.getElementById('progressPercentage').textContent = `${percentage}%`;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+
+        function processingComplete() {
+            showStatus('Treasure excavation complete! All 13 mystical patterns have been successfully channeled and crystallized into precious insights.', 'success');
+            
+            // Show results section
+            document.getElementById('resultsSection').classList.add('active');
+            
+            // Set download link
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = `/api/download/${currentProcessId}`;
+            
+            // Re-enable process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = false;
+            processBtn.textContent = 'Commence Treasure Hunt';
+        }
+
+        function processAnother() {
+            // Reset form
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('progressSection').classList.remove('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Reset progress
+            currentPattern = 0;
+            completedPatterns = 0;
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type}`;
+        }
+
+        function isValidYouTubeUrl(url) {
+            const patterns = [
+                /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/v\/[\w-]+/
+            ];
+            return patterns.some(pattern => pattern.test(url));
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('managementModal').classList.add('active');
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').classList.remove('active');
+        }
+
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/api/management/status');
+                const data = await response.json();
+                alert(`Chamber Status: ${data.status}\nUptime: ${data.uptime}\nActive Expeditions: ${data.activeProcesses}`);
+            } catch (error) {
+                alert('Chamber inspection complete - All mystical conduits are functioning optimally');
+            }
+        }
+
+        async function viewProcessingHistory() {
+            try {
+                const response = await fetch('/api/management/history');
+                const data = await response.json();
+                alert(`Expedition Log:\n${data.history.length} total expeditions\nLast expedition: ${data.history[0]?.timestamp || 'None'}`);
+            } catch (error) {
+                alert('Expedition log examined - No recent treasure hunting activities recorded');
+            }
+        }
+
+        async function cleanupOldFiles() {
+            if (confirm('Are you sure you want to clear old artifacts from the treasure chamber?')) {
+                try {
+                    await fetch('/api/management/cleanup-old', { method: 'POST' });
+                    alert('Old artifacts have been successfully cleared from the chamber');
+                } catch (error) {
+                    alert('Artifact cleanup simulation - Ancient treasures would be archived');
+                }
+            }
+        }
+
+        async function restartServer() {
+            if (confirm('Are you sure you want to rebuild the treasure chamber? This will interrupt any active expeditions.')) {
+                try {
+                    await fetch('/api/management/restart', { method: 'POST' });
+                    alert('Chamber reconstruction initiated');
+                } catch (error) {
+                    alert('Chamber rebuild simulation - Mystical infrastructure would be renewed');
+                }
+            }
+        }
+
+        function loadSystemInfo() {
+            const systemInfo = document.getElementById('systemInfo');
+            systemInfo.innerHTML = `
+                <div style="margin-bottom: 10px;"><strong>Chamber Type:</strong> Mystical Node.js Sanctum</div>
+                <div style="margin-bottom: 10px;"><strong>Arcane Version:</strong> v18.x Enhanced</div>
+                <div style="margin-bottom: 10px;"><strong>Fabric Patterns:</strong> 13 mystical patterns across 4 sacred chambers</div>
+                <div style="margin-bottom: 10px;"><strong>Processing Method:</strong> Transcript-first ethereal architecture</div>
+                <div style="margin-bottom: 10px;"><strong>Average Excavation Time:</strong> ~70 mystical seconds</div>
+                <div><strong>Treasure Format:</strong> 13 sacred scrolls + index codex + treasure chest</div>
+            `;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('managementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeManagementModal();
+            }
+        });
+
+        // Handle escape key for modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeManagementModal();
+            }
+        });
+
+        // Handle enter key in URL input
+        document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processVideo();
+            }
+        });
+    </script>
+</body>
+</html>

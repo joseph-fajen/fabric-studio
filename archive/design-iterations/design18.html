@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - AI Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0D1117 0%, #161B22 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Neural Network Background Animation */
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00D4AA;
+            border-radius: 50%;
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00D4AA, transparent);
+            animation: flow 4s infinite linear;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        @keyframes flow {
+            0% { opacity: 0; transform: translateX(-100%); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(100%); }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(13, 17, 23, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 170, 0.2);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00D4AA;
+        }
+
+        .ai-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #00D4AA, #00B89C);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-icon::before {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00D4AA;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+        }
+
+        /* Chat-like Interface */
+        .chat-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chat-message {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            backdrop-filter: blur(10px);
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #00D4AA, #00B89C);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .message-title {
+            font-weight: 600;
+            color: #00D4AA;
+        }
+
+        /* Input Section */
+        .input-container {
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(13, 17, 23, 0.8);
+            border: 2px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: none;
+            min-height: 60px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #00D4AA;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+        }
+
+        .input-field::placeholder {
+            color: #8b949e;
+        }
+
+        .smart-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(22, 27, 34, 0.95);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 8px;
+            margin-top: 4px;
+            display: none;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        .suggestion {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid rgba(0, 212, 170, 0.1);
+        }
+
+        .suggestion:hover {
+            background: rgba(0, 212, 170, 0.1);
+        }
+
+        .suggestion:last-child {
+            border-bottom: none;
+        }
+
+        /* Process Button */
+        .process-btn {
+            background: linear-gradient(45deg, #00D4AA, #00B89C);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            color: #000000;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
+        }
+
+        .process-btn:active {
+            transform: translateY(0);
+        }
+
+        .process-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #00D4AA, #00B89C);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .process-btn.loading .btn-loading {
+            opacity: 1;
+        }
+
+        .process-btn.loading .btn-text {
+            opacity: 0;
+        }
+
+        /* AI Brain Animation */
+        .ai-brain {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+
+        .brain-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #000000;
+            border-radius: 50%;
+            animation: brainPulse 1.5s infinite ease-in-out;
+        }
+
+        .brain-node:nth-child(1) { top: 2px; left: 10px; animation-delay: 0s; }
+        .brain-node:nth-child(2) { top: 8px; left: 4px; animation-delay: 0.2s; }
+        .brain-node:nth-child(3) { top: 8px; right: 4px; animation-delay: 0.4s; }
+        .brain-node:nth-child(4) { bottom: 2px; left: 6px; animation-delay: 0.6s; }
+        .brain-node:nth-child(5) { bottom: 2px; right: 6px; animation-delay: 0.8s; }
+
+        @keyframes brainPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: fit-content;
+        }
+
+        .progress-card {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: #00D4AA;
+        }
+
+        .progress-percentage {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-weight: 600;
+            color: #00D4AA;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(13, 17, 23, 0.8);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00D4AA, #00B89C);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: progressShimmer 2s infinite;
+        }
+
+        @keyframes progressShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Phase Progress */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .phase-item {
+            background: rgba(13, 17, 23, 0.6);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .phase-item.active {
+            border-color: #00D4AA;
+            background: rgba(0, 212, 170, 0.1);
+        }
+
+        .phase-item.completed {
+            border-color: #00D4AA;
+            background: rgba(0, 212, 170, 0.2);
+        }
+
+        .phase-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-name {
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        .phase-item.active .phase-name,
+        .phase-item.completed .phase-name {
+            color: #ffffff;
+        }
+
+        /* Pattern Details */
+        .patterns-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        .pattern-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.processing {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+        }
+
+        .pattern-item.completed {
+            background: rgba(0, 212, 170, 0.2);
+            border: 1px solid rgba(0, 212, 170, 0.5);
+        }
+
+        .pattern-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #8b949e;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.processing .pattern-status {
+            background: #00D4AA;
+            animation: pulse 1.5s infinite;
+        }
+
+        .pattern-item.completed .pattern-status {
+            background: #00D4AA;
+        }
+
+        .pattern-name {
+            flex: 1;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            grid-column: span 2;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .results-section.visible {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00D4AA;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #00D4AA, #00B89C);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            color: #000000;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 170, 0.4);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-card {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            border-color: #00D4AA;
+            transform: translateY(-2px);
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-preview {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            color: #8b949e;
+            line-height: 1.4;
+            max-height: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .result-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(transparent, rgba(22, 27, 34, 0.8));
+        }
+
+        /* Management Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: rgba(22, 27, 34, 0.95);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #00D4AA;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: #ffffff;
+        }
+
+        .modal-content {
+            padding: 1.5rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            color: #8b949e;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #00D4AA;
+            border-bottom-color: #00D4AA;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .management-btn {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #00D4AA;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .management-btn:hover {
+            background: rgba(0, 212, 170, 0.2);
+            border-color: #00D4AA;
+        }
+
+        .management-btn.danger {
+            background: rgba(244, 63, 94, 0.1);
+            border-color: rgba(244, 63, 94, 0.3);
+            color: #f43f5e;
+        }
+
+        .management-btn.danger:hover {
+            background: rgba(244, 63, 94, 0.2);
+            border-color: #f43f5e;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(45deg, #00D4AA, #00B89C);
+            border: none;
+            border-radius: 50%;
+            color: #000000;
+            font-size: 1.25rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 212, 170, 0.4);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(0, 212, 170, 0.6);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(13, 17, 23, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 170, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 212, 170, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .fab {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural Network Background -->
+    <div class="neural-bg" id="neuralBg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="ai-icon">⚡</div>
+                <span>YouTube Fabric Processor</span>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>AI Intelligence Active</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Chat Section -->
+        <div class="chat-section">
+            <!-- Welcome Message -->
+            <div class="chat-message">
+                <div class="message-header">
+                    <div class="avatar">AI</div>
+                    <div class="message-title">YouTube Intelligence Assistant</div>
+                </div>
+                <p>I'll help you analyze YouTube videos using 13 advanced fabric patterns. Simply provide a YouTube URL and I'll extract insights, summaries, and knowledge in under 70 seconds using our revolutionary transcript-first architecture.</p>
+            </div>
+
+            <!-- Input Section -->
+            <div class="chat-message">
+                <div class="message-header">
+                    <div class="avatar">🎯</div>
+                    <div class="message-title">Video Analysis Request</div>
+                </div>
+                <div class="input-container">
+                    <textarea 
+                        class="input-field" 
+                        id="urlInput" 
+                        placeholder="Paste your YouTube URL here... (e.g., https://www.youtube.com/watch?v=...)"
+                        rows="3"
+                    ></textarea>
+                    <div class="smart-suggestions" id="suggestions">
+                        <div class="suggestion" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                            🎵 Sample Music Video - Rick Astley
+                        </div>
+                        <div class="suggestion" data-url="https://www.youtube.com/watch?v=9bZkp7q19f0">
+                            🎭 Sample Comedy - Gangnam Style
+                        </div>
+                        <div class="suggestion" data-url="https://www.youtube.com/watch?v=kJQP7kiw5Fk">
+                            🎤 Sample Tech Talk - Luis von Ahn
+                        </div>
+                    </div>
+                </div>
+                <button class="process-btn" id="processBtn">
+                    <span class="btn-text">🚀 Analyze with AI Intelligence</span>
+                    <div class="btn-loading">
+                        <div class="ai-brain">
+                            <div class="brain-node"></div>
+                            <div class="brain-node"></div>
+                            <div class="brain-node"></div>
+                            <div class="brain-node"></div>
+                            <div class="brain-node"></div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <!-- Overall Progress -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <div class="progress-title">🧠 AI Processing Pipeline</div>
+                    <div class="progress-percentage" id="overallProgress">0%</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div id="currentTask" style="font-size: 0.9rem; color: #8b949e;">
+                    Ready to begin AI analysis...
+                </div>
+            </div>
+
+            <!-- Phase Progress -->
+            <div class="progress-card">
+                <div class="progress-title">📊 Processing Phases</div>
+                <div class="phases-grid" id="phasesGrid">
+                    <div class="phase-item" data-phase="1">
+                        <div class="phase-number">1</div>
+                        <div class="phase-name">Foundation</div>
+                    </div>
+                    <div class="phase-item" data-phase="2">
+                        <div class="phase-number">2</div>
+                        <div class="phase-name">Analysis</div>
+                    </div>
+                    <div class="phase-item" data-phase="3">
+                        <div class="phase-number">3</div>
+                        <div class="phase-name">Intelligence</div>
+                    </div>
+                    <div class="phase-item" data-phase="4">
+                        <div class="phase-number">4</div>
+                        <div class="phase-name">Synthesis</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern Details -->
+            <div class="progress-card">
+                <div class="progress-title">🔍 Fabric Patterns</div>
+                <div class="patterns-list" id="patternsList">
+                    <!-- Patterns will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section" id="resultsSection">
+        <div class="chat-message">
+            <div class="results-header">
+                <div class="results-title">✨ Analysis Complete</div>
+                <button class="download-btn" id="downloadBtn">
+                    📦 Download Results
+                </button>
+            </div>
+            <div class="results-grid" id="resultsGrid">
+                <!-- Results will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">🛠️ System Management</div>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="tabs">
+                    <button class="tab active" data-tab="status">Status</button>
+                    <button class="tab" data-tab="history">History</button>
+                    <button class="tab" data-tab="cleanup">Cleanup</button>
+                    <button class="tab" data-tab="control">Control</button>
+                </div>
+                
+                <div class="tab-content active" id="statusTab">
+                    <h3>System Status</h3>
+                    <div id="systemStatus">Loading...</div>
+                </div>
+                
+                <div class="tab-content" id="historyTab">
+                    <h3>Processing History</h3>
+                    <div id="processingHistory">Loading...</div>
+                </div>
+                
+                <div class="tab-content" id="cleanupTab">
+                    <h3>Storage Management</h3>
+                    <button class="management-btn">🗑️ Clean Old Files</button>
+                    <button class="management-btn">📊 View Storage Usage</button>
+                </div>
+                
+                <div class="tab-content" id="controlTab">
+                    <h3>Server Control</h3>
+                    <button class="management-btn danger">🔄 Restart Server</button>
+                    <button class="management-btn danger">⚠️ Shutdown Server</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="managementFab" title="Open Management">
+        ⚙️
+    </button>
+
+    <script>
+        // Neural Network Background Animation
+        function createNeuralNetwork() {
+            const bg = document.getElementById('neuralBg');
+            const nodeCount = 20;
+            const connectionCount = 15;
+
+            // Create nodes
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'neural-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 3 + 's';
+                bg.appendChild(node);
+            }
+
+            // Create connections
+            for (let i = 0; i < connectionCount; i++) {
+                const connection = document.createElement('div');
+                connection.className = 'neural-connection';
+                connection.style.left = Math.random() * 100 + '%';
+                connection.style.top = Math.random() * 100 + '%';
+                connection.style.width = Math.random() * 200 + 50 + 'px';
+                connection.style.transform = `rotate(${Math.random() * 360}deg)`;
+                connection.style.animationDelay = Math.random() * 4 + 's';
+                bg.appendChild(connection);
+            }
+        }
+
+        // Fabric Patterns Configuration
+        const fabricPatterns = {
+            phase1: [
+                { id: 1, name: 'extract_wisdom', description: 'Extract key insights and wisdom' },
+                { id: 2, name: 'summarize', description: 'Create comprehensive summary' },
+                { id: 3, name: 'extract_article', description: 'Generate article format' }
+            ],
+            phase2: [
+                { id: 4, name: 'create_quiz', description: 'Generate knowledge quiz' },
+                { id: 5, name: 'extract_questions', description: 'Extract key questions' },
+                { id: 6, name: 'create_summary', description: 'Create detailed summary' }
+            ],
+            phase3: [
+                { id: 7, name: 'analyze_claims', description: 'Analyze truth claims' },
+                { id: 8, name: 'extract_insights', description: 'Extract insights' },
+                { id: 9, name: 'create_timeline', description: 'Create timeline' },
+                { id: 10, name: 'find_logical_fallacies', description: 'Find logical fallacies' }
+            ],
+            phase4: [
+                { id: 11, name: 'write_essay', description: 'Write comprehensive essay' },
+                { id: 12, name: 'create_markmap', description: 'Create mind map' },
+                { id: 13, name: 'rate_content', description: 'Rate and evaluate content' }
+            ]
+        };
+
+        // Initialize patterns list
+        function initializePatterns() {
+            const patternsList = document.getElementById('patternsList');
+            patternsList.innerHTML = '';
+
+            Object.values(fabricPatterns).flat().forEach(pattern => {
+                const patternItem = document.createElement('div');
+                patternItem.className = 'pattern-item';
+                patternItem.id = `pattern-${pattern.id}`;
+                patternItem.innerHTML = `
+                    <div class="pattern-status"></div>
+                    <div class="pattern-name">${pattern.name}</div>
+                `;
+                patternsList.appendChild(patternItem);
+            });
+        }
+
+        // Smart URL suggestions
+        const urlInput = document.getElementById('urlInput');
+        const suggestions = document.getElementById('suggestions');
+
+        urlInput.addEventListener('focus', () => {
+            if (!urlInput.value.trim()) {
+                suggestions.style.display = 'block';
+            }
+        });
+
+        urlInput.addEventListener('blur', (e) => {
+            // Delay hiding to allow suggestion clicks
+            setTimeout(() => {
+                suggestions.style.display = 'none';
+            }, 200);
+        });
+
+        urlInput.addEventListener('input', (e) => {
+            if (e.target.value.trim()) {
+                suggestions.style.display = 'none';
+            }
+        });
+
+        // Handle suggestion clicks
+        suggestions.addEventListener('click', (e) => {
+            const suggestion = e.target.closest('.suggestion');
+            if (suggestion) {
+                urlInput.value = suggestion.dataset.url;
+                suggestions.style.display = 'none';
+                urlInput.focus();
+            }
+        });
+
+        // Process button handling
+        const processBtn = document.getElementById('processBtn');
+        let isProcessing = false;
+
+        processBtn.addEventListener('click', () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+
+            startProcessing(url);
+        });
+
+        function isValidYouTubeUrl(url) {
+            const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/;
+            return ytRegex.test(url);
+        }
+
+        // Processing simulation
+        function startProcessing(url) {
+            if (isProcessing) return;
+
+            isProcessing = true;
+            processBtn.disabled = true;
+            processBtn.classList.add('loading');
+
+            // Reset UI
+            resetProgressUI();
+
+            // Start simulation
+            simulateProcessing();
+        }
+
+        function resetProgressUI() {
+            const progressBar = document.getElementById('progressBar');
+            const overallProgress = document.getElementById('overallProgress');
+            const currentTask = document.getElementById('currentTask');
+
+            progressBar.style.width = '0%';
+            overallProgress.textContent = '0%';
+            currentTask.textContent = 'Initializing AI processing...';
+
+            // Reset phases
+            document.querySelectorAll('.phase-item').forEach(phase => {
+                phase.classList.remove('active', 'completed');
+            });
+
+            // Reset patterns
+            document.querySelectorAll('.pattern-item').forEach(pattern => {
+                pattern.classList.remove('processing', 'completed');
+            });
+
+            // Hide results
+            document.getElementById('resultsSection').classList.remove('visible');
+        }
+
+        function simulateProcessing() {
+            const steps = [
+                { progress: 5, task: 'Extracting video metadata...', duration: 1000 },
+                { progress: 15, task: 'Downloading transcript...', duration: 2000 },
+                { progress: 25, task: 'Starting Phase 1: Foundation patterns...', duration: 1000, phase: 1 },
+                { progress: 40, task: 'Processing Phase 2: Analysis patterns...', duration: 3000, phase: 2 },
+                { progress: 65, task: 'Executing Phase 3: Intelligence patterns...', duration: 4000, phase: 3 },
+                { progress: 85, task: 'Finalizing Phase 4: Synthesis patterns...', duration: 3000, phase: 4 },
+                { progress: 95, task: 'Generating output files...', duration: 1500 },
+                { progress: 100, task: 'Analysis complete!', duration: 500 }
+            ];
+
+            let stepIndex = 0;
+
+            function executeStep() {
+                if (stepIndex >= steps.length) {
+                    completeProcessing();
+                    return;
+                }
+
+                const step = steps[stepIndex];
+                updateProgress(step.progress, step.task);
+
+                if (step.phase) {
+                    activatePhase(step.phase);
+                    simulatePhasePatterns(step.phase);
+                }
+
+                setTimeout(() => {
+                    stepIndex++;
+                    executeStep();
+                }, step.duration);
+            }
+
+            executeStep();
+        }
+
+        function updateProgress(percentage, task) {
+            const progressBar = document.getElementById('progressBar');
+            const overallProgress = document.getElementById('overallProgress');
+            const currentTask = document.getElementById('currentTask');
+
+            progressBar.style.width = percentage + '%';
+            overallProgress.textContent = percentage + '%';
+            currentTask.textContent = task;
+        }
+
+        function activatePhase(phaseNumber) {
+            // Mark previous phases as completed
+            for (let i = 1; i < phaseNumber; i++) {
+                const phaseElement = document.querySelector(`[data-phase="${i}"]`);
+                if (phaseElement) {
+                    phaseElement.classList.remove('active');
+                    phaseElement.classList.add('completed');
+                }
+            }
+
+            // Mark current phase as active
+            const currentPhase = document.querySelector(`[data-phase="${phaseNumber}"]`);
+            if (currentPhase) {
+                currentPhase.classList.add('active');
+            }
+        }
+
+        function simulatePhasePatterns(phaseNumber) {
+            const phaseKey = `phase${phaseNumber}`;
+            const patterns = fabricPatterns[phaseKey];
+
+            patterns.forEach((pattern, index) => {
+                setTimeout(() => {
+                    const patternElement = document.getElementById(`pattern-${pattern.id}`);
+                    if (patternElement) {
+                        patternElement.classList.add('processing');
+                        
+                        setTimeout(() => {
+                            patternElement.classList.remove('processing');
+                            patternElement.classList.add('completed');
+                        }, 1500 + Math.random() * 1000);
+                    }
+                }, index * 800);
+            });
+        }
+
+        function completeProcessing() {
+            // Mark final phase as completed
+            const finalPhase = document.querySelector(`[data-phase="4"]`);
+            if (finalPhase) {
+                finalPhase.classList.remove('active');
+                finalPhase.classList.add('completed');
+            }
+
+            // Show results
+            generateResults();
+            document.getElementById('resultsSection').classList.add('visible');
+
+            // Reset button
+            processBtn.disabled = false;
+            processBtn.classList.remove('loading');
+            isProcessing = false;
+        }
+
+        function generateResults() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = '';
+
+            const results = [
+                { title: 'Wisdom Extract', preview: 'Key insights and wisdom from the video content...' },
+                { title: 'Summary', preview: 'Comprehensive summary of main points and themes...' },
+                { title: 'Article Format', preview: 'Structured article based on video content...' },
+                { title: 'Knowledge Quiz', preview: 'Q1: What is the main theme discussed?\nQ2: Who are the key figures mentioned?' },
+                { title: 'Key Questions', preview: 'What are the implications of...?\nHow does this relate to...?' },
+                { title: 'Detailed Summary', preview: 'In-depth analysis covering all major topics...' },
+                { title: 'Claims Analysis', preview: 'Fact-checking and verification of statements...' },
+                { title: 'Insights', preview: 'Deep insights and connections identified...' },
+                { title: 'Timeline', preview: 'Chronological breakdown of events and topics...' },
+                { title: 'Logical Analysis', preview: 'Evaluation of reasoning and argument structure...' },
+                { title: 'Essay', preview: 'Comprehensive essay based on video content...' },
+                { title: 'Mind Map', preview: 'Visual representation of concepts and relationships...' },
+                { title: 'Content Rating', preview: 'Quality assessment and content evaluation...' }
+            ];
+
+            results.forEach(result => {
+                const resultCard = document.createElement('div');
+                resultCard.className = 'result-card';
+                resultCard.innerHTML = `
+                    <div class="result-title">${result.title}</div>
+                    <div class="result-preview">${result.preview}</div>
+                `;
+                resultsGrid.appendChild(resultCard);
+            });
+        }
+
+        // Management Modal
+        const managementFab = document.getElementById('managementFab');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModal = document.getElementById('closeModal');
+
+        managementFab.addEventListener('click', () => {
+            modalOverlay.classList.add('visible');
+            loadManagementData();
+        });
+
+        closeModal.addEventListener('click', () => {
+            modalOverlay.classList.remove('visible');
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('visible');
+            }
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+                
+                // Update active tab
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update active content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(targetTab + 'Tab').classList.add('active');
+            });
+        });
+
+        function loadManagementData() {
+            // Simulate loading system status
+            document.getElementById('systemStatus').innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <strong>Server Status:</strong> <span style="color: #00D4AA;">Online</span><br>
+                    <strong>Active Processes:</strong> ${isProcessing ? '1' : '0'}<br>
+                    <strong>Memory Usage:</strong> 342 MB<br>
+                    <strong>Storage:</strong> 1.2 GB used
+                </div>
+            `;
+
+            // Simulate processing history
+            document.getElementById('processingHistory').innerHTML = `
+                <div style="font-family: monospace; font-size: 0.85rem; line-height: 1.6;">
+                    [2024-01-15 14:32] ✅ Analysis completed - dQw4w9WgXcQ<br>
+                    [2024-01-15 14:28] 🚀 Started processing - dQw4w9WgXcQ<br>
+                    [2024-01-15 13:45] ✅ Analysis completed - 9bZkp7q19f0<br>
+                    [2024-01-15 13:41] 🚀 Started processing - 9bZkp7q19f0<br>
+                </div>
+            `;
+        }
+
+        // Download button
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            // Simulate download
+            const link = document.createElement('a');
+            link.href = '#';
+            link.download = 'youtube_analysis.zip';
+            link.textContent = 'Downloading...';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Initialize the application
+        function init() {
+            createNeuralNetwork();
+            initializePatterns();
+        }
+
+        // Start the application
+        init();
+    </script>
+</body>
+</html>

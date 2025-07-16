@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Coral Reef Laboratory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Coral Reef Laboratory Color Palette */
+            --coral-primary: rgba(255, 127, 80, 0.9);
+            --coral-secondary: rgba(255, 160, 122, 0.7);
+            --sea-green: rgba(32, 178, 170, 0.8);
+            --sea-green-light: rgba(32, 178, 170, 0.4);
+            --tropical-blue: rgba(70, 130, 180, 0.9);
+            --tropical-blue-light: rgba(70, 130, 180, 0.3);
+            --deep-teal: rgba(0, 139, 139, 0.8);
+            --aqua-glow: rgba(0, 255, 255, 0.3);
+            --bioluminescent: rgba(173, 255, 47, 0.6);
+            --sandy-beige: rgba(245, 222, 179, 0.2);
+            
+            /* Living Glass Backgrounds */
+            --reef-bg-primary: rgba(255, 255, 255, 0.08);
+            --reef-bg-secondary: rgba(255, 255, 255, 0.12);
+            --reef-bg-tertiary: rgba(255, 255, 255, 0.16);
+            --reef-bg-elevated: rgba(255, 255, 255, 0.2);
+            --reef-bg-modal: rgba(255, 255, 255, 0.25);
+            
+            /* Organic Borders */
+            --reef-border: rgba(255, 255, 255, 0.25);
+            --reef-border-subtle: rgba(255, 255, 255, 0.15);
+            --reef-border-strong: rgba(255, 255, 255, 0.35);
+            --reef-border-glow: rgba(32, 178, 170, 0.4);
+            
+            /* Bioluminescent Text */
+            --text-reef-primary: rgba(255, 255, 255, 0.96);
+            --text-reef-secondary: rgba(255, 255, 255, 0.82);
+            --text-reef-tertiary: rgba(255, 255, 255, 0.68);
+            --text-reef-muted: rgba(255, 255, 255, 0.54);
+            --text-reef-accent: rgba(32, 178, 170, 0.95);
+            
+            /* Organic Shadows */
+            --reef-shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --reef-shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.2);
+            --reef-shadow-deep: 0 16px 80px rgba(0, 0, 0, 0.3);
+            --reef-shadow-bioluminescent: 0 0 40px rgba(32, 178, 170, 0.2);
+            --reef-shadow-coral: 0 0 30px rgba(255, 127, 80, 0.15);
+            
+            /* Flowing Blur Effects */
+            --reef-blur-gentle: blur(8px);
+            --reef-blur-medium: blur(16px);
+            --reef-blur-deep: blur(24px);
+            --reef-blur-mystical: blur(40px);
+            
+            /* Organic Dimensions */
+            --border-radius-coral: 20px;
+            --border-radius-anemone: 32px;
+            --border-radius-pearl: 16px;
+            --border-radius-organic: 50px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: radial-gradient(ellipse at top, 
+                #1a3b5c 0%, 
+                #2c5f7e 20%, 
+                #1e4a6b 40%, 
+                #0f2a44 70%, 
+                #081c2e 100%);
+            background-attachment: fixed;
+            color: var(--text-reef-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Coral Reef Ambient Environment */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 25%, var(--coral-primary) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, var(--sea-green) 0%, transparent 40%),
+                radial-gradient(circle at 45% 85%, var(--tropical-blue) 0%, transparent 35%),
+                radial-gradient(circle at 75% 15%, var(--bioluminescent) 0%, transparent 30%);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -2;
+            animation: coralBreathing 12s ease-in-out infinite;
+        }
+
+        @keyframes coralBreathing {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.02); }
+        }
+
+        /* Floating Bioluminescent Particles */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, var(--bioluminescent) 1px, transparent 1px),
+                radial-gradient(circle at 70% 60%, var(--aqua-glow) 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, var(--coral-secondary) 1px, transparent 1px),
+                radial-gradient(circle at 90% 20%, var(--sea-green-light) 1px, transparent 1px);
+            background-size: 120px 120px, 180px 180px, 240px 240px, 300px 300px;
+            animation: bioFlow 25s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        @keyframes bioFlow {
+            0%, 100% { 
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                opacity: 0.4;
+            }
+            25% { 
+                transform: translateX(-15px) translateY(-8px) rotate(2deg);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateX(8px) translateY(12px) rotate(-1deg);
+                opacity: 0.5;
+            }
+            75% { 
+                transform: translateX(12px) translateY(-5px) rotate(1deg);
+                opacity: 0.7;
+            }
+        }
+
+        /* Underwater Current Effect */
+        .current-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(32, 178, 170, 0.1) 49%, rgba(32, 178, 170, 0.1) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(70, 130, 180, 0.08) 49%, rgba(70, 130, 180, 0.08) 51%, transparent 52%);
+            background-size: 200px 200px, 150px 150px;
+            animation: currentFlow 20s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        @keyframes currentFlow {
+            0% { background-position: 0% 0%, 0% 0%; }
+            100% { background-position: 200px 200px, -150px 150px; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Organic Header with Coral Growth Pattern */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--sea-green) 0%, var(--coral-primary) 30%, transparent 70%);
+            border-radius: 60% 40% 70% 30%;
+            filter: var(--reef-blur-medium);
+            z-index: -1;
+            animation: coralGrowth 15s ease-in-out infinite;
+        }
+
+        @keyframes coralGrowth {
+            0%, 100% { 
+                border-radius: 60% 40% 70% 30%;
+                transform: translateX(-50%) scale(1) rotate(0deg);
+            }
+            50% { 
+                border-radius: 40% 60% 30% 70%;
+                transform: translateX(-50%) scale(1.1) rotate(5deg);
+            }
+        }
+
+        .header h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, 
+                var(--text-reef-primary) 0%, 
+                var(--coral-primary) 25%,
+                var(--sea-green) 50%, 
+                var(--tropical-blue) 75%,
+                var(--text-reef-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 50px var(--sea-green);
+            position: relative;
+            animation: textGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 50px var(--sea-green); }
+            50% { text-shadow: 0 0 70px var(--coral-primary), 0 0 90px var(--sea-green); }
+        }
+
+        .header p {
+            color: var(--text-reef-secondary);
+            font-size: 1.3rem;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+            animation: subtleGlow 10s ease-in-out infinite;
+        }
+
+        @keyframes subtleGlow {
+            0%, 100% { color: var(--text-reef-secondary); }
+            50% { color: var(--text-reef-accent); }
+        }
+
+        /* Living Coral Card */
+        .coral-card {
+            background: var(--reef-bg-secondary);
+            backdrop-filter: var(--reef-blur-medium);
+            -webkit-backdrop-filter: var(--reef-blur-medium);
+            border: 2px solid var(--reef-border);
+            border-radius: var(--border-radius-anemone);
+            padding: 45px;
+            margin-bottom: 40px;
+            box-shadow: var(--reef-shadow-medium), var(--reef-shadow-bioluminescent);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coral-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--coral-primary) 25%,
+                var(--sea-green) 50%,
+                var(--tropical-blue) 75%,
+                transparent 100%);
+            animation: reefShimmer 6s ease-in-out infinite;
+        }
+
+        @keyframes reefShimmer {
+            0%, 100% { opacity: 0.6; transform: translateX(-100%); }
+            50% { opacity: 1; transform: translateX(100%); }
+        }
+
+        .coral-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                transparent 50%, 
+                rgba(32, 178, 170, 0.03) 100%);
+            pointer-events: none;
+            border-radius: var(--border-radius-anemone);
+        }
+
+        .coral-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: var(--reef-shadow-deep), var(--reef-shadow-bioluminescent), var(--reef-shadow-coral);
+            border-color: var(--reef-border-glow);
+            background: var(--reef-bg-tertiary);
+        }
+
+        /* Elevated Reef Structure */
+        .coral-card-elevated {
+            background: var(--reef-bg-elevated);
+            backdrop-filter: var(--reef-blur-deep);
+            -webkit-backdrop-filter: var(--reef-blur-deep);
+            border: 2px solid var(--reef-border-strong);
+            border-radius: var(--border-radius-organic);
+            padding: 50px;
+            box-shadow: var(--reef-shadow-deep), 
+                        0 0 80px rgba(32, 178, 170, 0.2),
+                        inset 0 2px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: organicPulse 12s ease-in-out infinite;
+        }
+
+        @keyframes organicPulse {
+            0%, 100% { border-radius: var(--border-radius-organic); }
+            50% { border-radius: 45px 25px 40px 30px; }
+        }
+
+        .coral-card-elevated::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, 
+                rgba(255, 127, 80, 0.08) 0%, 
+                transparent 40%),
+                radial-gradient(circle at 70% 80%, 
+                rgba(32, 178, 170, 0.06) 0%, 
+                transparent 40%);
+            pointer-events: none;
+            animation: organicAmbient 18s ease-in-out infinite;
+        }
+
+        @keyframes organicAmbient {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Input Elements with Coral Texture */
+        .input-group {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-reef-primary);
+            margin-bottom: 15px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 22px 28px;
+            font-size: 1.15rem;
+            background: var(--reef-bg-primary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border);
+            border-radius: var(--border-radius-coral);
+            color: var(--text-reef-primary);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-family: inherit;
+            box-shadow: inset 0 3px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .url-input::placeholder {
+            color: var(--text-reef-muted);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--reef-border-glow);
+            background: var(--reef-bg-secondary);
+            box-shadow: 0 0 0 4px rgba(32, 178, 170, 0.2),
+                        inset 0 3px 12px rgba(0, 0, 0, 0.15),
+                        0 0 40px rgba(32, 178, 170, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Bioluminescent Button */
+        .bio-button {
+            background: linear-gradient(135deg, 
+                var(--sea-green) 0%, 
+                var(--tropical-blue) 50%,
+                var(--coral-primary) 100%);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid rgba(32, 178, 170, 0.6);
+            border-radius: var(--border-radius-coral);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 22px 45px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--reef-shadow-soft), 
+                        0 0 30px rgba(32, 178, 170, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-family: inherit;
+        }
+
+        .bio-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .bio-button:hover::before {
+            left: 100%;
+        }
+
+        .bio-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--reef-shadow-medium), 
+                        0 0 50px rgba(32, 178, 170, 0.5),
+                        0 0 80px rgba(255, 127, 80, 0.3);
+            border-color: rgba(32, 178, 170, 0.9);
+        }
+
+        .bio-button:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        .bio-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            animation: disabledPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes disabledPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Current Flow Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 45px;
+        }
+
+        .progress-section.visible {
+            display: block;
+            animation: surfaceFromDepth 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes surfaceFromDepth {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Reef Phase Structure */
+        .reef-phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 45px;
+        }
+
+        .phase-polyp {
+            background: var(--reef-bg-primary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border-subtle);
+            border-radius: var(--border-radius-coral);
+            padding: 28px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-polyp::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
+                rgba(32, 178, 170, 0.1) 0%, 
+                transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .phase-polyp:hover::before {
+            opacity: 1;
+        }
+
+        .phase-polyp.active {
+            border-color: var(--reef-border-glow);
+            background: var(--reef-bg-secondary);
+            box-shadow: 0 0 40px rgba(32, 178, 170, 0.2);
+            animation: activeGrowth 3s ease-in-out infinite;
+        }
+
+        @keyframes activeGrowth {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .phase-polyp.completed {
+            border-color: rgba(255, 127, 80, 0.4);
+            background: rgba(255, 127, 80, 0.08);
+            box-shadow: 0 0 30px rgba(255, 127, 80, 0.15);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .phase-nucleus {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--reef-bg-tertiary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--text-reef-secondary);
+            transition: all 0.4s ease;
+        }
+
+        .phase-polyp.active .phase-nucleus {
+            background: var(--sea-green-light);
+            border-color: var(--sea-green);
+            color: white;
+            box-shadow: 0 0 20px rgba(32, 178, 170, 0.4);
+            animation: nucleusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes nucleusPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .phase-polyp.completed .phase-nucleus {
+            background: var(--coral-primary);
+            border-color: rgba(255, 127, 80, 0.6);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 127, 80, 0.4);
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-reef-primary);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .pattern-tentacles {
+            list-style: none;
+        }
+
+        .pattern-organism {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pattern-organism:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-organism:hover {
+            padding-left: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .pattern-symbiont {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-reef-muted);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pattern-organism.active .pattern-symbiont {
+            background: var(--sea-green);
+            box-shadow: 0 0 15px rgba(32, 178, 170, 0.6);
+            animation: symbiontPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes symbiontPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(32, 178, 170, 0.6);
+            }
+            50% { 
+                transform: scale(1.3);
+                box-shadow: 0 0 25px rgba(32, 178, 170, 0.8);
+            }
+        }
+
+        .pattern-organism.completed .pattern-symbiont {
+            background: var(--coral-primary);
+            box-shadow: 0 0 12px rgba(255, 127, 80, 0.5);
+        }
+
+        .pattern-name {
+            font-weight: 600;
+            color: var(--text-reef-secondary);
+            flex: 1;
+            transition: color 0.3s ease;
+        }
+
+        .pattern-organism.active .pattern-name {
+            color: var(--text-reef-accent);
+            text-shadow: 0 0 10px rgba(32, 178, 170, 0.3);
+        }
+
+        .pattern-organism.completed .pattern-name {
+            color: var(--text-reef-primary);
+        }
+
+        /* Results Treasure */
+        .results-section {
+            display: none;
+            margin-top: 45px;
+        }
+
+        .results-section.visible {
+            display: block;
+            animation: surfaceFromDepth 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .treasure-card {
+            background: var(--reef-bg-elevated);
+            backdrop-filter: var(--reef-blur-medium);
+            -webkit-backdrop-filter: var(--reef-blur-medium);
+            border: 2px solid var(--reef-border-strong);
+            border-radius: var(--border-radius-anemone);
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--reef-shadow-medium), 
+                        0 0 60px rgba(255, 127, 80, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .treasure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(255, 127, 80, 0.1) 0%, 
+                transparent 60%);
+            animation: treasureGlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes treasureGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .treasure-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-reef-primary);
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 127, 80, 0.3);
+        }
+
+        .treasure-description {
+            color: var(--text-reef-secondary);
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .harvest-button {
+            background: linear-gradient(135deg, 
+                var(--coral-primary) 0%, 
+                rgba(255, 127, 80, 0.9) 100%);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid rgba(255, 127, 80, 0.6);
+            border-radius: var(--border-radius-coral);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 18px 40px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--reef-shadow-soft), 
+                        0 0 30px rgba(255, 127, 80, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .harvest-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--reef-shadow-medium), 
+                        0 0 50px rgba(255, 127, 80, 0.5);
+            border-color: rgba(255, 127, 80, 0.9);
+        }
+
+        /* Management Laboratory */
+        .lab-portal {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: var(--reef-bg-secondary);
+            backdrop-filter: var(--reef-blur-medium);
+            -webkit-backdrop-filter: var(--reef-blur-medium);
+            border: 2px solid var(--reef-border);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-reef-primary);
+            font-size: 1.4rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 999;
+            box-shadow: var(--reef-shadow-soft);
+        }
+
+        .lab-portal:hover {
+            background: var(--reef-bg-tertiary);
+            border-color: var(--reef-border-glow);
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: var(--reef-shadow-medium), 0 0 30px rgba(32, 178, 170, 0.3);
+        }
+
+        /* Laboratory Modal */
+        .lab-depths {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: var(--reef-blur-mystical);
+            -webkit-backdrop-filter: var(--reef-blur-mystical);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 25px;
+        }
+
+        .lab-depths.visible {
+            display: flex;
+            animation: depthDive 0.5s ease-out;
+        }
+
+        @keyframes depthDive {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .laboratory {
+            background: var(--reef-bg-modal);
+            backdrop-filter: var(--reef-blur-mystical);
+            -webkit-backdrop-filter: var(--reef-blur-mystical);
+            border: 2px solid var(--reef-border-strong);
+            border-radius: var(--border-radius-organic);
+            padding: 45px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--reef-shadow-deep), 
+                        0 0 100px rgba(0, 0, 0, 0.4);
+            position: relative;
+            animation: labAscent 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes labAscent {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .laboratory::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(32, 178, 170, 0.05) 100%);
+            border-radius: var(--border-radius-organic);
+            pointer-events: none;
+        }
+
+        .lab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lab-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-reef-primary);
+            text-shadow: 0 0 15px rgba(32, 178, 170, 0.3);
+        }
+
+        .lab-exit {
+            background: var(--reef-bg-primary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-reef-secondary);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .lab-exit:hover {
+            background: var(--reef-bg-secondary);
+            border-color: var(--reef-border-strong);
+            color: var(--text-reef-primary);
+            transform: rotate(90deg);
+        }
+
+        .lab-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .lab-section {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--reef-border-subtle);
+        }
+
+        .lab-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-reef-primary);
+            margin-bottom: 18px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .lab-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .control-organism {
+            background: var(--reef-bg-secondary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border);
+            border-radius: var(--border-radius-pearl);
+            color: var(--text-reef-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .control-organism:hover {
+            background: var(--reef-bg-tertiary);
+            border-color: var(--reef-border-glow);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(32, 178, 170, 0.15);
+        }
+
+        .control-organism.danger {
+            border-color: rgba(255, 127, 80, 0.4);
+            color: rgba(255, 127, 80, 0.9);
+        }
+
+        .control-organism.danger:hover {
+            background: rgba(255, 127, 80, 0.1);
+            border-color: rgba(255, 127, 80, 0.6);
+            box-shadow: 0 4px 15px rgba(255, 127, 80, 0.15);
+        }
+
+        /* Responsive Reef */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px 18px;
+            }
+
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .coral-card {
+                padding: 30px;
+            }
+
+            .coral-card-elevated {
+                padding: 35px;
+            }
+
+            .reef-phases {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .laboratory {
+                padding: 30px;
+                margin: 20px;
+            }
+
+            .lab-portal {
+                width: 52px;
+                height: 52px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Current Flow Loading */
+        .current-loading {
+            background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(32, 178, 170, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 100%);
+            background-size: 200% 100%;
+            animation: currentShimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes currentShimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Reef Reflection Effects */
+        .reef-reflection {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reef-reflection::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 100%);
+            transform: skewX(-20deg);
+            transition: left 0.8s ease;
+        }
+
+        .reef-reflection:hover::after {
+            left: 150%;
+        }
+
+        /* Progress Flow Animation */
+        .progress-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .progress-header h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-reef-primary);
+            text-shadow: 0 0 20px rgba(32, 178, 170, 0.3);
+        }
+
+        .progress-header p {
+            color: var(--text-reef-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Hover Effects */
+        .phase-polyp {
+            cursor: pointer;
+        }
+
+        .phase-polyp:hover {
+            transform: translateY(-2px);
+            border-color: var(--reef-border-glow);
+        }
+
+        /* Add current lines to body */
+        body {
+            position: relative;
+        }
+
+        body > .current-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(32, 178, 170, 0.1) 49%, rgba(32, 178, 170, 0.1) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(70, 130, 180, 0.08) 49%, rgba(70, 130, 180, 0.08) 51%, transparent 52%);
+            background-size: 200px 200px, 150px 150px;
+            animation: currentFlow 20s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="current-lines"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Dive deep into the coral reef laboratory where YouTube videos transform into vibrant insights through 13 specialized fabric patterns</p>
+        </header>
+
+        <main class="coral-card coral-card-elevated">
+            <div class="input-group">
+                <label for="youtube-url" class="input-label">YouTube Video URL</label>
+                <input 
+                    type="url" 
+                    id="youtube-url" 
+                    class="url-input" 
+                    placeholder="https://www.youtube.com/watch?v=..."
+                />
+            </div>
+
+            <button id="process-btn" class="bio-button reef-reflection">Begin Deep Analysis</button>
+        </main>
+
+        <div id="progress-section" class="progress-section">
+            <div class="coral-card">
+                <div class="progress-header">
+                    <h3>Exploring the Reef Depths</h3>
+                    <p>Your video is being processed through our coral reef laboratory using 13 specialized patterns across 4 evolutionary phases</p>
+                </div>
+
+                <div class="reef-phases">
+                    <div class="phase-polyp" data-phase="1">
+                        <div class="phase-header">
+                            <div class="phase-nucleus">1</div>
+                            <span class="phase-title">Foundation Coral</span>
+                        </div>
+                        <ul class="pattern-tentacles">
+                            <li class="pattern-organism" data-pattern="extract_wisdom">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Wisdom</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="summarize">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Summarize</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="analyze_claims">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Analyze Claims</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-polyp" data-phase="2">
+                        <div class="phase-header">
+                            <div class="phase-nucleus">2</div>
+                            <span class="phase-title">Analysis Anemone</span>
+                        </div>
+                        <ul class="pattern-tentacles">
+                            <li class="pattern-organism" data-pattern="find_logical_fallacies">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Find Logical Fallacies</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_ideas">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Ideas</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="get_youtube_rss">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Get YouTube RSS</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-polyp" data-phase="3">
+                        <div class="phase-header">
+                            <div class="phase-nucleus">3</div>
+                            <span class="phase-title">Insight Ecosystem</span>
+                        </div>
+                        <ul class="pattern-tentacles">
+                            <li class="pattern-organism" data-pattern="create_quiz">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Create Quiz</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_questions">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Questions</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_references">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract References</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-polyp" data-phase="4">
+                        <div class="phase-header">
+                            <div class="phase-nucleus">4</div>
+                            <span class="phase-title">Knowledge Reef</span>
+                        </div>
+                        <ul class="pattern-tentacles">
+                            <li class="pattern-organism" data-pattern="create_keynote">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Create Keynote</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_poc">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract POC</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="create_security_update">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Create Security Update</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="create_investigation_visualization">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Create Investigation Visualization</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-section" class="results-section">
+            <div class="coral-card">
+                <div class="treasure-card">
+                    <h3 class="treasure-title">Reef Exploration Complete!</h3>
+                    <p class="treasure-description">Your YouTube video has been thoroughly explored through our coral reef laboratory. All 13 fabric patterns have been processed and are ready for harvest.</p>
+                    <a href="#" id="download-btn" class="harvest-button reef-reflection">Harvest Results</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lab-portal" id="lab-portal">
+        🧪
+    </div>
+
+    <div id="lab-modal" class="lab-depths">
+        <div class="laboratory">
+            <div class="lab-header">
+                <h2 class="lab-title">Reef Laboratory Console</h2>
+                <button id="lab-exit" class="lab-exit">×</button>
+            </div>
+            
+            <div class="lab-content">
+                <div class="lab-section">
+                    <h3 class="section-header">Ecosystem Status</h3>
+                    <div class="lab-controls">
+                        <button class="control-organism" onclick="checkReefStatus()">Check Reef Health</button>
+                        <button class="control-organism" onclick="viewExplorationHistory()">Exploration History</button>
+                        <button class="control-organism" onclick="monitorCurrents()">Monitor Currents</button>
+                    </div>
+                </div>
+                
+                <div class="lab-section">
+                    <h3 class="section-header">Reef Maintenance</h3>
+                    <div class="lab-controls">
+                        <button class="control-organism" onclick="cleanReef()">Clean Old Specimens</button>
+                        <button class="control-organism" onclick="refreshEcosystem()">Refresh Ecosystem</button>
+                        <button class="control-organism danger" onclick="resetLaboratory()">Reset Laboratory</button>
+                    </div>
+                </div>
+                
+                <div class="lab-section">
+                    <h3 class="section-header">System Controls</h3>
+                    <div class="lab-controls">
+                        <button class="control-organism danger" onclick="restartReef()">Restart Reef System</button>
+                        <button class="control-organism danger" onclick="shutdownLab()">Shutdown Laboratory</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const processBtn = document.getElementById('process-btn');
+        const urlInput = document.getElementById('youtube-url');
+        const progressSection = document.getElementById('progress-section');
+        const resultsSection = document.getElementById('results-section');
+        const downloadBtn = document.getElementById('download-btn');
+        const labPortal = document.getElementById('lab-portal');
+        const labModal = document.getElementById('lab-modal');
+        const labExit = document.getElementById('lab-exit');
+
+        // Processing state
+        let isProcessing = false;
+        let currentProcessId = null;
+
+        // Event Listeners
+        processBtn.addEventListener('click', beginDeepAnalysis);
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') beginDeepAnalysis();
+        });
+        downloadBtn.addEventListener('click', harvestResults);
+        labPortal.addEventListener('click', openLaboratory);
+        labExit.addEventListener('click', closeLaboratory);
+        labModal.addEventListener('click', (e) => {
+            if (e.target === labModal) closeLaboratory();
+        });
+
+        // Particle interaction effects
+        document.addEventListener('mousemove', (e) => {
+            const phasePolyps = document.querySelectorAll('.phase-polyp');
+            phasePolyps.forEach(polyp => {
+                const rect = polyp.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                polyp.style.setProperty('--x', x + '%');
+                polyp.style.setProperty('--y', y + '%');
+            });
+        });
+
+        // Processing functions
+        async function beginDeepAnalysis() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showNotification('Please enter a YouTube URL to begin reef exploration', 'error');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showNotification('Please enter a valid YouTube URL for proper reef analysis', 'error');
+                return;
+            }
+
+            if (isProcessing) return;
+
+            isProcessing = true;
+            currentProcessId = 'reef-exploration-' + Date.now();
+
+            // Update UI
+            processBtn.disabled = true;
+            processBtn.textContent = 'Diving Deep...';
+            urlInput.disabled = true;
+
+            // Show progress section
+            progressSection.classList.add('visible');
+            resultsSection.classList.remove('visible');
+
+            // Reset all organisms
+            resetReefState();
+
+            // Start the deep exploration
+            await simulateReefExploration();
+        }
+
+        async function simulateReefExploration() {
+            const phases = [1, 2, 3, 4];
+            const patterns = [
+                'extract_wisdom', 'summarize', 'analyze_claims',
+                'find_logical_fallacies', 'extract_ideas', 'get_youtube_rss',
+                'create_quiz', 'extract_questions', 'extract_references',
+                'create_keynote', 'extract_poc', 'create_security_update', 'create_investigation_visualization'
+            ];
+
+            let currentPhase = 0;
+            let currentPattern = 0;
+
+            for (const pattern of patterns) {
+                // Determine which phase we're in
+                if (pattern === 'extract_wisdom') currentPhase = 1;
+                else if (pattern === 'find_logical_fallacies') currentPhase = 2;
+                else if (pattern === 'create_quiz') currentPhase = 3;
+                else if (pattern === 'create_keynote') currentPhase = 4;
+
+                // Activate current phase
+                const phasePolyp = document.querySelector(`[data-phase="${currentPhase}"]`);
+                if (phasePolyp && !phasePolyp.classList.contains('active')) {
+                    // Mark previous phase as completed if exists
+                    if (currentPhase > 1) {
+                        const prevPhase = document.querySelector(`[data-phase="${currentPhase - 1}"]`);
+                        if (prevPhase) {
+                            prevPhase.classList.remove('active');
+                            prevPhase.classList.add('completed');
+                        }
+                    }
+                    phasePolyp.classList.add('active');
+                }
+
+                // Activate current pattern
+                const patternOrganism = document.querySelector(`[data-pattern="${pattern}"]`);
+                if (patternOrganism) {
+                    patternOrganism.classList.add('active');
+                }
+
+                // Simulate processing time (2-5 seconds per pattern)
+                await sleep(Math.random() * 3000 + 2000);
+
+                // Complete current pattern
+                if (patternOrganism) {
+                    patternOrganism.classList.remove('active');
+                    patternOrganism.classList.add('completed');
+                }
+
+                currentPattern++;
+            }
+
+            // Complete final phase
+            const finalPhase = document.querySelector(`[data-phase="4"]`);
+            if (finalPhase) {
+                finalPhase.classList.remove('active');
+                finalPhase.classList.add('completed');
+            }
+
+            // Show results
+            await sleep(1000);
+            explorationComplete();
+        }
+
+        function explorationComplete() {
+            // Show results section
+            resultsSection.classList.add('visible');
+            
+            // Update download link
+            downloadBtn.href = `/api/download/${currentProcessId}`;
+            
+            // Reset button
+            processBtn.disabled = false;
+            processBtn.textContent = 'Begin Deep Analysis';
+            urlInput.disabled = false;
+            isProcessing = false;
+
+            showNotification('Reef exploration complete! All patterns have been successfully processed.', 'success');
+        }
+
+        function harvestResults() {
+            if (currentProcessId) {
+                // Simulate download
+                showNotification('Harvesting your reef exploration results...', 'info');
+                // In real implementation, this would trigger the actual download
+                setTimeout(() => {
+                    showNotification('Results harvested successfully!', 'success');
+                }, 1500);
+            }
+        }
+
+        function resetReefState() {
+            // Reset all phases
+            document.querySelectorAll('.phase-polyp').forEach(polyp => {
+                polyp.classList.remove('active', 'completed');
+            });
+            
+            // Reset all patterns
+            document.querySelectorAll('.pattern-organism').forEach(organism => {
+                organism.classList.remove('active', 'completed');
+            });
+        }
+
+        // Laboratory functions
+        function openLaboratory() {
+            labModal.classList.add('visible');
+        }
+
+        function closeLaboratory() {
+            labModal.classList.remove('visible');
+        }
+
+        function checkReefStatus() {
+            showNotification('Reef ecosystem is healthy and all systems are operational', 'info');
+        }
+
+        function viewExplorationHistory() {
+            showNotification('Recent explorations: 3 successful reef analyses in the past 24 hours', 'info');
+        }
+
+        function monitorCurrents() {
+            showNotification('Ocean currents are stable, processing flow is optimal', 'info');
+        }
+
+        function cleanReef() {
+            if (confirm('Clean old specimens from the reef laboratory?')) {
+                showNotification('Reef cleaning initiated - old exploration data will be archived', 'info');
+            }
+        }
+
+        function refreshEcosystem() {
+            showNotification('Reef ecosystem refreshed - all systems optimized', 'success');
+        }
+
+        function resetLaboratory() {
+            if (confirm('Reset the entire reef laboratory? This will clear all data.')) {
+                showNotification('Laboratory reset initiated - all systems will be restored to pristine state', 'warning');
+            }
+        }
+
+        function restartReef() {
+            if (confirm('Restart the reef system? Active explorations will be interrupted.')) {
+                showNotification('Reef system restart initiated', 'warning');
+            }
+        }
+
+        function shutdownLab() {
+            if (confirm('Shutdown the reef laboratory? This will halt all operations.')) {
+                showNotification('Laboratory shutdown initiated', 'warning');
+            }
+        }
+
+        // Utility functions
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+            return youtubeRegex.test(url);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--reef-bg-elevated);
+                backdrop-filter: var(--reef-blur-medium);
+                border: 2px solid var(--reef-border-strong);
+                border-radius: var(--border-radius-coral);
+                color: var(--text-reef-primary);
+                padding: 16px 24px;
+                max-width: 350px;
+                z-index: 3000;
+                box-shadow: var(--reef-shadow-medium);
+                animation: slideInFromRight 0.3s ease-out;
+            `;
+            
+            if (type === 'error') {
+                notification.style.borderColor = 'rgba(255, 127, 80, 0.6)';
+                notification.style.background = 'rgba(255, 127, 80, 0.1)';
+            } else if (type === 'success') {
+                notification.style.borderColor = 'rgba(32, 178, 170, 0.6)';
+                notification.style.background = 'rgba(32, 178, 170, 0.1)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutToRight 0.3s ease-in forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Add CSS for notification animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInFromRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutToRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Handle escape key for laboratory
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLaboratory();
+            }
+        });
+
+        // Auto-focus URL input on page load
+        window.addEventListener('load', () => {
+            urlInput.focus();
+        });
+    </script>
+</body>
+</html>

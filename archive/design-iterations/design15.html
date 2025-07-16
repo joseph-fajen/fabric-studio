@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - BMW Performance Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=BMW+Noto:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bmw-blue: #0066CC;
+            --bmw-dark-blue: #004499;
+            --bmw-light-blue: #3388DD;
+            --bmw-black: #000000;
+            --bmw-dark-gray: #1a1a1a;
+            --bmw-gray: #333333;
+            --bmw-light-gray: #666666;
+            --bmw-white: #FFFFFF;
+            --bmw-silver: #C0C0C0;
+            --bmw-accent: #FF6600;
+            --bmw-success: #00CC66;
+            --bmw-warning: #FFCC00;
+            --bmw-error: #FF3333;
+        }
+
+        body {
+            font-family: 'BMW Noto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bmw-black) 0%, var(--bmw-dark-gray) 50%, var(--bmw-gray) 100%);
+            color: var(--bmw-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* BMW Kidney Grille Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(ellipse 60px 40px at 25% 25%, rgba(0, 102, 204, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 60px 40px at 75% 25%, rgba(0, 102, 204, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 60px 40px at 25% 75%, rgba(0, 102, 204, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse 60px 40px at 75% 75%, rgba(0, 102, 204, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--bmw-blue), var(--bmw-light-blue), var(--bmw-white));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 102, 204, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--bmw-silver);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* BMW iDrive Inspired Input Section */
+        .input-section {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 26, 0.9));
+            border: 2px solid var(--bmw-blue);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 102, 204, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--bmw-blue), transparent);
+            animation: scanLine 3s infinite;
+        }
+
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .input-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 18px 25px;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--bmw-gray);
+            border-radius: 50px;
+            color: var(--bmw-white);
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .url-input:focus {
+            border-color: var(--bmw-blue);
+            box-shadow: 0 0 20px rgba(0, 102, 204, 0.5);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .url-input::placeholder {
+            color: var(--bmw-light-gray);
+            font-style: italic;
+        }
+
+        .process-btn {
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--bmw-blue), var(--bmw-dark-blue));
+            color: var(--bmw-white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.4);
+        }
+
+        .process-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .process-btn:hover::before {
+            left: 100%;
+        }
+
+        .process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.6);
+        }
+
+        .process-btn:active {
+            transform: translateY(0);
+        }
+
+        .process-btn:disabled {
+            background: var(--bmw-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* BMW Dashboard Style Progress Section */
+        .progress-section {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.9), rgba(26, 26, 26, 0.8));
+            border: 2px solid var(--bmw-blue);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: none;
+            position: relative;
+        }
+
+        .progress-section.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .progress-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--bmw-blue);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .progress-subtitle {
+            color: var(--bmw-silver);
+            font-size: 1.1rem;
+        }
+
+        /* BMW iDrive Style Phases */
+        .phases-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .phase {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(51, 51, 51, 0.6));
+            border: 1px solid var(--bmw-gray);
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .phase.active {
+            border-color: var(--bmw-blue);
+            box-shadow: 0 0 20px rgba(0, 102, 204, 0.4);
+        }
+
+        .phase.completed {
+            border-color: var(--bmw-success);
+            background: linear-gradient(135deg, rgba(0, 204, 102, 0.1), rgba(0, 0, 0, 0.8));
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .phase-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--bmw-blue), var(--bmw-dark-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .phase.completed .phase-number {
+            background: linear-gradient(45deg, var(--bmw-success), #00AA55);
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--bmw-white);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .patterns-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(102, 102, 102, 0.3);
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bmw-gray);
+            margin-right: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.active .pattern-status {
+            background: var(--bmw-blue);
+            box-shadow: 0 0 10px rgba(0, 102, 204, 0.6);
+            animation: pulse 1.5s infinite;
+        }
+
+        .pattern-item.completed .pattern-status {
+            background: var(--bmw-success);
+            box-shadow: 0 0 10px rgba(0, 204, 102, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* BMW Gauge Style Overall Progress */
+        .overall-progress {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .progress-gauge {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .gauge-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--bmw-blue) 0deg,
+                var(--bmw-blue) var(--progress, 0deg),
+                var(--bmw-gray) var(--progress, 0deg),
+                var(--bmw-gray) 360deg
+            );
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-inner {
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--bmw-black), var(--bmw-dark-gray));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .gauge-percentage {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--bmw-blue);
+            line-height: 1;
+        }
+
+        .gauge-label {
+            font-size: 0.9rem;
+            color: var(--bmw-silver);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.9), rgba(26, 26, 26, 0.8));
+            border: 2px solid var(--bmw-success);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: none;
+            text-align: center;
+        }
+
+        .results-section.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .results-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--bmw-success);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .download-btn {
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--bmw-success), #00AA55);
+            color: var(--bmw-white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 204, 102, 0.4);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 204, 102, 0.6);
+        }
+
+        /* Management Button */
+        .management-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--bmw-blue), var(--bmw-dark-blue));
+            border: none;
+            color: var(--bmw-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.4);
+            z-index: 1000;
+        }
+
+        .management-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.6);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.95), rgba(26, 26, 26, 0.9));
+            margin: 2% auto;
+            padding: 0;
+            border: 2px solid var(--bmw-blue);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 1000px;
+            height: 90vh;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 102, 204, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(90deg, var(--bmw-blue), var(--bmw-dark-blue));
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--bmw-white);
+            text-transform: uppercase;
+        }
+
+        .close {
+            color: var(--bmw-white);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            color: var(--bmw-accent);
+            transform: scale(1.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+            height: calc(90vh - 100px);
+            overflow-y: auto;
+        }
+
+        /* BMW iDrive Tab System */
+        .tab-container {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--bmw-gray);
+        }
+
+        .tab {
+            padding: 15px 25px;
+            background: transparent;
+            border: none;
+            color: var(--bmw-silver);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--bmw-blue);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--bmw-blue);
+        }
+
+        .tab:hover {
+            color: var(--bmw-white);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Status Cards */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(51, 51, 51, 0.6));
+            border: 1px solid var(--bmw-gray);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .status-card:hover {
+            border-color: var(--bmw-blue);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        .status-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--bmw-blue);
+            margin-bottom: 10px;
+        }
+
+        .status-label {
+            color: var(--bmw-silver);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            padding: 12px 25px;
+            margin: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            background: linear-gradient(45deg, var(--bmw-gray), var(--bmw-light-gray));
+            color: var(--bmw-white);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(45deg, var(--bmw-blue), var(--bmw-dark-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.4);
+        }
+
+        .action-btn.danger {
+            background: linear-gradient(45deg, var(--bmw-error), #CC0000);
+        }
+
+        .action-btn.danger:hover {
+            background: linear-gradient(45deg, #FF4444, var(--bmw-error));
+        }
+
+        /* History Table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--bmw-gray);
+        }
+
+        .history-table th {
+            background: linear-gradient(90deg, var(--bmw-blue), var(--bmw-dark-blue));
+            color: var(--bmw-white);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .history-table tr:hover {
+            background: rgba(0, 102, 204, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .url-input,
+            .process-btn {
+                width: 100%;
+            }
+
+            .phases-container {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                height: 95vh;
+                margin: 2.5% auto;
+            }
+
+            .management-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--bmw-gray);
+            border-radius: 50%;
+            border-top-color: var(--bmw-blue);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* BMW Engine Sound Effect */
+        .engine-sound {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.8rem;
+            color: var(--bmw-silver);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">YouTube Fabric Processor</h1>
+            <p class="subtitle">The Ultimate Driving Machine for Video Analysis</p>
+        </header>
+
+        <section class="input-section">
+            <div class="input-group">
+                <input type="url" class="url-input" id="youtubeUrl" placeholder="Enter YouTube URL for BMW-grade precision analysis">
+                <button class="process-btn" id="processBtn">
+                    <span id="btnText">Engage</span>
+                    <span id="btnLoading" class="loading" style="display: none;"></span>
+                </button>
+            </div>
+        </section>
+
+        <section class="progress-section" id="progressSection">
+            <div class="progress-header">
+                <h2 class="progress-title">Processing Engine</h2>
+                <p class="progress-subtitle">BMW Performance Analytics in Motion</p>
+            </div>
+
+            <div class="phases-container" id="phasesContainer">
+                <!-- Phases will be populated by JavaScript -->
+            </div>
+
+            <div class="overall-progress">
+                <div class="progress-gauge">
+                    <div class="gauge-bg" style="--progress: 0deg;">
+                        <div class="gauge-inner">
+                            <div class="gauge-percentage" id="overallPercentage">0%</div>
+                            <div class="gauge-label">Complete</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="results-section" id="resultsSection">
+            <h2 class="results-title">Mission Accomplished</h2>
+            <p style="margin-bottom: 30px; font-size: 1.2rem; color: var(--bmw-silver);">
+                Your BMW-grade analysis is ready for download
+            </p>
+            <a href="#" class="download-btn" id="downloadBtn">Download Results</a>
+        </section>
+    </div>
+
+    <!-- Management Button -->
+    <button class="management-btn" id="managementBtn" title="Open Management Console">⚙️</button>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">BMW Command Center</h2>
+                <span class="close" id="closeModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="tab-container">
+                    <button class="tab active" onclick="showTab('status')">Status</button>
+                    <button class="tab" onclick="showTab('history')">History</button>
+                    <button class="tab" onclick="showTab('cleanup')">Cleanup</button>
+                    <button class="tab" onclick="showTab('control')">Control</button>
+                </div>
+
+                <div id="statusTab" class="tab-content active">
+                    <div class="status-grid">
+                        <div class="status-card">
+                            <div class="status-value" id="serverStatus">Online</div>
+                            <div class="status-label">Server Status</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-value" id="activeProcesses">0</div>
+                            <div class="status-label">Active Processes</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-value" id="totalProcessed">0</div>
+                            <div class="status-label">Total Processed</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-value" id="uptime">0h 0m</div>
+                            <div class="status-label">Uptime</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="historyTab" class="tab-content">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Video ID</th>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Duration</th>
+                                <th>Completed</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- History entries will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="cleanupTab" class="tab-content">
+                    <h3 style="margin-bottom: 20px; color: var(--bmw-blue);">Cleanup Options</h3>
+                    <p style="margin-bottom: 20px; color: var(--bmw-silver);">
+                        Manage storage and clean up old processing outputs
+                    </p>
+                    <button class="action-btn" onclick="cleanupOld()">Clean Old Files (7+ days)</button>
+                    <button class="action-btn danger" onclick="cleanupAll()">Clean All Files</button>
+                </div>
+
+                <div id="controlTab" class="tab-content">
+                    <h3 style="margin-bottom: 20px; color: var(--bmw-blue);">Server Control</h3>
+                    <p style="margin-bottom: 20px; color: var(--bmw-silver);">
+                        Control server operations and restart services
+                    </p>
+                    <button class="action-btn" onclick="restartServer()">Restart Server</button>
+                    <button class="action-btn danger" onclick="shutdownServer()">Shutdown Server</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="engine-sound">BMW M Performance ⚡ Powered by Claude</div>
+
+    <script>
+        // Global variables
+        let currentProcessId = null;
+        let socket = null;
+        let processComplete = false;
+
+        // Fabric patterns organized by phases
+        const fabricPatterns = {
+            "Phase 1: Foundation Analysis": [
+                "extract_wisdom",
+                "summarize", 
+                "create_summary"
+            ],
+            "Phase 2: Content Intelligence": [
+                "extract_ideas",
+                "find_logical_fallacies",
+                "extract_predictions"
+            ],
+            "Phase 3: Knowledge Mining": [
+                "extract_questions",
+                "extract_references",
+                "create_quiz"
+            ],
+            "Phase 4: Strategic Insights": [
+                "analyze_tech_impact",
+                "create_keynote",
+                "analyze_claims",
+                "rate_content"
+            ]
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeWebSocket();
+            setupEventListeners();
+            createPhasesUI();
+            loadManagementData();
+            
+            // BMW startup sound effect
+            setTimeout(() => {
+                console.log('🏁 BMW Performance System Initialized');
+            }, 1000);
+        });
+
+        function initializeWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}`;
+            
+            socket = new WebSocket(wsUrl);
+            
+            socket.onopen = function() {
+                console.log('BMW Command Center Connected');
+                updateServerStatus('Online');
+            };
+            
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+            
+            socket.onclose = function() {
+                console.log('BMW Command Center Disconnected');
+                updateServerStatus('Offline');
+                // Attempt to reconnect after 3 seconds
+                setTimeout(initializeWebSocket, 3000);
+            };
+            
+            socket.onerror = function(error) {
+                console.error('BMW System Error:', error);
+                updateServerStatus('Error');
+            };
+        }
+
+        function setupEventListeners() {
+            // Process button
+            document.getElementById('processBtn').addEventListener('click', startProcessing);
+            
+            // Enter key in URL input
+            document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startProcessing();
+                }
+            });
+            
+            // Management modal
+            document.getElementById('managementBtn').addEventListener('click', openManagementModal);
+            document.getElementById('closeModal').addEventListener('click', closeManagementModal);
+            
+            // Close modal on outside click
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('managementModal');
+                if (e.target === modal) {
+                    closeManagementModal();
+                }
+            });
+        }
+
+        function createPhasesUI() {
+            const container = document.getElementById('phasesContainer');
+            let phaseNumber = 1;
+            
+            for (const [phaseName, patterns] of Object.entries(fabricPatterns)) {
+                const phaseDiv = document.createElement('div');
+                phaseDiv.className = 'phase';
+                phaseDiv.id = `phase-${phaseNumber}`;
+                
+                phaseDiv.innerHTML = `
+                    <div class="phase-header">
+                        <div class="phase-number">${phaseNumber}</div>
+                        <div class="phase-title">${phaseName}</div>
+                    </div>
+                    <ul class="patterns-list">
+                        ${patterns.map(pattern => `
+                            <li class="pattern-item" id="pattern-${pattern}">
+                                <div class="pattern-status"></div>
+                                <span>${pattern.replace(/_/g, ' ').toUpperCase()}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                
+                container.appendChild(phaseDiv);
+                phaseNumber++;
+            }
+        }
+
+        async function startProcessing() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            const btn = document.getElementById('processBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+            
+            if (!isValidYouTubeURL(url)) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+            
+            // Update UI to processing state
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline-block';
+            
+            // Show progress section
+            document.getElementById('progressSection').classList.add('active');
+            document.getElementById('resultsSection').classList.remove('show');
+            
+            // Reset progress
+            resetProgress();
+            processComplete = false;
+            
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentProcessId = result.processId;
+                    console.log('BMW Engine Started:', currentProcessId);
+                } else {
+                    throw new Error(result.error || 'BMW System Error');
+                }
+            } catch (error) {
+                console.error('BMW Processing Error:', error);
+                alert('Error starting processing: ' + error.message);
+                resetUI();
+            }
+        }
+
+        function handleWebSocketMessage(data) {
+            console.log('BMW Telemetry:', data);
+            
+            switch (data.type) {
+                case 'progress':
+                    updateProgress(data);
+                    break;
+                case 'phase_start':
+                    updatePhaseStatus(data.phase, 'active');
+                    break;
+                case 'phase_complete':
+                    updatePhaseStatus(data.phase, 'completed');
+                    break;
+                case 'pattern_start':
+                    updatePatternStatus(data.pattern, 'active');
+                    break;
+                case 'pattern_complete':
+                    updatePatternStatus(data.pattern, 'completed');
+                    break;
+                case 'complete':
+                    handleProcessingComplete(data);
+                    break;
+                case 'error':
+                    handleError(data);
+                    break;
+            }
+        }
+
+        function updateProgress(data) {
+            const percentage = data.percentage || 0;
+            const gauge = document.querySelector('.gauge-bg');
+            const percentageText = document.getElementById('overallPercentage');
+            
+            // Update gauge
+            const degrees = (percentage / 100) * 360;
+            gauge.style.setProperty('--progress', `${degrees}deg`);
+            percentageText.textContent = `${Math.round(percentage)}%`;
+        }
+
+        function updatePhaseStatus(phaseNumber, status) {
+            const phase = document.getElementById(`phase-${phaseNumber}`);
+            if (phase) {
+                phase.classList.remove('active', 'completed');
+                if (status === 'active' || status === 'completed') {
+                    phase.classList.add(status);
+                }
+            }
+        }
+
+        function updatePatternStatus(patternName, status) {
+            const pattern = document.getElementById(`pattern-${patternName}`);
+            if (pattern) {
+                pattern.classList.remove('active', 'completed');
+                if (status === 'active' || status === 'completed') {
+                    pattern.classList.add(status);
+                }
+            }
+        }
+
+        function handleProcessingComplete(data) {
+            processComplete = true;
+            
+            // Show results section
+            document.getElementById('resultsSection').classList.add('show');
+            
+            // Update download button
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = `/api/download/${currentProcessId}`;
+            
+            // Reset UI
+            resetUI();
+            
+            // BMW completion sound effect
+            console.log('🏁 BMW Mission Accomplished!');
+        }
+
+        function handleError(data) {
+            console.error('BMW System Error:', data);
+            alert('BMW Processing Error: ' + (data.message || 'Unknown error'));
+            resetUI();
+        }
+
+        function resetProgress() {
+            // Reset all phases and patterns
+            document.querySelectorAll('.phase').forEach(phase => {
+                phase.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.pattern-item').forEach(pattern => {
+                pattern.classList.remove('active', 'completed');
+            });
+            
+            // Reset gauge
+            updateProgress({ percentage: 0 });
+        }
+
+        function resetUI() {
+            const btn = document.getElementById('processBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            
+            btn.disabled = false;
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+        }
+
+        function isValidYouTubeURL(url) {
+            const patterns = [
+                /^https?:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+/,
+                /^https?:\/\/youtu\.be\/[\w-]+/,
+                /^https?:\/\/(?:www\.)?youtube\.com\/embed\/[\w-]+/
+            ];
+            return patterns.some(pattern => pattern.test(url));
+        }
+
+        // Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('managementModal').style.display = 'block';
+            loadManagementData();
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').style.display = 'none';
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Load data for specific tabs
+            if (tabName === 'history') {
+                loadHistoryData();
+            }
+        }
+
+        async function loadManagementData() {
+            try {
+                const response = await fetch('/api/management/status');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('activeProcesses').textContent = data.activeProcesses || 0;
+                    document.getElementById('totalProcessed').textContent = data.totalProcessed || 0;
+                    document.getElementById('uptime').textContent = formatUptime(data.uptime || 0);
+                }
+            } catch (error) {
+                console.error('Error loading management data:', error);
+            }
+        }
+
+        async function loadHistoryData() {
+            try {
+                const response = await fetch('/api/management/history');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const tbody = document.getElementById('historyTableBody');
+                    tbody.innerHTML = '';
+                    
+                    data.history.forEach(entry => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${entry.id}</td>
+                            <td>${entry.title || 'Unknown'}</td>
+                            <td>${entry.status}</td>
+                            <td>${entry.duration || 'N/A'}</td>
+                            <td>${new Date(entry.completed).toLocaleString()}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading history data:', error);
+            }
+        }
+
+        function updateServerStatus(status) {
+            const statusElement = document.getElementById('serverStatus');
+            if (statusElement) {
+                statusElement.textContent = status;
+                statusElement.style.color = status === 'Online' ? 'var(--bmw-success)' : 'var(--bmw-error)';
+            }
+        }
+
+        function formatUptime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return `${hours}h ${minutes}m`;
+        }
+
+        async function cleanupOld() {
+            if (confirm('BMW Cleanup: Remove files older than 7 days?')) {
+                try {
+                    const response = await fetch('/api/management/cleanup-old', {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    alert(result.message || 'BMW Cleanup Complete');
+                } catch (error) {
+                    alert('BMW Cleanup Error: ' + error.message);
+                }
+            }
+        }
+
+        async function cleanupAll() {
+            if (confirm('BMW WARNING: This will delete ALL output files. Continue?')) {
+                try {
+                    const response = await fetch('/api/management/cleanup-all', {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    alert(result.message || 'BMW Complete Cleanup Finished');
+                } catch (error) {
+                    alert('BMW Cleanup Error: ' + error.message);
+                }
+            }
+        }
+
+        async function restartServer() {
+            if (confirm('BMW System Restart: This will restart the server. Continue?')) {
+                try {
+                    const response = await fetch('/api/management/restart', {
+                        method: 'POST'
+                    });
+                    alert('BMW Server restarting...');
+                    closeManagementModal();
+                } catch (error) {
+                    alert('BMW Restart Error: ' + error.message);
+                }
+            }
+        }
+
+        async function shutdownServer() {
+            if (confirm('BMW SHUTDOWN: This will shut down the server. Continue?')) {
+                try {
+                    const response = await fetch('/api/management/shutdown', {
+                        method: 'POST'
+                    });
+                    alert('BMW Server shutting down...');
+                    closeManagementModal();
+                } catch (error) {
+                    alert('BMW Shutdown Error: ' + error.message);
+                }
+            }
+        }
+
+        // BMW Easter Egg - Engine Sound on Button Hover
+        document.addEventListener('mouseover', function(e) {
+            if (e.target.classList.contains('process-btn') || 
+                e.target.classList.contains('download-btn') ||
+                e.target.classList.contains('management-btn')) {
+                console.log('🏁 BMW M Performance Ready');
+            }
+        });
+
+        // Keyboard shortcuts (BMW iDrive inspired)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'm':
+                        e.preventDefault();
+                        openManagementModal();
+                        break;
+                    case 'Enter':
+                        e.preventDefault();
+                        if (!processComplete && !document.getElementById('processBtn').disabled) {
+                            startProcessing();
+                        }
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

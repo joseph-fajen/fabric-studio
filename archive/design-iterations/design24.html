@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Sophisticated Glass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Sophisticated Glass Color Palette */
+            --glass-primary: rgba(17, 24, 39, 0.95);
+            --glass-secondary: rgba(55, 65, 81, 0.8);
+            --glass-accent: rgba(59, 130, 246, 0.9);
+            --glass-accent-light: rgba(59, 130, 246, 0.3);
+            --glass-success: rgba(16, 185, 129, 0.8);
+            --glass-warning: rgba(245, 158, 11, 0.8);
+            --glass-error: rgba(239, 68, 68, 0.8);
+            
+            /* Glass Background Layers */
+            --glass-bg-primary: rgba(255, 255, 255, 0.05);
+            --glass-bg-secondary: rgba(255, 255, 255, 0.1);
+            --glass-bg-tertiary: rgba(255, 255, 255, 0.15);
+            --glass-bg-elevated: rgba(255, 255, 255, 0.2);
+            --glass-bg-modal: rgba(255, 255, 255, 0.25);
+            
+            /* Glass Borders */
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-border-subtle: rgba(255, 255, 255, 0.1);
+            --glass-border-strong: rgba(255, 255, 255, 0.3);
+            
+            /* Text Colors for Glass */
+            --text-glass-primary: rgba(255, 255, 255, 0.95);
+            --text-glass-secondary: rgba(255, 255, 255, 0.75);
+            --text-glass-tertiary: rgba(255, 255, 255, 0.6);
+            --text-glass-muted: rgba(255, 255, 255, 0.45);
+            
+            /* Glass Shadows */
+            --glass-shadow-light: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --glass-shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.15);
+            --glass-shadow-heavy: 0 16px 64px rgba(0, 0, 0, 0.25);
+            --glass-shadow-ambient: 0 0 32px rgba(59, 130, 246, 0.1);
+            
+            /* Glass Effects */
+            --glass-blur-light: blur(12px);
+            --glass-blur-medium: blur(20px);
+            --glass-blur-heavy: blur(32px);
+            --glass-blur-extreme: blur(48px);
+            
+            /* Dimensions */
+            --border-radius: 16px;
+            --border-radius-large: 24px;
+            --border-radius-small: 12px;
+            --border-radius-xl: 32px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: linear-gradient(135deg, 
+                #0f172a 0%, 
+                #1e293b 25%, 
+                #334155 50%, 
+                #475569 75%, 
+                #64748b 100%);
+            background-attachment: fixed;
+            color: var(--text-glass-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Floating Glass Particles */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 100px 100px, 150px 150px, 200px 200px;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(1deg); }
+            66% { transform: translateY(5px) rotate(-1deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glass Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: var(--glass-blur-medium);
+            z-index: -1;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, 
+                var(--text-glass-primary) 0%, 
+                rgba(59, 130, 246, 0.9) 50%, 
+                var(--text-glass-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 32px rgba(59, 130, 246, 0.3);
+            position: relative;
+        }
+
+        .header p {
+            color: var(--text-glass-secondary);
+            font-size: 1.25rem;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Primary Glass Card */
+        .glass-card {
+            background: var(--glass-bg-secondary);
+            backdrop-filter: var(--glass-blur-medium);
+            -webkit-backdrop-filter: var(--glass-blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-large);
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: var(--glass-shadow-medium), var(--glass-shadow-ambient);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--glass-shadow-heavy), var(--glass-shadow-ambient);
+            border-color: var(--glass-border-strong);
+            background: var(--glass-bg-tertiary);
+        }
+
+        /* Elevated Glass Card */
+        .glass-card-elevated {
+            background: var(--glass-bg-elevated);
+            backdrop-filter: var(--glass-blur-heavy);
+            -webkit-backdrop-filter: var(--glass-blur-heavy);
+            border: 1px solid var(--glass-border-strong);
+            border-radius: var(--border-radius-xl);
+            padding: 48px;
+            box-shadow: var(--glass-shadow-heavy), 
+                        0 0 64px rgba(59, 130, 246, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card-elevated::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.02) 100%);
+            pointer-events: none;
+        }
+
+        /* Input Group */
+        .input-group {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-glass-primary);
+            margin-bottom: 12px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 1.1rem;
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            color: var(--text-glass-primary);
+            transition: all 0.3s ease;
+            font-family: inherit;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .url-input::placeholder {
+            color: var(--text-glass-muted);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--glass-accent);
+            background: var(--glass-bg-secondary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2),
+                        inset 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Glass Button */
+        .glass-button {
+            background: linear-gradient(135deg, 
+                var(--glass-accent) 0%, 
+                rgba(59, 130, 246, 0.8) 100%);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: var(--border-radius);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 20px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--glass-shadow-light), 
+                        0 0 20px rgba(59, 130, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            transition: left 0.5s ease;
+        }
+
+        .glass-button:hover::before {
+            left: 100%;
+        }
+
+        .glass-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glass-shadow-medium), 
+                        0 0 32px rgba(59, 130, 246, 0.4);
+            border-color: rgba(59, 130, 246, 0.8);
+        }
+
+        .glass-button:active {
+            transform: translateY(0px);
+        }
+
+        .glass-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .progress-section.active {
+            display: block;
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Phase Progress */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .phase-card {
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid var(--glass-border-subtle);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card.active {
+            border-color: var(--glass-accent-light);
+            background: var(--glass-bg-secondary);
+            box-shadow: 0 0 24px rgba(59, 130, 246, 0.15);
+        }
+
+        .phase-card.completed {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .phase-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--glass-bg-tertiary);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-glass-secondary);
+        }
+
+        .phase-card.active .phase-number {
+            background: var(--glass-accent-light);
+            border-color: var(--glass-accent);
+            color: white;
+            box-shadow: 0 0 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .phase-card.completed .phase-number {
+            background: var(--glass-success);
+            border-color: rgba(16, 185, 129, 0.5);
+            color: white;
+        }
+
+        .phase-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-glass-primary);
+        }
+
+        .patterns-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-glass-muted);
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.processing .pattern-status {
+            background: var(--glass-accent);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .pattern-item.completed .pattern-status {
+            background: var(--glass-success);
+        }
+
+        .pattern-item.error .pattern-status {
+            background: var(--glass-error);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        .pattern-name {
+            font-weight: 500;
+            color: var(--text-glass-secondary);
+            flex: 1;
+        }
+
+        .pattern-item.processing .pattern-name {
+            color: var(--text-glass-primary);
+        }
+
+        .pattern-item.completed .pattern-name {
+            color: var(--text-glass-primary);
+        }
+
+        /* Overall Progress */
+        .overall-progress {
+            margin-bottom: 32px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-glass-primary);
+        }
+
+        .progress-percentage {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--glass-accent);
+        }
+
+        .progress-bar-container {
+            height: 8px;
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                var(--glass-accent) 0%, 
+                rgba(59, 130, 246, 0.8) 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 20px 24px;
+            border-radius: var(--border-radius);
+            margin-bottom: 24px;
+            font-weight: 500;
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid;
+            transition: all 0.3s ease;
+        }
+
+        .status-message.info {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: rgba(59, 130, 246, 0.9);
+        }
+
+        .status-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: rgba(16, 185, 129, 0.9);
+        }
+
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: rgba(239, 68, 68, 0.9);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .download-card {
+            background: var(--glass-bg-elevated);
+            backdrop-filter: var(--glass-blur-medium);
+            -webkit-backdrop-filter: var(--glass-blur-medium);
+            border: 1px solid var(--glass-border-strong);
+            border-radius: var(--border-radius-large);
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--glass-shadow-medium), 
+                        0 0 32px rgba(16, 185, 129, 0.1);
+        }
+
+        .download-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-glass-primary);
+            margin-bottom: 12px;
+        }
+
+        .download-description {
+            color: var(--text-glass-secondary);
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+        }
+
+        .download-button {
+            background: linear-gradient(135deg, 
+                var(--glass-success) 0%, 
+                rgba(16, 185, 129, 0.8) 100%);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            border-radius: var(--border-radius);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 16px 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--glass-shadow-light), 
+                        0 0 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glass-shadow-medium), 
+                        0 0 32px rgba(16, 185, 129, 0.4);
+        }
+
+        .process-another-button {
+            background: var(--glass-bg-secondary);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            color: var(--text-glass-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+        }
+
+        .process-another-button:hover {
+            background: var(--glass-bg-tertiary);
+            border-color: var(--glass-border-strong);
+            transform: translateY(-1px);
+        }
+
+        /* Management Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: var(--glass-blur-heavy);
+            -webkit-backdrop-filter: var(--glass-blur-heavy);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: var(--glass-bg-modal);
+            backdrop-filter: var(--glass-blur-extreme);
+            -webkit-backdrop-filter: var(--glass-blur-extreme);
+            border: 1px solid var(--glass-border-strong);
+            border-radius: var(--border-radius-xl);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--glass-shadow-heavy), 
+                        0 0 64px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            border-radius: var(--border-radius-xl);
+            pointer-events: none;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-glass-primary);
+        }
+
+        .modal-close {
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-glass-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--glass-bg-secondary);
+            border-color: var(--glass-border-strong);
+            color: var(--text-glass-primary);
+        }
+
+        .modal-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .management-section {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--glass-border-subtle);
+        }
+
+        .management-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-glass-primary);
+            margin-bottom: 16px;
+        }
+
+        .management-button {
+            background: var(--glass-bg-secondary);
+            backdrop-filter: var(--glass-blur-light);
+            -webkit-backdrop-filter: var(--glass-blur-light);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-small);
+            color: var(--text-glass-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .management-button:hover {
+            background: var(--glass-bg-tertiary);
+            border-color: var(--glass-border-strong);
+            transform: translateY(-1px);
+        }
+
+        .management-button.danger {
+            border-color: rgba(239, 68, 68, 0.3);
+            color: rgba(239, 68, 68, 0.9);
+        }
+
+        .management-button.danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        /* Management Toggle */
+        .management-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg-secondary);
+            backdrop-filter: var(--glass-blur-medium);
+            -webkit-backdrop-filter: var(--glass-blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-glass-primary);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: var(--glass-shadow-light);
+        }
+
+        .management-toggle:hover {
+            background: var(--glass-bg-tertiary);
+            border-color: var(--glass-border-strong);
+            transform: scale(1.05);
+            box-shadow: var(--glass-shadow-medium);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .glass-card {
+                padding: 24px;
+            }
+
+            .glass-card-elevated {
+                padding: 32px;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .modal {
+                padding: 24px;
+                margin: 20px;
+            }
+
+            .management-toggle {
+                width: 48px;
+                height: 48px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Loading Animations */
+        .loading-shimmer {
+            background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+
+        /* Glass Reflection Effect */
+        .glass-reflection {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-reflection::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 100%);
+            transform: skewX(-15deg);
+            transition: left 0.6s ease;
+        }
+
+        .glass-reflection:hover::after {
+            left: 150%;
+        }
+    </style>
+</head>
+<body>
+    <div class="management-toggle" onclick="openManagementModal()" title="Management">
+        ⚙️
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Transform YouTube videos into comprehensive insights through 13 sophisticated fabric patterns</p>
+        </header>
+
+        <div class="glass-card glass-card-elevated">
+            <div class="input-group">
+                <label for="youtubeUrl" class="input-label">YouTube Video URL</label>
+                <input 
+                    type="url" 
+                    id="youtubeUrl" 
+                    class="url-input"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    required
+                >
+            </div>
+            
+            <button onclick="processVideo()" class="glass-button glass-reflection" id="processBtn">
+                Process Video
+            </button>
+        </div>
+
+        <div id="progressSection" class="progress-section">
+            <div class="glass-card">
+                <div class="overall-progress">
+                    <div class="progress-header">
+                        <span class="progress-title">Processing Progress</span>
+                        <span class="progress-percentage" id="progressPercentage">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="statusMessage" class="status-message info">
+                    Initializing processing...
+                </div>
+
+                <div class="phases-grid" id="phasesGrid">
+                    <!-- Phases will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section">
+            <div class="glass-card">
+                <div class="download-card">
+                    <h3 class="download-title">Processing Complete!</h3>
+                    <p class="download-description">Your YouTube video has been processed through all 13 fabric patterns. Download the complete analysis package below.</p>
+                    <a href="#" id="downloadLink" class="download-button glass-reflection">Download Results</a>
+                    <br>
+                    <button onclick="processAnother()" class="process-another-button">Process Another Video</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">System Management</h2>
+                <button class="modal-close" onclick="closeManagementModal()">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="management-section">
+                    <h3 class="section-title">Server Status</h3>
+                    <button onclick="checkServerStatus()" class="management-button">Check Status</button>
+                    <button onclick="viewProcessingHistory()" class="management-button">View History</button>
+                </div>
+                
+                <div class="management-section">
+                    <h3 class="section-title">Maintenance</h3>
+                    <button onclick="cleanupOldFiles()" class="management-button">Cleanup Old Files</button>
+                    <button onclick="restartServer()" class="management-button danger">Restart Server</button>
+                </div>
+                
+                <div class="management-section">
+                    <h3 class="section-title">System Information</h3>
+                    <div id="systemInfo" style="color: var(--text-glass-secondary); font-size: 0.9rem;">
+                        Loading system information...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fabric patterns configuration
+        const FABRIC_PATTERNS = [
+            // Phase 1: Primary Extraction
+            { phase: 1, name: "youtube_summary", description: "Comprehensive video summary", filename: "01-youtube_summary.txt" },
+            { phase: 1, name: "extract_core_message", description: "Central thesis and key messages", filename: "02-extract_core_message.txt" },
+            
+            // Phase 2: Content Analysis
+            { phase: 2, name: "extract_wisdom", description: "Life lessons and insights", filename: "03-extract_wisdom.txt" },
+            { phase: 2, name: "extract_insights", description: "Deep analytical observations", filename: "04-extract_insights.txt" },
+            { phase: 2, name: "extract_ideas", description: "Novel concepts and innovations", filename: "05-extract_ideas.txt" },
+            { phase: 2, name: "extract_patterns", description: "Recurring themes and structures", filename: "06-extract_patterns.txt" },
+            { phase: 2, name: "extract_recommendations", description: "Actionable guidance", filename: "07-extract_recommendations.txt" },
+            { phase: 2, name: "extract_predictions", description: "Future implications and trends", filename: "08-extract_predictions.txt" },
+            
+            // Phase 3: Knowledge Graph Building
+            { phase: 3, name: "extract_references", description: "People, organizations, and resources", filename: "09-extract_references.txt" },
+            { phase: 3, name: "extract_questions", description: "Critical questions raised", filename: "10-extract_questions.txt" },
+            { phase: 3, name: "create_tags", description: "Comprehensive tagging system", filename: "11-create_tags.txt" },
+            
+            // Phase 4: Synthesis Materials
+            { phase: 4, name: "create_5_sentence_summary", description: "Ultra-concise overview", filename: "12-create_5_sentence_summary.txt" },
+            { phase: 4, name: "to_flashcards", description: "Educational flashcards for learning", filename: "13-to_flashcards.txt" }
+        ];
+
+        const PHASE_DESCRIPTIONS = {
+            1: "Primary Extraction",
+            2: "Content Analysis",
+            3: "Knowledge Graph Building",
+            4: "Synthesis Materials"
+        };
+
+        let currentProcessId = null;
+        let socket = null;
+        let currentPattern = 0;
+        let completedPatterns = 0;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePhasesGrid();
+            initializeWebSocket();
+            loadSystemInfo();
+        });
+
+        function initializePhasesGrid() {
+            const phasesGrid = document.getElementById('phasesGrid');
+            const phases = {};
+            
+            // Group patterns by phase
+            FABRIC_PATTERNS.forEach(pattern => {
+                if (!phases[pattern.phase]) {
+                    phases[pattern.phase] = [];
+                }
+                phases[pattern.phase].push(pattern);
+            });
+
+            // Create phase cards
+            Object.keys(phases).forEach(phaseNum => {
+                const phaseCard = document.createElement('div');
+                phaseCard.className = 'phase-card';
+                phaseCard.id = `phase-${phaseNum}`;
+                
+                const patterns = phases[phaseNum];
+                const patternsList = patterns.map(pattern => 
+                    `<li class="pattern-item" data-pattern="${pattern.name}">
+                        <div class="pattern-status"></div>
+                        <div class="pattern-name">${pattern.description}</div>
+                    </li>`
+                ).join('');
+
+                phaseCard.innerHTML = `
+                    <div class="phase-header">
+                        <div class="phase-number">${phaseNum}</div>
+                        <div class="phase-title">${PHASE_DESCRIPTIONS[phaseNum]}</div>
+                    </div>
+                    <ul class="patterns-list">
+                        ${patternsList}
+                    </ul>
+                `;
+                
+                phasesGrid.appendChild(phaseCard);
+            });
+        }
+
+        function initializeWebSocket() {
+            // Simulate WebSocket connection for demo
+            console.log('WebSocket simulation initialized');
+        }
+
+        async function processVideo() {
+            const urlInput = document.getElementById('youtubeUrl');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please enter a YouTube URL', 'error');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showStatus('Please enter a valid YouTube URL', 'error');
+                return;
+            }
+
+            // Reset state
+            currentPattern = 0;
+            completedPatterns = 0;
+            currentProcessId = 'demo-' + Date.now();
+
+            // Show progress section
+            document.getElementById('progressSection').classList.add('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Disable process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = true;
+            processBtn.textContent = 'Processing...';
+
+            // Reset all patterns
+            const patternItems = document.querySelectorAll('.pattern-item');
+            patternItems.forEach(item => {
+                item.className = 'pattern-item';
+            });
+
+            const phaseCards = document.querySelectorAll('.phase-card');
+            phaseCards.forEach(card => {
+                card.className = 'phase-card';
+            });
+
+            // Start processing simulation
+            showStatus('Starting video processing...', 'info');
+            await simulateProcessing();
+        }
+
+        async function simulateProcessing() {
+            // Simulate processing with realistic timing
+            showStatus('Downloading transcript...', 'info');
+            await sleep(2000);
+
+            showStatus('Processing patterns in parallel batches...', 'info');
+            
+            for (let i = 0; i < FABRIC_PATTERNS.length; i++) {
+                const pattern = FABRIC_PATTERNS[i];
+                const phaseCard = document.getElementById(`phase-${pattern.phase}`);
+                const patternElement = document.querySelector(`[data-pattern="${pattern.name}"]`);
+                
+                // Mark phase as active
+                phaseCard.classList.add('active');
+                
+                // Mark pattern as processing
+                patternElement.classList.add('processing');
+                
+                showStatus(`Processing: ${pattern.description}`, 'info');
+                
+                // Simulate processing time (3-8 seconds per pattern)
+                await sleep(Math.random() * 5000 + 3000);
+                
+                // Mark pattern as completed
+                patternElement.classList.remove('processing');
+                patternElement.classList.add('completed');
+                
+                completedPatterns++;
+                updateProgress();
+                
+                // Check if phase is completed
+                const phasePatterns = Array.from(phaseCard.querySelectorAll('.pattern-item'));
+                const completedInPhase = phasePatterns.filter(p => p.classList.contains('completed')).length;
+                
+                if (completedInPhase === phasePatterns.length) {
+                    phaseCard.classList.remove('active');
+                    phaseCard.classList.add('completed');
+                }
+            }
+
+            processingComplete();
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((completedPatterns / FABRIC_PATTERNS.length) * 100);
+            
+            document.getElementById('progressPercentage').textContent = `${percentage}%`;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+
+        function processingComplete() {
+            showStatus('Processing completed successfully! All 13 patterns have been generated.', 'success');
+            
+            // Show results section
+            document.getElementById('resultsSection').classList.add('active');
+            
+            // Set download link
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = `/api/download/${currentProcessId}`;
+            
+            // Re-enable process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = false;
+            processBtn.textContent = 'Process Video';
+        }
+
+        function processAnother() {
+            // Reset form
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('progressSection').classList.remove('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Reset progress
+            currentPattern = 0;
+            completedPatterns = 0;
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type}`;
+        }
+
+        function isValidYouTubeUrl(url) {
+            const patterns = [
+                /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/v\/[\w-]+/
+            ];
+            return patterns.some(pattern => pattern.test(url));
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('managementModal').classList.add('active');
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').classList.remove('active');
+        }
+
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/api/management/status');
+                const data = await response.json();
+                alert(`Server Status: ${data.status}\nUptime: ${data.uptime}\nActive Processes: ${data.activeProcesses}`);
+            } catch (error) {
+                alert('Status check simulated - Server appears to be running normally');
+            }
+        }
+
+        async function viewProcessingHistory() {
+            try {
+                const response = await fetch('/api/management/history');
+                const data = await response.json();
+                alert(`Processing History:\n${data.history.length} total processes\nLast process: ${data.history[0]?.timestamp || 'None'}`);
+            } catch (error) {
+                alert('History check simulated - No recent processing history available');
+            }
+        }
+
+        async function cleanupOldFiles() {
+            if (confirm('Are you sure you want to cleanup old output files?')) {
+                try {
+                    await fetch('/api/management/cleanup-old', { method: 'POST' });
+                    alert('Old files cleaned up successfully');
+                } catch (error) {
+                    alert('Cleanup simulated - Old files would be cleaned up');
+                }
+            }
+        }
+
+        async function restartServer() {
+            if (confirm('Are you sure you want to restart the server? This will interrupt any active processing.')) {
+                try {
+                    await fetch('/api/management/restart', { method: 'POST' });
+                    alert('Server restart initiated');
+                } catch (error) {
+                    alert('Restart simulated - Server would be restarted');
+                }
+            }
+        }
+
+        function loadSystemInfo() {
+            const systemInfo = document.getElementById('systemInfo');
+            systemInfo.innerHTML = `
+                <div style="margin-bottom: 8px;"><strong>Platform:</strong> Node.js</div>
+                <div style="margin-bottom: 8px;"><strong>Version:</strong> v18.x</div>
+                <div style="margin-bottom: 8px;"><strong>Fabric Patterns:</strong> 13 patterns in 4 phases</div>
+                <div style="margin-bottom: 8px;"><strong>Processing Method:</strong> Transcript-first architecture</div>
+                <div style="margin-bottom: 8px;"><strong>Average Processing Time:</strong> ~70 seconds</div>
+                <div><strong>Output Format:</strong> 13 .txt files + index.md + ZIP</div>
+            `;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('managementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeManagementModal();
+            }
+        });
+
+        // Handle escape key for modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeManagementModal();
+            }
+        });
+
+        // Handle enter key in URL input
+        document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processVideo();
+            }
+        });
+    </script>
+</body>
+</html>

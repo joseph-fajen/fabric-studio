@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Professional Gradient</title>
+    <style>
+        :root {
+            /* Professional Gradient Color System */
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-neutral: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-error: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            
+            /* Sophisticated Background Gradients */
+            --bg-gradient-main: linear-gradient(135deg, 
+                #f8fafc 0%, 
+                #e2e8f0 25%, 
+                #cbd5e1 50%, 
+                #94a3b8 75%, 
+                #64748b 100%);
+            --bg-gradient-overlay: linear-gradient(135deg, 
+                rgba(248, 250, 252, 0.95) 0%, 
+                rgba(226, 232, 240, 0.9) 50%, 
+                rgba(203, 213, 225, 0.85) 100%);
+            --bg-gradient-card: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9) 0%, 
+                rgba(248, 250, 252, 0.8) 100%);
+            
+            /* Cool Professional Gradients */
+            --gradient-cool-primary: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            --gradient-cool-secondary: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            --gradient-cool-accent: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            
+            /* Subtle Text Gradients */
+            --text-gradient-primary: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            --text-gradient-secondary: linear-gradient(135deg, #475569 0%, #64748b 100%);
+            --text-gradient-accent: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            
+            /* Professional Colors */
+            --color-white: #ffffff;
+            --color-gray-50: #f8fafc;
+            --color-gray-100: #f1f5f9;
+            --color-gray-200: #e2e8f0;
+            --color-gray-300: #cbd5e1;
+            --color-gray-400: #94a3b8;
+            --color-gray-500: #64748b;
+            --color-gray-600: #475569;
+            --color-gray-700: #334155;
+            --color-gray-800: #1e293b;
+            --color-gray-900: #0f172a;
+            
+            /* Sophisticated Shadows with Gradients */
+            --shadow-gradient-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 
+                                  0 1px 3px 0 rgba(100, 116, 139, 0.1);
+            --shadow-gradient-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                                  0 2px 4px -1px rgba(100, 116, 139, 0.06);
+            --shadow-gradient-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+                                  0 4px 6px -2px rgba(100, 116, 139, 0.05);
+            --shadow-gradient-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                                  0 10px 10px -5px rgba(100, 116, 139, 0.04);
+            
+            /* Gradient Mesh Background */
+            --mesh-gradient: radial-gradient(circle at 20% 80%, rgba(120, 113, 243, 0.15) 0%, transparent 50%),
+                           radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                           radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-gradient-main);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--color-gray-800);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Gradient Mesh Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--mesh-gradient);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Professional Gradient Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--text-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            background: var(--text-gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Gradient Enhanced Cards */
+        .card {
+            background: var(--bg-gradient-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-gradient-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-primary);
+            opacity: 0.6;
+        }
+
+        /* Professional Input Group */
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .input-container {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: linear-gradient(white, white) padding-box,
+                       var(--gradient-cool-primary) border-box;
+            box-shadow: var(--shadow-gradient-sm);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-container input:focus {
+            box-shadow: var(--shadow-gradient-md), 
+                       0 0 0 3px rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .input-container input::placeholder {
+            color: var(--color-gray-400);
+        }
+
+        /* Sophisticated Gradient Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            box-shadow: var(--shadow-gradient-md);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gradient-xl);
+        }
+
+        .btn-secondary {
+            background: var(--gradient-cool-secondary);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gradient-xl);
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Elegant Progress System */
+        .progress-container {
+            margin: 2rem 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            background: var(--text-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-percentage {
+            font-weight: 700;
+            background: var(--text-gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--color-gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            animation: progressShimmer 2s infinite;
+        }
+
+        @keyframes progressShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Sophisticated Phase Cards */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .phase-card {
+            background: var(--bg-gradient-card);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-gradient-md);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-gradient-xl);
+        }
+
+        .phase-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .phase-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: var(--text-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .patterns-list {
+            list-style: none;
+        }
+
+        .patterns-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--color-gray-200);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .patterns-list li:last-child {
+            border-bottom: none;
+        }
+
+        .patterns-list li:hover {
+            padding-left: 0.5rem;
+            background: linear-gradient(90deg, 
+                rgba(37, 99, 235, 0.05) 0%, 
+                transparent 100%);
+        }
+
+        .pattern-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-gray-300);
+            transition: all 0.3s ease;
+        }
+
+        .pattern-status.processing {
+            background: var(--gradient-warning);
+            animation: pulse 2s infinite;
+        }
+
+        .pattern-status.completed {
+            background: var(--gradient-success);
+        }
+
+        .pattern-status.error {
+            background: var(--gradient-error);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Professional Results Section */
+        .results-section {
+            margin-top: 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .result-item {
+            background: var(--bg-gradient-card);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow-gradient-sm);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-gradient-md);
+        }
+
+        .result-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .result-title {
+            font-weight: 600;
+            background: var(--text-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-description {
+            color: var(--color-gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Gradient Enhanced Management Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 2rem;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-gradient-card);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-gradient-xl);
+            position: relative;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--text-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-gray-500);
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--color-gray-700);
+        }
+
+        /* Status Cards in Management */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-card {
+            background: var(--bg-gradient-card);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-gradient-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .status-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--text-gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            color: var(--color-gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Professional Management Buttons */
+        .management-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .input-container {
+                min-width: unset;
+            }
+
+            .management-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                padding: 0.875rem 1.5rem;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Gradient Animation Utilities */
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Loading States */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Enhanced Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            background: var(--text-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Professional Alerts */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, 
+                rgba(74, 172, 254, 0.1) 0%, 
+                rgba(0, 242, 254, 0.1) 100%);
+            border-color: rgba(74, 172, 254, 0.2);
+            color: var(--color-gray-800);
+        }
+
+        .alert-success::before {
+            background: var(--gradient-success);
+        }
+
+        .alert-error {
+            background: linear-gradient(135deg, 
+                rgba(250, 112, 154, 0.1) 0%, 
+                rgba(254, 225, 64, 0.1) 100%);
+            border-color: rgba(250, 112, 154, 0.2);
+            color: var(--color-gray-800);
+        }
+
+        .alert-error::before {
+            background: var(--gradient-error);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, 
+                rgba(67, 233, 123, 0.1) 0%, 
+                rgba(56, 249, 215, 0.1) 100%);
+            border-color: rgba(67, 233, 123, 0.2);
+            color: var(--color-gray-800);
+        }
+
+        .alert-warning::before {
+            background: var(--gradient-warning);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Transform YouTube videos into actionable insights through 13 sophisticated fabric patterns with professional gradient design</p>
+        </header>
+
+        <div class="card">
+            <div class="input-group">
+                <div class="input-container">
+                    <input type="url" id="youtubeUrl" placeholder="Enter YouTube URL (e.g., https://www.youtube.com/watch?v=...)">
+                </div>
+                <button class="btn btn-primary" onclick="startProcessing()">
+                    <span>Process Video</span>
+                </button>
+            </div>
+            
+            <div class="input-group">
+                <button class="btn btn-secondary" onclick="showManagement()">
+                    Management Dashboard
+                </button>
+                <button class="btn btn-secondary" onclick="checkHealth()">
+                    System Health
+                </button>
+            </div>
+        </div>
+
+        <div id="progressSection" style="display: none;">
+            <div class="card">
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-title">Processing Progress</span>
+                        <span class="progress-percentage" id="overallProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="currentStatus" class="alert alert-warning" style="display: none;">
+                    <strong>Status:</strong> <span id="statusText">Initializing...</span>
+                </div>
+
+                <div class="phases-grid" id="phasesGrid">
+                    <!-- Phase cards will be dynamically generated -->
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <div class="card">
+                <h2 style="margin-bottom: 1rem; background: var(--text-gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Processing Results</h2>
+                <div id="downloadSection" style="margin-bottom: 2rem;">
+                    <!-- Download button will be added here -->
+                </div>
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Results will be dynamically populated -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Management Dashboard</h2>
+                <button class="close-modal" onclick="hideManagement()">&times;</button>
+            </div>
+            
+            <div id="managementContent">
+                <div class="status-grid" id="statusGrid">
+                    <!-- Status cards will be populated here -->
+                </div>
+                
+                <div class="management-actions">
+                    <button class="btn btn-secondary" onclick="refreshStatus()">Refresh Status</button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">View History</button>
+                    <button class="btn btn-secondary" onclick="cleanupOld()">Cleanup Old Files</button>
+                    <button class="btn btn-secondary" onclick="restartServer()">Restart Server</button>
+                </div>
+                
+                <div id="managementDetails">
+                    <!-- Detailed information will be shown here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let currentProcessId = null;
+        let isProcessing = false;
+
+        // Fabric patterns organized by phases
+        const fabricPatterns = {
+            'Phase 1: Analysis': [
+                { id: 'analyze_claims', name: 'Analyze Claims', description: 'Extract and evaluate key claims made in the video' },
+                { id: 'extract_wisdom', name: 'Extract Wisdom', description: 'Distill key insights and wisdom from the content' },
+                { id: 'summarize', name: 'Summarize', description: 'Create a comprehensive summary of the video content' }
+            ],
+            'Phase 2: Extraction': [
+                { id: 'extract_ideas', name: 'Extract Ideas', description: 'Identify and catalog innovative ideas presented' },
+                { id: 'extract_questions', name: 'Extract Questions', description: 'Pull out thought-provoking questions raised' },
+                { id: 'extract_references', name: 'Extract References', description: 'Compile all references, citations, and sources mentioned' },
+                { id: 'extract_recommendations', name: 'Extract Recommendations', description: 'List actionable recommendations and advice given' }
+            ],
+            'Phase 3: Insights': [
+                { id: 'find_logical_fallacies', name: 'Find Logical Fallacies', description: 'Identify reasoning errors and logical inconsistencies' },
+                { id: 'rate_content', name: 'Rate Content', description: 'Provide structured rating and evaluation of content quality' },
+                { id: 'analyze_prose', name: 'Analyze Prose', description: 'Examine writing style, rhetoric, and communication effectiveness' }
+            ],
+            'Phase 4: Synthesis': [
+                { id: 'create_quiz', name: 'Create Quiz', description: 'Generate quiz questions to test understanding' },
+                { id: 'write_essay', name: 'Write Essay', description: 'Compose analytical essay based on video content' },
+                { id: 'create_summary', name: 'Create Summary', description: 'Produce executive summary for quick reference' }
+            ]
+        };
+
+        function initializeWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}`;
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = function() {
+                console.log('WebSocket connected');
+            };
+            
+            ws.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    handleWebSocketMessage(data);
+                } catch (error) {
+                    console.error('Error parsing WebSocket message:', error);
+                }
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket disconnected');
+                // Attempt to reconnect if processing
+                if (isProcessing) {
+                    setTimeout(initializeWebSocket, 3000);
+                }
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        function handleWebSocketMessage(data) {
+            console.log('WebSocket message:', data);
+            
+            switch (data.type) {
+                case 'progress':
+                    updateProgress(data.progress, data.status);
+                    break;
+                case 'phaseUpdate':
+                    updatePhaseStatus(data.phase, data.status);
+                    break;
+                case 'patternUpdate':
+                    updatePatternStatus(data.pattern, data.status);
+                    break;
+                case 'completed':
+                    handleProcessingComplete(data);
+                    break;
+                case 'error':
+                    handleProcessingError(data.error);
+                    break;
+            }
+        }
+
+        function startProcessing() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            
+            if (!url) {
+                showAlert('Please enter a YouTube URL', 'error');
+                return;
+            }
+            
+            if (!isValidYouTubeUrl(url)) {
+                showAlert('Please enter a valid YouTube URL', 'error');
+                return;
+            }
+            
+            if (isProcessing) {
+                showAlert('Processing is already in progress', 'warning');
+                return;
+            }
+            
+            // Initialize WebSocket if not connected
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                initializeWebSocket();
+            }
+            
+            isProcessing = true;
+            setupProgressInterface();
+            
+            fetch('/api/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                currentProcessId = data.processId;
+                showAlert('Processing started successfully!', 'success');
+            })
+            .catch(error => {
+                console.error('Error starting processing:', error);
+                showAlert('Error starting processing: ' + error.message, 'error');
+                isProcessing = false;
+                hideProgressInterface();
+            });
+        }
+
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[a-zA-Z0-9_-]{11}/;
+            return youtubeRegex.test(url);
+        }
+
+        function setupProgressInterface() {
+            // Show progress section
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            // Create phase cards
+            createPhaseCards();
+            
+            // Reset progress
+            updateProgress(0, 'Initializing...');
+        }
+
+        function hideProgressInterface() {
+            document.getElementById('progressSection').style.display = 'none';
+        }
+
+        function createPhaseCards() {
+            const phasesGrid = document.getElementById('phasesGrid');
+            phasesGrid.innerHTML = '';
+            
+            Object.entries(fabricPatterns).forEach(([phaseName, patterns]) => {
+                const phaseCard = document.createElement('div');
+                phaseCard.className = 'phase-card';
+                phaseCard.id = `phase-${phaseName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+                
+                const patternsList = patterns.map(pattern => 
+                    `<li><span class="pattern-status" id="status-${pattern.id}"></span>${pattern.name}</li>`
+                ).join('');
+                
+                phaseCard.innerHTML = `
+                    <h3 class="phase-title">${phaseName}</h3>
+                    <ul class="patterns-list">
+                        ${patternsList}
+                    </ul>
+                `;
+                
+                phasesGrid.appendChild(phaseCard);
+            });
+        }
+
+        function updateProgress(percentage, status) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('overallProgress').textContent = Math.round(percentage) + '%';
+            
+            const statusElement = document.getElementById('currentStatus');
+            const statusText = document.getElementById('statusText');
+            
+            if (status) {
+                statusText.textContent = status;
+                statusElement.style.display = 'block';
+            }
+        }
+
+        function updatePhaseStatus(phase, status) {
+            // Update phase card styling based on status
+            const phaseElement = document.getElementById(`phase-${phase.toLowerCase().replace(/[^a-z0-9]/g, '-')}`);
+            if (phaseElement) {
+                phaseElement.classList.remove('processing', 'completed', 'error');
+                phaseElement.classList.add(status);
+            }
+        }
+
+        function updatePatternStatus(patternId, status) {
+            const statusElement = document.getElementById(`status-${patternId}`);
+            if (statusElement) {
+                statusElement.classList.remove('processing', 'completed', 'error');
+                statusElement.classList.add(status);
+            }
+        }
+
+        function handleProcessingComplete(data) {
+            isProcessing = false;
+            updateProgress(100, 'Processing completed successfully!');
+            
+            // Show success alert
+            showAlert('Video processing completed successfully!', 'success');
+            
+            // Display results
+            displayResults(data.results);
+        }
+
+        function handleProcessingError(error) {
+            isProcessing = false;
+            showAlert('Processing failed: ' + error, 'error');
+            
+            // Update status
+            const statusElement = document.getElementById('currentStatus');
+            statusElement.className = 'alert alert-error';
+            document.getElementById('statusText').textContent = 'Error: ' + error;
+        }
+
+        function displayResults(results) {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsGrid = document.getElementById('resultsGrid');
+            const downloadSection = document.getElementById('downloadSection');
+            
+            resultsSection.style.display = 'block';
+            
+            // Add download button
+            if (currentProcessId) {
+                downloadSection.innerHTML = `
+                    <button class="btn btn-success" onclick="downloadResults()">
+                        Download Complete Analysis Package
+                    </button>
+                `;
+            }
+            
+            // Clear previous results
+            resultsGrid.innerHTML = '';
+            
+            // Display all patterns results
+            Object.entries(fabricPatterns).forEach(([phaseName, patterns]) => {
+                patterns.forEach(pattern => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    
+                    resultItem.innerHTML = `
+                        <div class="result-title">${pattern.name}</div>
+                        <div class="result-description">${pattern.description}</div>
+                        <button class="btn btn-secondary" onclick="viewResult('${pattern.id}')">
+                            View Result
+                        </button>
+                    `;
+                    
+                    resultsGrid.appendChild(resultItem);
+                });
+            });
+        }
+
+        function downloadResults() {
+            if (currentProcessId) {
+                window.open(`/api/download/${currentProcessId}`, '_blank');
+            }
+        }
+
+        function viewResult(patternId) {
+            if (currentProcessId) {
+                window.open(`/outputs/${currentProcessId}/${patternId}.txt`, '_blank');
+            }
+        }
+
+        function showAlert(message, type = 'success') {
+            // Remove existing alerts
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => {
+                if (alert.id !== 'currentStatus') {
+                    alert.remove();
+                }
+            });
+            
+            // Create new alert
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `<strong>${type === 'error' ? 'Error' : type === 'warning' ? 'Warning' : 'Success'}:</strong> ${message}`;
+            
+            // Insert after header
+            const header = document.querySelector('.header');
+            header.parentNode.insertBefore(alert, header.nextSibling);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function checkHealth() {
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    showAlert(`System is healthy! Server: ${data.status}, Timestamp: ${data.timestamp}`, 'success');
+                })
+                .catch(error => {
+                    showAlert('Health check failed: ' + error.message, 'error');
+                });
+        }
+
+        // Management Dashboard Functions
+        function showManagement() {
+            document.getElementById('managementModal').classList.add('show');
+            loadManagementData();
+        }
+
+        function hideManagement() {
+            document.getElementById('managementModal').classList.remove('show');
+        }
+
+        function loadManagementData() {
+            Promise.all([
+                fetch('/api/management/status').then(r => r.json()),
+                fetch('/api/management/history').then(r => r.json())
+            ])
+            .then(([status, history]) => {
+                displayManagementStatus(status);
+                displayManagementHistory(history);
+            })
+            .catch(error => {
+                console.error('Error loading management data:', error);
+                showAlert('Error loading management data: ' + error.message, 'error');
+            });
+        }
+
+        function displayManagementStatus(status) {
+            const statusGrid = document.getElementById('statusGrid');
+            statusGrid.innerHTML = '';
+
+            const statusCards = [
+                { label: 'Server Status', value: status.serverStatus, gradient: '--gradient-success' },
+                { label: 'Active Processes', value: status.activeProcesses || 0, gradient: '--gradient-primary' },
+                { label: 'Total Processed', value: status.totalProcessed || 0, gradient: '--gradient-secondary' },
+                { label: 'Uptime', value: formatUptime(status.uptime), gradient: '--gradient-cool-primary' }
+            ];
+
+            statusCards.forEach(card => {
+                const statusCard = document.createElement('div');
+                statusCard.className = 'status-card';
+                statusCard.innerHTML = `
+                    <div class="status-value">${card.value}</div>
+                    <div class="status-label">${card.label}</div>
+                `;
+                statusGrid.appendChild(statusCard);
+            });
+        }
+
+        function displayManagementHistory(history) {
+            const detailsSection = document.getElementById('managementDetails');
+            
+            if (history && history.length > 0) {
+                const historyHTML = `
+                    <h3 style="margin: 2rem 0 1rem; background: var(--text-gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Recent Processing History</h3>
+                    <div class="results-grid">
+                        ${history.slice(0, 10).map(item => `
+                            <div class="result-item">
+                                <div class="result-title">${item.title || 'Video Processing'}</div>
+                                <div class="result-description">
+                                    Status: ${item.status}<br>
+                                    Date: ${new Date(item.timestamp).toLocaleString()}
+                                </div>
+                                ${item.downloadUrl ? `<button class="btn btn-secondary" onclick="window.open('${item.downloadUrl}', '_blank')">Download</button>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                detailsSection.innerHTML = historyHTML;
+            } else {
+                detailsSection.innerHTML = '<p style="text-align: center; margin: 2rem 0; color: var(--color-gray-600);">No processing history available.</p>';
+            }
+        }
+
+        function refreshStatus() {
+            loadManagementData();
+            showAlert('Management data refreshed', 'success');
+        }
+
+        function viewHistory() {
+            fetch('/api/management/history')
+                .then(response => response.json())
+                .then(history => {
+                    displayManagementHistory(history);
+                })
+                .catch(error => {
+                    showAlert('Error loading history: ' + error.message, 'error');
+                });
+        }
+
+        function cleanupOld() {
+            if (confirm('This will remove old processing folders. Continue?')) {
+                fetch('/api/management/cleanup-old', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showAlert(`Cleanup completed: ${data.message}`, 'success');
+                        refreshStatus();
+                    })
+                    .catch(error => {
+                        showAlert('Cleanup failed: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        function restartServer() {
+            if (confirm('This will restart the server. Continue?')) {
+                fetch('/api/management/restart', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showAlert('Server restart initiated', 'warning');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                    })
+                    .catch(error => {
+                        showAlert('Restart failed: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        function formatUptime(seconds) {
+            if (!seconds) return 'Unknown';
+            
+            const days = Math.floor(seconds / 86400);
+            const hours = Math.floor((seconds % 86400) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            
+            if (days > 0) return `${days}d ${hours}h`;
+            if (hours > 0) return `${hours}h ${minutes}m`;
+            return `${minutes}m`;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('managementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideManagement();
+            }
+        });
+
+        // Initialize WebSocket connection when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeWebSocket();
+        });
+
+        // Handle page unload
+        window.addEventListener('beforeunload', function() {
+            if (ws) {
+                ws.close();
+            }
+        });
+    </script>
+</body>
+</html>

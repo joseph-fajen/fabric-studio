@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - IBM Carbon Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* IBM Carbon Design System Variables */
+        :root {
+            --cds-blue-60: #0062FF;
+            --cds-blue-70: #0043CE;
+            --cds-blue-80: #002D9C;
+            --cds-gray-100: #000000;
+            --cds-gray-90: #1C1C1C;
+            --cds-gray-80: #343434;
+            --cds-gray-70: #525252;
+            --cds-gray-60: #6F6F6F;
+            --cds-gray-50: #8D8D8D;
+            --cds-gray-40: #A8A8A8;
+            --cds-gray-30: #C1C1C1;
+            --cds-gray-20: #D1D1D1;
+            --cds-gray-10: #E0E0E0;
+            --cds-white-0: #FFFFFF;
+            --cds-field-01: #F4F4F4;
+            --cds-field-02: #FFFFFF;
+            --cds-ui-01: #F4F4F4;
+            --cds-ui-02: #FFFFFF;
+            --cds-ui-03: #E0E0E0;
+            --cds-ui-04: #8D8D8D;
+            --cds-ui-05: #161616;
+            --cds-text-01: #161616;
+            --cds-text-02: #525252;
+            --cds-text-03: #A8A8A8;
+            --cds-text-error: #DA1E28;
+            --cds-support-error: #DA1E28;
+            --cds-support-success: #24A148;
+            --cds-support-warning: #F1C21B;
+            --cds-support-info: #0062FF;
+            --cds-spacing-03: 0.5rem;
+            --cds-spacing-04: 0.75rem;
+            --cds-spacing-05: 1rem;
+            --cds-spacing-06: 1.5rem;
+            --cds-spacing-07: 2rem;
+            --cds-spacing-08: 2.5rem;
+            --cds-spacing-09: 3rem;
+            --cds-spacing-10: 4rem;
+            --cds-spacing-12: 6rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--cds-ui-01);
+            color: var(--cds-text-01);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* Header */
+        .cds-header {
+            background-color: var(--cds-gray-100);
+            color: var(--cds-white-0);
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--cds-spacing-05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--cds-gray-80);
+        }
+
+        .cds-header__name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-left: var(--cds-spacing-05);
+        }
+
+        .cds-header__global {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: var(--cds-spacing-05);
+        }
+
+        /* Main Layout */
+        .cds-content {
+            margin-top: 48px;
+            min-height: calc(100vh - 48px);
+            background-color: var(--cds-ui-01);
+        }
+
+        .cds-grid {
+            max-width: 1584px;
+            margin: 0 auto;
+            padding: var(--cds-spacing-06) var(--cds-spacing-05);
+        }
+
+        .cds-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -0.5rem;
+        }
+
+        .cds-col {
+            padding: 0 0.5rem;
+            margin-bottom: var(--cds-spacing-06);
+        }
+
+        .cds-col-lg-8 {
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
+        }
+
+        .cds-col-lg-4 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+
+        .cds-col-lg-12 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        /* Tiles */
+        .cds-tile {
+            background-color: var(--cds-ui-02);
+            border: 1px solid var(--cds-ui-03);
+            padding: var(--cds-spacing-06);
+            margin-bottom: var(--cds-spacing-06);
+        }
+
+        .cds-tile--clickable {
+            cursor: pointer;
+            transition: background-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+        }
+
+        .cds-tile--clickable:hover {
+            background-color: var(--cds-ui-01);
+        }
+
+        /* Typography */
+        .cds-productive-heading-04 {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.25;
+            margin-bottom: var(--cds-spacing-06);
+        }
+
+        .cds-productive-heading-03 {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.375;
+            margin-bottom: var(--cds-spacing-05);
+        }
+
+        .cds-productive-heading-02 {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.375;
+            margin-bottom: var(--cds-spacing-04);
+        }
+
+        .cds-body-short-01 {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.29;
+        }
+
+        .cds-body-short-02 {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.375;
+        }
+
+        .cds-label-01 {
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.34;
+            color: var(--cds-text-02);
+        }
+
+        /* Form Elements */
+        .cds-form-item {
+            margin-bottom: var(--cds-spacing-06);
+        }
+
+        .cds-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.34;
+            color: var(--cds-text-02);
+            margin-bottom: var(--cds-spacing-03);
+        }
+
+        .cds-text-input {
+            width: 100%;
+            height: 40px;
+            padding: 0 var(--cds-spacing-05);
+            border: none;
+            border-bottom: 1px solid var(--cds-ui-04);
+            background-color: var(--cds-field-01);
+            color: var(--cds-text-01);
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-bottom-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+        }
+
+        .cds-text-input:focus {
+            outline: 2px solid var(--cds-blue-60);
+            outline-offset: -2px;
+            border-bottom-color: var(--cds-blue-60);
+        }
+
+        .cds-text-input--invalid {
+            border-bottom-color: var(--cds-support-error);
+        }
+
+        .cds-form-requirement {
+            font-size: 12px;
+            color: var(--cds-support-error);
+            margin-top: var(--cds-spacing-03);
+            display: none;
+        }
+
+        .cds-form-requirement--visible {
+            display: block;
+        }
+
+        /* Buttons */
+        .cds-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 var(--cds-spacing-05);
+            height: 48px;
+            border: none;
+            background-color: var(--cds-blue-60);
+            color: var(--cds-white-0);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.29;
+            cursor: pointer;
+            transition: background-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+            text-decoration: none;
+            border-radius: 0;
+        }
+
+        .cds-btn:hover {
+            background-color: var(--cds-blue-70);
+        }
+
+        .cds-btn:focus {
+            outline: 2px solid var(--cds-blue-60);
+            outline-offset: -2px;
+        }
+
+        .cds-btn:disabled {
+            background-color: var(--cds-ui-03);
+            color: var(--cds-text-03);
+            cursor: not-allowed;
+        }
+
+        .cds-btn--secondary {
+            background-color: transparent;
+            color: var(--cds-blue-60);
+            border: 1px solid var(--cds-blue-60);
+        }
+
+        .cds-btn--secondary:hover {
+            background-color: var(--cds-blue-60);
+            color: var(--cds-white-0);
+        }
+
+        .cds-btn--ghost {
+            background-color: transparent;
+            color: var(--cds-blue-60);
+            border: none;
+        }
+
+        .cds-btn--ghost:hover {
+            background-color: var(--cds-ui-01);
+        }
+
+        .cds-btn--danger {
+            background-color: var(--cds-support-error);
+        }
+
+        .cds-btn--danger:hover {
+            background-color: #ba1b23;
+        }
+
+        /* Progress Indicator */
+        .cds-progress-indicator {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cds-progress-step {
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            padding-bottom: var(--cds-spacing-07);
+        }
+
+        .cds-progress-step:last-child {
+            padding-bottom: 0;
+        }
+
+        .cds-progress-step::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 24px;
+            bottom: -16px;
+            width: 1px;
+            background-color: var(--cds-ui-03);
+        }
+
+        .cds-progress-step:last-child::before {
+            display: none;
+        }
+
+        .cds-progress-step__svg {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--cds-ui-03);
+            border-radius: 50%;
+            background-color: var(--cds-ui-02);
+            margin-right: var(--cds-spacing-05);
+            flex-shrink: 0;
+            margin-top: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cds-progress-step--current .cds-progress-step__svg {
+            border-color: var(--cds-blue-60);
+            background-color: var(--cds-blue-60);
+        }
+
+        .cds-progress-step--complete .cds-progress-step__svg {
+            border-color: var(--cds-support-success);
+            background-color: var(--cds-support-success);
+        }
+
+        .cds-progress-step__label {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.29;
+            color: var(--cds-text-01);
+        }
+
+        .cds-progress-step__optional {
+            font-size: 12px;
+            color: var(--cds-text-02);
+            margin-top: var(--cds-spacing-03);
+        }
+
+        /* Data Table */
+        .cds-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        .cds-data-table thead {
+            background-color: var(--cds-ui-03);
+        }
+
+        .cds-data-table th,
+        .cds-data-table td {
+            padding: var(--cds-spacing-05);
+            text-align: left;
+            border-bottom: 1px solid var(--cds-ui-03);
+        }
+
+        .cds-data-table th {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--cds-text-01);
+            text-transform: uppercase;
+            letter-spacing: 0.16px;
+        }
+
+        .cds-data-table td {
+            font-size: 14px;
+            color: var(--cds-text-01);
+        }
+
+        .cds-data-table tbody tr:hover {
+            background-color: var(--cds-ui-01);
+        }
+
+        /* Tags */
+        .cds-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 var(--cds-spacing-04);
+            height: 24px;
+            background-color: var(--cds-ui-03);
+            color: var(--cds-text-01);
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.34;
+            border-radius: 12px;
+        }
+
+        .cds-tag--red {
+            background-color: var(--cds-support-error);
+            color: var(--cds-white-0);
+        }
+
+        .cds-tag--green {
+            background-color: var(--cds-support-success);
+            color: var(--cds-white-0);
+        }
+
+        .cds-tag--blue {
+            background-color: var(--cds-blue-60);
+            color: var(--cds-white-0);
+        }
+
+        /* Modal */
+        .cds-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(22, 22, 22, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .cds-modal--open {
+            display: flex;
+        }
+
+        .cds-modal-container {
+            background-color: var(--cds-ui-02);
+            max-width: 768px;
+            width: calc(100% - 2rem);
+            max-height: calc(100% - 2rem);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cds-modal-header {
+            padding: var(--cds-spacing-06);
+            border-bottom: 1px solid var(--cds-ui-03);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cds-modal-header__heading {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.375;
+        }
+
+        .cds-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--cds-spacing-03);
+            color: var(--cds-text-01);
+            font-size: 16px;
+        }
+
+        .cds-modal-body {
+            padding: var(--cds-spacing-06);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Tabs */
+        .cds-tabs {
+            border-bottom: 1px solid var(--cds-ui-03);
+        }
+
+        .cds-tabs__nav {
+            display: flex;
+            list-style: none;
+        }
+
+        .cds-tabs__nav-item {
+            margin-right: var(--cds-spacing-05);
+        }
+
+        .cds-tabs__nav-link {
+            display: block;
+            padding: var(--cds-spacing-05) 0;
+            color: var(--cds-text-02);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            border-bottom: 2px solid transparent;
+            transition: color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+        }
+
+        .cds-tabs__nav-link:hover {
+            color: var(--cds-text-01);
+        }
+
+        .cds-tabs__nav-link--selected {
+            color: var(--cds-text-01);
+            border-bottom-color: var(--cds-blue-60);
+        }
+
+        .cds-tab-content {
+            padding: var(--cds-spacing-06) 0;
+        }
+
+        /* Loading */
+        .cds-loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--cds-ui-03);
+            border-top: 2px solid var(--cds-blue-60);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .cds-inline-notification {
+            display: flex;
+            align-items: flex-start;
+            padding: var(--cds-spacing-05);
+            margin-bottom: var(--cds-spacing-06);
+            border-left: 3px solid var(--cds-support-info);
+            background-color: #EDF5FF;
+        }
+
+        .cds-inline-notification--error {
+            border-left-color: var(--cds-support-error);
+            background-color: #FDF2F2;
+        }
+
+        .cds-inline-notification--success {
+            border-left-color: var(--cds-support-success);
+            background-color: #F1F8F4;
+        }
+
+        .cds-inline-notification__details {
+            flex: 1;
+        }
+
+        .cds-inline-notification__title {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.29;
+            margin-bottom: var(--cds-spacing-03);
+        }
+
+        .cds-inline-notification__subtitle {
+            font-size: 14px;
+            color: var(--cds-text-02);
+            line-height: 1.29;
+        }
+
+        /* Custom Styles */
+        .phase-group {
+            margin-bottom: var(--cds-spacing-07);
+        }
+
+        .phase-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--cds-text-01);
+            margin-bottom: var(--cds-spacing-05);
+            padding-bottom: var(--cds-spacing-03);
+            border-bottom: 1px solid var(--cds-ui-03);
+        }
+
+        .pattern-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--cds-spacing-04) 0;
+            border-bottom: 1px solid var(--cds-ui-01);
+        }
+
+        .pattern-name {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .pattern-status {
+            display: flex;
+            align-items: center;
+            gap: var(--cds-spacing-03);
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--cds-ui-03);
+        }
+
+        .status-indicator--pending {
+            background-color: var(--cds-ui-03);
+        }
+
+        .status-indicator--processing {
+            background-color: var(--cds-blue-60);
+        }
+
+        .status-indicator--completed {
+            background-color: var(--cds-support-success);
+        }
+
+        .status-indicator--error {
+            background-color: var(--cds-support-error);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--cds-spacing-05);
+            margin-top: var(--cds-spacing-06);
+        }
+
+        .result-card {
+            background-color: var(--cds-ui-02);
+            border: 1px solid var(--cds-ui-03);
+            padding: var(--cds-spacing-05);
+        }
+
+        .result-card__title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: var(--cds-spacing-04);
+        }
+
+        .result-card__description {
+            font-size: 12px;
+            color: var(--cds-text-02);
+            line-height: 1.34;
+        }
+
+        /* Responsive */
+        @media (max-width: 672px) {
+            .cds-col-lg-8,
+            .cds-col-lg-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            .cds-grid {
+                padding: var(--cds-spacing-05);
+            }
+
+            .cds-modal-container {
+                width: calc(100% - 1rem);
+                max-height: calc(100% - 1rem);
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Watson AI branding */
+        .watson-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--cds-spacing-03);
+            font-size: 12px;
+            color: var(--cds-text-02);
+            margin-top: var(--cds-spacing-05);
+        }
+
+        .watson-icon {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, var(--cds-blue-60), var(--cds-blue-80));
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="cds-header">
+        <div class="watson-icon"></div>
+        <div class="cds-header__name">YouTube Fabric Processor</div>
+        <div class="cds-header__global">
+            <button class="cds-btn cds-btn--ghost" onclick="openManagementModal()">Management</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="cds-content">
+        <div class="cds-grid">
+            <div class="cds-row">
+                <div class="cds-col cds-col-lg-8">
+                    <!-- Processing Section -->
+                    <div class="cds-tile">
+                        <h1 class="cds-productive-heading-04">YouTube Video Analysis</h1>
+                        <p class="cds-body-short-02">Process YouTube videos through 13 fabric patterns to extract insights, summaries, and knowledge using advanced AI analysis.</p>
+                        
+                        <div class="watson-badge">
+                            <div class="watson-icon"></div>
+                            <span>Powered by Watson AI and Fabric Patterns</span>
+                        </div>
+
+                        <!-- URL Input Form -->
+                        <form id="processForm" class="cds-form-item">
+                            <label for="youtubeUrl" class="cds-label">YouTube URL</label>
+                            <input 
+                                type="url" 
+                                id="youtubeUrl" 
+                                class="cds-text-input" 
+                                placeholder="https://www.youtube.com/watch?v=..."
+                                required
+                            >
+                            <div id="urlError" class="cds-form-requirement">Please enter a valid YouTube URL</div>
+                            
+                            <div style="margin-top: var(--cds-spacing-06);">
+                                <button type="submit" class="cds-btn" id="processBtn">
+                                    Start Analysis
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Progress Section -->
+                        <div id="progressSection" class="hidden" style="margin-top: var(--cds-spacing-07);">
+                            <h2 class="cds-productive-heading-03">Processing Progress</h2>
+                            
+                            <div id="currentStatus" class="cds-inline-notification">
+                                <div class="cds-inline-notification__details">
+                                    <div class="cds-inline-notification__title">Initializing</div>
+                                    <div class="cds-inline-notification__subtitle">Preparing to process video...</div>
+                                </div>
+                            </div>
+
+                            <!-- Phase Progress -->
+                            <div id="phaseProgress">
+                                <!-- Phase 1: Foundation -->
+                                <div class="phase-group">
+                                    <div class="phase-title">Phase 1: Foundation Analysis</div>
+                                    <div class="pattern-item" data-pattern="extract_wisdom">
+                                        <span class="pattern-name">Extract Wisdom</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="summarize">
+                                        <span class="pattern-name">Summarize</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="extract_main_idea">
+                                        <span class="pattern-name">Extract Main Idea</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Phase 2: Analysis -->
+                                <div class="phase-group">
+                                    <div class="phase-title">Phase 2: Deep Analysis</div>
+                                    <div class="pattern-item" data-pattern="extract_insights">
+                                        <span class="pattern-name">Extract Insights</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="find_logical_fallacies">
+                                        <span class="pattern-name">Find Logical Fallacies</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="extract_questions">
+                                        <span class="pattern-name">Extract Questions</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="extract_references">
+                                        <span class="pattern-name">Extract References</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Phase 3: Content -->
+                                <div class="phase-group">
+                                    <div class="phase-title">Phase 3: Content Extraction</div>
+                                    <div class="pattern-item" data-pattern="extract_business_ideas">
+                                        <span class="pattern-name">Extract Business Ideas</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="extract_extraordinary_claims">
+                                        <span class="pattern-name">Extract Extraordinary Claims</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="extract_predictions">
+                                        <span class="pattern-name">Extract Predictions</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Phase 4: Synthesis -->
+                                <div class="phase-group">
+                                    <div class="phase-title">Phase 4: Synthesis</div>
+                                    <div class="pattern-item" data-pattern="create_5_sentence_summary">
+                                        <span class="pattern-name">Create 5 Sentence Summary</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="create_summary">
+                                        <span class="pattern-name">Create Summary</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                    <div class="pattern-item" data-pattern="create_quiz">
+                                        <span class="pattern-name">Create Quiz</span>
+                                        <div class="pattern-status">
+                                            <div class="status-indicator status-indicator--pending"></div>
+                                            <span class="cds-label-01">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Section -->
+                        <div id="resultsSection" class="hidden" style="margin-top: var(--cds-spacing-07);">
+                            <h2 class="cds-productive-heading-03">Analysis Complete</h2>
+                            
+                            <div class="cds-inline-notification cds-inline-notification--success">
+                                <div class="cds-inline-notification__details">
+                                    <div class="cds-inline-notification__title">Processing Complete</div>
+                                    <div class="cds-inline-notification__subtitle">All 13 fabric patterns have been successfully applied to your video.</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: var(--cds-spacing-06);">
+                                <button class="cds-btn" id="downloadBtn" onclick="downloadResults()">
+                                    Download Analysis Package
+                                </button>
+                                <button class="cds-btn cds-btn--secondary" onclick="processAnother()" style="margin-left: var(--cds-spacing-05);">
+                                    Process Another Video
+                                </button>
+                            </div>
+
+                            <div class="results-grid">
+                                <div class="result-card">
+                                    <div class="result-card__title">📚 Foundation Analysis</div>
+                                    <div class="result-card__description">Core wisdom, summaries, and main ideas extracted from the content</div>
+                                </div>
+                                <div class="result-card">
+                                    <div class="result-card__title">🔍 Deep Analysis</div>
+                                    <div class="result-card__description">Insights, logical analysis, questions, and reference materials</div>
+                                </div>
+                                <div class="result-card">
+                                    <div class="result-card__title">💡 Content Extraction</div>
+                                    <div class="result-card__description">Business ideas, extraordinary claims, and future predictions</div>
+                                </div>
+                                <div class="result-card">
+                                    <div class="result-card__title">📝 Synthesis</div>
+                                    <div class="result-card__description">Comprehensive summaries and interactive quiz materials</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cds-col cds-col-lg-4">
+                    <!-- System Status -->
+                    <div class="cds-tile">
+                        <h2 class="cds-productive-heading-03">System Status</h2>
+                        <div style="margin-bottom: var(--cds-spacing-05);">
+                            <div class="cds-label-01">Processing Engine</div>
+                            <div class="cds-body-short-01">
+                                <span class="cds-tag cds-tag--green">Operational</span>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: var(--cds-spacing-05);">
+                            <div class="cds-label-01">Fabric CLI</div>
+                            <div class="cds-body-short-01">
+                                <span class="cds-tag cds-tag--green">Connected</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="cds-label-01">AI Model</div>
+                            <div class="cds-body-short-01">claude-3-5-sonnet-20241022</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="cds-tile">
+                        <h2 class="cds-productive-heading-03">Performance Metrics</h2>
+                        <div style="margin-bottom: var(--cds-spacing-05);">
+                            <div class="cds-label-01">Average Processing Time</div>
+                            <div class="cds-body-short-01">~70 seconds</div>
+                        </div>
+                        <div style="margin-bottom: var(--cds-spacing-05);">
+                            <div class="cds-label-01">Supported Patterns</div>
+                            <div class="cds-body-short-01">13 fabric patterns</div>
+                        </div>
+                        <div>
+                            <div class="cds-label-01">Architecture</div>
+                            <div class="cds-body-short-01">Transcript-first processing</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="cds-tile">
+                        <h2 class="cds-productive-heading-03">Recent Activity</h2>
+                        <div id="recentActivity">
+                            <div class="cds-body-short-01" style="color: var(--cds-text-02);">
+                                No recent processing activity
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="cds-modal">
+        <div class="cds-modal-container">
+            <div class="cds-modal-header">
+                <h2 class="cds-modal-header__heading">System Management</h2>
+                <button class="cds-modal-close" onclick="closeManagementModal()">×</button>
+            </div>
+            <div class="cds-modal-body">
+                <!-- Tabs -->
+                <div class="cds-tabs">
+                    <ul class="cds-tabs__nav">
+                        <li class="cds-tabs__nav-item">
+                            <a href="#" class="cds-tabs__nav-link cds-tabs__nav-link--selected" onclick="showTab('status')">Status</a>
+                        </li>
+                        <li class="cds-tabs__nav-item">
+                            <a href="#" class="cds-tabs__nav-link" onclick="showTab('history')">History</a>
+                        </li>
+                        <li class="cds-tabs__nav-item">
+                            <a href="#" class="cds-tabs__nav-link" onclick="showTab('cleanup')">Cleanup</a>
+                        </li>
+                        <li class="cds-tabs__nav-item">
+                            <a href="#" class="cds-tabs__nav-link" onclick="showTab('control')">Control</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Status Tab -->
+                <div id="statusTab" class="cds-tab-content">
+                    <h3 class="cds-productive-heading-02">Server Status</h3>
+                    <table class="cds-data-table">
+                        <tbody>
+                            <tr>
+                                <td>Server Status</td>
+                                <td><span class="cds-tag cds-tag--green">Running</span></td>
+                            </tr>
+                            <tr>
+                                <td>Active Processes</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Uptime</td>
+                                <td>2h 34m</td>
+                            </tr>
+                            <tr>
+                                <td>Memory Usage</td>
+                                <td>156 MB</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- History Tab -->
+                <div id="historyTab" class="cds-tab-content hidden">
+                    <h3 class="cds-productive-heading-02">Processing History</h3>
+                    <table class="cds-data-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Video</th>
+                                <th>Status</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-01-15 14:30</td>
+                                <td>AI Trends 2024</td>
+                                <td><span class="cds-tag cds-tag--green">Complete</span></td>
+                                <td>68s</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-15 13:45</td>
+                                <td>Machine Learning Basics</td>
+                                <td><span class="cds-tag cds-tag--green">Complete</span></td>
+                                <td>72s</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cleanup Tab -->
+                <div id="cleanupTab" class="cds-tab-content hidden">
+                    <h3 class="cds-productive-heading-02">System Cleanup</h3>
+                    <p class="cds-body-short-01" style="margin-bottom: var(--cds-spacing-06);">
+                        Remove old processing outputs and temporary files to free up disk space.
+                    </p>
+                    <button class="cds-btn cds-btn--secondary" onclick="cleanupOldFiles()">
+                        Clean Old Files
+                    </button>
+                </div>
+
+                <!-- Control Tab -->
+                <div id="controlTab" class="cds-tab-content hidden">
+                    <h3 class="cds-productive-heading-02">Server Control</h3>
+                    <p class="cds-body-short-01" style="margin-bottom: var(--cds-spacing-06);">
+                        Manage server operations and maintenance tasks.
+                    </p>
+                    <div style="display: flex; gap: var(--cds-spacing-05);">
+                        <button class="cds-btn cds-btn--secondary" onclick="restartServer()">
+                            Restart Server
+                        </button>
+                        <button class="cds-btn cds-btn--danger" onclick="shutdownServer()">
+                            Shutdown Server
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        let currentProcessId = null;
+        let ws = null;
+
+        // Form Handling
+        document.getElementById('processForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = document.getElementById('youtubeUrl').value;
+            
+            if (!isValidYouTubeUrl(url)) {
+                showError('Please enter a valid YouTube URL');
+                return;
+            }
+
+            startProcessing(url);
+        });
+
+        function isValidYouTubeUrl(url) {
+            const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)[\w-]+/;
+            return pattern.test(url);
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('urlError');
+            const input = document.getElementById('youtubeUrl');
+            
+            errorElement.textContent = message;
+            errorElement.classList.add('cds-form-requirement--visible');
+            input.classList.add('cds-text-input--invalid');
+        }
+
+        function clearError() {
+            const errorElement = document.getElementById('urlError');
+            const input = document.getElementById('youtubeUrl');
+            
+            errorElement.classList.remove('cds-form-requirement--visible');
+            input.classList.remove('cds-text-input--invalid');
+        }
+
+        // Processing Functions
+        function startProcessing(url) {
+            clearError();
+            
+            // Reset UI
+            document.getElementById('progressSection').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('processBtn').disabled = true;
+            document.getElementById('processBtn').textContent = 'Processing...';
+
+            // Reset all pattern statuses
+            resetPatternStatuses();
+
+            // Simulate processing with WebSocket-like updates
+            simulateProcessing();
+        }
+
+        function resetPatternStatuses() {
+            const patterns = document.querySelectorAll('.pattern-item');
+            patterns.forEach(pattern => {
+                const indicator = pattern.querySelector('.status-indicator');
+                const statusText = pattern.querySelector('.cds-label-01');
+                
+                indicator.className = 'status-indicator status-indicator--pending';
+                statusText.textContent = 'Pending';
+            });
+        }
+
+        function updatePatternStatus(patternName, status) {
+            const pattern = document.querySelector(`[data-pattern="${patternName}"]`);
+            if (pattern) {
+                const indicator = pattern.querySelector('.status-indicator');
+                const statusText = pattern.querySelector('.cds-label-01');
+                
+                indicator.className = `status-indicator status-indicator--${status}`;
+                statusText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+
+        function updateCurrentStatus(title, subtitle, type = 'info') {
+            const statusElement = document.getElementById('currentStatus');
+            const titleElement = statusElement.querySelector('.cds-inline-notification__title');
+            const subtitleElement = statusElement.querySelector('.cds-inline-notification__subtitle');
+            
+            statusElement.className = `cds-inline-notification ${type !== 'info' ? `cds-inline-notification--${type}` : ''}`;
+            titleElement.textContent = title;
+            subtitleElement.textContent = subtitle;
+        }
+
+        function simulateProcessing() {
+            const patterns = [
+                'extract_wisdom', 'summarize', 'extract_main_idea',
+                'extract_insights', 'find_logical_fallacies', 'extract_questions', 'extract_references',
+                'extract_business_ideas', 'extract_extraordinary_claims', 'extract_predictions',
+                'create_5_sentence_summary', 'create_summary', 'create_quiz'
+            ];
+
+            let currentIndex = 0;
+            const processingInterval = setInterval(() => {
+                if (currentIndex < patterns.length) {
+                    const pattern = patterns[currentIndex];
+                    updatePatternStatus(pattern, 'processing');
+                    updateCurrentStatus(
+                        `Processing ${pattern.replace(/_/g, ' ')}`,
+                        `Analyzing content with ${pattern} pattern...`
+                    );
+
+                    setTimeout(() => {
+                        updatePatternStatus(pattern, 'completed');
+                        currentIndex++;
+                    }, 1000);
+                } else {
+                    clearInterval(processingInterval);
+                    processingComplete();
+                }
+            }, 2000);
+        }
+
+        function processingComplete() {
+            document.getElementById('progressSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('processBtn').disabled = false;
+            document.getElementById('processBtn').textContent = 'Start Analysis';
+
+            // Update recent activity
+            addRecentActivity();
+        }
+
+        function addRecentActivity() {
+            const activityElement = document.getElementById('recentActivity');
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            activityElement.innerHTML = `
+                <div style="margin-bottom: var(--cds-spacing-04);">
+                    <div class="cds-label-01">${timeString}</div>
+                    <div class="cds-body-short-01">Video analysis completed</div>
+                </div>
+            `;
+        }
+
+        function downloadResults() {
+            // Simulate download
+            const downloadBtn = document.getElementById('downloadBtn');
+            const originalText = downloadBtn.textContent;
+            
+            downloadBtn.textContent = 'Preparing Download...';
+            downloadBtn.disabled = true;
+            
+            setTimeout(() => {
+                downloadBtn.textContent = originalText;
+                downloadBtn.disabled = false;
+                
+                // Create a mock download
+                const link = document.createElement('a');
+                link.href = 'data:text/plain;charset=utf-8,Mock analysis results';
+                link.download = 'youtube_analysis.zip';
+                link.click();
+            }, 2000);
+        }
+
+        function processAnother() {
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('progressSection').classList.add('hidden');
+        }
+
+        // Modal Functions
+        function openManagementModal() {
+            document.getElementById('managementModal').classList.add('cds-modal--open');
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').classList.remove('cds-modal--open');
+        }
+
+        function showTab(tabName) {
+            // Update tab navigation
+            const navLinks = document.querySelectorAll('.cds-tabs__nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('cds-tabs__nav-link--selected');
+            });
+            event.target.classList.add('cds-tabs__nav-link--selected');
+
+            // Show/hide tab content
+            const tabs = ['status', 'history', 'cleanup', 'control'];
+            tabs.forEach(tab => {
+                const tabElement = document.getElementById(`${tab}Tab`);
+                if (tab === tabName) {
+                    tabElement.classList.remove('hidden');
+                } else {
+                    tabElement.classList.add('hidden');
+                }
+            });
+        }
+
+        // Management Functions
+        function cleanupOldFiles() {
+            alert('Cleanup operation initiated. Old files will be removed.');
+        }
+
+        function restartServer() {
+            if (confirm('Are you sure you want to restart the server?')) {
+                alert('Server restart initiated.');
+            }
+        }
+
+        function shutdownServer() {
+            if (confirm('Are you sure you want to shutdown the server?')) {
+                alert('Server shutdown initiated.');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('managementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeManagementModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clear any existing errors
+            clearError();
+        });
+    </script>
+</body>
+</html>

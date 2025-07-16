@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Material Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Material Design 3 Color System */
+            --md-primary: #1976D2;
+            --md-primary-variant: #1565C0;
+            --md-secondary: #03DAC6;
+            --md-secondary-variant: #018786;
+            --md-background: #FAFAFA;
+            --md-surface: #FFFFFF;
+            --md-surface-variant: #F5F5F5;
+            --md-error: #B00020;
+            --md-on-primary: #FFFFFF;
+            --md-on-secondary: #000000;
+            --md-on-background: #000000;
+            --md-on-surface: #000000;
+            --md-on-error: #FFFFFF;
+            --md-outline: #79747E;
+            --md-outline-variant: #CAC4D0;
+            
+            /* Elevation shadows */
+            --md-elevation-1: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24);
+            --md-elevation-2: 0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23);
+            --md-elevation-4: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
+            --md-elevation-8: 0px 19px 38px rgba(0, 0, 0, 0.30), 0px 15px 12px rgba(0, 0, 0, 0.22);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-background);
+            color: var(--md-on-background);
+            line-height: 1.5;
+        }
+
+        /* App Bar */
+        .app-bar {
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+            padding: 16px 24px;
+            box-shadow: var(--md-elevation-4);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .app-bar h1 {
+            font-size: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Material Card */
+        .md-card {
+            background-color: var(--md-surface);
+            border-radius: 12px;
+            box-shadow: var(--md-elevation-2);
+            overflow: hidden;
+            margin-bottom: 24px;
+            transition: box-shadow 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .md-card:hover {
+            box-shadow: var(--md-elevation-4);
+        }
+
+        .card-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid var(--md-outline-variant);
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: var(--md-on-surface);
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--md-outline);
+            margin-bottom: 16px;
+        }
+
+        /* Input Fields */
+        .md-textfield {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .md-textfield input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--md-outline-variant);
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-surface);
+            transition: border-color 0.3s ease;
+        }
+
+        .md-textfield input:focus {
+            outline: none;
+            border-color: var(--md-primary);
+        }
+
+        .md-textfield label {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            font-size: 16px;
+            color: var(--md-outline);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .md-textfield input:focus + label,
+        .md-textfield input:not(:placeholder-shown) + label {
+            top: -8px;
+            left: 12px;
+            font-size: 12px;
+            color: var(--md-primary);
+            background-color: var(--md-surface);
+            padding: 0 4px;
+        }
+
+        /* Buttons */
+        .md-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 100px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .md-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            transform: translate(-50%, -50%);
+        }
+
+        .md-button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .md-button-filled {
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+            box-shadow: var(--md-elevation-2);
+        }
+
+        .md-button-filled:hover {
+            box-shadow: var(--md-elevation-4);
+        }
+
+        .md-button-outlined {
+            background-color: transparent;
+            color: var(--md-primary);
+            border: 2px solid var(--md-primary);
+        }
+
+        .md-button-outlined:hover {
+            background-color: rgba(25, 118, 210, 0.08);
+        }
+
+        /* Floating Action Button */
+        .md-fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+            border: none;
+            box-shadow: var(--md-elevation-8);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .md-fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Progress Indicators */
+        .progress-container {
+            margin: 24px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .md-progress {
+            width: 100%;
+            height: 4px;
+            background-color: var(--md-outline-variant);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .md-progress-bar {
+            height: 100%;
+            background-color: var(--md-primary);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .md-progress-indeterminate .md-progress-bar {
+            animation: indeterminate 2s infinite linear;
+        }
+
+        @keyframes indeterminate {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .phase-card {
+            background-color: var(--md-surface);
+            border-radius: 12px;
+            box-shadow: var(--md-elevation-1);
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card.active {
+            box-shadow: var(--md-elevation-4);
+            border: 2px solid var(--md-primary);
+        }
+
+        .phase-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phase-patterns {
+            list-style: none;
+            padding: 0;
+        }
+
+        .phase-patterns li {
+            padding: 4px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pattern-status {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--md-outline-variant);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .pattern-status.completed {
+            background-color: var(--md-secondary);
+            color: var(--md-on-secondary);
+        }
+
+        .pattern-status.processing {
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--md-surface);
+            border-radius: 12px;
+            box-shadow: var(--md-elevation-8);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translate(-50%, -60%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--md-outline-variant);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .modal-content {
+            padding: 24px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* Tabs */
+        .tab-container {
+            border-bottom: 1px solid var(--md-outline-variant);
+            margin-bottom: 24px;
+        }
+
+        .tab-list {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+            color: var(--md-outline);
+        }
+
+        .tab-button.active {
+            color: var(--md-primary);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--md-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Status indicators */
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--md-outline-variant);
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            font-weight: 500;
+        }
+
+        .status-value {
+            color: var(--md-outline);
+        }
+
+        /* History list */
+        .history-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--md-outline-variant);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-info h4 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .history-info p {
+            font-size: 14px;
+            color: var(--md-outline);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .card-content {
+                padding: 16px;
+            }
+
+            .phase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal {
+                width: 95%;
+                margin: 20px;
+            }
+        }
+
+        /* Utility classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-24 {
+            margin-top: 24px;
+        }
+
+        .mb-16 {
+            margin-bottom: 16px;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .gap-16 {
+            gap: 16px;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- App Bar -->
+    <header class="app-bar">
+        <h1>
+            <span class="material-icons">smart_toy</span>
+            YouTube Fabric Processor
+        </h1>
+    </header>
+
+    <div class="container">
+        <!-- Main Input Card -->
+        <div class="md-card">
+            <div class="card-header">
+                <h2 class="card-title">Process YouTube Video</h2>
+                <p class="card-subtitle">Extract insights using 13 fabric patterns in 4 phases</p>
+            </div>
+            <div class="card-content">
+                <div class="md-textfield">
+                    <input type="url" id="youtube-url" placeholder=" " required>
+                    <label for="youtube-url">YouTube URL</label>
+                </div>
+                <button class="md-button md-button-filled" id="process-btn">
+                    <span class="material-icons">play_arrow</span>
+                    Process Video
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="md-card hidden" id="progress-section">
+            <div class="card-header">
+                <h3 class="card-title">Processing Progress</h3>
+                <p class="card-subtitle" id="current-status">Initializing...</p>
+            </div>
+            <div class="card-content">
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Overall Progress</span>
+                        <span id="overall-progress-text">0%</span>
+                    </div>
+                    <div class="md-progress">
+                        <div class="md-progress-bar" id="overall-progress-bar"></div>
+                    </div>
+                </div>
+
+                <div class="phase-grid" id="phases-grid">
+                    <!-- Phase cards will be generated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="md-card hidden" id="results-section">
+            <div class="card-header">
+                <h3 class="card-title">Processing Complete</h3>
+                <p class="card-subtitle">Your analysis is ready for download</p>
+            </div>
+            <div class="card-content">
+                <div class="flex gap-16 justify-center">
+                    <button class="md-button md-button-filled" id="download-btn">
+                        <span class="material-icons">download</span>
+                        Download Results
+                    </button>
+                    <button class="md-button md-button-outlined" id="new-analysis-btn">
+                        <span class="material-icons">refresh</span>
+                        New Analysis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="md-fab" id="management-fab" title="Management">
+        <span class="material-icons">settings</span>
+    </button>
+
+    <!-- Management Modal -->
+    <div class="modal-overlay" id="management-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">System Management</h3>
+                <button class="md-button" id="close-modal-btn" style="padding: 8px; min-width: auto;">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="tab-container">
+                    <ul class="tab-list">
+                        <li><button class="tab-button active" data-tab="status">Status</button></li>
+                        <li><button class="tab-button" data-tab="history">History</button></li>
+                        <li><button class="tab-button" data-tab="cleanup">Cleanup</button></li>
+                        <li><button class="tab-button" data-tab="control">Control</button></li>
+                    </ul>
+                </div>
+
+                <!-- Status Tab -->
+                <div class="tab-content active" id="status-tab">
+                    <div id="status-content">
+                        <div class="status-item">
+                            <span class="status-label">Server Status</span>
+                            <span class="status-value" id="server-status">Running</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Active Processes</span>
+                            <span class="status-value" id="active-processes">0</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Uptime</span>
+                            <span class="status-value" id="uptime">--</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Memory Usage</span>
+                            <span class="status-value" id="memory-usage">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Tab -->
+                <div class="tab-content" id="history-tab">
+                    <div id="history-content">
+                        <!-- History items will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Cleanup Tab -->
+                <div class="tab-content" id="cleanup-tab">
+                    <p class="mb-16">Remove old output folders to free up disk space.</p>
+                    <button class="md-button md-button-outlined" id="cleanup-btn">
+                        <span class="material-icons">delete_sweep</span>
+                        Cleanup Old Files
+                    </button>
+                </div>
+
+                <!-- Control Tab -->
+                <div class="tab-content" id="control-tab">
+                    <p class="mb-16">Server control operations.</p>
+                    <div class="flex gap-16">
+                        <button class="md-button md-button-outlined" id="restart-btn">
+                            <span class="material-icons">restart_alt</span>
+                            Restart Server
+                        </button>
+                        <button class="md-button md-button-outlined" id="shutdown-btn" style="color: var(--md-error); border-color: var(--md-error);">
+                            <span class="material-icons">power_settings_new</span>
+                            Shutdown
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application state
+        let currentProcessId = null;
+        let socket = null;
+
+        // Fabric patterns organized by phases
+        const fabricPhases = {
+            "Phase 1: Foundation": ["analyze_claims", "extract_wisdom", "summarize"],
+            "Phase 2: Structure": ["create_quiz", "extract_article", "write_essay"],
+            "Phase 3: Insights": ["extract_insights", "find_logical_fallacies", "extract_recommendations"],
+            "Phase 4: Creative": ["create_video_chapters", "write_micro_essay", "create_summary", "label_and_rate"]
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            generatePhaseCards();
+            initializeWebSocket();
+            loadManagementData();
+        });
+
+        function initializeEventListeners() {
+            // Process button
+            document.getElementById('process-btn').addEventListener('click', startProcessing);
+
+            // Management modal
+            document.getElementById('management-fab').addEventListener('click', openManagementModal);
+            document.getElementById('close-modal-btn').addEventListener('click', closeManagementModal);
+            document.getElementById('management-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeManagementModal();
+            });
+
+            // Tab navigation
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // Management actions
+            document.getElementById('cleanup-btn').addEventListener('click', cleanupOldFiles);
+            document.getElementById('restart-btn').addEventListener('click', restartServer);
+            document.getElementById('shutdown-btn').addEventListener('click', shutdownServer);
+
+            // Results actions
+            document.getElementById('download-btn').addEventListener('click', downloadResults);
+            document.getElementById('new-analysis-btn').addEventListener('click', resetInterface);
+
+            // Enter key for URL input
+            document.getElementById('youtube-url').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startProcessing();
+                }
+            });
+        }
+
+        function generatePhaseCards() {
+            const grid = document.getElementById('phases-grid');
+            grid.innerHTML = '';
+
+            Object.entries(fabricPhases).forEach(([phase, patterns], index) => {
+                const card = document.createElement('div');
+                card.className = 'phase-card';
+                card.id = `phase-${index + 1}`;
+
+                const title = document.createElement('div');
+                title.className = 'phase-title';
+                title.innerHTML = `
+                    <span class="material-icons">layers</span>
+                    ${phase}
+                `;
+
+                const patternsList = document.createElement('ul');
+                patternsList.className = 'phase-patterns';
+
+                patterns.forEach(pattern => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="pattern-status" id="status-${pattern}"></div>
+                        ${pattern.replace(/_/g, ' ')}
+                    `;
+                    patternsList.appendChild(li);
+                });
+
+                card.appendChild(title);
+                card.appendChild(patternsList);
+                grid.appendChild(card);
+            });
+        }
+
+        function initializeWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}`;
+            
+            socket = new WebSocket(wsUrl);
+
+            socket.onopen = function() {
+                console.log('WebSocket connected');
+            };
+
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+
+            socket.onclose = function() {
+                console.log('WebSocket disconnected');
+                // Attempt to reconnect after 3 seconds
+                setTimeout(initializeWebSocket, 3000);
+            };
+
+            socket.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'progress':
+                    updateProgress(data);
+                    break;
+                case 'phase_start':
+                    updatePhaseStatus(data.phase, 'active');
+                    break;
+                case 'pattern_start':
+                    updatePatternStatus(data.pattern, 'processing');
+                    break;
+                case 'pattern_complete':
+                    updatePatternStatus(data.pattern, 'completed');
+                    break;
+                case 'complete':
+                    showResults(data);
+                    break;
+                case 'error':
+                    showError(data.message);
+                    break;
+            }
+        }
+
+        function startProcessing() {
+            const url = document.getElementById('youtube-url').value.trim();
+            if (!url) {
+                showSnackbar('Please enter a YouTube URL');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showSnackbar('Please enter a valid YouTube URL');
+                return;
+            }
+
+            // Show progress section
+            document.getElementById('progress-section').classList.remove('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('process-btn').disabled = true;
+
+            // Reset all progress indicators
+            resetProgress();
+
+            // Start processing
+            fetch('/api/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.id) {
+                    currentProcessId = data.id;
+                    updateStatus('Processing started...');
+                } else {
+                    throw new Error(data.error || 'Failed to start processing');
+                }
+            })
+            .catch(error => {
+                showError(error.message);
+                resetInterface();
+            });
+        }
+
+        function updateProgress(data) {
+            const progress = Math.round((data.completed / data.total) * 100);
+            document.getElementById('overall-progress-bar').style.width = `${progress}%`;
+            document.getElementById('overall-progress-text').textContent = `${progress}%`;
+            
+            if (data.currentPattern) {
+                updateStatus(`Processing: ${data.currentPattern.replace(/_/g, ' ')}`);
+            }
+        }
+
+        function updatePhaseStatus(phaseIndex, status) {
+            const phaseCard = document.getElementById(`phase-${phaseIndex}`);
+            if (phaseCard) {
+                phaseCard.classList.toggle('active', status === 'active');
+            }
+        }
+
+        function updatePatternStatus(pattern, status) {
+            const statusElement = document.getElementById(`status-${pattern}`);
+            if (statusElement) {
+                statusElement.className = `pattern-status ${status}`;
+                if (status === 'completed') {
+                    statusElement.innerHTML = '<span class="material-icons" style="font-size: 10px;">check</span>';
+                } else if (status === 'processing') {
+                    statusElement.innerHTML = '<span class="material-icons" style="font-size: 10px;">autorenew</span>';
+                }
+            }
+        }
+
+        function updateStatus(message) {
+            document.getElementById('current-status').textContent = message;
+        }
+
+        function showResults(data) {
+            document.getElementById('progress-section').classList.add('hidden');
+            document.getElementById('results-section').classList.remove('hidden');
+            document.getElementById('process-btn').disabled = false;
+            updateStatus('Processing complete');
+        }
+
+        function showError(message) {
+            showSnackbar(message, 'error');
+            resetInterface();
+        }
+
+        function resetInterface() {
+            document.getElementById('progress-section').classList.add('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('process-btn').disabled = false;
+            document.getElementById('youtube-url').value = '';
+            currentProcessId = null;
+            resetProgress();
+        }
+
+        function resetProgress() {
+            document.getElementById('overall-progress-bar').style.width = '0%';
+            document.getElementById('overall-progress-text').textContent = '0%';
+            
+            // Reset all pattern statuses
+            document.querySelectorAll('.pattern-status').forEach(status => {
+                status.className = 'pattern-status';
+                status.innerHTML = '';
+            });
+
+            // Reset phase cards
+            document.querySelectorAll('.phase-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            updateStatus('Ready to process');
+        }
+
+        function downloadResults() {
+            if (currentProcessId) {
+                window.location.href = `/api/download/${currentProcessId}`;
+            }
+        }
+
+        function isValidYouTubeUrl(url) {
+            const patterns = [
+                /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.+/,
+                /^https?:\/\/(www\.)?youtube\.com\/watch\?v=.+/,
+                /^https?:\/\/youtu\.be\/.+/
+            ];
+            return patterns.some(pattern => pattern.test(url));
+        }
+
+        // Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('management-modal').style.display = 'block';
+            loadManagementData();
+        }
+
+        function closeManagementModal() {
+            document.getElementById('management-modal').style.display = 'none';
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabName);
+            });
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === `${tabName}-tab`);
+            });
+
+            // Load specific tab data
+            if (tabName === 'history') {
+                loadHistory();
+            }
+        }
+
+        function loadManagementData() {
+            fetch('/api/management/status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('server-status').textContent = data.status || 'Running';
+                    document.getElementById('active-processes').textContent = data.activeProcesses || '0';
+                    document.getElementById('uptime').textContent = data.uptime || '--';
+                    document.getElementById('memory-usage').textContent = data.memoryUsage || '--';
+                })
+                .catch(error => {
+                    console.error('Failed to load status:', error);
+                });
+        }
+
+        function loadHistory() {
+            fetch('/api/management/history')
+                .then(response => response.json())
+                .then(data => {
+                    const historyContent = document.getElementById('history-content');
+                    historyContent.innerHTML = '';
+
+                    if (data.history && data.history.length > 0) {
+                        data.history.forEach(item => {
+                            const historyItem = document.createElement('div');
+                            historyItem.className = 'history-item';
+                            historyItem.innerHTML = `
+                                <div class="history-info">
+                                    <h4>${item.videoTitle || 'Unknown Video'}</h4>
+                                    <p>${new Date(item.timestamp).toLocaleString()}</p>
+                                </div>
+                                <div class="history-actions">
+                                    <span class="material-icons" style="color: var(--md-outline);">
+                                        ${item.status === 'completed' ? 'check_circle' : 'error'}
+                                    </span>
+                                </div>
+                            `;
+                            historyContent.appendChild(historyItem);
+                        });
+                    } else {
+                        historyContent.innerHTML = '<p style="text-align: center; color: var(--md-outline);">No processing history available</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to load history:', error);
+                });
+        }
+
+        function cleanupOldFiles() {
+            if (confirm('Are you sure you want to delete old output files?')) {
+                fetch('/api/management/cleanup-old', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showSnackbar('Cleanup completed successfully');
+                        loadManagementData();
+                    })
+                    .catch(error => {
+                        showSnackbar('Cleanup failed: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        function restartServer() {
+            if (confirm('Are you sure you want to restart the server?')) {
+                fetch('/api/management/restart', { method: 'POST' })
+                    .then(() => {
+                        showSnackbar('Server restart initiated');
+                        closeManagementModal();
+                    })
+                    .catch(error => {
+                        showSnackbar('Restart failed: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        function shutdownServer() {
+            if (confirm('Are you sure you want to shutdown the server?')) {
+                fetch('/api/management/shutdown', { method: 'POST' })
+                    .then(() => {
+                        showSnackbar('Server shutdown initiated');
+                        closeManagementModal();
+                    })
+                    .catch(error => {
+                        showSnackbar('Shutdown failed: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        // Snackbar notification system
+        function showSnackbar(message, type = 'info') {
+            // Remove existing snackbar
+            const existing = document.querySelector('.snackbar');
+            if (existing) {
+                existing.remove();
+            }
+
+            const snackbar = document.createElement('div');
+            snackbar.className = 'snackbar';
+            snackbar.style.cssText = `
+                position: fixed;
+                bottom: 24px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: ${type === 'error' ? 'var(--md-error)' : 'var(--md-on-surface)'};
+                color: ${type === 'error' ? 'var(--md-on-error)' : 'var(--md-surface)'};
+                padding: 16px 24px;
+                border-radius: 4px;
+                box-shadow: var(--md-elevation-8);
+                z-index: 3000;
+                font-size: 14px;
+                font-weight: 500;
+                animation: slideUp 0.3s ease;
+            `;
+            snackbar.textContent = message;
+
+            // Add slide up animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideUp {
+                    from { transform: translate(-50%, 100%); opacity: 0; }
+                    to { transform: translate(-50%, 0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(snackbar);
+
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                snackbar.remove();
+                style.remove();
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

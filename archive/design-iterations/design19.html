@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Fintech Analytics Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --stripe-purple: #635BFF;
+            --stripe-purple-dark: #5A54E8;
+            --stripe-purple-light: #7C75FF;
+            --stripe-blue: #00D4FF;
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--stripe-purple) 0%, var(--stripe-purple-light) 100%);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--stripe-purple);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 48px 0;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-700) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--gray-600);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 32px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--stripe-purple);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        /* Processor Card */
+        .processor-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+            padding: 40px;
+            margin-bottom: 48px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: var(--gray-600);
+            font-size: 16px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--stripe-purple);
+            box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--stripe-purple) 0%, var(--stripe-purple-dark) 100%);
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 32px;
+        }
+
+        .progress-section.active {
+            display: block;
+        }
+
+        .phase-container {
+            margin-bottom: 24px;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 16px 20px;
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--stripe-purple);
+        }
+
+        .phase-number {
+            width: 32px;
+            height: 32px;
+            background: var(--stripe-purple);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .phase-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .patterns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-left: 44px;
+        }
+
+        .pattern-item {
+            padding: 16px;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+        }
+
+        .pattern-item.processing {
+            border-color: var(--stripe-purple);
+            background: rgba(99, 91, 255, 0.05);
+        }
+
+        .pattern-item.completed {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .pattern-item.error {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .pattern-name {
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 4px;
+        }
+
+        .pattern-status {
+            font-size: 14px;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .status-icon.pending {
+            background: var(--gray-300);
+            color: var(--gray-600);
+        }
+
+        .status-icon.processing {
+            background: var(--stripe-purple);
+            color: var(--white);
+            animation: pulse 2s infinite;
+        }
+
+        .status-icon.completed {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .status-icon.error {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            margin-top: 32px;
+            padding: 32px;
+            background: var(--white);
+            border-radius: 16px;
+            border: 2px solid var(--success);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .results-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .results-subtitle {
+            color: var(--gray-600);
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .result-stat {
+            text-align: center;
+            padding: 20px;
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+        }
+
+        .result-stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--stripe-purple);
+            display: block;
+        }
+
+        .result-stat-label {
+            font-size: 14px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        /* Management Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: var(--border-radius);
+        }
+
+        .modal-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .modal-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .modal-tab {
+            flex: 1;
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-tab.active {
+            color: var(--stripe-purple);
+            background: rgba(99, 91, 255, 0.05);
+            border-bottom: 2px solid var(--stripe-purple);
+        }
+
+        .modal-content {
+            padding: 32px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Status indicators */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.online {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-badge.processing {
+            background: rgba(99, 91, 255, 0.1);
+            color: var(--stripe-purple);
+        }
+
+        .status-badge.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .processor-card {
+                padding: 24px;
+            }
+
+            .patterns-grid {
+                grid-template-columns: 1fr;
+                margin-left: 0;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .modal {
+                width: 95%;
+                margin: 16px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
+            border-top: 2px solid var(--stripe-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Utilities */
+        .text-center { text-align: center; }
+        .mb-16 { margin-bottom: 16px; }
+        .mb-24 { margin-bottom: 24px; }
+        .mb-32 { margin-bottom: 32px; }
+        .mt-16 { margin-top: 16px; }
+        .mt-24 { margin-top: 24px; }
+        .mt-32 { margin-top: 32px; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">YF</div>
+                    <span>YouTube Fabric Processor</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="#" class="nav-link">Documentation</a>
+                    <a href="#" class="nav-link">API</a>
+                    <a href="#" class="nav-link">Pricing</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="managementBtn">Management</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1 class="hero-title">Enterprise Video Intelligence</h1>
+                <p class="hero-subtitle">
+                    Transform YouTube content into actionable insights with our advanced AI processing pipeline. 
+                    Extract summaries, knowledge, and analytics from any video in under 70 seconds.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">13</span>
+                        <span class="stat-label">AI Patterns</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">70s</span>
+                        <span class="stat-label">Process Time</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Processor Card -->
+            <div class="processor-card">
+                <div class="card-header">
+                    <h2 class="card-title">Video Analysis Pipeline</h2>
+                    <p class="card-subtitle">Enter a YouTube URL to begin comprehensive content analysis</p>
+                </div>
+
+                <form id="processorForm">
+                    <div class="form-group">
+                        <label class="form-label" for="youtubeUrl">YouTube URL</label>
+                        <input 
+                            type="url" 
+                            id="youtubeUrl" 
+                            class="form-input"
+                            placeholder="https://www.youtube.com/watch?v=..."
+                            required
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full" id="processBtn">
+                        <span id="processText">Start Analysis</span>
+                        <div id="processSpinner" class="loading-spinner" style="display: none;"></div>
+                    </button>
+                </form>
+
+                <!-- Progress Section -->
+                <div class="progress-section" id="progressSection">
+                    <div class="phase-container">
+                        <div class="phase-header">
+                            <div class="phase-number">1</div>
+                            <div class="phase-title">Foundation Analysis</div>
+                        </div>
+                        <div class="patterns-grid">
+                            <div class="pattern-item" data-pattern="extract_wisdom">
+                                <div class="pattern-name">Extract Wisdom</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="summarize">
+                                <div class="pattern-name">Summarize</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="extract_main_idea">
+                                <div class="pattern-name">Extract Main Idea</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="phase-container">
+                        <div class="phase-header">
+                            <div class="phase-number">2</div>
+                            <div class="phase-title">Content Structure</div>
+                        </div>
+                        <div class="patterns-grid">
+                            <div class="pattern-item" data-pattern="create_index">
+                                <div class="pattern-name">Create Index</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="extract_references">
+                                <div class="pattern-name">Extract References</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="extract_recommendations">
+                                <div class="pattern-name">Extract Recommendations</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="phase-container">
+                        <div class="phase-header">
+                            <div class="phase-number">3</div>
+                            <div class="phase-title">Knowledge Extraction</div>
+                        </div>
+                        <div class="patterns-grid">
+                            <div class="pattern-item" data-pattern="create_quiz">
+                                <div class="pattern-name">Create Quiz</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="extract_ideas">
+                                <div class="pattern-name">Extract Ideas</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="analyze_prose">
+                                <div class="pattern-name">Analyze Prose</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="phase-container">
+                        <div class="phase-header">
+                            <div class="phase-number">4</div>
+                            <div class="phase-title">Advanced Analytics</div>
+                        </div>
+                        <div class="patterns-grid">
+                            <div class="pattern-item" data-pattern="analyze_claims">
+                                <div class="pattern-name">Analyze Claims</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="extract_business_ideas">
+                                <div class="pattern-name">Extract Business Ideas</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="write_essay">
+                                <div class="pattern-name">Write Essay</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                            <div class="pattern-item" data-pattern="create_summary">
+                                <div class="pattern-name">Create Summary</div>
+                                <div class="pattern-status">
+                                    <div class="status-icon pending">●</div>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section" id="resultsSection">
+                    <div class="results-header">
+                        <h3 class="results-title">Analysis Complete</h3>
+                        <p class="results-subtitle">Your video has been successfully processed through all 13 patterns</p>
+                    </div>
+                    
+                    <div class="results-stats">
+                        <div class="result-stat">
+                            <span class="result-stat-number" id="processingTime">--</span>
+                            <span class="result-stat-label">Processing Time</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="result-stat-number">13</span>
+                            <span class="result-stat-label">Patterns Completed</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="result-stat-number" id="fileSize">--</span>
+                            <span class="result-stat-label">Archive Size</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="downloadBtn">
+                            <span>Download Analysis Package</span>
+                        </button>
+                        <button class="btn btn-secondary mt-16" id="newAnalysisBtn">
+                            <span>Start New Analysis</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Management Modal -->
+    <div class="modal-overlay" id="managementModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Management Dashboard</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="status">System Status</button>
+                <button class="modal-tab" data-tab="history">Processing History</button>
+                <button class="modal-tab" data-tab="cleanup">Data Management</button>
+                <button class="modal-tab" data-tab="controls">System Controls</button>
+            </div>
+
+            <div class="modal-content">
+                <!-- Status Tab -->
+                <div class="tab-content active" id="statusTab">
+                    <div class="mb-24">
+                        <h4 class="mb-16">Server Status</h4>
+                        <div class="status-badge online">
+                            <span>●</span>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-24">
+                        <h4 class="mb-16">Active Processes</h4>
+                        <div id="activeProcesses">
+                            <p class="text-center" style="color: var(--gray-500);">No active processes</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="mb-16">System Metrics</h4>
+                        <div class="results-stats">
+                            <div class="result-stat">
+                                <span class="result-stat-number">3</span>
+                                <span class="result-stat-label">Total Processed</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="result-stat-number">68s</span>
+                                <span class="result-stat-label">Avg Process Time</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="result-stat-number">99.9%</span>
+                                <span class="result-stat-label">Success Rate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Tab -->
+                <div class="tab-content" id="historyTab">
+                    <h4 class="mb-16">Recent Processing History</h4>
+                    <div id="processingHistory">
+                        <p class="text-center" style="color: var(--gray-500);">No processing history available</p>
+                    </div>
+                </div>
+
+                <!-- Cleanup Tab -->
+                <div class="tab-content" id="cleanupTab">
+                    <h4 class="mb-16">Data Management</h4>
+                    <p class="mb-24" style="color: var(--gray-600);">
+                        Clean up old processing files and manage storage space.
+                    </p>
+                    <button class="btn btn-secondary" id="cleanupBtn">
+                        <span>Clean Old Files</span>
+                    </button>
+                </div>
+
+                <!-- Controls Tab -->
+                <div class="tab-content" id="controlsTab">
+                    <h4 class="mb-16">System Controls</h4>
+                    <p class="mb-24" style="color: var(--gray-600);">
+                        Advanced system management and control options.
+                    </p>
+                    <div style="display: flex; gap: 16px;">
+                        <button class="btn btn-secondary" id="restartBtn">
+                            <span>Restart Server</span>
+                        </button>
+                        <button class="btn btn-secondary" id="shutdownBtn" style="background: var(--error); color: var(--white);">
+                            <span>Shutdown Server</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class YouTubeFabricProcessor {
+            constructor() {
+                this.currentProcessId = null;
+                this.websocket = null;
+                this.startTime = null;
+                this.patterns = [
+                    'extract_wisdom', 'summarize', 'extract_main_idea',
+                    'create_index', 'extract_references', 'extract_recommendations',
+                    'create_quiz', 'extract_ideas', 'analyze_prose',
+                    'analyze_claims', 'extract_business_ideas', 'write_essay', 'create_summary'
+                ];
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.initWebSocket();
+            }
+
+            bindEvents() {
+                // Form submission
+                document.getElementById('processorForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.startProcessing();
+                });
+
+                // Management modal
+                document.getElementById('managementBtn').addEventListener('click', () => {
+                    this.openManagementModal();
+                });
+
+                document.getElementById('closeModal').addEventListener('click', () => {
+                    this.closeManagementModal();
+                });
+
+                // Modal tabs
+                document.querySelectorAll('.modal-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        this.switchTab(tab.dataset.tab);
+                    });
+                });
+
+                // Modal overlay click
+                document.getElementById('managementModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'managementModal') {
+                        this.closeManagementModal();
+                    }
+                });
+
+                // Results actions
+                document.getElementById('downloadBtn').addEventListener('click', () => {
+                    this.downloadResults();
+                });
+
+                document.getElementById('newAnalysisBtn').addEventListener('click', () => {
+                    this.resetForm();
+                });
+
+                // Management actions
+                document.getElementById('cleanupBtn').addEventListener('click', () => {
+                    this.cleanupOldFiles();
+                });
+
+                document.getElementById('restartBtn').addEventListener('click', () => {
+                    this.restartServer();
+                });
+
+                document.getElementById('shutdownBtn').addEventListener('click', () => {
+                    this.shutdownServer();
+                });
+            }
+
+            initWebSocket() {
+                const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const wsUrl = `${protocol}//${window.location.host}`;
+                
+                try {
+                    this.websocket = new WebSocket(wsUrl);
+                    
+                    this.websocket.onmessage = (event) => {
+                        const data = JSON.parse(event.data);
+                        this.handleWebSocketMessage(data);
+                    };
+
+                    this.websocket.onerror = () => {
+                        console.log('WebSocket connection failed - using polling fallback');
+                    };
+                } catch (error) {
+                    console.log('WebSocket not available - using polling fallback');
+                }
+            }
+
+            handleWebSocketMessage(data) {
+                switch (data.type) {
+                    case 'progress':
+                        this.updateProgress(data.pattern, data.status);
+                        break;
+                    case 'completed':
+                        this.showResults(data);
+                        break;
+                    case 'error':
+                        this.showError(data.message);
+                        break;
+                }
+            }
+
+            async startProcessing() {
+                const url = document.getElementById('youtubeUrl').value;
+                const processBtn = document.getElementById('processBtn');
+                const processText = document.getElementById('processText');
+                const processSpinner = document.getElementById('processSpinner');
+
+                if (!this.isValidYouTubeUrl(url)) {
+                    alert('Please enter a valid YouTube URL');
+                    return;
+                }
+
+                // Update button state
+                processBtn.disabled = true;
+                processText.textContent = 'Processing...';
+                processSpinner.style.display = 'block';
+
+                // Show progress section
+                document.getElementById('progressSection').classList.add('active');
+                document.getElementById('resultsSection').classList.remove('active');
+
+                this.startTime = Date.now();
+
+                try {
+                    const response = await fetch('/api/process', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ url }),
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        this.currentProcessId = result.processId;
+                        this.simulateProgress(); // Fallback if WebSocket fails
+                    } else {
+                        throw new Error(result.error || 'Processing failed');
+                    }
+                } catch (error) {
+                    this.showError(error.message);
+                    this.resetButton();
+                }
+            }
+
+            simulateProgress() {
+                // Simulate progress for demo purposes
+                let currentPattern = 0;
+                const interval = setInterval(() => {
+                    if (currentPattern < this.patterns.length) {
+                        this.updateProgress(this.patterns[currentPattern], 'processing');
+                        
+                        setTimeout(() => {
+                            this.updateProgress(this.patterns[currentPattern], 'completed');
+                            currentPattern++;
+                            
+                            if (currentPattern === this.patterns.length) {
+                                clearInterval(interval);
+                                setTimeout(() => {
+                                    this.showResults({
+                                        processId: this.currentProcessId,
+                                        downloadUrl: `/api/download/${this.currentProcessId}`
+                                    });
+                                }, 1000);
+                            }
+                        }, 2000);
+                    }
+                }, 3000);
+            }
+
+            updateProgress(pattern, status) {
+                const patternElement = document.querySelector(`[data-pattern="${pattern}"]`);
+                if (!patternElement) return;
+
+                const statusIcon = patternElement.querySelector('.status-icon');
+                const statusText = patternElement.querySelector('.pattern-status span');
+
+                // Remove old classes
+                patternElement.className = 'pattern-item';
+                statusIcon.className = 'status-icon';
+
+                // Add new classes based on status
+                patternElement.classList.add(status);
+                statusIcon.classList.add(status);
+
+                // Update status text
+                switch (status) {
+                    case 'processing':
+                        statusText.textContent = 'Processing...';
+                        statusIcon.textContent = '⟳';
+                        break;
+                    case 'completed':
+                        statusText.textContent = 'Completed';
+                        statusIcon.textContent = '✓';
+                        break;
+                    case 'error':
+                        statusText.textContent = 'Error';
+                        statusIcon.textContent = '✗';
+                        break;
+                    default:
+                        statusText.textContent = 'Pending';
+                        statusIcon.textContent = '●';
+                }
+            }
+
+            showResults(data) {
+                const processingTime = this.startTime ? 
+                    Math.round((Date.now() - this.startTime) / 1000) : 68;
+                
+                document.getElementById('processingTime').textContent = `${processingTime}s`;
+                document.getElementById('fileSize').textContent = '2.4MB';
+                
+                document.getElementById('progressSection').classList.remove('active');
+                document.getElementById('resultsSection').classList.add('active');
+                
+                this.resetButton();
+                
+                // Store download URL for later use
+                this.downloadUrl = data.downloadUrl;
+            }
+
+            showError(message) {
+                alert(`Error: ${message}`);
+                this.resetButton();
+            }
+
+            resetButton() {
+                const processBtn = document.getElementById('processBtn');
+                const processText = document.getElementById('processText');
+                const processSpinner = document.getElementById('processSpinner');
+
+                processBtn.disabled = false;
+                processText.textContent = 'Start Analysis';
+                processSpinner.style.display = 'none';
+            }
+
+            resetForm() {
+                document.getElementById('youtubeUrl').value = '';
+                document.getElementById('progressSection').classList.remove('active');
+                document.getElementById('resultsSection').classList.remove('active');
+                
+                // Reset all pattern states
+                document.querySelectorAll('.pattern-item').forEach(item => {
+                    item.className = 'pattern-item';
+                    const statusIcon = item.querySelector('.status-icon');
+                    const statusText = item.querySelector('.pattern-status span');
+                    statusIcon.className = 'status-icon pending';
+                    statusIcon.textContent = '●';
+                    statusText.textContent = 'Pending';
+                });
+                
+                this.currentProcessId = null;
+                this.downloadUrl = null;
+            }
+
+            downloadResults() {
+                if (this.downloadUrl) {
+                    window.open(this.downloadUrl, '_blank');
+                } else {
+                    // Simulate download for demo
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.download = 'youtube_analysis.zip';
+                    link.click();
+                }
+            }
+
+            openManagementModal() {
+                document.getElementById('managementModal').classList.add('active');
+                this.loadManagementData();
+            }
+
+            closeManagementModal() {
+                document.getElementById('managementModal').classList.remove('active');
+            }
+
+            switchTab(tabName) {
+                // Update tab buttons
+                document.querySelectorAll('.modal-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}Tab`).classList.add('active');
+            }
+
+            async loadManagementData() {
+                // In a real implementation, these would be API calls
+                // For demo purposes, we'll simulate the data
+            }
+
+            async cleanupOldFiles() {
+                const button = document.getElementById('cleanupBtn');
+                const originalText = button.textContent;
+                
+                button.textContent = 'Cleaning...';
+                button.disabled = true;
+                
+                // Simulate cleanup
+                setTimeout(() => {
+                    button.textContent = 'Cleanup Complete';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.disabled = false;
+                    }, 2000);
+                }, 1500);
+            }
+
+            async restartServer() {
+                if (confirm('Are you sure you want to restart the server?')) {
+                    const button = document.getElementById('restartBtn');
+                    button.textContent = 'Restarting...';
+                    button.disabled = true;
+                    
+                    // In a real implementation, this would trigger a server restart
+                    setTimeout(() => {
+                        alert('Server restart initiated');
+                        button.textContent = 'Restart Server';
+                        button.disabled = false;
+                    }, 2000);
+                }
+            }
+
+            async shutdownServer() {
+                if (confirm('Are you sure you want to shutdown the server? This action cannot be undone.')) {
+                    const button = document.getElementById('shutdownBtn');
+                    button.textContent = 'Shutting down...';
+                    button.disabled = true;
+                    
+                    // In a real implementation, this would trigger a server shutdown
+                    setTimeout(() => {
+                        alert('Server shutdown initiated');
+                    }, 2000);
+                }
+            }
+
+            isValidYouTubeUrl(url) {
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+/;
+                return youtubeRegex.test(url);
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            new YouTubeFabricProcessor();
+        });
+    </script>
+</body>
+</html>

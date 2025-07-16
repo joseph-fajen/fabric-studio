@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Hydrothermal Vents</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Hydrothermal Vent Color Palette */
+            --volcanic-black: #0a0a0a;
+            --deep-black: #1a0a0a;
+            --volcanic-red: #cc2200;
+            --molten-orange: #ff6600;
+            --sulfur-yellow: #ffcc00;
+            --thermal-white: #ffffff;
+            --vent-steam: rgba(255, 255, 255, 0.8);
+            --hot-glow: rgba(255, 102, 0, 0.7);
+            --energy-pulse: rgba(255, 204, 0, 0.6);
+            
+            /* Glass Thermal Effects */
+            --thermal-glass-primary: rgba(255, 102, 0, 0.15);
+            --thermal-glass-secondary: rgba(255, 204, 0, 0.1);
+            --thermal-glass-elevated: rgba(255, 255, 255, 0.08);
+            --thermal-glass-modal: rgba(255, 255, 255, 0.12);
+            
+            /* Volcanic Borders */
+            --thermal-border: rgba(255, 102, 0, 0.3);
+            --energy-border: rgba(255, 204, 0, 0.4);
+            --steam-border: rgba(255, 255, 255, 0.2);
+            
+            /* Text Colors for Thermal Theme */
+            --text-thermal-primary: rgba(255, 255, 255, 0.95);
+            --text-thermal-secondary: rgba(255, 255, 255, 0.8);
+            --text-thermal-accent: rgba(255, 204, 0, 0.9);
+            --text-thermal-muted: rgba(255, 255, 255, 0.6);
+            
+            /* Thermal Shadows and Glows */
+            --thermal-shadow-light: 0 4px 16px rgba(255, 102, 0, 0.2);
+            --thermal-shadow-medium: 0 8px 32px rgba(255, 102, 0, 0.3);
+            --thermal-shadow-heavy: 0 16px 64px rgba(255, 102, 0, 0.4);
+            --thermal-glow-ambient: 0 0 32px rgba(255, 102, 0, 0.3);
+            --energy-glow: 0 0 20px rgba(255, 204, 0, 0.5);
+            
+            /* Thermal Blur Effects */
+            --thermal-blur-light: blur(12px);
+            --thermal-blur-medium: blur(20px);
+            --thermal-blur-heavy: blur(32px);
+            --thermal-blur-extreme: blur(48px);
+            
+            /* Dimensions */
+            --border-radius: 16px;
+            --border-radius-large: 24px;
+            --border-radius-small: 12px;
+            --border-radius-xl: 32px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: radial-gradient(ellipse at center, 
+                var(--deep-black) 0%, 
+                var(--volcanic-black) 40%, 
+                #000000 100%);
+            background-attachment: fixed;
+            color: var(--text-thermal-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Volcanic Background Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 25%, rgba(255, 102, 0, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(204, 34, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 90%, rgba(255, 204, 0, 0.12) 0%, transparent 35%),
+                radial-gradient(circle at 20% 80%, rgba(255, 102, 0, 0.08) 0%, transparent 45%);
+            pointer-events: none;
+            z-index: -2;
+            animation: thermalFlow 15s ease-in-out infinite;
+        }
+
+        @keyframes thermalFlow {
+            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+            25% { opacity: 0.8; transform: scale(1.05) rotate(1deg); }
+            50% { opacity: 1.2; transform: scale(0.95) rotate(-1deg); }
+            75% { opacity: 0.9; transform: scale(1.02) rotate(0.5deg); }
+        }
+
+        /* Floating Thermal Particles */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 204, 0, 0.04) 2px, transparent 2px),
+                radial-gradient(circle at 70% 60%, rgba(255, 102, 0, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 80% 20%, rgba(204, 34, 0, 0.03) 2px, transparent 2px);
+            background-size: 120px 120px, 80px 80px, 160px 160px, 100px 100px;
+            animation: thermalDrift 25s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes thermalDrift {
+            0% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-15px) translateX(5px); }
+            50% { transform: translateY(-8px) translateX(-3px); }
+            75% { transform: translateY(-20px) translateX(8px); }
+            100% { transform: translateY(0px) translateX(0px); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Thermal Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, 
+                rgba(255, 102, 0, 0.2) 0%, 
+                rgba(255, 204, 0, 0.1) 40%, 
+                transparent 70%);
+            border-radius: 50%;
+            filter: var(--thermal-blur-heavy);
+            z-index: -1;
+            animation: energyPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes energyPulse {
+            0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1.2; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, 
+                var(--text-thermal-primary) 0%, 
+                var(--molten-orange) 30%,
+                var(--sulfur-yellow) 60%, 
+                var(--text-thermal-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(255, 102, 0, 0.5);
+            position: relative;
+            animation: thermalGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes thermalGlow {
+            0% { text-shadow: 0 0 40px rgba(255, 102, 0, 0.5); }
+            100% { text-shadow: 0 0 60px rgba(255, 204, 0, 0.8); }
+        }
+
+        .header p {
+            color: var(--text-thermal-secondary);
+            font-size: 1.25rem;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Thermal Glass Card */
+        .thermal-card {
+            background: var(--thermal-glass-primary);
+            backdrop-filter: var(--thermal-blur-medium);
+            -webkit-backdrop-filter: var(--thermal-blur-medium);
+            border: 1px solid var(--thermal-border);
+            border-radius: var(--border-radius-large);
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: var(--thermal-shadow-medium), var(--thermal-glow-ambient);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thermal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--molten-orange) 25%,
+                var(--sulfur-yellow) 50%,
+                var(--molten-orange) 75%,
+                transparent 100%);
+            animation: energyFlow 3s ease-in-out infinite;
+        }
+
+        @keyframes energyFlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .thermal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--thermal-shadow-heavy), var(--thermal-glow-ambient);
+            border-color: var(--energy-border);
+            background: var(--thermal-glass-secondary);
+        }
+
+        /* Elevated Thermal Card */
+        .thermal-card-elevated {
+            background: var(--thermal-glass-elevated);
+            backdrop-filter: var(--thermal-blur-heavy);
+            -webkit-backdrop-filter: var(--thermal-blur-heavy);
+            border: 2px solid var(--energy-border);
+            border-radius: var(--border-radius-xl);
+            padding: 48px;
+            box-shadow: var(--thermal-shadow-heavy), 
+                        var(--energy-glow),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thermal-card-elevated::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 102, 0, 0.08) 0%, 
+                transparent 30%, 
+                rgba(255, 204, 0, 0.05) 70%,
+                transparent 100%);
+            pointer-events: none;
+            animation: thermalShimmer 5s ease-in-out infinite;
+        }
+
+        @keyframes thermalShimmer {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Input Group */
+        .input-group {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-thermal-primary);
+            margin-bottom: 12px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 1.1rem;
+            background: var(--thermal-glass-primary);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 1px solid var(--thermal-border);
+            border-radius: var(--border-radius);
+            color: var(--text-thermal-primary);
+            transition: all 0.3s ease;
+            font-family: inherit;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .url-input::placeholder {
+            color: var(--text-thermal-muted);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--energy-border);
+            background: var(--thermal-glass-secondary);
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.3),
+                        inset 0 2px 8px rgba(0, 0, 0, 0.3),
+                        var(--energy-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Thermal Button */
+        .thermal-button {
+            background: linear-gradient(135deg, 
+                var(--molten-orange) 0%, 
+                var(--volcanic-red) 50%,
+                var(--molten-orange) 100%);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 2px solid var(--thermal-border);
+            border-radius: var(--border-radius);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 20px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--thermal-shadow-light), 
+                        var(--thermal-glow-ambient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thermal-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .thermal-button:hover::before {
+            left: 100%;
+        }
+
+        .thermal-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--thermal-shadow-heavy), 
+                        var(--energy-glow);
+            border-color: var(--energy-border);
+            background: linear-gradient(135deg, 
+                var(--sulfur-yellow) 0%, 
+                var(--molten-orange) 50%,
+                var(--sulfur-yellow) 100%);
+        }
+
+        .thermal-button:active {
+            transform: translateY(-1px);
+        }
+
+        .thermal-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Secondary Button */
+        .thermal-button-secondary {
+            background: var(--thermal-glass-primary);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 1px solid var(--steam-border);
+            border-radius: var(--border-radius);
+            color: var(--text-thermal-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 16px 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 12px;
+        }
+
+        .thermal-button-secondary:hover {
+            background: var(--thermal-glass-secondary);
+            border-color: var(--thermal-border);
+            transform: translateY(-1px);
+            box-shadow: var(--thermal-shadow-light);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .progress-section.active {
+            display: block;
+            animation: thermalRise 0.6s ease-out;
+        }
+
+        @keyframes thermalRise {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Phase Progress */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .phase-card {
+            background: var(--thermal-glass-primary);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 1px solid var(--thermal-border);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--volcanic-red) 50%, 
+                transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .phase-card.active {
+            border-color: var(--energy-border);
+            background: var(--thermal-glass-secondary);
+            box-shadow: var(--thermal-shadow-medium), var(--energy-glow);
+            transform: translateY(-2px);
+        }
+
+        .phase-card.active::before {
+            opacity: 1;
+            animation: energyPulse 2s ease-in-out infinite;
+        }
+
+        .phase-card.completed {
+            border-color: var(--sulfur-yellow);
+            background: rgba(255, 204, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+        }
+
+        .phase-card.completed::before {
+            background: linear-gradient(90deg, 
+                var(--sulfur-yellow) 0%, 
+                var(--molten-orange) 50%, 
+                var(--sulfur-yellow) 100%);
+            opacity: 1;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .phase-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--thermal-glass-elevated);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 1px solid var(--thermal-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-thermal-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .phase-card.active .phase-number {
+            background: var(--molten-orange);
+            border-color: var(--energy-border);
+            color: white;
+            box-shadow: var(--energy-glow);
+            animation: thermalPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes thermalPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        .phase-card.completed .phase-number {
+            background: var(--sulfur-yellow);
+            border-color: var(--sulfur-yellow);
+            color: var(--volcanic-black);
+            box-shadow: 0 0 16px rgba(255, 204, 0, 0.5);
+        }
+
+        .phase-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-thermal-primary);
+        }
+
+        .patterns-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 102, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-thermal-muted);
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.processing .pattern-status {
+            background: var(--molten-orange);
+            box-shadow: 0 0 12px rgba(255, 102, 0, 0.8);
+            animation: thermalFlicker 1s ease-in-out infinite;
+        }
+
+        @keyframes thermalFlicker {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            25% { opacity: 0.7; transform: scale(1.2); }
+            50% { opacity: 1; transform: scale(0.9); }
+            75% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .pattern-item.completed .pattern-status {
+            background: var(--sulfur-yellow);
+            box-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+        }
+
+        .pattern-name {
+            font-weight: 500;
+            color: var(--text-thermal-secondary);
+            flex: 1;
+        }
+
+        .pattern-item.processing .pattern-name {
+            color: var(--text-thermal-primary);
+        }
+
+        .pattern-item.completed .pattern-name {
+            color: var(--text-thermal-accent);
+        }
+
+        /* Overall Progress */
+        .overall-progress {
+            margin-bottom: 32px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-thermal-primary);
+        }
+
+        .progress-percentage {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-thermal-accent);
+            text-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+        }
+
+        .progress-bar-container {
+            height: 10px;
+            background: var(--thermal-glass-primary);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--thermal-border);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                var(--volcanic-red) 0%, 
+                var(--molten-orange) 50%,
+                var(--sulfur-yellow) 100%);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+            box-shadow: var(--energy-glow);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            animation: thermalShimmer 2s ease-in-out infinite;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 20px 24px;
+            border-radius: var(--border-radius);
+            margin-bottom: 24px;
+            font-weight: 500;
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 1px solid;
+            transition: all 0.3s ease;
+        }
+
+        .status-message.info {
+            background: rgba(255, 102, 0, 0.15);
+            border-color: var(--thermal-border);
+            color: var(--text-thermal-primary);
+        }
+
+        .status-message.success {
+            background: rgba(255, 204, 0, 0.15);
+            border-color: var(--energy-border);
+            color: var(--text-thermal-accent);
+        }
+
+        .status-message.error {
+            background: rgba(204, 34, 0, 0.15);
+            border-color: var(--volcanic-red);
+            color: #ff6666;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: thermalRise 0.6s ease-out;
+        }
+
+        .download-card {
+            background: var(--thermal-glass-elevated);
+            backdrop-filter: var(--thermal-blur-medium);
+            -webkit-backdrop-filter: var(--thermal-blur-medium);
+            border: 2px solid var(--energy-border);
+            border-radius: var(--border-radius-large);
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--thermal-shadow-medium), 
+                        var(--energy-glow);
+        }
+
+        .download-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-thermal-primary);
+            margin-bottom: 12px;
+        }
+
+        .download-description {
+            color: var(--text-thermal-secondary);
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+        }
+
+        .download-button {
+            background: linear-gradient(135deg, 
+                var(--sulfur-yellow) 0%, 
+                var(--molten-orange) 100%);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 2px solid var(--energy-border);
+            border-radius: var(--border-radius);
+            color: var(--volcanic-black);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 16px 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--thermal-shadow-light), 
+                        var(--energy-glow);
+            text-shadow: none;
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--thermal-shadow-medium), 
+                        0 0 32px rgba(255, 204, 0, 0.6);
+            background: linear-gradient(135deg, 
+                var(--thermal-white) 0%, 
+                var(--sulfur-yellow) 100%);
+        }
+
+        /* Management Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: var(--thermal-blur-heavy);
+            -webkit-backdrop-filter: var(--thermal-blur-heavy);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: thermalFadeIn 0.4s ease-out;
+        }
+
+        @keyframes thermalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: var(--thermal-glass-modal);
+            backdrop-filter: var(--thermal-blur-extreme);
+            -webkit-backdrop-filter: var(--thermal-blur-extreme);
+            border: 2px solid var(--energy-border);
+            border-radius: var(--border-radius-xl);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--thermal-shadow-heavy), 
+                        var(--energy-glow);
+            position: relative;
+        }
+
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 102, 0, 0.1) 0%, 
+                transparent 50%, 
+                rgba(255, 204, 0, 0.05) 100%);
+            border-radius: var(--border-radius-xl);
+            pointer-events: none;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-thermal-primary);
+        }
+
+        .modal-close {
+            background: var(--thermal-glass-primary);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 1px solid var(--thermal-border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-thermal-secondary);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .modal-close:hover {
+            background: var(--thermal-glass-secondary);
+            border-color: var(--energy-border);
+            color: var(--text-thermal-primary);
+            box-shadow: var(--thermal-shadow-light);
+        }
+
+        .modal-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .management-section {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+        }
+
+        .management-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-thermal-primary);
+            margin-bottom: 16px;
+        }
+
+        .management-button {
+            background: var(--thermal-glass-primary);
+            backdrop-filter: var(--thermal-blur-light);
+            -webkit-backdrop-filter: var(--thermal-blur-light);
+            border: 1px solid var(--thermal-border);
+            border-radius: var(--border-radius-small);
+            color: var(--text-thermal-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .management-button:hover {
+            background: var(--thermal-glass-secondary);
+            border-color: var(--energy-border);
+            transform: translateY(-1px);
+            box-shadow: var(--thermal-shadow-light);
+        }
+
+        .management-button.danger {
+            border-color: var(--volcanic-red);
+            color: #ff6666;
+        }
+
+        .management-button.danger:hover {
+            background: rgba(204, 34, 0, 0.1);
+            border-color: var(--volcanic-red);
+        }
+
+        /* Management Toggle */
+        .management-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--thermal-glass-secondary);
+            backdrop-filter: var(--thermal-blur-medium);
+            -webkit-backdrop-filter: var(--thermal-blur-medium);
+            border: 2px solid var(--thermal-border);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-thermal-primary);
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: var(--thermal-shadow-light);
+        }
+
+        .management-toggle:hover {
+            background: var(--thermal-glass-elevated);
+            border-color: var(--energy-border);
+            transform: scale(1.05);
+            box-shadow: var(--thermal-shadow-medium), var(--energy-glow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .thermal-card {
+                padding: 24px;
+            }
+
+            .thermal-card-elevated {
+                padding: 32px;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .modal {
+                padding: 24px;
+                margin: 20px;
+            }
+
+            .management-toggle {
+                width: 52px;
+                height: 52px;
+                font-size: 1.1rem;
+            }
+
+            .thermal-button-secondary {
+                margin-left: 0;
+                margin-top: 12px;
+            }
+        }
+
+        /* Thermal Reflection Effect */
+        .thermal-reflection {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thermal-reflection::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 204, 0, 0.3) 50%,
+                transparent 100%);
+            transform: skewX(-15deg);
+            transition: left 0.8s ease;
+        }
+
+        .thermal-reflection:hover::after {
+            left: 150%;
+        }
+    </style>
+</head>
+<body>
+    <div class="management-toggle" onclick="openManagementModal()" title="Management Console">
+        ⚙️
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Harness the intense energy of hydrothermal vents to transform YouTube videos into powerful insights through 13 specialized fabric patterns</p>
+        </header>
+
+        <div class="thermal-card thermal-card-elevated">
+            <div class="input-group">
+                <label for="youtubeUrl" class="input-label">YouTube Video URL</label>
+                <input 
+                    type="url" 
+                    id="youtubeUrl" 
+                    class="url-input"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    required
+                >
+            </div>
+            
+            <button onclick="processVideo()" class="thermal-button thermal-reflection" id="processBtn">
+                Ignite Processing
+            </button>
+            <button onclick="clearForm()" class="thermal-button-secondary" id="clearBtn">
+                Reset
+            </button>
+        </div>
+
+        <div id="progressSection" class="progress-section">
+            <div class="thermal-card">
+                <div class="overall-progress">
+                    <div class="progress-header">
+                        <span class="progress-title">Thermal Processing</span>
+                        <span class="progress-percentage" id="progressPercentage">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="statusMessage" class="status-message info">
+                    Initializing thermal reactors...
+                </div>
+
+                <div class="phases-grid" id="phasesGrid">
+                    <!-- Phases will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section">
+            <div class="thermal-card">
+                <div class="download-card">
+                    <h3 class="download-title">Thermal Processing Complete!</h3>
+                    <p class="download-description">Your YouTube video has been superheated through all 13 fabric patterns in our hydrothermal processing chamber. The refined insights are ready for extraction.</p>
+                    <a href="#" id="downloadLink" class="download-button thermal-reflection">Extract Results</a>
+                    <br>
+                    <button onclick="processAnother()" class="thermal-button-secondary">Process Another Video</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Thermal Management Console</h2>
+                <button class="modal-close" onclick="closeManagementModal()">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="management-section">
+                    <h3 class="section-title">Reactor Status</h3>
+                    <button onclick="checkServerStatus()" class="management-button">Check Thermal Levels</button>
+                    <button onclick="viewProcessingHistory()" class="management-button">Processing History</button>
+                </div>
+                
+                <div class="management-section">
+                    <h3 class="section-title">Maintenance</h3>
+                    <button onclick="cleanupOldFiles()" class="management-button">Purge Old Outputs</button>
+                    <button onclick="restartServer()" class="management-button danger">Emergency Restart</button>
+                </div>
+                
+                <div class="management-section">
+                    <h3 class="section-title">Reactor Information</h3>
+                    <div id="systemInfo" style="color: var(--text-thermal-secondary); font-size: 0.9rem;">
+                        Loading reactor status...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fabric patterns configuration for hydrothermal processing
+        const FABRIC_PATTERNS = [
+            // Phase 1: Foundation (Thermal Extraction)
+            { phase: 1, name: "extract_wisdom", description: "Extract Core Wisdom", filename: "01-extract_wisdom.txt" },
+            { phase: 1, name: "summarize", description: "Compress Summary", filename: "02-summarize.txt" },
+            { phase: 1, name: "analyze_claims", description: "Analyze Truth Claims", filename: "03-analyze_claims.txt" },
+            
+            // Phase 2: Analysis (Energy Refinement)
+            { phase: 2, name: "find_logical_fallacies", description: "Detect Logical Flaws", filename: "04-find_logical_fallacies.txt" },
+            { phase: 2, name: "extract_ideas", description: "Crystallize Ideas", filename: "05-extract_ideas.txt" },
+            { phase: 2, name: "get_youtube_rss", description: "Channel Intelligence", filename: "06-get_youtube_rss.txt" },
+            
+            // Phase 3: Insights (Thermal Synthesis)
+            { phase: 3, name: "create_quiz", description: "Generate Quiz", filename: "07-create_quiz.txt" },
+            { phase: 3, name: "extract_questions", description: "Harvest Questions", filename: "08-extract_questions.txt" },
+            { phase: 3, name: "extract_references", description: "Mine References", filename: "09-extract_references.txt" },
+            
+            // Phase 4: Knowledge (Volcanic Output)
+            { phase: 4, name: "create_keynote", description: "Forge Keynote", filename: "10-create_keynote.txt" },
+            { phase: 4, name: "extract_poc", description: "Extract Proof of Concept", filename: "11-extract_poc.txt" },
+            { phase: 4, name: "create_security_update", description: "Security Analysis", filename: "12-create_security_update.txt" },
+            { phase: 4, name: "create_investigation_visualization", description: "Investigation Visualization", filename: "13-create_investigation_visualization.txt" }
+        ];
+
+        const PHASE_DESCRIPTIONS = {
+            1: "Thermal Extraction",
+            2: "Energy Refinement", 
+            3: "Thermal Synthesis",
+            4: "Volcanic Output"
+        };
+
+        let currentProcessId = null;
+        let socket = null;
+        let currentPattern = 0;
+        let completedPatterns = 0;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePhasesGrid();
+            loadSystemInfo();
+            
+            // Focus URL input
+            document.getElementById('youtubeUrl').focus();
+        });
+
+        function initializePhasesGrid() {
+            const phasesGrid = document.getElementById('phasesGrid');
+            const phases = {};
+            
+            // Group patterns by phase
+            FABRIC_PATTERNS.forEach(pattern => {
+                if (!phases[pattern.phase]) {
+                    phases[pattern.phase] = [];
+                }
+                phases[pattern.phase].push(pattern);
+            });
+
+            // Create phase cards
+            Object.keys(phases).forEach(phaseNum => {
+                const phaseCard = document.createElement('div');
+                phaseCard.className = 'phase-card';
+                phaseCard.id = `phase-${phaseNum}`;
+                
+                const patterns = phases[phaseNum];
+                const patternsList = patterns.map(pattern => 
+                    `<li class="pattern-item" data-pattern="${pattern.name}">
+                        <div class="pattern-status"></div>
+                        <div class="pattern-name">${pattern.description}</div>
+                    </li>`
+                ).join('');
+
+                phaseCard.innerHTML = `
+                    <div class="phase-header">
+                        <div class="phase-number">${phaseNum}</div>
+                        <div class="phase-title">${PHASE_DESCRIPTIONS[phaseNum]}</div>
+                    </div>
+                    <ul class="patterns-list">
+                        ${patternsList}
+                    </ul>
+                `;
+                
+                phasesGrid.appendChild(phaseCard);
+            });
+        }
+
+        async function processVideo() {
+            const urlInput = document.getElementById('youtubeUrl');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please enter a YouTube URL to begin thermal processing', 'error');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showStatus('Please enter a valid YouTube URL for thermal analysis', 'error');
+                return;
+            }
+
+            // Reset state
+            currentPattern = 0;
+            completedPatterns = 0;
+            currentProcessId = 'thermal-' + Date.now();
+
+            // Show progress section
+            document.getElementById('progressSection').classList.add('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Disable process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = true;
+            processBtn.textContent = 'Thermal Processing...';
+
+            // Reset all patterns
+            const patternItems = document.querySelectorAll('.pattern-item');
+            patternItems.forEach(item => {
+                item.className = 'pattern-item';
+            });
+
+            const phaseCards = document.querySelectorAll('.phase-card');
+            phaseCards.forEach(card => {
+                card.className = 'phase-card';
+            });
+
+            // Start processing simulation
+            showStatus('Igniting thermal reactors...', 'info');
+            await simulateProcessing();
+        }
+
+        function clearForm() {
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('progressSection').classList.remove('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = false;
+            processBtn.textContent = 'Ignite Processing';
+            
+            // Reset progress
+            currentPattern = 0;
+            completedPatterns = 0;
+            updateProgress();
+            
+            // Reset all visual states
+            const patternItems = document.querySelectorAll('.pattern-item');
+            patternItems.forEach(item => {
+                item.className = 'pattern-item';
+            });
+
+            const phaseCards = document.querySelectorAll('.phase-card');
+            phaseCards.forEach(card => {
+                card.className = 'phase-card';
+            });
+        }
+
+        async function simulateProcessing() {
+            // Simulate processing with thermal-themed messaging
+            showStatus('Heating transcript extraction chamber...', 'info');
+            await sleep(2500);
+
+            showStatus('Transcript superheated and ready for pattern processing...', 'info');
+            await sleep(1500);
+            
+            for (let i = 0; i < FABRIC_PATTERNS.length; i++) {
+                const pattern = FABRIC_PATTERNS[i];
+                const phaseCard = document.getElementById(`phase-${pattern.phase}`);
+                const patternElement = document.querySelector(`[data-pattern="${pattern.name}"]`);
+                
+                // Mark phase as active
+                phaseCard.classList.add('active');
+                
+                // Mark pattern as processing
+                patternElement.classList.add('processing');
+                
+                showStatus(`Thermal processing: ${pattern.description}`, 'info');
+                
+                // Simulate processing time (4-7 seconds per pattern for dramatic effect)
+                await sleep(Math.random() * 3000 + 4000);
+                
+                // Mark pattern as completed
+                patternElement.classList.remove('processing');
+                patternElement.classList.add('completed');
+                
+                completedPatterns++;
+                updateProgress();
+                
+                // Check if phase is completed
+                const phasePatterns = Array.from(phaseCard.querySelectorAll('.pattern-item'));
+                const completedInPhase = phasePatterns.filter(p => p.classList.contains('completed')).length;
+                
+                if (completedInPhase === phasePatterns.length) {
+                    phaseCard.classList.remove('active');
+                    phaseCard.classList.add('completed');
+                    showStatus(`${PHASE_DESCRIPTIONS[pattern.phase]} phase completed - thermal energy stabilized`, 'success');
+                    await sleep(800);
+                }
+            }
+
+            processingComplete();
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((completedPatterns / FABRIC_PATTERNS.length) * 100);
+            
+            document.getElementById('progressPercentage').textContent = `${percentage}%`;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+
+        function processingComplete() {
+            showStatus('Thermal processing complete! All 13 patterns have been refined in the hydrothermal chamber.', 'success');
+            
+            // Show results section
+            document.getElementById('resultsSection').classList.add('active');
+            
+            // Set download link
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = `/api/download/${currentProcessId}`;
+            
+            // Re-enable process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = false;
+            processBtn.textContent = 'Ignite Processing';
+        }
+
+        function processAnother() {
+            clearForm();
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type}`;
+        }
+
+        function isValidYouTubeUrl(url) {
+            const patterns = [
+                /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/v\/[\w-]+/
+            ];
+            return patterns.some(pattern => pattern.test(url));
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('managementModal').classList.add('active');
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').classList.remove('active');
+        }
+
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/api/management/status');
+                const data = await response.json();
+                alert(`Thermal Reactor Status: ${data.status}\nReactor Uptime: ${data.uptime}\nActive Thermal Processes: ${data.activeProcesses}\nCore Temperature: Optimal`);
+            } catch (error) {
+                alert('Thermal status check simulated - All reactors operating at optimal temperature');
+            }
+        }
+
+        async function viewProcessingHistory() {
+            try {
+                const response = await fetch('/api/management/history');
+                const data = await response.json();
+                alert(`Thermal Processing History:\n${data.history.length} total thermal processes\nLast thermal cycle: ${data.history[0]?.timestamp || 'None'}\nReactor efficiency: 98.7%`);
+            } catch (error) {
+                alert('Thermal history check simulated - No recent processing cycles in thermal logs');
+            }
+        }
+
+        async function cleanupOldFiles() {
+            if (confirm('Are you sure you want to purge old thermal output files from the reactor chamber?')) {
+                try {
+                    await fetch('/api/management/cleanup-old', { method: 'POST' });
+                    alert('Thermal chamber purged successfully - old outputs vaporized');
+                } catch (error) {
+                    alert('Thermal purge simulated - Old files would be vaporized in thermal chamber');
+                }
+            }
+        }
+
+        async function restartServer() {
+            if (confirm('Are you sure you want to initiate emergency thermal reactor restart? This will interrupt any active thermal processing.')) {
+                try {
+                    await fetch('/api/management/restart', { method: 'POST' });
+                    alert('Emergency thermal reactor restart initiated - cooling down reactors');
+                } catch (error) {
+                    alert('Emergency restart simulated - Thermal reactors would be safely restarted');
+                }
+            }
+        }
+
+        function loadSystemInfo() {
+            const systemInfo = document.getElementById('systemInfo');
+            systemInfo.innerHTML = `
+                <div style="margin-bottom: 8px;"><strong>Reactor Platform:</strong> Node.js Thermal Engine</div>
+                <div style="margin-bottom: 8px;"><strong>Thermal Version:</strong> v18.x Enhanced</div>
+                <div style="margin-bottom: 8px;"><strong>Processing Patterns:</strong> 13 thermal patterns in 4 phases</div>
+                <div style="margin-bottom: 8px;"><strong>Thermal Architecture:</strong> Transcript-first hydrothermal processing</div>
+                <div style="margin-bottom: 8px;"><strong>Average Thermal Cycle:</strong> ~70 seconds</div>
+                <div style="margin-bottom: 8px;"><strong>Reactor Temperature:</strong> 2,847°C (Optimal)</div>
+                <div><strong>Output Format:</strong> 13 refined .txt files + thermal index.md + compressed results</div>
+            `;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('managementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeManagementModal();
+            }
+        });
+
+        // Handle escape key for modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeManagementModal();
+            }
+        });
+
+        // Handle enter key in URL input
+        document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processVideo();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Art Deco Luxury</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Cinzel:wght@400;500;600&display=swap');
+        
+        :root {
+            --gold: #ffd700;
+            --black: #000000;
+            --cream: #f5f5dc;
+            --burgundy: #800020;
+            --dark-gold: #b8860b;
+            --light-gold: #fff8dc;
+            --deep-black: #1a1a1a;
+            --rich-cream: #faf8f0;
+            --shadow-gold: rgba(255, 215, 0, 0.3);
+            --shadow-black: rgba(0, 0, 0, 0.5);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, var(--deep-black) 0%, var(--burgundy) 50%, var(--deep-black) 100%);
+            color: var(--cream);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Art Deco Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, var(--shadow-gold) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--shadow-gold) 0%, transparent 50%),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 215, 0, 0.05) 2px,
+                    rgba(255, 215, 0, 0.05) 4px
+                );
+            z-index: -1;
+            animation: backgroundShimmer 10s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundShimmer {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header Styles */
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 3px solid var(--gold);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 2px 2px 4px var(--shadow-black);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            animation: goldShimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes goldShimmer {
+            0%, 100% { text-shadow: 2px 2px 4px var(--shadow-black); }
+            50% { text-shadow: 2px 2px 4px var(--shadow-black), 0 0 20px var(--gold); }
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: var(--cream);
+            font-style: italic;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Art Deco Decorative Elements */
+        .deco-line {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .deco-line::before,
+        .deco-line::after {
+            content: '◆';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+        
+        .deco-line::before {
+            left: 0;
+        }
+        
+        .deco-line::after {
+            right: 0;
+        }
+        
+        /* Input Section */
+        .input-section {
+            background: linear-gradient(135deg, var(--deep-black) 0%, var(--burgundy) 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 2px solid var(--gold);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow-black);
+        }
+        
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(255, 215, 0, 0.1) 1deg,
+                transparent 2deg
+            );
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .input-group {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 2rem;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Cinzel', serif;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--cream);
+            font-family: 'Playfair Display', serif;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--light-gold);
+            box-shadow: 0 0 20px var(--shadow-gold);
+            transform: scale(1.02);
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(245, 245, 220, 0.6);
+            font-style: italic;
+        }
+        
+        .process-btn {
+            width: 100%;
+            padding: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: var(--black);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+        
+        .process-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, var(--light-gold) 0%, transparent 70%);
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .process-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px var(--shadow-gold);
+        }
+        
+        .process-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .process-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Status Section */
+        .status-section {
+            background: linear-gradient(135deg, var(--deep-black) 0%, var(--burgundy) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--gold) 25%, 
+                var(--light-gold) 50%, 
+                var(--gold) 75%, 
+                transparent 100%);
+            animation: statusGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusGlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .status-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .status-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow-black);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: var(--black);
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-bar {
+            height: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--light-gold) 50%, var(--gold) 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: var(--cream);
+            font-weight: 500;
+        }
+        
+        /* Current Step */
+        .current-step {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--gold);
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .current-step h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .pattern-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .pattern-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--cream);
+        }
+        
+        .pattern-description {
+            font-style: italic;
+            color: rgba(245, 245, 220, 0.8);
+        }
+        
+        /* Phases Grid */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .phase-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(128, 0, 32, 0.3) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .phase-card:hover::before {
+            opacity: 1;
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow-black);
+        }
+        
+        .phase-card h4 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+        
+        .phase-patterns {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .pattern-item {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            border-left: 4px solid var(--gold);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--cream);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pattern-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .pattern-item.processing {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: var(--black);
+            animation: processingPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes processingPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .pattern-item.completed {
+            background: linear-gradient(135deg, var(--dark-gold) 0%, var(--gold) 100%);
+            color: var(--black);
+            opacity: 0.8;
+        }
+        
+        /* Results Section */
+        .results-section {
+            background: linear-gradient(135deg, var(--deep-black) 0%, var(--burgundy) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .results-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-conic-gradient(
+                from 45deg,
+                transparent 0deg,
+                rgba(255, 215, 0, 0.1) 1deg,
+                transparent 2deg
+            );
+            animation: rotate 30s linear infinite;
+        }
+        
+        .results-header {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 2rem;
+        }
+        
+        .results-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow-black);
+        }
+        
+        .results-summary {
+            font-size: 1.2rem;
+            color: var(--cream);
+            font-weight: 500;
+        }
+        
+        .download-section {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .download-btn {
+            padding: 1.5rem 3rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: var(--black);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, var(--light-gold) 0%, transparent 70%);
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px var(--shadow-gold);
+        }
+        
+        .download-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .download-info {
+            color: rgba(245, 245, 220, 0.8);
+            font-style: italic;
+            margin-top: 1rem;
+        }
+        
+        /* Error Section */
+        .error-section {
+            background: linear-gradient(135deg, var(--burgundy) 0%, var(--deep-black) 100%);
+            border: 2px solid #ff6b6b;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .error-header h2 {
+            font-family: 'Cinzel', serif;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        
+        .error-message {
+            color: var(--cream);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .retry-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #cc5555 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 3px solid var(--gold);
+            margin-top: 3rem;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .system-info {
+            font-size: 1rem;
+            color: var(--cream);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .separator {
+            color: var(--gold);
+            font-weight: bold;
+        }
+        
+        .management-toggle {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: var(--black);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            transition: all 0.3s ease;
+        }
+        
+        .management-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-gold);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--deep-black) 0%, var(--burgundy) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gold);
+        }
+        
+        .modal-header h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 2rem;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: var(--light-gold);
+            transform: scale(1.1);
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .input-section,
+            .status-section,
+            .results-section {
+                padding: 2rem;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .system-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .input-section,
+            .status-section,
+            .results-section {
+                padding: 1.5rem;
+            }
+            
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚱ Luxe Textile Analysis Salon</h1>
+            <p>Sophisticate your video content through the elegance of comprehensive fabric pattern analysis</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="input-group">
+                    <label for="youtube-url">YouTube Video URL</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        required
+                    >
+                </div>
+                
+                <button id="process-btn" class="process-btn">
+                    ◆ Commence Luxurious Analysis ◆
+                </button>
+            </section>
+
+            <section id="status-section" class="status-section hidden">
+                <div class="status-header">
+                    <h2>◆ Elegant Analysis Status ◆</h2>
+                    <div id="status-badge" class="status-badge">⚡ Preparing Silk Looms</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-current">0</span> of <span id="progress-total">13</span> patterns
+                    </div>
+                </div>
+
+                <div class="current-step">
+                    <h3>◆ Active Weaving Sequence ◆</h3>
+                    <div id="current-pattern" class="pattern-info">
+                        <span class="pattern-name">Calibrating Golden Threads...</span>
+                        <span class="pattern-description">Preparing luxury analysis chamber</span>
+                    </div>
+                </div>
+
+                <div class="deco-line"></div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <h4>◆ Phase 1: Silk Collection ◆</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="youtube_summary">youtube_summary</div>
+                            <div class="pattern-item" data-pattern="extract_core_message">extract_core_message</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="2">
+                        <h4>◆ Phase 2: Gilded Laboratory ◆</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_wisdom">extract_wisdom</div>
+                            <div class="pattern-item" data-pattern="extract_insights">extract_insights</div>
+                            <div class="pattern-item" data-pattern="extract_ideas">extract_ideas</div>
+                            <div class="pattern-item" data-pattern="extract_patterns">extract_patterns</div>
+                            <div class="pattern-item" data-pattern="extract_recommendations">extract_recommendations</div>
+                            <div class="pattern-item" data-pattern="extract_predictions">extract_predictions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="3">
+                        <h4>◆ Phase 3: Platinum Weaving ◆</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_references">extract_references</div>
+                            <div class="pattern-item" data-pattern="extract_questions">extract_questions</div>
+                            <div class="pattern-item" data-pattern="create_tags">create_tags</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="4">
+                        <h4>◆ Phase 4: Velvet Synthesis ◆</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="create_5_sentence_summary">create_5_sentence_summary</div>
+                            <div class="pattern-item" data-pattern="to_flashcards">to_flashcards</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="results-section" class="results-section hidden">
+                <div class="results-header">
+                    <h2>◆ Luxurious Results Ready ◆</h2>
+                    <div class="results-summary">
+                        <span id="results-count">13</span> exquisite analysis files crafted
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button id="download-btn" class="download-btn">
+                        ◆ Download Luxury Collection ◆
+                    </button>
+                    <p class="download-info">
+                        Files are provided as elegant text files (.txt) with sophisticated markdown formatting
+                    </p>
+                </div>
+            </section>
+
+            <section id="error-section" class="error-section hidden">
+                <div class="error-header">
+                    <h2>Processing Error</h2>
+                </div>
+                <div id="error-message" class="error-message">
+                    An error occurred during processing.
+                </div>
+                <button id="retry-btn" class="retry-btn">Try Again</button>
+            </section>
+        </main>
+
+        <footer>
+            <div class="system-info">
+                <span id="fabric-status">Checking fabric availability...</span>
+                <span class="separator">◆</span>
+                <span>13 luxury fabric patterns available</span>
+                <span class="separator">◆</span>
+                <button id="management-toggle" class="management-toggle">⚙ Salon Management</button>
+            </div>
+        </footer>
+
+        <!-- Management Panel Modal -->
+        <div id="management-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>⚙ Salon Management</h2>
+                    <button id="close-management" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="management-tabs">
+                        <button class="tab-btn active" data-tab="status">◆ Status</button>
+                        <button class="tab-btn" data-tab="history">◆ History</button>
+                        <button class="tab-btn" data-tab="cleanup">◆ Cleanup</button>
+                    </div>
+
+                    <!-- Status Tab -->
+                    <div id="status-tab" class="tab-content active">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <h3>Salon Status</h3>
+                                <div class="status-item">
+                                    <span class="label">Uptime:</span>
+                                    <span id="server-uptime">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Memory Usage:</span>
+                                    <span id="memory-usage">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Fabric Available:</span>
+                                    <span id="fabric-available">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <h3>Active Processes</h3>
+                                <div class="status-item">
+                                    <span class="label">Running:</span>
+                                    <span id="active-processes">-</span>
+                                </div>
+                                <div id="process-list" class="process-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="history-tab" class="tab-content">
+                        <div class="history-controls">
+                            <button id="refresh-history" class="refresh-btn">🔄 Refresh</button>
+                            <span class="history-count">Loading...</span>
+                        </div>
+                        <div id="history-list" class="history-list">
+                            <div class="loading">Loading history...</div>
+                        </div>
+                    </div>
+
+                    <!-- Cleanup Tab -->
+                    <div id="cleanup-tab" class="tab-content">
+                        <div class="cleanup-section">
+                            <h3>◆ Salon Cleanup ◆</h3>
+                            <p>Remove old analysis files to maintain pristine conditions</p>
+                            
+                            <div class="cleanup-controls">
+                                <div class="cleanup-option">
+                                    <label for="cleanup-days">Remove files older than:</label>
+                                    <select id="cleanup-days">
+                                        <option value="7">7 days</option>
+                                        <option value="30" selected>30 days</option>
+                                        <option value="90">90 days</option>
+                                    </select>
+                                    <button id="cleanup-old-btn" class="cleanup-btn">Remove Old Files</button>
+                                </div>
+                            </div>
+                            
+                            <div class="cleanup-warning">
+                                <p><strong>⚠️ Warning:</strong> This action cannot be undone. Files will be permanently removed.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let currentState = 'idle';
+        let currentPhase = 0;
+        let currentPatternIndex = 0;
+        let processingInterval;
+        let ws;
+        
+        // Pattern definitions
+        const patterns = [
+            { name: 'youtube_summary', phase: 1, description: 'Extracting golden essence from video content' },
+            { name: 'extract_core_message', phase: 1, description: 'Distilling core silk message' },
+            { name: 'extract_wisdom', phase: 2, description: 'Harvesting precious wisdom gems' },
+            { name: 'extract_insights', phase: 2, description: 'Polishing brilliant insights' },
+            { name: 'extract_ideas', phase: 2, description: 'Crafting innovative idea threads' },
+            { name: 'extract_patterns', phase: 2, description: 'Weaving intricate pattern designs' },
+            { name: 'extract_recommendations', phase: 2, description: 'Forging luxury recommendations' },
+            { name: 'extract_predictions', phase: 2, description: 'Divining future prophecies' },
+            { name: 'extract_references', phase: 3, description: 'Cataloging platinum references' },
+            { name: 'extract_questions', phase: 3, description: 'Sculpting thought-provoking questions' },
+            { name: 'create_tags', phase: 3, description: 'Engraving elegant classification tags' },
+            { name: 'create_5_sentence_summary', phase: 4, description: 'Composing velvet summary' },
+            { name: 'to_flashcards', phase: 4, description: 'Creating luxurious memory cards' }
+        ];
+        
+        // DOM Elements
+        const elements = {
+            processBtn: document.getElementById('process-btn'),
+            urlInput: document.getElementById('youtube-url'),
+            statusSection: document.getElementById('status-section'),
+            resultsSection: document.getElementById('results-section'),
+            errorSection: document.getElementById('error-section'),
+            statusBadge: document.getElementById('status-badge'),
+            progressFill: document.getElementById('progress-fill'),
+            progressCurrent: document.getElementById('progress-current'),
+            progressTotal: document.getElementById('progress-total'),
+            currentPattern: document.getElementById('current-pattern'),
+            resultsCount: document.getElementById('results-count'),
+            downloadBtn: document.getElementById('download-btn'),
+            errorMessage: document.getElementById('error-message'),
+            retryBtn: document.getElementById('retry-btn'),
+            fabricStatus: document.getElementById('fabric-status'),
+            managementToggle: document.getElementById('management-toggle'),
+            managementModal: document.getElementById('management-modal'),
+            closeManagement: document.getElementById('close-management')
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            checkFabricStatus();
+            updateProgressTotal();
+        });
+        
+        function setupEventListeners() {
+            elements.processBtn.addEventListener('click', startProcessing);
+            elements.retryBtn.addEventListener('click', startProcessing);
+            elements.downloadBtn.addEventListener('click', downloadResults);
+            elements.managementToggle.addEventListener('click', toggleManagement);
+            elements.closeManagement.addEventListener('click', toggleManagement);
+            
+            // Close modal on outside click
+            elements.managementModal.addEventListener('click', function(e) {
+                if (e.target === elements.managementModal) {
+                    toggleManagement();
+                }
+            });
+            
+            // URL input validation
+            elements.urlInput.addEventListener('input', function() {
+                const url = this.value.trim();
+                const isValid = url && (url.includes('youtube.com') || url.includes('youtu.be'));
+                elements.processBtn.disabled = !isValid;
+            });
+        }
+        
+        function updateProgressTotal() {
+            elements.progressTotal.textContent = patterns.length;
+        }
+        
+        function startProcessing() {
+            const url = elements.urlInput.value.trim();
+            if (!url) {
+                showError('Please enter a YouTube URL');
+                return;
+            }
+            
+            if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                showError('Please enter a valid YouTube URL');
+                return;
+            }
+            
+            currentState = 'processing';
+            currentPhase = 0;
+            currentPatternIndex = 0;
+            
+            hideAllSections();
+            elements.statusSection.classList.remove('hidden');
+            elements.statusBadge.textContent = '⚡ Preparing Silk Looms';
+            
+            // Reset progress
+            elements.progressFill.style.width = '0%';
+            elements.progressCurrent.textContent = '0';
+            
+            // Reset pattern items
+            document.querySelectorAll('.pattern-item').forEach(item => {
+                item.classList.remove('processing', 'completed');
+            });
+            
+            // Start WebSocket connection
+            connectWebSocket(url);
+        }
+        
+        function connectWebSocket(url) {
+            const wsUrl = `ws://localhost:3000/ws?url=${encodeURIComponent(url)}`;
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = function() {
+                console.log('WebSocket connected');
+                elements.statusBadge.textContent = '⚡ Luxury Analysis Initiated';
+            };
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket disconnected');
+                if (currentState === 'processing') {
+                    // If we were processing, this might be an error
+                    setTimeout(() => {
+                        if (currentState === 'processing') {
+                            showError('Connection lost during processing');
+                        }
+                    }, 1000);
+                }
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+                showError('Failed to connect to processing server');
+            };
+        }
+        
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'pattern_start':
+                    handlePatternStart(data);
+                    break;
+                case 'pattern_complete':
+                    handlePatternComplete(data);
+                    break;
+                case 'error':
+                    showError(data.message);
+                    break;
+                case 'complete':
+                    handleComplete(data);
+                    break;
+                case 'progress':
+                    updateProgress(data);
+                    break;
+            }
+        }
+        
+        function handlePatternStart(data) {
+            const pattern = patterns.find(p => p.name === data.pattern);
+            if (pattern) {
+                currentPhase = pattern.phase;
+                
+                // Update current pattern display
+                const patternNameEl = elements.currentPattern.querySelector('.pattern-name');
+                const patternDescEl = elements.currentPattern.querySelector('.pattern-description');
+                
+                patternNameEl.textContent = pattern.name;
+                patternDescEl.textContent = pattern.description;
+                
+                // Highlight current pattern
+                const patternItem = document.querySelector(`[data-pattern="${data.pattern}"]`);
+                if (patternItem) {
+                    patternItem.classList.add('processing');
+                }
+                
+                // Update status badge
+                elements.statusBadge.textContent = `⚡ Phase ${currentPhase}: ${getPhaseDescription(currentPhase)}`;
+                
+                // Highlight current phase
+                document.querySelectorAll('.phase-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                const currentPhaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                if (currentPhaseCard) {
+                    currentPhaseCard.classList.add('active');
+                }
+            }
+        }
+        
+        function handlePatternComplete(data) {
+            const patternItem = document.querySelector(`[data-pattern="${data.pattern}"]`);
+            if (patternItem) {
+                patternItem.classList.remove('processing');
+                patternItem.classList.add('completed');
+            }
+            
+            currentPatternIndex++;
+            updateProgress();
+        }
+        
+        function updateProgress(data) {
+            const progress = data ? data.progress : (currentPatternIndex / patterns.length) * 100;
+            const current = data ? data.current : currentPatternIndex;
+            
+            elements.progressFill.style.width = `${progress}%`;
+            elements.progressCurrent.textContent = current;
+        }
+        
+        function handleComplete(data) {
+            currentState = 'completed';
+            
+            hideAllSections();
+            elements.resultsSection.classList.remove('hidden');
+            elements.resultsCount.textContent = patterns.length;
+            
+            if (ws) {
+                ws.close();
+            }
+        }
+        
+        function getPhaseDescription(phase) {
+            const descriptions = {
+                1: 'Silk Collection',
+                2: 'Gilded Laboratory',
+                3: 'Platinum Weaving',
+                4: 'Velvet Synthesis'
+            };
+            return descriptions[phase] || 'Processing';
+        }
+        
+        function downloadResults() {
+            const url = elements.urlInput.value.trim();
+            if (!url) return;
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = `/download?url=${encodeURIComponent(url)}`;
+            link.download = 'youtube-analysis.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function showError(message) {
+            currentState = 'error';
+            hideAllSections();
+            elements.errorSection.classList.remove('hidden');
+            elements.errorMessage.textContent = message;
+            
+            if (ws) {
+                ws.close();
+            }
+        }
+        
+        function hideAllSections() {
+            elements.statusSection.classList.add('hidden');
+            elements.resultsSection.classList.add('hidden');
+            elements.errorSection.classList.add('hidden');
+        }
+        
+        function toggleManagement() {
+            elements.managementModal.classList.toggle('hidden');
+        }
+        
+        function checkFabricStatus() {
+            fetch('/api/fabric-status')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.available) {
+                        elements.fabricStatus.textContent = 'Fabric looms operational';
+                        elements.fabricStatus.style.color = 'var(--gold)';
+                    } else {
+                        elements.fabricStatus.textContent = 'Fabric looms offline';
+                        elements.fabricStatus.style.color = '#ff6b6b';
+                    }
+                })
+                .catch(() => {
+                    elements.fabricStatus.textContent = 'Checking fabric availability...';
+                    elements.fabricStatus.style.color = 'var(--cream)';
+                });
+        }
+        
+        // Tab functionality for management modal
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tab-btn')) {
+                const tab = e.target.dataset.tab;
+                
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+                
+                // Update active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tab}-tab`).classList.add('active');
+            }
+        });
+        
+        // Periodically check fabric status
+        setInterval(checkFabricStatus, 30000);
+    </script>
+</body>
+</html>

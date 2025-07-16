@@ -40,6 +40,7 @@ outputs/
 # Logs
 logs
 *.log
+server.log
 
 # Runtime data
 pids

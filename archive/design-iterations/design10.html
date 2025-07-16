@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Forest Canopy</title>
+    <style>
+        /* Forest Canopy Theme */
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --forest-green: #228b22;
+            --deep-forest: #1e7e1e;
+            --earth-brown: #8b4513;
+            --bark-gray: #696969;
+            --leaf-yellow: #9acd32;
+            --light-green: #90ee90;
+            --moss-green: #addfad;
+            --tree-brown: #654321;
+            --sunlight: #f0f8b4;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #2d5a2d 0%, #1e4a1e 50%, #0f2e0f 100%);
+            color: #f0f8b4;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background Elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(154, 205, 50, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 30%, rgba(34, 139, 34, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 70%, rgba(144, 238, 144, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(173, 223, 173, 0.1) 0%, transparent 50%);
+            animation: forestAmbience 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes forestAmbience {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Floating Leaves Animation */
+        .leaf {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--leaf-yellow);
+            border-radius: 0 100% 0 100%;
+            animation: fallAndSway 15s linear infinite;
+            z-index: -1;
+        }
+        
+        .leaf:nth-child(odd) {
+            background: var(--light-green);
+            animation-duration: 18s;
+        }
+        
+        .leaf:nth-child(3n) {
+            background: var(--moss-green);
+            animation-duration: 12s;
+        }
+        
+        @keyframes fallAndSway {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(34, 139, 34, 0.3), rgba(139, 69, 19, 0.2));
+            border-radius: 25px;
+            border: 2px solid rgba(154, 205, 50, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(154, 205, 50, 0.1) 10px,
+                rgba(154, 205, 50, 0.1) 20px
+            );
+            animation: leafPattern 30s linear infinite;
+        }
+        
+        @keyframes leafPattern {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--sunlight);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::before {
+            content: '🌲';
+            margin-right: 15px;
+        }
+        
+        h1::after {
+            content: '🌿';
+            margin-left: 15px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: var(--moss-green);
+            font-weight: 400;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .input-section {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.4), rgba(34, 139, 34, 0.3));
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(154, 205, 50, 0.4);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--forest-green), var(--leaf-yellow), var(--forest-green));
+            animation: growthLine 3s ease-in-out infinite;
+        }
+        
+        @keyframes growthLine {
+            0%, 100% { transform: scaleX(0.5); }
+            50% { transform: scaleX(1); }
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--sunlight);
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        input[type="url"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(154, 205, 50, 0.5);
+            border-radius: 15px;
+            font-size: 1rem;
+            background: rgba(240, 248, 180, 0.1);
+            color: var(--sunlight);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--leaf-yellow);
+            box-shadow: 0 0 20px rgba(154, 205, 50, 0.3);
+            background: rgba(240, 248, 180, 0.2);
+        }
+        
+        input[type="url"]::placeholder {
+            color: rgba(240, 248, 180, 0.6);
+        }
+        
+        .process-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--forest-green), var(--deep-forest));
+            color: var(--sunlight);
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 16px rgba(34, 139, 34, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .process-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(240, 248, 180, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .process-btn:hover::before {
+            left: 100%;
+        }
+        
+        .process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(34, 139, 34, 0.4);
+            background: linear-gradient(135deg, var(--leaf-yellow), var(--forest-green));
+        }
+        
+        .status-section {
+            background: linear-gradient(135deg, rgba(34, 139, 34, 0.3), rgba(139, 69, 19, 0.2));
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(154, 205, 50, 0.3);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .status-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--sunlight);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .status-badge {
+            background: linear-gradient(135deg, var(--leaf-yellow), var(--moss-green));
+            color: var(--deep-forest);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .progress-container {
+            margin-bottom: 25px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(105, 105, 105, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--forest-green), var(--leaf-yellow));
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(240, 248, 180, 0.3), transparent);
+            animation: progressShimmer 2s linear infinite;
+        }
+        
+        @keyframes progressShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-text {
+            color: var(--moss-green);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .current-step {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(139, 69, 19, 0.2);
+            border-radius: 15px;
+            border: 1px solid rgba(154, 205, 50, 0.2);
+        }
+        
+        .current-step h3 {
+            color: var(--sunlight);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .pattern-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .pattern-name {
+            font-weight: 600;
+            color: var(--leaf-yellow);
+            font-size: 1.1rem;
+        }
+        
+        .pattern-description {
+            color: var(--moss-green);
+            font-size: 0.95rem;
+        }
+        
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .phase-card {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.3), rgba(34, 139, 34, 0.2));
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(154, 205, 50, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--forest-green), var(--leaf-yellow));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .phase-card.active::before {
+            transform: scaleX(1);
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            border-color: var(--leaf-yellow);
+        }
+        
+        .phase-card h4 {
+            color: var(--sunlight);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .phase-patterns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .pattern-item {
+            padding: 8px 12px;
+            background: rgba(240, 248, 180, 0.1);
+            border-radius: 8px;
+            color: var(--moss-green);
+            font-size: 0.9rem;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .pattern-item:hover {
+            background: rgba(154, 205, 50, 0.2);
+            border-color: var(--leaf-yellow);
+            color: var(--sunlight);
+        }
+        
+        .pattern-item.completed {
+            background: rgba(154, 205, 50, 0.3);
+            color: var(--deep-forest);
+            border-color: var(--leaf-yellow);
+        }
+        
+        .pattern-item.active {
+            background: rgba(154, 205, 50, 0.4);
+            color: var(--deep-forest);
+            border-color: var(--leaf-yellow);
+            animation: activePattern 2s ease-in-out infinite;
+        }
+        
+        @keyframes activePattern {
+            0%, 100% { box-shadow: 0 0 5px rgba(154, 205, 50, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(154, 205, 50, 0.8); }
+        }
+        
+        .results-section {
+            background: linear-gradient(135deg, rgba(34, 139, 34, 0.4), rgba(154, 205, 50, 0.2));
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(154, 205, 50, 0.4);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .results-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--sunlight);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .results-summary {
+            color: var(--moss-green);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+        
+        .download-section {
+            margin-top: 25px;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, var(--leaf-yellow), var(--forest-green));
+            color: var(--deep-forest);
+            padding: 18px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(154, 205, 50, 0.3);
+            margin-bottom: 15px;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(154, 205, 50, 0.4);
+        }
+        
+        .download-info {
+            color: var(--moss-green);
+            font-size: 0.9rem;
+        }
+        
+        .error-section {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.4), rgba(34, 139, 34, 0.3));
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(220, 20, 60, 0.4);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .error-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .error-message {
+            color: var(--moss-green);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(135deg, var(--forest-green), var(--deep-forest));
+            color: var(--sunlight);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(34, 139, 34, 0.4);
+        }
+        
+        footer {
+            margin-top: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.3), rgba(34, 139, 34, 0.2));
+            border-radius: 15px;
+            border: 1px solid rgba(154, 205, 50, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .system-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            color: var(--moss-green);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .separator {
+            color: var(--bark-gray);
+        }
+        
+        .management-toggle {
+            background: rgba(154, 205, 50, 0.2);
+            color: var(--sunlight);
+            border: 1px solid rgba(154, 205, 50, 0.3);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .management-toggle:hover {
+            background: rgba(154, 205, 50, 0.3);
+            border-color: var(--leaf-yellow);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(34, 139, 34, 0.4), rgba(139, 69, 19, 0.3));
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(154, 205, 50, 0.4);
+            backdrop-filter: blur(15px);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-header h2 {
+            color: var(--sunlight);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--moss-green);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: var(--sunlight);
+        }
+        
+        .management-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(154, 205, 50, 0.3);
+        }
+        
+        .tab-btn {
+            background: rgba(154, 205, 50, 0.1);
+            color: var(--moss-green);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab-btn.active {
+            background: rgba(154, 205, 50, 0.3);
+            color: var(--sunlight);
+        }
+        
+        .tab-btn:hover {
+            background: rgba(154, 205, 50, 0.2);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .status-card {
+            background: rgba(139, 69, 19, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(154, 205, 50, 0.3);
+        }
+        
+        .status-card h3 {
+            color: var(--sunlight);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--moss-green);
+        }
+        
+        .label {
+            font-weight: 600;
+        }
+        
+        .history-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--forest-green), var(--deep-forest));
+            color: var(--sunlight);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(34, 139, 34, 0.3);
+        }
+        
+        .history-count {
+            color: var(--moss-green);
+            font-size: 0.9rem;
+        }
+        
+        .history-list {
+            background: rgba(139, 69, 19, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(154, 205, 50, 0.3);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .cleanup-section {
+            background: rgba(139, 69, 19, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(154, 205, 50, 0.3);
+        }
+        
+        .cleanup-section h3 {
+            color: var(--sunlight);
+            margin-bottom: 15px;
+        }
+        
+        .cleanup-controls {
+            margin: 20px 0;
+        }
+        
+        .cleanup-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .cleanup-option label {
+            color: var(--moss-green);
+            font-size: 0.9rem;
+        }
+        
+        .cleanup-option select {
+            background: rgba(240, 248, 180, 0.1);
+            color: var(--sunlight);
+            border: 1px solid rgba(154, 205, 50, 0.3);
+            padding: 8px;
+            border-radius: 5px;
+        }
+        
+        .cleanup-btn {
+            background: linear-gradient(135deg, var(--earth-brown), var(--tree-brown));
+            color: var(--sunlight);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cleanup-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+        }
+        
+        .cleanup-warning {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(220, 20, 60, 0.1);
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            border-radius: 10px;
+        }
+        
+        .cleanup-warning p {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            color: var(--moss-green);
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .system-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+            
+            .management-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cleanup-option {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .input-section,
+            .status-section,
+            .results-section,
+            .error-section {
+                padding: 20px;
+            }
+            
+            .process-btn {
+                padding: 15px;
+                font-size: 1rem;
+            }
+            
+            .download-btn {
+                padding: 15px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated floating leaves -->
+    <div class="leaf" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="leaf" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="leaf" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="leaf" style="left: 40%; animation-delay: 6s;"></div>
+    <div class="leaf" style="left: 50%; animation-delay: 8s;"></div>
+    <div class="leaf" style="left: 60%; animation-delay: 10s;"></div>
+    <div class="leaf" style="left: 70%; animation-delay: 12s;"></div>
+    <div class="leaf" style="left: 80%; animation-delay: 14s;"></div>
+    <div class="leaf" style="left: 90%; animation-delay: 16s;"></div>
+
+    <div class="container">
+        <header>
+            <h1>Forest Canopy Video Analysis</h1>
+            <p>Cultivate deep insights through nature's wisdom - sustainable analysis for growing knowledge</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="input-group">
+                    <label for="youtube-url">YouTube Video URL</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        required
+                    >
+                </div>
+                
+                <button id="process-btn" class="process-btn">
+                    🌱 Begin Natural Analysis
+                </button>
+            </section>
+
+            <section id="status-section" class="status-section hidden">
+                <div class="status-header">
+                    <h2>🌳 Forest Analysis Status</h2>
+                    <div id="status-badge" class="status-badge">🌿 Germinating Seeds</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-current">0</span> of <span id="progress-total">13</span> patterns
+                    </div>
+                </div>
+
+                <div class="current-step">
+                    <h3>🔍 Active Growth Sequence</h3>
+                    <div id="current-pattern" class="pattern-info">
+                        <span class="pattern-name">Preparing soil...</span>
+                        <span class="pattern-description">Cultivating the analysis environment</span>
+                    </div>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <h4>🌱 Phase 1: Seed Collection</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="youtube_summary">youtube_summary</div>
+                            <div class="pattern-item" data-pattern="extract_core_message">extract_core_message</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="2">
+                        <h4>🌿 Phase 2: Growth & Cultivation</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_wisdom">extract_wisdom</div>
+                            <div class="pattern-item" data-pattern="extract_insights">extract_insights</div>
+                            <div class="pattern-item" data-pattern="extract_ideas">extract_ideas</div>
+                            <div class="pattern-item" data-pattern="extract_patterns">extract_patterns</div>
+                            <div class="pattern-item" data-pattern="extract_recommendations">extract_recommendations</div>
+                            <div class="pattern-item" data-pattern="extract_predictions">extract_predictions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="3">
+                        <h4>🌳 Phase 3: Root Network Formation</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_references">extract_references</div>
+                            <div class="pattern-item" data-pattern="extract_questions">extract_questions</div>
+                            <div class="pattern-item" data-pattern="create_tags">create_tags</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="4">
+                        <h4>🍃 Phase 4: Fruit & Harvest</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="create_5_sentence_summary">create_5_sentence_summary</div>
+                            <div class="pattern-item" data-pattern="to_flashcards">to_flashcards</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="results-section" class="results-section hidden">
+                <div class="results-header">
+                    <h2>🌲 Forest Harvest Ready</h2>
+                    <div class="results-summary">
+                        <span id="results-count">13</span> wisdom seeds cultivated
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button id="download-btn" class="download-btn">
+                        🍃 Harvest Analysis Files
+                    </button>
+                    <p class="download-info">
+                        Files are provided as text files (.txt) with natural markdown formatting
+                    </p>
+                </div>
+            </section>
+
+            <section id="error-section" class="error-section hidden">
+                <div class="error-header">
+                    <h2>🍂 Growth Challenge</h2>
+                </div>
+                <div id="error-message" class="error-message">
+                    The forest encountered an obstacle during cultivation.
+                </div>
+                <button id="retry-btn" class="retry-btn">Plant Again</button>
+            </section>
+        </main>
+
+        <footer>
+            <div class="system-info">
+                <span id="fabric-status">Checking forest health...</span>
+                <span class="separator">🌿</span>
+                <span>13 growth patterns available</span>
+                <span class="separator">🌿</span>
+                <button id="management-toggle" class="management-toggle">🌲 Forest Management</button>
+            </div>
+        </footer>
+
+        <!-- Management Panel Modal -->
+        <div id="management-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🌲 Forest Management</h2>
+                    <button id="close-management" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="management-tabs">
+                        <button class="tab-btn active" data-tab="status">🌱 Status</button>
+                        <button class="tab-btn" data-tab="history">📜 History</button>
+                        <button class="tab-btn" data-tab="cleanup">🧹 Cleanup</button>
+                    </div>
+
+                    <!-- Status Tab -->
+                    <div id="status-tab" class="tab-content active">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <h3>Forest Health</h3>
+                                <div class="status-item">
+                                    <span class="label">Growth Time:</span>
+                                    <span id="server-uptime">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Nutrient Usage:</span>
+                                    <span id="memory-usage">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Fabric Available:</span>
+                                    <span id="fabric-available">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <h3>Active Growth</h3>
+                                <div class="status-item">
+                                    <span class="label">Sprouting:</span>
+                                    <span id="active-processes">-</span>
+                                </div>
+                                <div id="process-list" class="process-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="history-tab" class="tab-content">
+                        <div class="history-controls">
+                            <button id="refresh-history" class="refresh-btn">🔄 Refresh</button>
+                            <span class="history-count">Loading...</span>
+                        </div>
+                        <div id="history-list" class="history-list">
+                            <div class="loading">Loading forest history...</div>
+                        </div>
+                    </div>
+
+                    <!-- Cleanup Tab -->
+                    <div id="cleanup-tab" class="tab-content">
+                        <div class="cleanup-section">
+                            <h3>🧹 Forest Cleanup</h3>
+                            <p>Remove old growth to make room for new seedlings</p>
+                            
+                            <div class="cleanup-controls">
+                                <div class="cleanup-option">
+                                    <label for="cleanup-days">Compost files older than:</label>
+                                    <select id="cleanup-days">
+                                        <option value="7">7 days</option>
+                                        <option value="30" selected>30 days</option>
+                                        <option value="90">90 days</option>
+                                    </select>
+                                    <button id="cleanup-old-btn" class="cleanup-btn">Compost Old Files</button>
+                                </div>
+                            </div>
+                            
+                            <div class="cleanup-warning">
+                                <p><strong>🍂 Warning:</strong> This action cannot be undone. Files will be naturally composted.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Forest Canopy Theme JavaScript
+        class ForestAnalyzer {
+            constructor() {
+                this.currentPattern = 0;
+                this.totalPatterns = 13;
+                this.patterns = [
+                    { name: 'youtube_summary', description: 'Extracting video essence like tree rings' },
+                    { name: 'extract_core_message', description: 'Finding the root message' },
+                    { name: 'extract_wisdom', description: 'Gathering ancient forest wisdom' },
+                    { name: 'extract_insights', description: 'Discovering hidden knowledge in the undergrowth' },
+                    { name: 'extract_ideas', description: 'Cultivating new thought seedlings' },
+                    { name: 'extract_patterns', description: 'Mapping the forest ecosystem' },
+                    { name: 'extract_recommendations', description: 'Harvesting practical guidance' },
+                    { name: 'extract_predictions', description: 'Reading the forest signs' },
+                    { name: 'extract_references', description: 'Connecting the root network' },
+                    { name: 'extract_questions', description: 'Sprouting inquiry seeds' },
+                    { name: 'create_tags', description: 'Categorizing forest knowledge' },
+                    { name: 'create_5_sentence_summary', description: 'Distilling wisdom essence' },
+                    { name: 'to_flashcards', description: 'Creating knowledge fruit' }
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.checkServerStatus();
+                this.startAmbientAnimations();
+            }
+            
+            bindEvents() {
+                const processBtn = document.getElementById('process-btn');
+                const downloadBtn = document.getElementById('download-btn');
+                const retryBtn = document.getElementById('retry-btn');
+                const managementToggle = document.getElementById('management-toggle');
+                const closeManagement = document.getElementById('close-management');
+                const refreshHistory = document.getElementById('refresh-history');
+                const cleanupBtn = document.getElementById('cleanup-old-btn');
+                const tabBtns = document.querySelectorAll('.tab-btn');
+                
+                processBtn.addEventListener('click', () => this.startAnalysis());
+                downloadBtn.addEventListener('click', () => this.downloadResults());
+                retryBtn.addEventListener('click', () => this.resetAnalysis());
+                managementToggle.addEventListener('click', () => this.showManagement());
+                closeManagement.addEventListener('click', () => this.hideManagement());
+                refreshHistory.addEventListener('click', () => this.loadHistory());
+                cleanupBtn.addEventListener('click', () => this.cleanupFiles());
+                
+                tabBtns.forEach(btn => {
+                    btn.addEventListener('click', () => this.switchTab(btn.dataset.tab));
+                });
+                
+                // Close modal on outside click
+                document.getElementById('management-modal').addEventListener('click', (e) => {
+                    if (e.target.id === 'management-modal') {
+                        this.hideManagement();
+                    }
+                });
+            }
+            
+            async startAnalysis() {
+                const url = document.getElementById('youtube-url').value;
+                if (!url) {
+                    alert('Please enter a YouTube URL to begin the forest analysis');
+                    return;
+                }
+                
+                this.showSection('status-section');
+                this.hideSection('results-section');
+                this.hideSection('error-section');
+                
+                document.getElementById('status-badge').textContent = '🌱 Germinating Analysis';
+                
+                try {
+                    const response = await fetch('/api/process', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ url })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Forest analysis failed to sprout');
+                    }
+                    
+                    const data = await response.json();
+                    this.processId = data.processId;
+                    this.monitorProgress();
+                    
+                } catch (error) {
+                    this.showError(error.message);
+                }
+            }
+            
+            async monitorProgress() {
+                const interval = setInterval(async () => {
+                    try {
+                        const response = await fetch(`/api/progress/${this.processId}`);
+                        const data = await response.json();
+                        
+                        this.updateProgress(data.current, data.total);
+                        this.updateCurrentPattern(data.currentPattern);
+                        
+                        if (data.completed) {
+                            clearInterval(interval);
+                            this.showResults();
+                        }
+                        
+                        if (data.error) {
+                            clearInterval(interval);
+                            this.showError(data.error);
+                        }
+                        
+                    } catch (error) {
+                        clearInterval(interval);
+                        this.showError('Lost connection to the forest network');
+                    }
+                }, 1000);
+            }
+            
+            updateProgress(current, total) {
+                const percentage = (current / total) * 100;
+                document.getElementById('progress-fill').style.width = `${percentage}%`;
+                document.getElementById('progress-current').textContent = current;
+                document.getElementById('progress-total').textContent = total;
+                
+                // Update phase cards
+                const phaseCards = document.querySelectorAll('.phase-card');
+                phaseCards.forEach(card => {
+                    const phase = parseInt(card.dataset.phase);
+                    if (phase <= Math.ceil(current / (total / 4))) {
+                        card.classList.add('active');
+                    }
+                });
+                
+                // Update pattern items
+                const patternItems = document.querySelectorAll('.pattern-item');
+                patternItems.forEach((item, index) => {
+                    if (index < current) {
+                        item.classList.add('completed');
+                        item.classList.remove('active');
+                    } else if (index === current) {
+                        item.classList.add('active');
+                        item.classList.remove('completed');
+                    } else {
+                        item.classList.remove('completed', 'active');
+                    }
+                });
+            }
+            
+            updateCurrentPattern(patternName) {
+                const pattern = this.patterns.find(p => p.name === patternName);
+                if (pattern) {
+                    document.querySelector('.pattern-name').textContent = pattern.name;
+                    document.querySelector('.pattern-description').textContent = pattern.description;
+                }
+                
+                // Update status badge
+                const statusMessages = [
+                    '🌱 Germinating Seeds',
+                    '🌿 Growing Saplings',
+                    '🌳 Strengthening Roots',
+                    '🍃 Bearing Fruit'
+                ];
+                const phase = Math.floor((this.currentPattern / this.totalPatterns) * 4);
+                document.getElementById('status-badge').textContent = statusMessages[phase] || statusMessages[0];
+            }
+            
+            showResults() {
+                this.hideSection('status-section');
+                this.showSection('results-section');
+                document.getElementById('results-count').textContent = this.totalPatterns;
+            }
+            
+            showError(message) {
+                this.hideSection('status-section');
+                this.hideSection('results-section');
+                this.showSection('error-section');
+                document.getElementById('error-message').textContent = message;
+            }
+            
+            async downloadResults() {
+                try {
+                    const response = await fetch(`/api/download/${this.processId}`);
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'forest-analysis-results.zip';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                } catch (error) {
+                    alert('Failed to harvest results: ' + error.message);
+                }
+            }
+            
+            resetAnalysis() {
+                this.hideSection('status-section');
+                this.hideSection('results-section');
+                this.hideSection('error-section');
+                this.currentPattern = 0;
+                document.getElementById('youtube-url').value = '';
+            }
+            
+            showSection(sectionId) {
+                document.getElementById(sectionId).classList.remove('hidden');
+            }
+            
+            hideSection(sectionId) {
+                document.getElementById(sectionId).classList.add('hidden');
+            }
+            
+            showManagement() {
+                document.getElementById('management-modal').classList.remove('hidden');
+                this.loadServerStatus();
+            }
+            
+            hideManagement() {
+                document.getElementById('management-modal').classList.add('hidden');
+            }
+            
+            switchTab(tabName) {
+                // Update tab buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            }
+            
+            async loadServerStatus() {
+                try {
+                    const response = await fetch('/api/status');
+                    const data = await response.json();
+                    
+                    document.getElementById('server-uptime').textContent = data.uptime || '-';
+                    document.getElementById('memory-usage').textContent = data.memory || '-';
+                    document.getElementById('fabric-available').textContent = data.fabric ? 'Healthy' : 'Needs Water';
+                    document.getElementById('active-processes').textContent = data.processes || '0';
+                    
+                } catch (error) {
+                    console.error('Failed to load forest status:', error);
+                }
+            }
+            
+            async loadHistory() {
+                try {
+                    const response = await fetch('/api/history');
+                    const data = await response.json();
+                    
+                    const historyList = document.getElementById('history-list');
+                    historyList.innerHTML = '';
+                    
+                    if (data.history && data.history.length > 0) {
+                        data.history.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'history-item';
+                            div.innerHTML = `
+                                <div style="color: var(--sunlight); font-weight: 600;">${item.url}</div>
+                                <div style="color: var(--moss-green); font-size: 0.9rem;">${item.date}</div>
+                            `;
+                            historyList.appendChild(div);
+                        });
+                    } else {
+                        historyList.innerHTML = '<div class="loading">No forest history found</div>';
+                    }
+                    
+                    document.querySelector('.history-count').textContent = 
+                        `${data.history ? data.history.length : 0} analyses in forest memory`;
+                        
+                } catch (error) {
+                    console.error('Failed to load forest history:', error);
+                }
+            }
+            
+            async cleanupFiles() {
+                const days = document.getElementById('cleanup-days').value;
+                
+                if (!confirm(`Are you sure you want to compost files older than ${days} days? This action cannot be undone.`)) {
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/cleanup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ days: parseInt(days) })
+                    });
+                    
+                    const data = await response.json();
+                    alert(`Successfully composted ${data.deleted || 0} old files`);
+                    
+                } catch (error) {
+                    alert('Failed to perform forest cleanup: ' + error.message);
+                }
+            }
+            
+            async checkServerStatus() {
+                try {
+                    const response = await fetch('/api/health');
+                    const data = await response.json();
+                    
+                    document.getElementById('fabric-status').textContent = 
+                        data.fabric ? 'Forest fabric is healthy' : 'Forest needs tending';
+                        
+                } catch (error) {
+                    document.getElementById('fabric-status').textContent = 'Forest connection interrupted';
+                }
+            }
+            
+            startAmbientAnimations() {
+                // Add more floating leaves periodically
+                setInterval(() => {
+                    this.createFloatingLeaf();
+                }, 3000);
+            }
+            
+            createFloatingLeaf() {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.style.left = Math.random() * 100 + '%';
+                leaf.style.animationDelay = '0s';
+                leaf.style.animationDuration = (12 + Math.random() * 8) + 's';
+                
+                const colors = ['var(--leaf-yellow)', 'var(--light-green)', 'var(--moss-green)'];
+                leaf.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                document.body.appendChild(leaf);
+                
+                // Remove leaf after animation
+                setTimeout(() => {
+                    if (leaf.parentNode) {
+                        leaf.parentNode.removeChild(leaf);
+                    }
+                }, 20000);
+            }
+        }
+        
+        // Initialize the Forest Analyzer when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ForestAnalyzer();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Mercedes-Benz Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --mb-silver: #C0C0C0;
+            --mb-deep-blue: #003366;
+            --mb-gold: #D4AF37;
+            --mb-charcoal: #1A1A1A;
+            --mb-platinum: #E5E4E2;
+            --mb-navy: #1E3A5F;
+            --mb-copper: #B87333;
+            --mb-white: #FFFFFF;
+            --mb-gray: #6B7280;
+            
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-premium: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            --shadow-luxury: 0 8px 32px rgba(0, 51, 102, 0.12);
+            --shadow-premium: 0 16px 64px rgba(0, 51, 102, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, 
+                #f8fafc 0%, 
+                #e2e8f0 25%, 
+                #cbd5e1 50%, 
+                #94a3b8 75%, 
+                #64748b 100%);
+            min-height: 100vh;
+            color: var(--mb-charcoal);
+            overflow-x: hidden;
+        }
+
+        /* Luxury Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 51, 102, 0.03) 0%, transparent 50%),
+                linear-gradient(45deg, transparent 49%, rgba(192, 192, 192, 0.01) 50%, transparent 51%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--mb-deep-blue) 0%, var(--mb-navy) 100%);
+            padding: 2rem 0;
+            box-shadow: var(--shadow-luxury);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.5" fill="%23D4AF37" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mb-logo {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, var(--mb-gold) 0%, var(--mb-copper) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+
+        .mb-logo::before {
+            content: '★';
+            font-size: 24px;
+            color: var(--mb-white);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--mb-white);
+            font-size: 2.25rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: var(--mb-platinum);
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-left: auto;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .main-panel {
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.95) 0%, 
+                rgba(255, 255, 255, 0.85) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-premium);
+            border: 1px solid rgba(192, 192, 192, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--mb-gold) 0%, var(--mb-copper) 50%, var(--mb-gold) 100%);
+        }
+
+        .input-section {
+            margin-bottom: 3rem;
+        }
+
+        .input-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--mb-deep-blue);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .url-input-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--mb-silver);
+            border-radius: 16px;
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.9) 0%, 
+                rgba(248, 250, 252, 0.9) 100%);
+            transition: var(--transition-smooth);
+            font-family: 'Inter', sans-serif;
+            box-shadow: inset 0 2px 8px rgba(0, 51, 102, 0.05);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--mb-gold);
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 51, 102, 0.05),
+                0 0 0 4px rgba(212, 175, 55, 0.1),
+                0 8px 32px rgba(212, 175, 55, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .process-button {
+            background: linear-gradient(135deg, var(--mb-deep-blue) 0%, var(--mb-navy) 100%);
+            color: var(--mb-white);
+            border: none;
+            padding: 1.25rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: var(--transition-premium);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+            box-shadow: 
+                0 8px 24px rgba(0, 51, 102, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .process-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 32px rgba(0, 51, 102, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .process-button:hover::before {
+            left: 100%;
+        }
+
+        .process-button:active {
+            transform: translateY(0);
+        }
+
+        .process-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-section {
+            margin: 3rem 0;
+            padding: 2.5rem;
+            background: linear-gradient(145deg, 
+                rgba(0, 51, 102, 0.03) 0%, 
+                rgba(30, 58, 95, 0.05) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(192, 192, 192, 0.15);
+            display: none;
+        }
+
+        .progress-section.visible {
+            display: block;
+            animation: slideInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--mb-deep-blue);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .phase-container {
+            margin-bottom: 2.5rem;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--mb-silver) 0%, var(--mb-platinum) 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(192, 192, 192, 0.2);
+        }
+
+        .phase-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--mb-deep-blue) 0%, var(--mb-navy) 100%);
+            color: var(--mb-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0, 51, 102, 0.3);
+        }
+
+        .phase-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--mb-deep-blue);
+            flex: 1;
+        }
+
+        .phase-status {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--mb-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .patterns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-left: 1rem;
+        }
+
+        .pattern-item {
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.8) 0%, 
+                rgba(248, 250, 252, 0.8) 100%);
+            border: 1px solid rgba(192, 192, 192, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pattern-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--mb-silver);
+            transition: var(--transition-smooth);
+        }
+
+        .pattern-item.processing::before {
+            background: linear-gradient(180deg, var(--mb-gold) 0%, var(--mb-copper) 100%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .pattern-item.completed::before {
+            background: linear-gradient(180deg, #10B981 0%, #059669 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .pattern-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--mb-deep-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .pattern-description {
+            font-size: 0.9rem;
+            color: var(--mb-gray);
+            line-height: 1.4;
+        }
+
+        .pattern-status {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--mb-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+        }
+
+        .pattern-item.completed .pattern-status {
+            color: #10B981;
+        }
+
+        .results-section {
+            margin-top: 3rem;
+            padding: 2.5rem;
+            background: linear-gradient(145deg, 
+                rgba(212, 175, 55, 0.05) 0%, 
+                rgba(184, 115, 51, 0.05) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            display: none;
+        }
+
+        .results-section.visible {
+            display: block;
+            animation: slideInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .results-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--mb-deep-blue);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .download-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--mb-gold) 0%, var(--mb-copper) 100%);
+            color: var(--mb-white);
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition-premium);
+            box-shadow: 
+                0 8px 24px rgba(212, 175, 55, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            margin: 0 auto;
+            display: flex;
+            width: fit-content;
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 32px rgba(212, 175, 55, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .management-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .management-button {
+            background: linear-gradient(145deg, 
+                rgba(192, 192, 192, 0.8) 0%, 
+                rgba(229, 228, 226, 0.8) 100%);
+            color: var(--mb-deep-blue);
+            border: 1px solid rgba(192, 192, 192, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .management-button:hover {
+            background: linear-gradient(145deg, 
+                rgba(212, 175, 55, 0.1) 0%, 
+                rgba(184, 115, 51, 0.1) 100%);
+            border-color: var(--mb-gold);
+            transform: translateY(-1px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.visible {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.95) 0%, 
+                rgba(248, 250, 252, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-premium);
+            border: 1px solid rgba(192, 192, 192, 0.2);
+            animation: slideInScale 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes slideInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--mb-deep-blue) 0%, var(--mb-navy) 100%);
+            color: var(--mb-white);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--mb-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--mb-silver);
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--mb-gray);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border-bottom: 3px solid transparent;
+            position: relative;
+        }
+
+        .tab-button.active {
+            color: var(--mb-deep-blue);
+            border-bottom-color: var(--mb-gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .status-card {
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.8) 0%, 
+                rgba(248, 250, 252, 0.8) 100%);
+            border: 1px solid rgba(192, 192, 192, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--mb-deep-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            color: var(--mb-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .history-item {
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.8) 0%, 
+                rgba(248, 250, 252, 0.8) 100%);
+            border: 1px solid rgba(192, 192, 192, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .history-url {
+            font-weight: 600;
+            color: var(--mb-deep-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .history-meta {
+            font-size: 0.9rem;
+            color: var(--mb-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, var(--mb-deep-blue) 0%, var(--mb-navy) 100%);
+            color: var(--mb-white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .action-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25);
+        }
+
+        .action-button.danger {
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+        }
+
+        .action-button.danger:hover {
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .header p {
+                margin-left: 0;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .main-panel {
+                padding: 2rem;
+            }
+
+            .patterns-grid {
+                grid-template-columns: 1fr;
+                margin-left: 0;
+            }
+
+            .management-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab-buttons {
+                flex-wrap: wrap;
+            }
+
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="mb-logo"></div>
+            <h1>YouTube Fabric Processor</h1>
+            <p>Mercedes-Benz Luxury Edition</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-panel">
+            <div class="input-section">
+                <label for="youtube-url" class="input-label">YouTube URL</label>
+                <div class="url-input-container">
+                    <input type="url" id="youtube-url" class="url-input" 
+                           placeholder="Enter YouTube video URL (e.g., https://www.youtube.com/watch?v=...)">
+                </div>
+                <button id="process-btn" class="process-button">Begin Premium Analysis</button>
+            </div>
+
+            <div id="progress-section" class="progress-section">
+                <h2 class="progress-title">Processing Status</h2>
+                
+                <div class="phase-container">
+                    <div class="phase-header">
+                        <div class="phase-number">1</div>
+                        <div class="phase-title">Analysis & Extraction</div>
+                        <div class="phase-status" id="phase1-status">Pending</div>
+                    </div>
+                    <div class="patterns-grid">
+                        <div class="pattern-item" data-pattern="extract_wisdom">
+                            <div class="pattern-name">Extract Wisdom</div>
+                            <div class="pattern-description">Key insights and wisdom from content</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="summarize">
+                            <div class="pattern-name">Summarize</div>
+                            <div class="pattern-description">Comprehensive content summary</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_main_idea">
+                            <div class="pattern-name">Extract Main Idea</div>
+                            <div class="pattern-description">Core concepts and themes</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-container">
+                    <div class="phase-header">
+                        <div class="phase-number">2</div>
+                        <div class="phase-title">Deep Analysis</div>
+                        <div class="phase-status" id="phase2-status">Pending</div>
+                    </div>
+                    <div class="patterns-grid">
+                        <div class="pattern-item" data-pattern="analyze_claims">
+                            <div class="pattern-name">Analyze Claims</div>
+                            <div class="pattern-description">Fact-checking and claim analysis</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_questions">
+                            <div class="pattern-name">Extract Questions</div>
+                            <div class="pattern-description">Key questions raised by content</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="find_logical_fallacies">
+                            <div class="pattern-name">Find Logical Fallacies</div>
+                            <div class="pattern-description">Logical reasoning analysis</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_sponsors_and_conflicts">
+                            <div class="pattern-name">Extract Sponsors & Conflicts</div>
+                            <div class="pattern-description">Bias and conflict identification</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-container">
+                    <div class="phase-header">
+                        <div class="phase-number">3</div>
+                        <div class="phase-title">Content Structure</div>
+                        <div class="phase-status" id="phase3-status">Pending</div>
+                    </div>
+                    <div class="patterns-grid">
+                        <div class="pattern-item" data-pattern="create_quiz">
+                            <div class="pattern-name">Create Quiz</div>
+                            <div class="pattern-description">Educational quiz generation</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="get_youtube_rss">
+                            <div class="pattern-name">Get YouTube RSS</div>
+                            <div class="pattern-description">Channel and metadata extraction</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_references">
+                            <div class="pattern-name">Extract References</div>
+                            <div class="pattern-description">Citations and source materials</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-container">
+                    <div class="phase-header">
+                        <div class="phase-number">4</div>
+                        <div class="phase-title">Advanced Insights</div>
+                        <div class="phase-status" id="phase4-status">Pending</div>
+                    </div>
+                    <div class="patterns-grid">
+                        <div class="pattern-item" data-pattern="extract_extraordinary_claims">
+                            <div class="pattern-name">Extract Extraordinary Claims</div>
+                            <div class="pattern-description">Unusual or remarkable statements</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_book_ideas">
+                            <div class="pattern-name">Extract Book Ideas</div>
+                            <div class="pattern-description">Content suitable for publication</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="write_essay">
+                            <div class="pattern-name">Write Essay</div>
+                            <div class="pattern-description">Comprehensive analytical essay</div>
+                            <div class="pattern-status">Waiting</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results-section" class="results-section">
+                <h2 class="results-title">Analysis Complete</h2>
+                <p style="text-align: center; margin-bottom: 2rem; color: var(--mb-gray); font-size: 1.1rem;">
+                    Your premium analysis is ready for download. All 13 patterns have been processed with Mercedes-Benz precision.
+                </p>
+                <a href="#" id="download-btn" class="download-button">
+                    <span>⬇</span>
+                    Download Premium Analysis
+                </a>
+            </div>
+
+            <div class="management-controls">
+                <button class="management-button" onclick="openManagementModal()">Management Console</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="management-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Management Console</h3>
+                <button class="close-modal" onclick="closeManagementModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="switchTab('status')">Status</button>
+                        <button class="tab-button" onclick="switchTab('history')">History</button>
+                        <button class="tab-button" onclick="switchTab('cleanup')">Cleanup</button>
+                        <button class="tab-button" onclick="switchTab('control')">Control</button>
+                    </div>
+
+                    <div id="status-tab" class="tab-content active">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <div class="status-value" id="active-processes">0</div>
+                                <div class="status-label">Active Processes</div>
+                            </div>
+                            <div class="status-card">
+                                <div class="status-value" id="total-processed">0</div>
+                                <div class="status-label">Total Processed</div>
+                            </div>
+                            <div class="status-card">
+                                <div class="status-value" id="server-uptime">0m</div>
+                                <div class="status-label">Server Uptime</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="history-tab" class="tab-content">
+                        <div id="history-list">
+                            <div class="history-item">
+                                <div class="history-url">https://www.youtube.com/watch?v=example1</div>
+                                <div class="history-meta">
+                                    <span>Completed 2 hours ago</span>
+                                    <span>Duration: 1m 15s</span>
+                                </div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-url">https://www.youtube.com/watch?v=example2</div>
+                                <div class="history-meta">
+                                    <span>Completed 1 day ago</span>
+                                    <span>Duration: 2m 03s</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cleanup-tab" class="tab-content">
+                        <p style="margin-bottom: 2rem; color: var(--mb-gray);">
+                            Clean up old output folders to free up disk space. This action cannot be undone.
+                        </p>
+                        <button class="action-button" onclick="cleanupOldFiles()">Clean Old Files (>7 days)</button>
+                        <button class="action-button danger" onclick="cleanupAllFiles()">Clean All Files</button>
+                    </div>
+
+                    <div id="control-tab" class="tab-content">
+                        <p style="margin-bottom: 2rem; color: var(--mb-gray);">
+                            Server control operations. Use with caution.
+                        </p>
+                        <button class="action-button" onclick="restartServer()">Restart Server</button>
+                        <button class="action-button danger" onclick="shutdownServer()">Shutdown Server</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket connection for real-time updates
+        let ws = null;
+        let currentProcessId = null;
+
+        // Pattern definitions with phases
+        const patterns = {
+            1: ['extract_wisdom', 'summarize', 'extract_main_idea'],
+            2: ['analyze_claims', 'extract_questions', 'find_logical_fallacies', 'extract_sponsors_and_conflicts'],
+            3: ['create_quiz', 'get_youtube_rss', 'extract_references'],
+            4: ['extract_extraordinary_claims', 'extract_book_ideas', 'write_essay']
+        };
+
+        // Initialize WebSocket connection
+        function initializeWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}`);
+            
+            ws.onopen = function() {
+                console.log('WebSocket connection established');
+            };
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket connection closed');
+                // Attempt to reconnect after 3 seconds
+                setTimeout(initializeWebSocket, 3000);
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        // Handle WebSocket messages
+        function handleWebSocketMessage(data) {
+            const { type, payload } = data;
+            
+            switch(type) {
+                case 'progress':
+                    updateProgress(payload);
+                    break;
+                case 'phase_complete':
+                    updatePhaseStatus(payload.phase, 'completed');
+                    break;
+                case 'pattern_start':
+                    updatePatternStatus(payload.pattern, 'processing');
+                    break;
+                case 'pattern_complete':
+                    updatePatternStatus(payload.pattern, 'completed');
+                    break;
+                case 'processing_complete':
+                    showResults(payload.processId);
+                    break;
+                case 'error':
+                    showError(payload.message);
+                    break;
+            }
+        }
+
+        // Start processing
+        async function startProcessing() {
+            const url = document.getElementById('youtube-url').value.trim();
+            
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+            
+            if (!isValidYouTubeUrl(url)) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+            
+            const processBtn = document.getElementById('process-btn');
+            processBtn.disabled = true;
+            processBtn.textContent = 'Initiating Premium Analysis...';
+            
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                currentProcessId = result.id;
+                
+                // Show progress section
+                document.getElementById('progress-section').classList.add('visible');
+                
+                // Reset all patterns to waiting state
+                resetPatterns();
+                
+                // Update button text
+                processBtn.textContent = 'Analysis in Progress...';
+                
+            } catch (error) {
+                console.error('Error starting processing:', error);
+                alert('Failed to start processing. Please try again.');
+                resetProcessButton();
+            }
+        }
+
+        // Update progress based on WebSocket data
+        function updateProgress(payload) {
+            const { phase, pattern, status, message } = payload;
+            
+            if (phase) {
+                updatePhaseStatus(phase, status);
+            }
+            
+            if (pattern) {
+                updatePatternStatus(pattern, status);
+            }
+        }
+
+        // Update phase status
+        function updatePhaseStatus(phase, status) {
+            const phaseStatus = document.getElementById(`phase${phase}-status`);
+            if (phaseStatus) {
+                phaseStatus.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+
+        // Update pattern status
+        function updatePatternStatus(pattern, status) {
+            const patternElement = document.querySelector(`[data-pattern="${pattern}"]`);
+            if (patternElement) {
+                // Remove existing status classes
+                patternElement.classList.remove('processing', 'completed');
+                
+                // Add new status class
+                if (status === 'processing') {
+                    patternElement.classList.add('processing');
+                    patternElement.querySelector('.pattern-status').textContent = 'Processing';
+                } else if (status === 'completed') {
+                    patternElement.classList.add('completed');
+                    patternElement.querySelector('.pattern-status').textContent = 'Completed';
+                }
+            }
+        }
+
+        // Show results section
+        function showResults(processId) {
+            document.getElementById('results-section').classList.add('visible');
+            document.getElementById('download-btn').href = `/api/download/${processId}`;
+            resetProcessButton();
+        }
+
+        // Show error message
+        function showError(message) {
+            alert(`Error: ${message}`);
+            resetProcessButton();
+        }
+
+        // Reset process button
+        function resetProcessButton() {
+            const processBtn = document.getElementById('process-btn');
+            processBtn.disabled = false;
+            processBtn.textContent = 'Begin Premium Analysis';
+        }
+
+        // Reset all patterns to initial state
+        function resetPatterns() {
+            document.querySelectorAll('.pattern-item').forEach(item => {
+                item.classList.remove('processing', 'completed');
+                item.querySelector('.pattern-status').textContent = 'Waiting';
+            });
+            
+            // Reset phase statuses
+            for (let i = 1; i <= 4; i++) {
+                updatePhaseStatus(i, 'pending');
+            }
+            
+            // Hide results section
+            document.getElementById('results-section').classList.remove('visible');
+        }
+
+        // Validate YouTube URL
+        function isValidYouTubeUrl(url) {
+            const patterns = [
+                /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.+/,
+                /^https?:\/\/(www\.)?youtube\.com\/watch\?v=.+/,
+                /^https?:\/\/youtu\.be\/.+/
+            ];
+            
+            return patterns.some(pattern => pattern.test(url));
+        }
+
+        // Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('management-modal').classList.add('visible');
+            loadManagementData();
+        }
+
+        function closeManagementModal() {
+            document.getElementById('management-modal').classList.remove('visible');
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Add active class to selected tab button
+            event.target.classList.add('active');
+        }
+
+        async function loadManagementData() {
+            try {
+                const response = await fetch('/api/management/status');
+                const data = await response.json();
+                
+                document.getElementById('active-processes').textContent = data.activeProcesses || 0;
+                document.getElementById('total-processed').textContent = data.totalProcessed || 0;
+                document.getElementById('server-uptime').textContent = data.uptime || '0m';
+                
+            } catch (error) {
+                console.error('Error loading management data:', error);
+            }
+        }
+
+        async function cleanupOldFiles() {
+            if (confirm('Are you sure you want to clean up old files (>7 days)?')) {
+                try {
+                    const response = await fetch('/api/management/cleanup-old', {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    alert(`Cleanup completed: ${result.message}`);
+                } catch (error) {
+                    alert('Error during cleanup: ' + error.message);
+                }
+            }
+        }
+
+        async function cleanupAllFiles() {
+            if (confirm('Are you sure you want to clean up ALL files? This cannot be undone!')) {
+                try {
+                    const response = await fetch('/api/management/cleanup-all', {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    alert(`Cleanup completed: ${result.message}`);
+                } catch (error) {
+                    alert('Error during cleanup: ' + error.message);
+                }
+            }
+        }
+
+        async function restartServer() {
+            if (confirm('Are you sure you want to restart the server?')) {
+                try {
+                    await fetch('/api/management/restart', {
+                        method: 'POST'
+                    });
+                    alert('Server restart initiated. The page will reload.');
+                    setTimeout(() => window.location.reload(), 3000);
+                } catch (error) {
+                    alert('Error restarting server: ' + error.message);
+                }
+            }
+        }
+
+        async function shutdownServer() {
+            if (confirm('Are you sure you want to shutdown the server?')) {
+                try {
+                    await fetch('/api/management/shutdown', {
+                        method: 'POST'
+                    });
+                    alert('Server shutdown initiated.');
+                } catch (error) {
+                    alert('Error shutting down server: ' + error.message);
+                }
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('process-btn').addEventListener('click', startProcessing);
+
+        // Close modal when clicking outside
+        document.getElementById('management-modal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeManagementModal();
+            }
+        });
+
+        // Enter key support for URL input
+        document.getElementById('youtube-url').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                startProcessing();
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeWebSocket();
+            
+            // Add some demo data for history
+            setTimeout(() => {
+                loadManagementData();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

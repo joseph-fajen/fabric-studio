@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Jellyfish Sanctuary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Jellyfish Sanctuary Color Palette */
+            --jellyfish-primary: rgba(20, 46, 89, 0.95);
+            --jellyfish-secondary: rgba(45, 85, 135, 0.8);
+            --jellyfish-accent: rgba(138, 43, 226, 0.9);
+            --jellyfish-accent-light: rgba(138, 43, 226, 0.3);
+            --jellyfish-electric: rgba(255, 20, 147, 0.8);
+            --jellyfish-teal: rgba(0, 206, 209, 0.7);
+            --jellyfish-soft-pink: rgba(255, 192, 203, 0.6);
+            --jellyfish-ethereal: rgba(173, 216, 230, 0.5);
+            
+            /* Glass Background Layers */
+            --glass-bg-primary: rgba(255, 255, 255, 0.03);
+            --glass-bg-secondary: rgba(255, 255, 255, 0.08);
+            --glass-bg-tertiary: rgba(255, 255, 255, 0.12);
+            --glass-bg-elevated: rgba(255, 255, 255, 0.18);
+            --glass-bg-modal: rgba(255, 255, 255, 0.22);
+            
+            /* Jellyfish Borders */
+            --glass-border: rgba(173, 216, 230, 0.3);
+            --glass-border-subtle: rgba(173, 216, 230, 0.15);
+            --glass-border-strong: rgba(138, 43, 226, 0.4);
+            
+            /* Text Colors */
+            --text-primary: rgba(255, 255, 255, 0.97);
+            --text-secondary: rgba(255, 255, 255, 0.78);
+            --text-tertiary: rgba(255, 255, 255, 0.62);
+            --text-muted: rgba(255, 255, 255, 0.45);
+            
+            /* Jellyfish Shadows */
+            --glow-light: 0 4px 20px rgba(138, 43, 226, 0.15);
+            --glow-medium: 0 8px 32px rgba(138, 43, 226, 0.25);
+            --glow-heavy: 0 16px 64px rgba(138, 43, 226, 0.35);
+            --glow-electric: 0 0 40px rgba(255, 20, 147, 0.3);
+            --glow-teal: 0 0 30px rgba(0, 206, 209, 0.25);
+            
+            /* Glass Effects */
+            --blur-light: blur(15px);
+            --blur-medium: blur(25px);
+            --blur-heavy: blur(35px);
+            --blur-extreme: blur(50px);
+            
+            /* Dimensions */
+            --border-radius: 20px;
+            --border-radius-large: 28px;
+            --border-radius-small: 14px;
+            --border-radius-xl: 40px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: linear-gradient(135deg, 
+                #0a1428 0%, 
+                #1a2447 20%, 
+                #2a3655 40%, 
+                #1e3c72 60%, 
+                #2a5298 80%, 
+                #0f2027 100%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Jellyfish Background Animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 15% 20%, rgba(138, 43, 226, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 85% 70%, rgba(255, 20, 147, 0.12) 0%, transparent 55%),
+                radial-gradient(ellipse at 40% 90%, rgba(0, 206, 209, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 30%, rgba(173, 216, 230, 0.08) 0%, transparent 45%),
+                radial-gradient(ellipse at 25% 75%, rgba(255, 192, 203, 0.06) 0%, transparent 40%);
+            animation: jellyfishFloat 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        /* Organic Tentacle Patterns */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 30%, rgba(138, 43, 226, 0.03) 2px, transparent 2px),
+                radial-gradient(circle at 90% 80%, rgba(255, 20, 147, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 60% 20%, rgba(0, 206, 209, 0.02) 1.5px, transparent 1.5px),
+                radial-gradient(circle at 30% 90%, rgba(173, 216, 230, 0.02) 1px, transparent 1px);
+            background-size: 120px 120px, 180px 180px, 140px 140px, 200px 200px;
+            animation: tentacleDrift 25s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes jellyfishFloat {
+            0%, 100% { 
+                transform: translateY(0px) scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+            25% { 
+                transform: translateY(-15px) scale(1.02) rotate(1deg);
+                opacity: 0.9;
+            }
+            50% { 
+                transform: translateY(-8px) scale(0.98) rotate(-0.5deg);
+                opacity: 1;
+            }
+            75% { 
+                transform: translateY(10px) scale(1.01) rotate(0.5deg);
+                opacity: 0.85;
+            }
+        }
+
+        @keyframes tentacleDrift {
+            0% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-10px) rotate(0.5deg); }
+            50% { transform: translateX(5px) rotate(-0.3deg); }
+            75% { transform: translateX(-5px) rotate(0.3deg); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Jellyfish Header */
+        .header {
+            text-align: center;
+            margin-bottom: 70px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(ellipse, 
+                rgba(138, 43, 226, 0.2) 0%, 
+                rgba(255, 20, 147, 0.15) 30%, 
+                rgba(0, 206, 209, 0.1) 60%, 
+                transparent 80%);
+            border-radius: 50%;
+            filter: var(--blur-medium);
+            animation: jellyfishPulse 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes jellyfishPulse {
+            0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateX(-50%) scale(1.1) rotate(1deg); opacity: 0.8; }
+        }
+
+        .header h1 {
+            font-size: 4.2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, 
+                var(--text-primary) 0%, 
+                rgba(138, 43, 226, 0.95) 30%, 
+                rgba(255, 20, 147, 0.9) 60%, 
+                rgba(0, 206, 209, 0.85) 80%, 
+                var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(138, 43, 226, 0.4);
+            animation: textFloat 6s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes textFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            font-weight: 400;
+            max-width: 650px;
+            margin: 0 auto;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+            animation: textFloat 6s ease-in-out infinite 1s;
+        }
+
+        /* Jellyfish Glass Card */
+        .jellyfish-card {
+            background: var(--glass-bg-secondary);
+            backdrop-filter: var(--blur-medium);
+            -webkit-backdrop-filter: var(--blur-medium);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--border-radius-large);
+            padding: 45px;
+            margin-bottom: 40px;
+            box-shadow: var(--glow-medium), var(--glow-electric);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .jellyfish-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(138, 43, 226, 0.5) 20%,
+                rgba(255, 20, 147, 0.6) 50%, 
+                rgba(0, 206, 209, 0.5) 80%,
+                transparent 100%);
+            animation: tentacleShimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes tentacleShimmer {
+            0%, 100% { opacity: 0.5; transform: scaleX(1); }
+            50% { opacity: 1; transform: scaleX(1.05); }
+        }
+
+        .jellyfish-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%, 
+                transparent 30%, 
+                rgba(138, 43, 226, 0.03) 70%,
+                transparent 100%);
+            pointer-events: none;
+            border-radius: var(--border-radius-large);
+        }
+
+        .jellyfish-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: var(--glow-heavy), var(--glow-teal);
+            border-color: var(--glass-border-strong);
+            background: var(--glass-bg-tertiary);
+        }
+
+        /* Enhanced Input Styling */
+        .input-group {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 22px 28px;
+            font-size: 1.15rem;
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid var(--glass-border-subtle);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .url-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--jellyfish-accent);
+            background: var(--glass-bg-secondary);
+            box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.25),
+                        inset 0 2px 12px rgba(0, 0, 0, 0.15),
+                        var(--glow-light);
+            transform: translateY(-2px);
+        }
+
+        /* Jellyfish Button */
+        .jellyfish-button {
+            background: linear-gradient(135deg, 
+                var(--jellyfish-accent) 0%, 
+                rgba(255, 20, 147, 0.9) 50%,
+                rgba(0, 206, 209, 0.8) 100%);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            border-radius: var(--border-radius);
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 600;
+            padding: 22px 45px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--glow-light), var(--glow-electric);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .jellyfish-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .jellyfish-button:hover::before {
+            left: 100%;
+        }
+
+        .jellyfish-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--glow-heavy), var(--glow-teal);
+            border-color: rgba(255, 20, 147, 0.8);
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 1.1) 0%, 
+                rgba(255, 20, 147, 1) 50%,
+                rgba(0, 206, 209, 0.9) 100%);
+        }
+
+        .jellyfish-button:active {
+            transform: translateY(-1px) scale(1);
+        }
+
+        .jellyfish-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Organic Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 50px;
+        }
+
+        .progress-section.active {
+            display: block;
+            animation: jellyfishRise 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes jellyfishRise {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Phase Progress Cards */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 45px;
+        }
+
+        .phase-card {
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid var(--glass-border-subtle);
+            border-radius: var(--border-radius);
+            padding: 28px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                transparent 50%);
+            pointer-events: none;
+            border-radius: var(--border-radius);
+        }
+
+        .phase-card.active {
+            border-color: var(--jellyfish-accent-light);
+            background: var(--glass-bg-secondary);
+            box-shadow: var(--glow-medium);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .phase-card.completed {
+            border-color: rgba(0, 206, 209, 0.4);
+            background: rgba(0, 206, 209, 0.08);
+            box-shadow: var(--glow-teal);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .phase-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg-tertiary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .phase-card.active .phase-number {
+            background: var(--jellyfish-accent-light);
+            border-color: var(--jellyfish-accent);
+            color: white;
+            box-shadow: var(--glow-light);
+            animation: jellyfishPulse 2s ease-in-out infinite;
+        }
+
+        .phase-card.completed .phase-number {
+            background: var(--jellyfish-teal);
+            border-color: rgba(0, 206, 209, 0.6);
+            color: white;
+            box-shadow: var(--glow-teal);
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Tentacle-like Pattern Progress */
+        .patterns-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pattern-item:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                var(--jellyfish-accent) 0%, 
+                var(--jellyfish-electric) 50%,
+                var(--jellyfish-teal) 100%);
+            transition: width 0.5s ease;
+            transform: translateY(-50%);
+        }
+
+        .pattern-item.active::before {
+            width: 100%;
+            animation: tentacleGrow 1s ease-in-out;
+        }
+
+        @keyframes tentacleGrow {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        .pattern-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+        }
+
+        .pattern-item.processing .pattern-status {
+            background: var(--jellyfish-accent);
+            box-shadow: var(--glow-light);
+            animation: jellyfishPulse 1.5s ease-in-out infinite;
+        }
+
+        .pattern-item.completed .pattern-status {
+            background: var(--jellyfish-teal);
+            box-shadow: var(--glow-teal);
+        }
+
+        .pattern-name {
+            font-weight: 500;
+            color: var(--text-secondary);
+            flex: 1;
+            transition: color 0.3s ease;
+        }
+
+        .pattern-item.processing .pattern-name {
+            color: var(--text-primary);
+        }
+
+        .pattern-item.completed .pattern-name {
+            color: var(--text-primary);
+        }
+
+        /* Overall Progress Bar */
+        .overall-progress {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid var(--glass-border-subtle);
+            border-radius: var(--border-radius);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .progress-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-percentage {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--jellyfish-accent);
+        }
+
+        .progress-bar-container {
+            height: 12px;
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                var(--jellyfish-accent) 0%, 
+                var(--jellyfish-electric) 50%,
+                var(--jellyfish-teal) 100%);
+            border-radius: 6px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--glow-light);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            animation: tentacleFlow 2.5s ease-in-out infinite;
+        }
+
+        @keyframes tentacleFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 22px 28px;
+            border-radius: var(--border-radius);
+            margin-bottom: 28px;
+            font-weight: 500;
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid;
+            transition: all 0.3s ease;
+        }
+
+        .status-message.info {
+            background: rgba(138, 43, 226, 0.12);
+            border-color: rgba(138, 43, 226, 0.4);
+            color: var(--text-primary);
+            box-shadow: var(--glow-light);
+        }
+
+        .status-message.success {
+            background: rgba(0, 206, 209, 0.12);
+            border-color: rgba(0, 206, 209, 0.4);
+            color: var(--text-primary);
+            box-shadow: var(--glow-teal);
+        }
+
+        .status-message.error {
+            background: rgba(255, 20, 147, 0.12);
+            border-color: rgba(255, 20, 147, 0.4);
+            color: var(--text-primary);
+            box-shadow: var(--glow-electric);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: jellyfishRise 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .download-card {
+            background: var(--glass-bg-elevated);
+            backdrop-filter: var(--blur-medium);
+            -webkit-backdrop-filter: var(--blur-medium);
+            border: 2px solid var(--glass-border-strong);
+            border-radius: var(--border-radius-large);
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--glow-medium), var(--glow-teal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(0, 206, 209, 0.08) 0%, 
+                transparent 50%, 
+                rgba(138, 43, 226, 0.05) 100%);
+            pointer-events: none;
+            border-radius: var(--border-radius-large);
+        }
+
+        .download-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .download-description {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 1.15rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .download-button {
+            background: linear-gradient(135deg, 
+                var(--jellyfish-teal) 0%, 
+                rgba(0, 206, 209, 0.9) 100%);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid rgba(0, 206, 209, 0.6);
+            border-radius: var(--border-radius);
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 600;
+            padding: 18px 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--glow-teal);
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .download-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--glow-heavy), var(--glow-electric);
+        }
+
+        .process-another-button {
+            background: var(--glass-bg-secondary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 14px 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-another-button:hover {
+            background: var(--glass-bg-tertiary);
+            border-color: var(--glass-border-strong);
+            transform: translateY(-2px);
+            box-shadow: var(--glow-light);
+        }
+
+        /* Management Console */
+        .management-toggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: var(--glass-bg-secondary);
+            backdrop-filter: var(--blur-medium);
+            -webkit-backdrop-filter: var(--blur-medium);
+            border: 2px solid var(--glass-border);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: var(--glow-light);
+        }
+
+        .management-toggle:hover {
+            background: var(--glass-bg-tertiary);
+            border-color: var(--glass-border-strong);
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: var(--glow-medium);
+        }
+
+        /* Management Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: var(--blur-heavy);
+            -webkit-backdrop-filter: var(--blur-heavy);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 25px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: var(--glass-bg-modal);
+            backdrop-filter: var(--blur-extreme);
+            -webkit-backdrop-filter: var(--blur-extreme);
+            border: 2px solid var(--glass-border-strong);
+            border-radius: var(--border-radius-xl);
+            padding: 45px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--glow-heavy), 
+                        0 0 80px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.1) 0%, 
+                transparent 30%, 
+                rgba(0, 206, 209, 0.08) 70%,
+                transparent 100%);
+            border-radius: var(--border-radius-xl);
+            pointer-events: none;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid var(--glass-border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .modal-close:hover {
+            background: var(--glass-bg-secondary);
+            border-color: var(--glass-border-strong);
+            color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        .modal-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .management-section {
+            margin-bottom: 35px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--glass-border-subtle);
+        }
+
+        .management-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 18px;
+        }
+
+        .management-button {
+            background: var(--glass-bg-secondary);
+            backdrop-filter: var(--blur-light);
+            -webkit-backdrop-filter: var(--blur-light);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--border-radius-small);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 14px 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 14px;
+            margin-bottom: 14px;
+            display: inline-block;
+        }
+
+        .management-button:hover {
+            background: var(--glass-bg-tertiary);
+            border-color: var(--glass-border-strong);
+            transform: translateY(-2px);
+            box-shadow: var(--glow-light);
+        }
+
+        .management-button.danger {
+            border-color: rgba(255, 20, 147, 0.4);
+            color: var(--text-primary);
+        }
+
+        .management-button.danger:hover {
+            background: rgba(255, 20, 147, 0.15);
+            border-color: rgba(255, 20, 147, 0.6);
+            box-shadow: var(--glow-electric);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px 20px;
+            }
+
+            .header h1 {
+                font-size: 2.8rem;
+            }
+
+            .header p {
+                font-size: 1.15rem;
+            }
+
+            .jellyfish-card {
+                padding: 30px;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .modal {
+                padding: 30px;
+                margin: 20px;
+            }
+
+            .management-toggle {
+                width: 52px;
+                height: 52px;
+                font-size: 1.1rem;
+            }
+
+            .jellyfish-button {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="management-toggle" onclick="openManagementModal()" title="Management Console">
+        ⚙️
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Dive into the depths of knowledge with 13 ethereal fabric patterns flowing like graceful jellyfish tentacles</p>
+        </header>
+
+        <div class="jellyfish-card">
+            <div class="input-group">
+                <label for="youtubeUrl" class="input-label">YouTube Video URL</label>
+                <input 
+                    type="url" 
+                    id="youtubeUrl" 
+                    class="url-input"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    required
+                >
+            </div>
+            
+            <button onclick="processVideo()" class="jellyfish-button" id="processBtn">
+                Process Video
+            </button>
+        </div>
+
+        <div id="progressSection" class="progress-section">
+            <div class="overall-progress">
+                <div class="progress-header">
+                    <span class="progress-title">Processing Journey</span>
+                    <span class="progress-percentage" id="progressPercentage">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="statusMessage" class="status-message info">
+                Awakening the jellyfish sanctuary...
+            </div>
+
+            <div class="phases-grid" id="phasesGrid">
+                <!-- Phases will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section">
+            <div class="download-card">
+                <h3 class="download-title">Journey Complete!</h3>
+                <p class="download-description">Your video has been lovingly processed through all 13 fabric patterns, like gentle jellyfish flowing through the digital ocean. Download your complete analysis package below.</p>
+                <a href="#" id="downloadLink" class="download-button">Download Results</a>
+                <br>
+                <button onclick="processAnother()" class="process-another-button">Process Another Video</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Sanctuary Management</h2>
+                <button class="modal-close" onclick="closeManagementModal()">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="management-section">
+                    <h3 class="section-title">Server Status</h3>
+                    <button onclick="checkServerStatus()" class="management-button">Check Status</button>
+                    <button onclick="viewProcessingHistory()" class="management-button">View History</button>
+                </div>
+                
+                <div class="management-section">
+                    <h3 class="section-title">Maintenance</h3>
+                    <button onclick="cleanupOldFiles()" class="management-button">Cleanup Old Files</button>
+                    <button onclick="restartServer()" class="management-button danger">Restart Server</button>
+                </div>
+                
+                <div class="management-section">
+                    <h3 class="section-title">Sanctuary Information</h3>
+                    <div id="systemInfo" style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Loading sanctuary status...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fabric patterns configuration for jellyfish sanctuary
+        const FABRIC_PATTERNS = [
+            // Phase 1: Foundation Depths
+            { phase: 1, name: "extract_wisdom", description: "Ancient wisdom from the depths", filename: "01-extract_wisdom.txt" },
+            { phase: 1, name: "summarize", description: "Crystal clear essence", filename: "02-summarize.txt" },
+            { phase: 1, name: "analyze_claims", description: "Truth currents analysis", filename: "03-analyze_claims.txt" },
+            
+            // Phase 2: Current Analysis
+            { phase: 2, name: "find_logical_fallacies", description: "Logic tide patterns", filename: "04-find_logical_fallacies.txt" },
+            { phase: 2, name: "extract_ideas", description: "Flowing thought currents", filename: "05-extract_ideas.txt" },
+            { phase: 2, name: "get_youtube_rss", description: "Channel flow tracking", filename: "06-get_youtube_rss.txt" },
+            
+            // Phase 3: Insight Illumination
+            { phase: 3, name: "create_quiz", description: "Knowledge pearl creation", filename: "07-create_quiz.txt" },
+            { phase: 3, name: "extract_questions", description: "Deep inquiry tendrils", filename: "08-extract_questions.txt" },
+            { phase: 3, name: "extract_references", description: "Source current mapping", filename: "09-extract_references.txt" },
+            
+            // Phase 4: Knowledge Synthesis
+            { phase: 4, name: "create_keynote", description: "Presentation luminescence", filename: "10-create_keynote.txt" },
+            { phase: 4, name: "extract_poc", description: "Proof current distillation", filename: "11-extract_poc.txt" },
+            { phase: 4, name: "create_security_update", description: "Protective barrier weaving", filename: "12-create_security_update.txt" },
+            { phase: 4, name: "create_investigation_visualization", description: "Visual flow mapping", filename: "13-create_investigation_visualization.txt" }
+        ];
+
+        const PHASE_DESCRIPTIONS = {
+            1: "Foundation Depths",
+            2: "Current Analysis", 
+            3: "Insight Illumination",
+            4: "Knowledge Synthesis"
+        };
+
+        let currentProcessId = null;
+        let socket = null;
+        let currentPattern = 0;
+        let completedPatterns = 0;
+
+        // Initialize the jellyfish sanctuary
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePhasesGrid();
+            initializeWebSocket();
+            loadSystemInfo();
+        });
+
+        function initializePhasesGrid() {
+            const phasesGrid = document.getElementById('phasesGrid');
+            const phases = {};
+            
+            // Group patterns by phase like jellyfish by depth
+            FABRIC_PATTERNS.forEach(pattern => {
+                if (!phases[pattern.phase]) {
+                    phases[pattern.phase] = [];
+                }
+                phases[pattern.phase].push(pattern);
+            });
+
+            // Create ethereal phase cards
+            Object.keys(phases).forEach(phaseNum => {
+                const phaseCard = document.createElement('div');
+                phaseCard.className = 'phase-card';
+                phaseCard.id = `phase-${phaseNum}`;
+                
+                const patterns = phases[phaseNum];
+                const patternsList = patterns.map(pattern => 
+                    `<li class="pattern-item" data-pattern="${pattern.name}">
+                        <div class="pattern-status"></div>
+                        <div class="pattern-name">${pattern.description}</div>
+                    </li>`
+                ).join('');
+
+                phaseCard.innerHTML = `
+                    <div class="phase-header">
+                        <div class="phase-number">${phaseNum}</div>
+                        <div class="phase-title">${PHASE_DESCRIPTIONS[phaseNum]}</div>
+                    </div>
+                    <ul class="patterns-list">
+                        ${patternsList}
+                    </ul>
+                `;
+                
+                phasesGrid.appendChild(phaseCard);
+            });
+        }
+
+        function initializeWebSocket() {
+            // Simulate jellyfish communication network
+            console.log('Jellyfish communication network initialized');
+        }
+
+        async function processVideo() {
+            const urlInput = document.getElementById('youtubeUrl');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please provide a URL for the jellyfish to analyze', 'error');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showStatus('Please provide a valid YouTube URL for processing', 'error');
+                return;
+            }
+
+            // Reset the sanctuary state
+            currentPattern = 0;
+            completedPatterns = 0;
+            currentProcessId = 'jellyfish-' + Date.now();
+
+            // Activate the processing currents
+            document.getElementById('progressSection').classList.add('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Transform the process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = true;
+            processBtn.textContent = 'Jellyfish Swimming...';
+
+            // Reset all pattern states
+            const patternItems = document.querySelectorAll('.pattern-item');
+            patternItems.forEach(item => {
+                item.className = 'pattern-item';
+            });
+
+            const phaseCards = document.querySelectorAll('.phase-card');
+            phaseCards.forEach(card => {
+                card.className = 'phase-card';
+            });
+
+            // Begin the graceful processing journey
+            showStatus('Jellyfish are awakening in the sanctuary...', 'info');
+            await simulateProcessing();
+        }
+
+        async function simulateProcessing() {
+            // Simulate the jellyfish processing dance
+            showStatus('Downloading transcript with tentacle precision...', 'info');
+            await sleep(2500);
+
+            showStatus('Jellyfish are dancing through the patterns...', 'info');
+            
+            for (let i = 0; i < FABRIC_PATTERNS.length; i++) {
+                const pattern = FABRIC_PATTERNS[i];
+                const phaseCard = document.getElementById(`phase-${pattern.phase}`);
+                const patternElement = document.querySelector(`[data-pattern="${pattern.name}"]`);
+                
+                // Illuminate the current phase
+                phaseCard.classList.add('active');
+                
+                // Begin pattern processing with tentacle-like grace
+                patternElement.classList.add('processing');
+                
+                showStatus(`Jellyfish weaving: ${pattern.description}`, 'info');
+                
+                // Simulate organic processing time (4-9 seconds per pattern)
+                await sleep(Math.random() * 5000 + 4000);
+                
+                // Complete pattern with luminescent glow
+                patternElement.classList.remove('processing');
+                patternElement.classList.add('completed');
+                
+                completedPatterns++;
+                updateProgress();
+                
+                // Check if phase depth is completed
+                const phasePatterns = Array.from(phaseCard.querySelectorAll('.pattern-item'));
+                const completedInPhase = phasePatterns.filter(p => p.classList.contains('completed')).length;
+                
+                if (completedInPhase === phasePatterns.length) {
+                    phaseCard.classList.remove('active');
+                    phaseCard.classList.add('completed');
+                }
+            }
+
+            processingComplete();
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((completedPatterns / FABRIC_PATTERNS.length) * 100);
+            
+            document.getElementById('progressPercentage').textContent = `${percentage}%`;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+
+        function processingComplete() {
+            showStatus('The jellyfish sanctuary has completed its graceful dance! All 13 patterns flow in perfect harmony.', 'success');
+            
+            // Surface the results like a graceful jellyfish
+            document.getElementById('resultsSection').classList.add('active');
+            
+            // Set the download current
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = `/api/download/${currentProcessId}`;
+            
+            // Restore the process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = false;
+            processBtn.textContent = 'Process Video';
+        }
+
+        function processAnother() {
+            // Reset the sanctuary for another journey
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('progressSection').classList.remove('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Reset flow progress
+            currentPattern = 0;
+            completedPatterns = 0;
+            updateProgress();
+            
+            // Gentle scroll to surface
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type}`;
+        }
+
+        function isValidYouTubeUrl(url) {
+            const patterns = [
+                /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/v\/[\w-]+/
+            ];
+            return patterns.some(pattern => pattern.test(url));
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('managementModal').classList.add('active');
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').classList.remove('active');
+        }
+
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/api/management/status');
+                const data = await response.json();
+                alert(`Sanctuary Status: ${data.status}\nJellyfish Uptime: ${data.uptime}\nActive Currents: ${data.activeProcesses}`);
+            } catch (error) {
+                alert('Sanctuary status check - All jellyfish are swimming gracefully');
+            }
+        }
+
+        async function viewProcessingHistory() {
+            try {
+                const response = await fetch('/api/management/history');
+                const data = await response.json();
+                alert(`Processing Current History:\n${data.history.length} total journeys\nLast current: ${data.history[0]?.timestamp || 'None'}`);
+            } catch (error) {
+                alert('History currents flowing - Recent jellyfish journeys archived in the depths');
+            }
+        }
+
+        async function cleanupOldFiles() {
+            if (confirm('Are you sure you want to clean the old sanctuary chambers?')) {
+                try {
+                    await fetch('/api/management/cleanup-old', { method: 'POST' });
+                    alert('Old sanctuary chambers have been gracefully cleaned');
+                } catch (error) {
+                    alert('Cleanup simulation - Ancient chambers would be purified by gentle currents');
+                }
+            }
+        }
+
+        async function restartServer() {
+            if (confirm('Are you sure you want to restart the jellyfish sanctuary? This will interrupt any active flowing patterns.')) {
+                try {
+                    await fetch('/api/management/restart', { method: 'POST' });
+                    alert('Sanctuary restart initiated - Jellyfish will gracefully resurface');
+                } catch (error) {
+                    alert('Restart simulation - The sanctuary would gently restart with new currents');
+                }
+            }
+        }
+
+        function loadSystemInfo() {
+            const systemInfo = document.getElementById('systemInfo');
+            systemInfo.innerHTML = `
+                <div style="margin-bottom: 10px;"><strong>Sanctuary Platform:</strong> Node.js Jellyfish Habitat</div>
+                <div style="margin-bottom: 10px;"><strong>Current Version:</strong> Ethereal v18.x</div>
+                <div style="margin-bottom: 10px;"><strong>Fabric Patterns:</strong> 13 flowing tentacles in 4 depth layers</div>
+                <div style="margin-bottom: 10px;"><strong>Processing Method:</strong> Transcript-first with jellyfish grace</div>
+                <div style="margin-bottom: 10px;"><strong>Average Flow Time:</strong> ~70 seconds of graceful movement</div>
+                <div><strong>Output Treasures:</strong> 13 .txt pearls + index.md + sanctuary ZIP</div>
+            `;
+        }
+
+        // Graceful modal interactions
+        document.getElementById('managementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeManagementModal();
+            }
+        });
+
+        // Escape current for modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeManagementModal();
+            }
+        });
+
+        // Flow activation with enter key
+        document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processVideo();
+            }
+        });
+    </script>
+</body>
+</html>

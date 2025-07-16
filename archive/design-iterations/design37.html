@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Arctic Ocean Laboratory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Arctic Ocean Color Palette */
+            --arctic-ice: #E1F5FE;
+            --glacier-blue: #B3E5FC;
+            --polar-blue: #81D4FA;
+            --arctic-cyan: #4FC3F7;
+            --deep-arctic: #29B6F6;
+            --aurora-green: #26E0C2;
+            --ice-white: #FAFAFA;
+            --frost-gray: #ECEFF1;
+            --crystal-blue: #E3F2FD;
+            
+            /* Glass Arctic Backgrounds */
+            --arctic-glass-primary: rgba(224, 247, 250, 0.12);
+            --arctic-glass-secondary: rgba(224, 247, 250, 0.18);
+            --arctic-glass-tertiary: rgba(224, 247, 250, 0.25);
+            --arctic-glass-elevated: rgba(224, 247, 250, 0.35);
+            --arctic-glass-modal: rgba(240, 248, 255, 0.45);
+            
+            /* Arctic Ice Borders */
+            --ice-border: rgba(224, 247, 250, 0.3);
+            --ice-border-subtle: rgba(224, 247, 250, 0.15);
+            --ice-border-strong: rgba(224, 247, 250, 0.5);
+            --crystal-border: rgba(129, 212, 250, 0.4);
+            
+            /* Arctic Text Colors */
+            --text-ice-primary: rgba(255, 255, 255, 0.98);
+            --text-ice-secondary: rgba(255, 255, 255, 0.85);
+            --text-ice-tertiary: rgba(255, 255, 255, 0.65);
+            --text-ice-muted: rgba(255, 255, 255, 0.5);
+            --text-aurora: rgba(38, 224, 194, 0.95);
+            
+            /* Crystalline Shadows */
+            --crystal-shadow-light: 0 2px 12px rgba(129, 212, 250, 0.08);
+            --crystal-shadow-medium: 0 6px 24px rgba(129, 212, 250, 0.12);
+            --crystal-shadow-heavy: 0 12px 48px rgba(129, 212, 250, 0.18);
+            --aurora-shadow: 0 0 32px rgba(38, 224, 194, 0.15);
+            --ice-shadow-ambient: 0 0 64px rgba(224, 247, 250, 0.1);
+            
+            /* Arctic Blur Effects */
+            --ice-blur-light: blur(8px);
+            --ice-blur-medium: blur(16px);
+            --ice-blur-heavy: blur(28px);
+            --ice-blur-extreme: blur(40px);
+            
+            /* Crystalline Dimensions */
+            --crystal-radius: 14px;
+            --crystal-radius-large: 20px;
+            --crystal-radius-small: 10px;
+            --crystal-radius-xl: 28px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: linear-gradient(135deg, 
+                #0D47A1 0%,     /* Deep arctic blue */
+                #1565C0 15%,    /* Arctic depths */
+                #1976D2 35%,    /* Polar waters */
+                #1E88E5 55%,    /* Ice formation */
+                #2196F3 75%,    /* Crystal waters */
+                #42A5F5 95%);   /* Arctic surface */
+            background-attachment: fixed;
+            color: var(--text-ice-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Arctic Ambient Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                /* Aurora borealis simulation */
+                radial-gradient(ellipse at 25% 20%, rgba(38, 224, 194, 0.08) 0%, transparent 55%),
+                radial-gradient(ellipse at 75% 80%, rgba(129, 212, 250, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 40%, rgba(224, 247, 250, 0.04) 0%, transparent 70%);
+            animation: auroraDance 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes auroraDance {
+            0%, 100% { 
+                opacity: 1;
+                transform: translateY(0px) scale(1); 
+            }
+            25% { 
+                opacity: 0.8;
+                transform: translateY(-10px) scale(1.02); 
+            }
+            50% { 
+                opacity: 0.6;
+                transform: translateY(-5px) scale(0.98); 
+            }
+            75% { 
+                opacity: 0.9;
+                transform: translateY(-15px) scale(1.01); 
+            }
+        }
+
+        /* Ice Crystals Floating Effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                /* Micro ice crystals */
+                radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 45% 55%, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                radial-gradient(circle at 65% 35%, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 120px 120px, 180px 180px, 240px 240px, 300px 300px;
+            animation: crystalFloat 25s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes crystalFloat {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-20px) rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Arctic Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(38, 224, 194, 0.08) 0%, transparent 65%);
+            border-radius: 50%;
+            filter: var(--ice-blur-medium);
+            animation: headerAura 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes headerAura {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+            50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+        }
+
+        .header h1 {
+            font-size: 4.2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 18px;
+            background: linear-gradient(135deg, 
+                var(--text-ice-primary) 0%, 
+                rgba(38, 224, 194, 0.9) 40%, 
+                rgba(129, 212, 250, 0.85) 70%,
+                var(--text-ice-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(38, 224, 194, 0.2);
+            position: relative;
+            animation: titleShimmer 6s ease-in-out infinite;
+        }
+
+        @keyframes titleShimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.15); }
+        }
+
+        .header p {
+            color: var(--text-ice-secondary);
+            font-size: 1.3rem;
+            font-weight: 400;
+            max-width: 650px;
+            margin: 0 auto;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+            line-height: 1.5;
+        }
+
+        /* Arctic Glass Card */
+        .arctic-glass-card {
+            background: var(--arctic-glass-secondary);
+            backdrop-filter: var(--ice-blur-medium);
+            -webkit-backdrop-filter: var(--ice-blur-medium);
+            border: 1px solid var(--ice-border);
+            border-radius: var(--crystal-radius-large);
+            padding: 42px;
+            margin-bottom: 36px;
+            box-shadow: var(--crystal-shadow-medium), var(--aurora-shadow);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arctic-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(38, 224, 194, 0.4) 30%,
+                rgba(129, 212, 250, 0.3) 50%, 
+                rgba(38, 224, 194, 0.4) 70%,
+                transparent 100%);
+            animation: crystalEdge 4s ease-in-out infinite;
+        }
+
+        @keyframes crystalEdge {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .arctic-glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--crystal-shadow-heavy), var(--aurora-shadow);
+            border-color: var(--crystal-border);
+            background: var(--arctic-glass-tertiary);
+        }
+
+        /* Elevated Arctic Card */
+        .arctic-glass-card-elevated {
+            background: var(--arctic-glass-elevated);
+            backdrop-filter: var(--ice-blur-heavy);
+            -webkit-backdrop-filter: var(--ice-blur-heavy);
+            border: 1px solid var(--crystal-border);
+            border-radius: var(--crystal-radius-xl);
+            padding: 50px;
+            box-shadow: var(--crystal-shadow-heavy), 
+                        0 0 60px rgba(38, 224, 194, 0.12),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arctic-glass-card-elevated::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%, 
+                transparent 45%, 
+                rgba(38, 224, 194, 0.03) 100%);
+            pointer-events: none;
+        }
+
+        /* Input Elements */
+        .input-group {
+            margin-bottom: 36px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-ice-primary);
+            margin-bottom: 14px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .arctic-input {
+            width: 100%;
+            padding: 22px 26px;
+            font-size: 1.15rem;
+            background: var(--arctic-glass-primary);
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border: 1px solid var(--ice-border);
+            border-radius: var(--crystal-radius);
+            color: var(--text-ice-primary);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-family: inherit;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .arctic-input::placeholder {
+            color: var(--text-ice-muted);
+        }
+
+        .arctic-input:focus {
+            outline: none;
+            border-color: var(--aurora-green);
+            background: var(--arctic-glass-secondary);
+            box-shadow: 0 0 0 3px rgba(38, 224, 194, 0.15),
+                        inset 0 2px 6px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Arctic Buttons */
+        .arctic-button {
+            background: linear-gradient(135deg, 
+                rgba(38, 224, 194, 0.9) 0%, 
+                rgba(79, 195, 247, 0.8) 100%);
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border: 1px solid rgba(38, 224, 194, 0.5);
+            border-radius: var(--crystal-radius);
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 600;
+            padding: 22px 44px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--crystal-shadow-light), 
+                        0 0 24px rgba(38, 224, 194, 0.15);
+            position: relative;
+            overflow: hidden;
+            font-family: inherit;
+            border: none;
+        }
+
+        .arctic-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.25) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .arctic-button:hover::before {
+            left: 100%;
+        }
+
+        .arctic-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--crystal-shadow-medium), 
+                        0 0 36px rgba(38, 224, 194, 0.3);
+            border-color: rgba(38, 224, 194, 0.8);
+        }
+
+        .arctic-button:active {
+            transform: translateY(-1px);
+        }
+
+        .arctic-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .arctic-button-secondary {
+            background: var(--arctic-glass-secondary);
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border: 1px solid var(--ice-border);
+            border-radius: var(--crystal-radius);
+            color: var(--text-ice-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 16px 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .arctic-button-secondary:hover {
+            background: var(--arctic-glass-tertiary);
+            border-color: var(--crystal-border);
+            transform: translateY(-2px);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 44px;
+        }
+
+        .progress-section.active {
+            display: block;
+            animation: iceRise 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes iceRise {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Phase Cards */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 26px;
+            margin-bottom: 44px;
+        }
+
+        .phase-card {
+            background: var(--arctic-glass-primary);
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border: 1px solid var(--ice-border-subtle);
+            border-radius: var(--crystal-radius);
+            padding: 26px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(129, 212, 250, 0.3) 50%, 
+                transparent 100%);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .phase-card.active {
+            border-color: rgba(38, 224, 194, 0.4);
+            background: var(--arctic-glass-secondary);
+            box-shadow: 0 0 28px rgba(38, 224, 194, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .phase-card.active::before {
+            opacity: 1;
+        }
+
+        .phase-card.completed {
+            border-color: rgba(129, 212, 250, 0.5);
+            background: rgba(129, 212, 250, 0.08);
+            box-shadow: 0 0 20px rgba(129, 212, 250, 0.1);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .phase-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--arctic-glass-tertiary);
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border: 1px solid var(--ice-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-ice-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .phase-card.active .phase-number {
+            background: linear-gradient(135deg, rgba(38, 224, 194, 0.3), rgba(79, 195, 247, 0.25));
+            border-color: var(--aurora-green);
+            color: var(--text-ice-primary);
+            box-shadow: 0 0 18px rgba(38, 224, 194, 0.2);
+            transform: scale(1.05);
+        }
+
+        .phase-card.completed .phase-number {
+            background: linear-gradient(135deg, rgba(129, 212, 250, 0.4), rgba(79, 195, 247, 0.3));
+            border-color: var(--polar-blue);
+            color: white;
+            box-shadow: 0 0 15px rgba(129, 212, 250, 0.15);
+        }
+
+        .phase-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-ice-primary);
+        }
+
+        /* Pattern Items */
+        .patterns-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-ice-muted);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 0 transparent;
+        }
+
+        .pattern-item.processing .pattern-status {
+            background: var(--aurora-green);
+            box-shadow: 0 0 0 4px rgba(38, 224, 194, 0.2);
+            animation: crystalPulse 1.8s ease-in-out infinite;
+        }
+
+        .pattern-item.completed .pattern-status {
+            background: var(--polar-blue);
+            box-shadow: 0 0 0 2px rgba(129, 212, 250, 0.15);
+        }
+
+        @keyframes crystalPulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+                box-shadow: 0 0 0 4px rgba(38, 224, 194, 0.2);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.15);
+                box-shadow: 0 0 0 8px rgba(38, 224, 194, 0.1);
+            }
+        }
+
+        .pattern-name {
+            font-weight: 500;
+            color: var(--text-ice-secondary);
+            flex: 1;
+        }
+
+        .pattern-item.processing .pattern-name {
+            color: var(--text-ice-primary);
+        }
+
+        .pattern-item.completed .pattern-name {
+            color: var(--text-ice-primary);
+        }
+
+        /* Overall Progress */
+        .overall-progress {
+            margin-bottom: 36px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .progress-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-ice-primary);
+        }
+
+        .progress-percentage {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--aurora-green);
+        }
+
+        .progress-bar-container {
+            height: 10px;
+            background: var(--arctic-glass-primary);
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(38, 224, 194, 0.9) 0%, 
+                rgba(79, 195, 247, 0.8) 100%);
+            border-radius: 5px;
+            transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 0 15px rgba(38, 224, 194, 0.2);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.25) 50%, 
+                transparent 100%);
+            animation: crystalShimmer 2.5s ease-in-out infinite;
+        }
+
+        @keyframes crystalShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 22px 26px;
+            border-radius: var(--crystal-radius);
+            margin-bottom: 26px;
+            font-weight: 500;
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border: 1px solid;
+            transition: all 0.3s ease;
+        }
+
+        .status-message.info {
+            background: rgba(38, 224, 194, 0.08);
+            border-color: rgba(38, 224, 194, 0.25);
+            color: var(--text-aurora);
+        }
+
+        .status-message.success {
+            background: rgba(129, 212, 250, 0.08);
+            border-color: rgba(129, 212, 250, 0.25);
+            color: rgba(129, 212, 250, 0.9);
+        }
+
+        .status-message.error {
+            background: rgba(255, 107, 107, 0.08);
+            border-color: rgba(255, 107, 107, 0.25);
+            color: rgba(255, 107, 107, 0.9);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: iceRise 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .download-card {
+            background: var(--arctic-glass-elevated);
+            backdrop-filter: var(--ice-blur-medium);
+            -webkit-backdrop-filter: var(--ice-blur-medium);
+            border: 1px solid var(--crystal-border);
+            border-radius: var(--crystal-radius-large);
+            padding: 36px;
+            text-align: center;
+            box-shadow: var(--crystal-shadow-medium), 
+                        0 0 40px rgba(129, 212, 250, 0.08);
+        }
+
+        .download-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-ice-primary);
+            margin-bottom: 14px;
+        }
+
+        .download-description {
+            color: var(--text-ice-secondary);
+            margin-bottom: 28px;
+            font-size: 1.15rem;
+            line-height: 1.5;
+        }
+
+        .download-button {
+            background: linear-gradient(135deg, 
+                rgba(129, 212, 250, 0.9) 0%, 
+                rgba(79, 195, 247, 0.8) 100%);
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border: 1px solid rgba(129, 212, 250, 0.5);
+            border-radius: var(--crystal-radius);
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 600;
+            padding: 18px 36px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--crystal-shadow-light), 
+                        0 0 24px rgba(129, 212, 250, 0.15);
+            font-family: inherit;
+        }
+
+        .download-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--crystal-shadow-medium), 
+                        0 0 36px rgba(129, 212, 250, 0.25);
+        }
+
+        /* Management Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(13, 71, 161, 0.75);
+            backdrop-filter: var(--ice-blur-heavy);
+            -webkit-backdrop-filter: var(--ice-blur-heavy);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: modalFreeze 0.4s ease-out;
+        }
+
+        @keyframes modalFreeze {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: var(--arctic-glass-modal);
+            backdrop-filter: var(--ice-blur-extreme);
+            -webkit-backdrop-filter: var(--ice-blur-extreme);
+            border: 1px solid var(--crystal-border);
+            border-radius: var(--crystal-radius-xl);
+            padding: 44px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--crystal-shadow-heavy), 
+                        0 0 80px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 45%, 
+                rgba(38, 224, 194, 0.05) 100%);
+            border-radius: var(--crystal-radius-xl);
+            pointer-events: none;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-ice-primary);
+        }
+
+        .modal-close {
+            background: var(--arctic-glass-primary);
+            backdrop-filter: var(--ice-blur-light);
+            -webkit-backdrop-filter: var(--ice-blur-light);
+            border: 1px solid var(--ice-border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-ice-secondary);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .modal-close:hover {
+            background: var(--arctic-glass-secondary);
+            border-color: var(--crystal-border);
+            color: var(--text-ice-primary);
+            transform: scale(1.05);
+        }
+
+        .modal-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--ice-border);
+            margin-bottom: 28px;
+        }
+
+        .tab {
+            padding: 14px 22px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-ice-tertiary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            font-family: inherit;
+        }
+
+        .tab.active {
+            color: var(--text-aurora);
+            border-bottom-color: var(--aurora-green);
+        }
+
+        .tab:hover:not(.active) {
+            color: var(--text-ice-secondary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: tabSlide 0.3s ease-out;
+        }
+
+        @keyframes tabSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .management-section {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--ice-border-subtle);
+        }
+
+        .management-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-ice-primary);
+            margin-bottom: 18px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .status-item {
+            background: var(--arctic-glass-primary);
+            border: 1px solid var(--ice-border);
+            border-radius: var(--crystal-radius-small);
+            padding: 18px;
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-aurora);
+            margin-bottom: 6px;
+        }
+
+        .status-label {
+            font-size: 0.85rem;
+            color: var(--text-ice-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .history-item {
+            background: var(--arctic-glass-primary);
+            border: 1px solid var(--ice-border);
+            border-radius: var(--crystal-radius-small);
+            padding: 18px;
+            margin-bottom: 14px;
+        }
+
+        .history-title {
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text-ice-primary);
+        }
+
+        .history-meta {
+            font-size: 0.85rem;
+            color: var(--text-ice-secondary);
+        }
+
+        .cleanup-options {
+            display: grid;
+            gap: 14px;
+        }
+
+        .cleanup-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px;
+            background: var(--arctic-glass-primary);
+            border: 1px solid var(--ice-border);
+            border-radius: var(--crystal-radius-small);
+        }
+
+        .cleanup-info {
+            flex: 1;
+        }
+
+        .cleanup-title {
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text-ice-primary);
+        }
+
+        .cleanup-desc {
+            font-size: 0.85rem;
+            color: var(--text-ice-secondary);
+        }
+
+        .control-grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        .control-item {
+            background: var(--arctic-glass-primary);
+            border: 1px solid var(--ice-border);
+            border-radius: var(--crystal-radius-small);
+            padding: 22px;
+            text-align: center;
+        }
+
+        .control-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--text-ice-primary);
+        }
+
+        .control-desc {
+            font-size: 0.85rem;
+            color: var(--text-ice-secondary);
+            margin-bottom: 18px;
+        }
+
+        /* Management Toggle */
+        .management-toggle {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--arctic-glass-secondary);
+            backdrop-filter: var(--ice-blur-medium);
+            -webkit-backdrop-filter: var(--ice-blur-medium);
+            border: 1px solid var(--ice-border);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-ice-primary);
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: var(--crystal-shadow-light);
+        }
+
+        .management-toggle:hover {
+            background: var(--arctic-glass-tertiary);
+            border-color: var(--crystal-border);
+            transform: scale(1.05);
+            box-shadow: var(--crystal-shadow-medium);
+        }
+
+        /* Button Groups */
+        .button-group {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 18px;
+            }
+
+            .header h1 {
+                font-size: 2.8rem;
+            }
+
+            .header p {
+                font-size: 1.15rem;
+            }
+
+            .arctic-glass-card {
+                padding: 28px;
+            }
+
+            .arctic-glass-card-elevated {
+                padding: 36px;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .modal {
+                padding: 28px;
+                margin: 20px;
+            }
+
+            .management-toggle {
+                width: 52px;
+                height: 52px;
+                font-size: 1.1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .arctic-button,
+            .arctic-button-secondary {
+                width: 100%;
+            }
+        }
+
+        /* Loading States */
+        .loading-shimmer {
+            background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0.08) 0%,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0.08) 100%);
+            background-size: 200% 100%;
+            animation: crystalShimmer 2s ease-in-out infinite;
+        }
+
+        /* Arctic Reflection Effect */
+        .arctic-reflection {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arctic-reflection::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.15) 50%,
+                transparent 100%);
+            transform: skewX(-12deg);
+            transition: left 0.7s ease;
+        }
+
+        .arctic-reflection:hover::after {
+            left: 150%;
+        }
+    </style>
+</head>
+<body>
+    <div class="management-toggle" onclick="openManagementModal()" title="Arctic Research Station Management">
+        ❄️
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Arctic Ocean Laboratory - Transform video content through crystalline analysis patterns in the deepest research environment</p>
+        </header>
+
+        <div class="arctic-glass-card arctic-glass-card-elevated">
+            <div class="input-group">
+                <label for="youtubeUrl" class="input-label">YouTube Video URL</label>
+                <input 
+                    type="url" 
+                    id="youtubeUrl" 
+                    class="arctic-input"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    required
+                >
+            </div>
+            
+            <div class="button-group">
+                <button onclick="processVideo()" class="arctic-button arctic-reflection" id="processBtn">
+                    Initiate Analysis
+                </button>
+                <button onclick="clearForm()" class="arctic-button-secondary" id="clearBtn">
+                    Reset Parameters
+                </button>
+            </div>
+        </div>
+
+        <div id="progressSection" class="progress-section">
+            <div class="arctic-glass-card">
+                <div class="overall-progress">
+                    <div class="progress-header">
+                        <span class="progress-title">Deep Analysis Progress</span>
+                        <span class="progress-percentage" id="progressPercentage">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="statusMessage" class="status-message info">
+                    Initializing arctic research protocols...
+                </div>
+
+                <div class="phases-grid" id="phasesGrid">
+                    <!-- Phase cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section">
+            <div class="arctic-glass-card">
+                <div class="download-card">
+                    <h3 class="download-title">Analysis Complete!</h3>
+                    <p class="download-description">Your video has been processed through all 13 fabric patterns in our Arctic Ocean Laboratory. The complete crystalline analysis package is ready for download.</p>
+                    <a href="#" id="downloadLink" class="download-button arctic-reflection">Download Arctic Analysis</a>
+                    <br>
+                    <button onclick="processAnother()" class="arctic-button-secondary" style="margin-top: 20px;">Process Another Sample</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Arctic Research Station Control</h2>
+                <button class="modal-close" onclick="closeManagementModal()">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="tabs">
+                    <button class="tab active" data-tab="status">Status</button>
+                    <button class="tab" data-tab="history">History</button>
+                    <button class="tab" data-tab="cleanup">Cleanup</button>
+                    <button class="tab" data-tab="control">Control</button>
+                </div>
+
+                <div id="status-tab" class="tab-content active">
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <div class="status-value">Online</div>
+                            <div class="status-label">Station Status</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-value">0</div>
+                            <div class="status-label">Active Analyses</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-value">-2.1°C</div>
+                            <div class="status-label">Core Temperature</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-value">99.2%</div>
+                            <div class="status-label">Ice Integrity</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="history-tab" class="tab-content">
+                    <div class="history-item">
+                        <div class="history-title">Climate Science Deep Dive</div>
+                        <div class="history-meta">Analyzed 3 hours ago • 13 patterns • Arctic Success</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-title">Antarctic Research Methods</div>
+                        <div class="history-meta">Analyzed 6 hours ago • 13 patterns • Crystalline Success</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-title">Ocean Current Analysis</div>
+                        <div class="history-meta">Analyzed yesterday • 13 patterns • Deep Sea Success</div>
+                    </div>
+                </div>
+
+                <div id="cleanup-tab" class="tab-content">
+                    <div class="cleanup-options">
+                        <div class="cleanup-option">
+                            <div class="cleanup-info">
+                                <div class="cleanup-title">Purge Ice Cores</div>
+                                <div class="cleanup-desc">Remove analysis data older than 7 days</div>
+                            </div>
+                            <button class="arctic-button-secondary">Purge</button>
+                        </div>
+                        <div class="cleanup-option">
+                            <div class="cleanup-info">
+                                <div class="cleanup-title">Clear Crystal Cache</div>
+                                <div class="cleanup-desc">Clear temporary arctic analysis files</div>
+                            </div>
+                            <button class="arctic-button-secondary">Clear</button>
+                        </div>
+                        <div class="cleanup-option">
+                            <div class="cleanup-info">
+                                <div class="cleanup-title">Station Reset</div>
+                                <div class="cleanup-desc">Complete reset of arctic research station</div>
+                            </div>
+                            <button class="arctic-button-secondary">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="control-tab" class="tab-content">
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <div class="control-title">Restart Station</div>
+                            <div class="control-desc">Gracefully restart the arctic research protocols</div>
+                            <button class="arctic-button-secondary">Restart</button>
+                        </div>
+                        <div class="control-item">
+                            <div class="control-title">Emergency Shutdown</div>
+                            <div class="control-desc">Safely shutdown station after current analyses</div>
+                            <button class="arctic-button-secondary">Shutdown</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Arctic Fabric Patterns Configuration
+        const FABRIC_PATTERNS = [
+            // Phase 1: Primary Extraction
+            { phase: 1, name: "extract_wisdom", description: "Extract Core Wisdom", filename: "01-extract_wisdom.txt" },
+            { phase: 1, name: "summarize", description: "Comprehensive Summary", filename: "02-summarize.txt" },
+            { phase: 1, name: "analyze_claims", description: "Claim Analysis", filename: "03-analyze_claims.txt" },
+            
+            // Phase 2: Deep Analysis
+            { phase: 2, name: "find_logical_fallacies", description: "Logical Fallacy Detection", filename: "04-find_logical_fallacies.txt" },
+            { phase: 2, name: "extract_ideas", description: "Innovation Extraction", filename: "05-extract_ideas.txt" },
+            { phase: 2, name: "get_youtube_rss", description: "Channel RSS Analysis", filename: "06-get_youtube_rss.txt" },
+            
+            // Phase 3: Knowledge Synthesis
+            { phase: 3, name: "create_quiz", description: "Interactive Quiz Generation", filename: "07-create_quiz.txt" },
+            { phase: 3, name: "extract_questions", description: "Critical Questions", filename: "08-extract_questions.txt" },
+            { phase: 3, name: "extract_references", description: "Reference Mapping", filename: "09-extract_references.txt" },
+            
+            // Phase 4: Advanced Outputs
+            { phase: 4, name: "create_keynote", description: "Keynote Presentation", filename: "10-create_keynote.txt" },
+            { phase: 4, name: "extract_poc", description: "Proof of Concept", filename: "11-extract_poc.txt" },
+            { phase: 4, name: "create_security_update", description: "Security Analysis", filename: "12-create_security_update.txt" },
+            { phase: 4, name: "create_investigation_visualization", description: "Investigation Visualization", filename: "13-create_investigation_visualization.txt" }
+        ];
+
+        const PHASE_DESCRIPTIONS = {
+            1: "Primary Extraction",
+            2: "Deep Analysis", 
+            3: "Knowledge Synthesis",
+            4: "Advanced Outputs"
+        };
+
+        let currentProcessId = null;
+        let socket = null;
+        let currentPattern = 0;
+        let completedPatterns = 0;
+
+        // Initialize the Arctic Research Station
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePhasesGrid();
+            initializeWebSocket();
+            loadSystemInfo();
+            document.getElementById('youtubeUrl').focus();
+        });
+
+        function initializePhasesGrid() {
+            const phasesGrid = document.getElementById('phasesGrid');
+            const phases = {};
+            
+            // Group patterns by phase
+            FABRIC_PATTERNS.forEach(pattern => {
+                if (!phases[pattern.phase]) {
+                    phases[pattern.phase] = [];
+                }
+                phases[pattern.phase].push(pattern);
+            });
+
+            // Create phase cards
+            Object.keys(phases).forEach(phaseNum => {
+                const phaseCard = document.createElement('div');
+                phaseCard.className = 'phase-card';
+                phaseCard.id = `phase-${phaseNum}`;
+                
+                const patterns = phases[phaseNum];
+                const patternsList = patterns.map(pattern => 
+                    `<li class="pattern-item" data-pattern="${pattern.name}">
+                        <div class="pattern-status"></div>
+                        <div class="pattern-name">${pattern.description}</div>
+                    </li>`
+                ).join('');
+
+                phaseCard.innerHTML = `
+                    <div class="phase-header">
+                        <div class="phase-number">${phaseNum}</div>
+                        <div class="phase-title">${PHASE_DESCRIPTIONS[phaseNum]}</div>
+                    </div>
+                    <ul class="patterns-list">
+                        ${patternsList}
+                    </ul>
+                `;
+                
+                phasesGrid.appendChild(phaseCard);
+            });
+        }
+
+        function initializeWebSocket() {
+            // Arctic WebSocket simulation
+            console.log('Arctic Research Station WebSocket protocols initialized');
+        }
+
+        async function processVideo() {
+            const urlInput = document.getElementById('youtubeUrl');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please enter a YouTube URL for arctic analysis', 'error');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showStatus('Please enter a valid YouTube URL for processing', 'error');
+                return;
+            }
+
+            // Reset arctic research state
+            currentPattern = 0;
+            completedPatterns = 0;
+            currentProcessId = 'arctic-' + Date.now();
+
+            // Show progress section
+            document.getElementById('progressSection').classList.add('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Disable process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = true;
+            processBtn.textContent = 'Analyzing...';
+
+            // Reset all patterns
+            const patternItems = document.querySelectorAll('.pattern-item');
+            patternItems.forEach(item => {
+                item.className = 'pattern-item';
+            });
+
+            const phaseCards = document.querySelectorAll('.phase-card');
+            phaseCards.forEach(card => {
+                card.className = 'phase-card';
+            });
+
+            // Start arctic processing simulation
+            showStatus('Initiating arctic research protocols...', 'info');
+            await simulateArcticProcessing();
+        }
+
+        async function simulateArcticProcessing() {
+            // Simulate arctic research with crystalline precision
+            showStatus('Downloading transcript to arctic laboratory...', 'info');
+            await sleep(2500);
+
+            showStatus('Processing patterns through crystalline analysis matrix...', 'info');
+            
+            for (let i = 0; i < FABRIC_PATTERNS.length; i++) {
+                const pattern = FABRIC_PATTERNS[i];
+                const phaseCard = document.getElementById(`phase-${pattern.phase}`);
+                const patternElement = document.querySelector(`[data-pattern="${pattern.name}"]`);
+                
+                // Mark phase as active
+                phaseCard.classList.add('active');
+                
+                // Mark pattern as processing
+                patternElement.classList.add('processing');
+                
+                showStatus(`Arctic analysis: ${pattern.description}`, 'info');
+                
+                // Simulate arctic processing time (4-7 seconds per pattern)
+                await sleep(Math.random() * 3000 + 4000);
+                
+                // Mark pattern as completed
+                patternElement.classList.remove('processing');
+                patternElement.classList.add('completed');
+                
+                completedPatterns++;
+                updateProgress();
+                
+                // Check if phase is completed
+                const phasePatterns = Array.from(phaseCard.querySelectorAll('.pattern-item'));
+                const completedInPhase = phasePatterns.filter(p => p.classList.contains('completed')).length;
+                
+                if (completedInPhase === phasePatterns.length) {
+                    phaseCard.classList.remove('active');
+                    phaseCard.classList.add('completed');
+                }
+            }
+
+            arcticProcessingComplete();
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((completedPatterns / FABRIC_PATTERNS.length) * 100);
+            
+            document.getElementById('progressPercentage').textContent = `${percentage}%`;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+
+        function arcticProcessingComplete() {
+            showStatus('Arctic analysis complete! All 13 crystalline patterns have been generated with pristine clarity.', 'success');
+            
+            // Show results section
+            document.getElementById('resultsSection').classList.add('active');
+            
+            // Set download link
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = `/api/download/${currentProcessId}`;
+            
+            // Re-enable process button
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = false;
+            processBtn.textContent = 'Initiate Analysis';
+        }
+
+        function processAnother() {
+            // Reset arctic laboratory
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('progressSection').classList.remove('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Reset progress
+            currentPattern = 0;
+            completedPatterns = 0;
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Focus input
+            document.getElementById('youtubeUrl').focus();
+        }
+
+        function clearForm() {
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('youtubeUrl').focus();
+            document.getElementById('progressSection').classList.remove('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            // Reset progress
+            currentPattern = 0;
+            completedPatterns = 0;
+            updateProgress();
+            
+            // Reset patterns
+            const patternItems = document.querySelectorAll('.pattern-item');
+            patternItems.forEach(item => {
+                item.className = 'pattern-item';
+            });
+
+            const phaseCards = document.querySelectorAll('.phase-card');
+            phaseCards.forEach(card => {
+                card.className = 'phase-card';
+            });
+        }
+
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type}`;
+        }
+
+        function isValidYouTubeUrl(url) {
+            const patterns = [
+                /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,
+                /^https?:\/\/(www\.)?youtube\.com\/v\/[\w-]+/
+            ];
+            return patterns.some(pattern => pattern.test(url));
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Arctic Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('managementModal').classList.add('active');
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').classList.remove('active');
+        }
+
+        // Tab Management
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tab')) {
+                const tabName = e.target.dataset.tab;
+                switchTab(tabName);
+            }
+        });
+
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        // Management Functions (Arctic themed)
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/api/management/status');
+                const data = await response.json();
+                alert(`Arctic Station Status: ${data.status}\nUptime: ${data.uptime}\nActive Analyses: ${data.activeProcesses}`);
+            } catch (error) {
+                alert('Arctic Station Status: Online\nCore Temperature: -2.1°C\nIce Integrity: 99.2%\nAll systems operational');
+            }
+        }
+
+        async function viewProcessingHistory() {
+            try {
+                const response = await fetch('/api/management/history');
+                const data = await response.json();
+                alert(`Arctic Research History:\n${data.history.length} total analyses\nLast analysis: ${data.history[0]?.timestamp || 'None'}`);
+            } catch (error) {
+                alert('Arctic Research History:\n- Climate Science Deep Dive (3h ago)\n- Antarctic Research Methods (6h ago)\n- Ocean Current Analysis (1d ago)');
+            }
+        }
+
+        async function cleanupOldFiles() {
+            if (confirm('Are you sure you want to purge old arctic research data?')) {
+                try {
+                    await fetch('/api/management/cleanup-old', { method: 'POST' });
+                    alert('Arctic data purged successfully');
+                } catch (error) {
+                    alert('Arctic cleanup simulation - Old ice core data would be purged');
+                }
+            }
+        }
+
+        async function restartServer() {
+            if (confirm('Are you sure you want to restart the Arctic Research Station? This will interrupt any active analyses.')) {
+                try {
+                    await fetch('/api/management/restart', { method: 'POST' });
+                    alert('Arctic Research Station restart initiated');
+                } catch (error) {
+                    alert('Arctic restart simulation - Research station would be restarted');
+                }
+            }
+        }
+
+        function loadSystemInfo() {
+            // Arctic system info loaded automatically
+            console.log('Arctic Research Station systems initialized');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('managementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeManagementModal();
+            }
+        });
+
+        // Handle escape key for modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeManagementModal();
+            }
+        });
+
+        // Handle enter key in URL input
+        document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processVideo();
+            }
+        });
+    </script>
+</body>
+</html>

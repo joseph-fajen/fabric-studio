@@ -2,7 +2,7 @@
 
 ## Overview
 
-This application processes YouTube videos through fabric patterns to extract insights, summaries, and knowledge. The **OPTIMIZED VERSION** processes 13 patterns in under 5 minutes using parallel processing.
+This application processes YouTube videos through fabric patterns to extract insights, summaries, and knowledge. The **OPTIMIZED VERSION** processes 13 patterns in ~70 seconds using transcript-first architecture with parallel processing.
 
 ## Prerequisites
 

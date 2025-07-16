@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Twilight Zone Depths</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Twilight Zone Depths Color Palette */
+            --void-black: #0a0612;
+            --deep-purple: #1a0b2e;
+            --midnight-blue: #2d1b4e;
+            --twilight-indigo: #4c2a85;
+            --ethereal-violet: #6d3bbc;
+            --silver-mist: #b8a9d9;
+            --ghost-white: rgba(248, 250, 252, 0.95);
+            
+            /* Glass Layers for Depths */
+            --abyss-glass: rgba(10, 6, 18, 0.85);
+            --deep-glass: rgba(26, 11, 46, 0.75);
+            --twilight-glass: rgba(45, 27, 78, 0.65);
+            --ethereal-glass: rgba(76, 42, 133, 0.55);
+            --mist-glass: rgba(184, 169, 217, 0.25);
+            --phantom-glass: rgba(248, 250, 252, 0.1);
+            
+            /* Mystical Glows */
+            --ethereal-glow: rgba(109, 59, 188, 0.4);
+            --silver-glow: rgba(184, 169, 217, 0.3);
+            --void-glow: rgba(10, 6, 18, 0.8);
+            --phantom-glow: rgba(248, 250, 252, 0.15);
+            
+            /* Depths Borders */
+            --phantom-border: rgba(248, 250, 252, 0.2);
+            --silver-border: rgba(184, 169, 217, 0.3);
+            --ethereal-border: rgba(109, 59, 188, 0.4);
+            --void-border: rgba(10, 6, 18, 0.6);
+            
+            /* Haunting Shadows */
+            --phantom-shadow: 0 4px 32px rgba(10, 6, 18, 0.4);
+            --ethereal-shadow: 0 8px 48px rgba(109, 59, 188, 0.25);
+            --abyss-shadow: 0 16px 64px rgba(10, 6, 18, 0.6);
+            --silver-ambient: 0 0 40px rgba(184, 169, 217, 0.1);
+            
+            /* Mystical Blurs */
+            --mist-blur: blur(16px);
+            --ethereal-blur: blur(24px);
+            --void-blur: blur(32px);
+            --phantom-blur: blur(48px);
+            
+            /* Dimensions */
+            --radius-small: 12px;
+            --radius-medium: 20px;
+            --radius-large: 28px;
+            --radius-xl: 40px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: radial-gradient(ellipse at center, 
+                var(--deep-purple) 0%, 
+                var(--void-black) 35%, 
+                #000000 100%);
+            background-attachment: fixed;
+            color: var(--ghost-white);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ethereal Depth Layers */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 25%, var(--ethereal-glow) 0%, transparent 35%),
+                radial-gradient(circle at 85% 15%, var(--silver-glow) 0%, transparent 25%),
+                radial-gradient(circle at 70% 80%, var(--ethereal-glow) 0%, transparent 30%),
+                radial-gradient(circle at 25% 75%, var(--silver-glow) 0%, transparent 20%);
+            animation: depthsFloat 25s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        /* Phantom Particles */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 8% 15%, var(--phantom-glow) 1px, transparent 1px),
+                radial-gradient(circle at 92% 25%, var(--phantom-glow) 1px, transparent 1px),
+                radial-gradient(circle at 35% 85%, var(--phantom-glow) 0.5px, transparent 0.5px),
+                radial-gradient(circle at 75% 65%, var(--phantom-glow) 1px, transparent 1px),
+                radial-gradient(circle at 45% 35%, var(--phantom-glow) 0.5px, transparent 0.5px);
+            background-size: 180px 180px, 220px 220px, 150px 150px, 200px 200px, 120px 120px;
+            animation: phantomDrift 30s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes depthsFloat {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.7;
+            }
+            25% { 
+                transform: translate(-15px, -20px) rotate(2deg);
+                opacity: 0.9;
+            }
+            50% { 
+                transform: translate(10px, -15px) rotate(-1deg);
+                opacity: 0.6;
+            }
+            75% { 
+                transform: translate(-8px, 25px) rotate(1.5deg);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes phantomDrift {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(90deg); }
+            50% { transform: translateY(-15px) rotate(180deg); }
+            75% { transform: translateY(-40px) rotate(270deg); }
+            100% { transform: translateY(0px) rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Mystical Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--ethereal-glow) 0%, transparent 60%);
+            border-radius: 50%;
+            filter: var(--ethereal-blur);
+            z-index: -1;
+            animation: etherealPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes etherealPulse {
+            0%, 100% { 
+                transform: translateX(-50%) scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateX(-50%) scale(1.2);
+                opacity: 0.9;
+            }
+        }
+
+        .header h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, 
+                var(--ghost-white) 0%, 
+                var(--silver-mist) 35%, 
+                var(--ethereal-violet) 65%, 
+                var(--silver-mist) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 50px var(--ethereal-glow);
+            position: relative;
+            animation: titleShimmer 6s ease-in-out infinite;
+        }
+
+        @keyframes titleShimmer {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 30px var(--ethereal-glow)); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 50px var(--silver-glow)); }
+        }
+
+        .header p {
+            color: var(--silver-mist);
+            font-size: 1.3rem;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 0 2px 12px var(--void-glow);
+            opacity: 0.9;
+        }
+
+        /* Ethereal Glass Cards */
+        .main-card {
+            background: var(--deep-glass);
+            backdrop-filter: var(--ethereal-blur);
+            -webkit-backdrop-filter: var(--ethereal-blur);
+            border: 1px solid var(--silver-border);
+            border-radius: var(--radius-large);
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--ethereal-shadow), var(--silver-ambient);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--ethereal-violet) 25%, 
+                var(--silver-mist) 50%, 
+                var(--ethereal-violet) 75%, 
+                transparent 100%);
+            animation: etherealFlow 4s ease-in-out infinite;
+        }
+
+        @keyframes etherealFlow {
+            0%, 100% { opacity: 0.5; transform: scaleX(0.8); }
+            50% { opacity: 1; transform: scaleX(1.2); }
+        }
+
+        .main-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                var(--phantom-glass) 0%, 
+                transparent 40%, 
+                var(--phantom-glass) 100%);
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .main-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--abyss-shadow), var(--silver-ambient);
+            border-color: var(--ethereal-border);
+            background: var(--twilight-glass);
+        }
+
+        /* Mystical Input */
+        .input-group {
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--silver-mist);
+            margin-bottom: 12px;
+            text-shadow: 0 1px 4px var(--void-glow);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 1.1rem;
+            background: var(--abyss-glass);
+            backdrop-filter: var(--mist-blur);
+            -webkit-backdrop-filter: var(--mist-blur);
+            border: 1px solid var(--phantom-border);
+            border-radius: var(--radius-medium);
+            color: var(--ghost-white);
+            transition: all 0.4s ease;
+            font-family: inherit;
+            box-shadow: inset 0 2px 12px var(--void-glow);
+        }
+
+        .url-input::placeholder {
+            color: var(--silver-mist);
+            opacity: 0.7;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--ethereal-border);
+            background: var(--deep-glass);
+            box-shadow: 0 0 0 4px var(--ethereal-glow),
+                        inset 0 2px 12px var(--void-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Phantom Buttons */
+        .button-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn {
+            padding: 18px 36px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-medium);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, 
+                var(--ethereal-violet) 0%, 
+                var(--midnight-blue) 100%);
+            color: white;
+            border: 1px solid var(--ethereal-border);
+            box-shadow: var(--ethereal-shadow), 
+                        0 0 30px var(--ethereal-glow);
+            text-shadow: 0 1px 4px var(--void-glow);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--phantom-glow) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--abyss-shadow), 
+                        0 0 50px var(--ethereal-glow);
+            background: linear-gradient(135deg, 
+                var(--twilight-indigo) 0%, 
+                var(--ethereal-violet) 100%);
+        }
+
+        .btn-secondary {
+            background: var(--twilight-glass);
+            backdrop-filter: var(--mist-blur);
+            -webkit-backdrop-filter: var(--mist-blur);
+            color: var(--silver-mist);
+            border: 1px solid var(--silver-border);
+            box-shadow: var(--phantom-shadow);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ethereal-glass);
+            border-color: var(--ethereal-border);
+            color: var(--ghost-white);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Progress Depths */
+        .progress-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .progress-section.visible {
+            display: block;
+            animation: emergeFromDepths 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes emergeFromDepths {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .progress-header h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--silver-mist);
+            text-shadow: 0 0 30px var(--ethereal-glow);
+        }
+
+        .progress-header p {
+            color: var(--silver-mist);
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        /* Phase Cards in the Abyss */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .phase-card {
+            background: var(--abyss-glass);
+            backdrop-filter: var(--mist-blur);
+            -webkit-backdrop-filter: var(--mist-blur);
+            border: 1px solid var(--phantom-border);
+            border-radius: var(--radius-medium);
+            padding: 28px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                var(--phantom-glass) 0%, 
+                transparent 50%, 
+                var(--phantom-glass) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .phase-card.active {
+            border-color: var(--ethereal-border);
+            background: var(--deep-glass);
+            box-shadow: 0 0 40px var(--ethereal-glow);
+            transform: translateY(-4px);
+        }
+
+        .phase-card.active::before {
+            opacity: 0.6;
+        }
+
+        .phase-card.completed {
+            border-color: var(--silver-border);
+            background: var(--twilight-glass);
+            box-shadow: 0 0 30px var(--silver-glow);
+        }
+
+        .phase-card.completed::before {
+            opacity: 0.8;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--silver-mist);
+            text-shadow: 0 1px 4px var(--void-glow);
+        }
+
+        .phase-status {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--phantom-border);
+            transition: all 0.4s ease;
+            box-shadow: inset 0 2px 4px var(--void-glow);
+        }
+
+        .phase-status.active {
+            background: var(--ethereal-violet);
+            box-shadow: 0 0 20px var(--ethereal-glow),
+                        inset 0 2px 4px var(--void-glow);
+            animation: etherealPulse 2s infinite;
+        }
+
+        .phase-status.completed {
+            background: var(--silver-mist);
+            box-shadow: 0 0 15px var(--silver-glow);
+        }
+
+        /* Pattern Items */
+        .patterns-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            font-size: 0.95rem;
+            color: var(--silver-mist);
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--phantom-border);
+            margin-right: 16px;
+            transition: all 0.4s ease;
+            box-shadow: inset 0 1px 2px var(--void-glow);
+        }
+
+        .pattern-item.completed {
+            color: var(--ghost-white);
+            opacity: 1;
+        }
+
+        .pattern-item.completed::before {
+            background: var(--silver-mist);
+            box-shadow: 0 0 12px var(--silver-glow);
+        }
+
+        .pattern-item.active {
+            color: var(--ghost-white);
+            opacity: 1;
+        }
+
+        .pattern-item.active::before {
+            background: var(--ethereal-violet);
+            box-shadow: 0 0 16px var(--ethereal-glow);
+            animation: etherealPulse 2s infinite;
+        }
+
+        /* Results from the Depths */
+        .results-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .results-section.visible {
+            display: block;
+            animation: emergeFromDepths 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .results-card {
+            background: var(--deep-glass);
+            backdrop-filter: var(--ethereal-blur);
+            -webkit-backdrop-filter: var(--ethereal-blur);
+            border: 1px solid var(--silver-border);
+            border-radius: var(--radius-large);
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--ethereal-shadow), var(--silver-ambient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, 
+                var(--phantom-glass) 0%, 
+                transparent 60%);
+            pointer-events: none;
+            animation: etherealPulse 6s infinite;
+        }
+
+        .results-header {
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .results-header h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--silver-mist);
+            text-shadow: 0 0 40px var(--silver-glow);
+        }
+
+        .results-header p {
+            color: var(--silver-mist);
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .download-btn {
+            padding: 20px 48px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, 
+                var(--silver-mist) 0%, 
+                var(--ethereal-violet) 100%);
+            color: var(--void-black);
+            border: none;
+            border-radius: var(--radius-medium);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: inherit;
+            text-shadow: none;
+            box-shadow: var(--ethereal-shadow), 
+                        0 0 40px var(--silver-glow);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(248, 250, 252, 0.3) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, 
+                var(--ghost-white) 0%, 
+                var(--silver-mist) 100%);
+            transform: translateY(-3px);
+            box-shadow: var(--abyss-shadow), 
+                        0 0 60px var(--silver-glow);
+        }
+
+        /* Management Portal */
+        .management-section {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .management-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--twilight-glass);
+            backdrop-filter: var(--ethereal-blur);
+            -webkit-backdrop-filter: var(--ethereal-blur);
+            border: 1px solid var(--phantom-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            box-shadow: var(--phantom-shadow);
+        }
+
+        .management-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: var(--ethereal-shadow);
+            border-color: var(--ethereal-border);
+            background: var(--deep-glass);
+        }
+
+        .management-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--silver-mist);
+            stroke-width: 2;
+            transition: all 0.4s ease;
+        }
+
+        .management-btn:hover svg {
+            stroke: var(--ghost-white);
+        }
+
+        /* Ethereal Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--void-glow);
+            backdrop-filter: var(--phantom-blur);
+            -webkit-backdrop-filter: var(--phantom-blur);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.visible {
+            display: flex;
+            animation: depthsFadeIn 0.5s ease;
+        }
+
+        @keyframes depthsFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--deep-glass);
+            backdrop-filter: var(--phantom-blur);
+            -webkit-backdrop-filter: var(--phantom-blur);
+            border: 1px solid var(--silver-border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--abyss-shadow), var(--silver-ambient);
+            animation: modalEmerge 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                var(--phantom-glass) 0%, 
+                transparent 50%, 
+                var(--phantom-glass) 100%);
+            border-radius: var(--radius-xl);
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @keyframes modalEmerge {
+            from {
+                opacity: 0;
+                transform: scale(0.85) translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--silver-mist);
+            text-shadow: 0 0 30px var(--ethereal-glow);
+        }
+
+        .close-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--abyss-glass);
+            border: 1px solid var(--phantom-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            color: var(--silver-mist);
+        }
+
+        .close-btn:hover {
+            background: var(--twilight-glass);
+            border-color: var(--ethereal-border);
+            color: var(--ghost-white);
+            transform: rotate(90deg);
+        }
+
+        /* Tabs in the Void */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--phantom-border);
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tab {
+            padding: 16px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--silver-mist);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border-bottom: 2px solid transparent;
+            opacity: 0.7;
+        }
+
+        .tab.active {
+            color: var(--ghost-white);
+            border-bottom-color: var(--ethereal-violet);
+            opacity: 1;
+            text-shadow: 0 0 20px var(--ethereal-glow);
+        }
+
+        .tab:hover {
+            color: var(--ghost-white);
+            opacity: 1;
+        }
+
+        .tab-content {
+            display: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: depthsFadeIn 0.4s ease;
+        }
+
+        /* Management Elements */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .status-item {
+            background: var(--abyss-glass);
+            border: 1px solid var(--phantom-border);
+            border-radius: var(--radius-medium);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .status-item:hover {
+            border-color: var(--ethereal-border);
+            background: var(--twilight-glass);
+        }
+
+        .status-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--ethereal-violet);
+            margin-bottom: 6px;
+            text-shadow: 0 0 20px var(--ethereal-glow);
+        }
+
+        .status-label {
+            font-size: 0.85rem;
+            color: var(--silver-mist);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.8;
+        }
+
+        .history-item, .cleanup-option, .control-item {
+            background: var(--abyss-glass);
+            border: 1px solid var(--phantom-border);
+            border-radius: var(--radius-medium);
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.4s ease;
+        }
+
+        .history-item:hover, .cleanup-option:hover, .control-item:hover {
+            border-color: var(--ethereal-border);
+            background: var(--twilight-glass);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 16px;
+            }
+
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            .main-card {
+                padding: 28px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .management-section {
+                position: static;
+                display: flex;
+                justify-content: center;
+                margin-top: 40px;
+            }
+
+            .modal-content {
+                margin: 20px;
+                padding: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Dive into the twilight zone depths where YouTube videos transform into profound insights through 13 ethereal fabric patterns</p>
+        </header>
+
+        <main class="main-card">
+            <div class="input-group">
+                <label for="youtube-url" class="input-label">YouTube URL</label>
+                <input 
+                    type="url" 
+                    id="youtube-url" 
+                    class="url-input" 
+                    placeholder="https://www.youtube.com/watch?v=..."
+                />
+            </div>
+
+            <div class="button-group">
+                <button id="process-btn" class="btn btn-primary">Process Video</button>
+                <button id="clear-btn" class="btn btn-secondary">Clear</button>
+            </div>
+
+            <div id="progress-section" class="progress-section">
+                <div class="progress-header">
+                    <h3>Processing in the Depths</h3>
+                    <p>Channeling ethereal forces through 13 fabric patterns across 4 mystical phases</p>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <div class="phase-header">
+                            <span class="phase-title">Phase 1: Foundation</span>
+                            <div class="phase-status"></div>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="extract_wisdom">Extract Wisdom</li>
+                            <li class="pattern-item" data-pattern="summarize">Summarize</li>
+                            <li class="pattern-item" data-pattern="analyze_claims">Analyze Claims</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="2">
+                        <div class="phase-header">
+                            <span class="phase-title">Phase 2: Analysis</span>
+                            <div class="phase-status"></div>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="find_logical_fallacies">Find Logical Fallacies</li>
+                            <li class="pattern-item" data-pattern="extract_ideas">Extract Ideas</li>
+                            <li class="pattern-item" data-pattern="get_youtube_rss">Get YouTube RSS</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="3">
+                        <div class="phase-header">
+                            <span class="phase-title">Phase 3: Insights</span>
+                            <div class="phase-status"></div>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="create_quiz">Create Quiz</li>
+                            <li class="pattern-item" data-pattern="extract_questions">Extract Questions</li>
+                            <li class="pattern-item" data-pattern="extract_references">Extract References</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="4">
+                        <div class="phase-header">
+                            <span class="phase-title">Phase 4: Knowledge</span>
+                            <div class="phase-status"></div>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="create_keynote">Create Keynote</li>
+                            <li class="pattern-item" data-pattern="extract_poc">Extract POC</li>
+                            <li class="pattern-item" data-pattern="create_security_update">Create Security Update</li>
+                            <li class="pattern-item" data-pattern="create_investigation_visualization">Create Investigation Visualization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results-section" class="results-section">
+                <div class="results-card">
+                    <div class="results-header">
+                        <h3>Ethereal Transformation Complete</h3>
+                        <p>Your video has emerged from the twilight depths, fully analyzed through all 13 mystical fabric patterns</p>
+                    </div>
+                    <button id="download-btn" class="download-btn">Download Ethereal Insights</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="management-section">
+        <button id="management-btn" class="management-btn">
+            <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+        </button>
+    </div>
+
+    <div id="management-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Ethereal Management Portal</h2>
+                <button id="close-modal" class="close-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="status">Status</button>
+                <button class="tab" data-tab="history">History</button>
+                <button class="tab" data-tab="cleanup">Cleanup</button>
+                <button class="tab" data-tab="control">Control</button>
+            </div>
+
+            <div id="status-tab" class="tab-content active">
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-value">Online</div>
+                        <div class="status-label">Server Status</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">0</div>
+                        <div class="status-label">Active Processes</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">2.4 GB</div>
+                        <div class="status-label">Memory Usage</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">99.2%</div>
+                        <div class="status-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history-tab" class="tab-content">
+                <div class="history-item">
+                    <div style="font-weight: 600; margin-bottom: 6px; color: var(--silver-mist);">Deep Learning Mysteries</div>
+                    <div style="font-size: 0.9rem; color: var(--silver-mist); opacity: 0.8;">Processed 1 hour ago • 13 patterns • Success</div>
+                </div>
+                <div class="history-item">
+                    <div style="font-weight: 600; margin-bottom: 6px; color: var(--silver-mist);">Quantum Computing Enigmas</div>
+                    <div style="font-size: 0.9rem; color: var(--silver-mist); opacity: 0.8;">Processed 4 hours ago • 13 patterns • Success</div>
+                </div>
+                <div class="history-item">
+                    <div style="font-weight: 600; margin-bottom: 6px; color: var(--silver-mist);">AI Ethics in the Void</div>
+                    <div style="font-size: 0.9rem; color: var(--silver-mist); opacity: 0.8;">Processed yesterday • 13 patterns • Success</div>
+                </div>
+            </div>
+
+            <div id="cleanup-tab" class="tab-content">
+                <div class="cleanup-option">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 6px; color: var(--silver-mist);">Purge Ancient Files</div>
+                        <div style="font-size: 0.9rem; color: var(--silver-mist); opacity: 0.8;">Remove processing files older than 7 days from the depths</div>
+                    </div>
+                    <button class="btn btn-secondary">Purge</button>
+                </div>
+                <div class="cleanup-option">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 6px; color: var(--silver-mist);">Clear Ethereal Cache</div>
+                        <div style="font-size: 0.9rem; color: var(--silver-mist); opacity: 0.8;">Clear temporary files and cached ethereal data</div>
+                    </div>
+                    <button class="btn btn-secondary">Clear</button>
+                </div>
+                <div class="cleanup-option">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 6px; color: var(--silver-mist);">Reset to Void</div>
+                        <div style="font-size: 0.9rem; color: var(--silver-mist); opacity: 0.8;">Remove all data and return system to primordial state</div>
+                    </div>
+                    <button class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+
+            <div id="control-tab" class="tab-content">
+                <div class="control-item">
+                    <div style="text-align: center;">
+                        <div style="font-weight: 600; margin-bottom: 8px; color: var(--silver-mist);">Restart Ethereal Server</div>
+                        <div style="font-size: 0.9rem; color: var(--silver-mist); opacity: 0.8; margin-bottom: 16px;">Gracefully restart the processing server from the depths</div>
+                        <button class="btn btn-secondary">Restart</button>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <div style="text-align: center;">
+                        <div style="font-weight: 600; margin-bottom: 8px; color: var(--silver-mist);">Descend into Void</div>
+                        <div style="font-size: 0.9rem; color: var(--silver-mist); opacity: 0.8; margin-bottom: 16px;">Safely shutdown server after completing current ethereal tasks</div>
+                        <button class="btn btn-secondary">Shutdown</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const processBtn = document.getElementById('process-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const urlInput = document.getElementById('youtube-url');
+        const progressSection = document.getElementById('progress-section');
+        const resultsSection = document.getElementById('results-section');
+        const downloadBtn = document.getElementById('download-btn');
+        const managementBtn = document.getElementById('management-btn');
+        const managementModal = document.getElementById('management-modal');
+        const closeModal = document.getElementById('close-modal');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Event Listeners
+        processBtn.addEventListener('click', startProcessing);
+        clearBtn.addEventListener('click', clearForm);
+        downloadBtn.addEventListener('click', downloadResults);
+        managementBtn.addEventListener('click', openManagement);
+        closeModal.addEventListener('click', closeManagement);
+        managementModal.addEventListener('click', (e) => {
+            if (e.target === managementModal) closeManagement();
+        });
+
+        // Tab handling
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+        });
+
+        // Enter key handling
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') startProcessing();
+        });
+
+        // Processing simulation
+        function startProcessing() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a YouTube URL to begin the ethereal transformation');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                alert('Please enter a valid YouTube URL for the mystical processing');
+                return;
+            }
+
+            // Disable form
+            processBtn.disabled = true;
+            processBtn.textContent = 'Channeling Ethereal Forces...';
+            urlInput.disabled = true;
+
+            // Show progress section
+            progressSection.classList.add('visible');
+            resultsSection.classList.remove('visible');
+
+            // Simulate processing phases
+            simulateProcessing();
+        }
+
+        function clearForm() {
+            urlInput.value = '';
+            urlInput.disabled = false;
+            processBtn.disabled = false;
+            processBtn.textContent = 'Process Video';
+            progressSection.classList.remove('visible');
+            resultsSection.classList.remove('visible');
+            resetProgress();
+        }
+
+        function downloadResults() {
+            // Simulate download
+            alert('Downloading ethereal insights from the twilight depths...');
+        }
+
+        function openManagement() {
+            managementModal.classList.add('visible');
+        }
+
+        function closeManagement() {
+            managementModal.classList.remove('visible');
+        }
+
+        function switchTab(tabName) {
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+            return youtubeRegex.test(url);
+        }
+
+        function simulateProcessing() {
+            const phases = [1, 2, 3, 4];
+            const patterns = [
+                'extract_wisdom', 'summarize', 'analyze_claims',
+                'find_logical_fallacies', 'extract_ideas', 'get_youtube_rss',
+                'create_quiz', 'extract_questions', 'extract_references',
+                'create_keynote', 'extract_poc', 'create_security_update', 'create_investigation_visualization'
+            ];
+
+            let currentPhase = 0;
+            let currentPattern = 0;
+
+            function processNextPattern() {
+                if (currentPattern >= patterns.length) {
+                    // Processing complete
+                    setTimeout(() => {
+                        progressSection.classList.remove('visible');
+                        resultsSection.classList.add('visible');
+                        processBtn.disabled = false;
+                        processBtn.textContent = 'Process Video';
+                        urlInput.disabled = false;
+                    }, 1000);
+                    return;
+                }
+
+                // Update phase if needed
+                if (currentPattern === 0 || currentPattern === 3 || currentPattern === 6 || currentPattern === 9) {
+                    if (currentPhase > 0) {
+                        // Mark previous phase as completed
+                        const prevPhaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                        prevPhaseCard.classList.remove('active');
+                        prevPhaseCard.classList.add('completed');
+                        prevPhaseCard.querySelector('.phase-status').classList.remove('active');
+                        prevPhaseCard.querySelector('.phase-status').classList.add('completed');
+                    }
+                    
+                    currentPhase++;
+                    const phaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                    phaseCard.classList.add('active');
+                    phaseCard.querySelector('.phase-status').classList.add('active');
+                }
+
+                // Mark current pattern as active
+                const patternElement = document.querySelector(`[data-pattern="${patterns[currentPattern]}"]`);
+                patternElement.classList.add('active');
+
+                // Simulate pattern processing time (mystical timing)
+                setTimeout(() => {
+                    patternElement.classList.remove('active');
+                    patternElement.classList.add('completed');
+                    currentPattern++;
+                    processNextPattern();
+                }, Math.random() * 2500 + 1500); // 1.5-4 seconds per pattern
+            }
+
+            processNextPattern();
+        }
+
+        function resetProgress() {
+            document.querySelectorAll('.phase-card').forEach(card => {
+                card.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.phase-status').forEach(status => {
+                status.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.pattern-item').forEach(pattern => {
+                pattern.classList.remove('active', 'completed');
+            });
+        }
+
+        // Auto-focus URL input with ethereal effect
+        urlInput.focus();
+    </script>
+</body>
+</html>

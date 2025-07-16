@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Professional Analysis Platform</title>
+    <style>
+        /* Professional Typography Foundation */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        :root {
+            /* Sophisticated Professional Color Palette */
+            --color-primary: #1a365d;
+            --color-primary-light: #2c5282;
+            --color-primary-dark: #0f1419;
+            --color-accent: #2563eb;
+            --color-accent-light: #3b82f6;
+            --color-accent-dark: #1d4ed8;
+            
+            /* Professional Neutrals */
+            --color-gray-50: #f8fafc;
+            --color-gray-100: #f1f5f9;
+            --color-gray-200: #e2e8f0;
+            --color-gray-300: #cbd5e1;
+            --color-gray-400: #94a3b8;
+            --color-gray-500: #64748b;
+            --color-gray-600: #475569;
+            --color-gray-700: #334155;
+            --color-gray-800: #1e293b;
+            --color-gray-900: #0f172a;
+            
+            /* Semantic Colors */
+            --color-success: #10b981;
+            --color-success-light: #34d399;
+            --color-warning: #f59e0b;
+            --color-warning-light: #fbbf24;
+            --color-error: #ef4444;
+            --color-error-light: #f87171;
+            
+            /* Professional Typography Scale */
+            --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-family-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+            
+            /* Professional Spacing System */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            
+            /* Professional Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Professional Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-base: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+            
+            /* Professional Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Professional Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            font-size: 16px;
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            font-family: var(--font-family-sans);
+            font-size: var(--font-size-base);
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--color-gray-800);
+            background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+            min-height: 100vh;
+        }
+        
+        /* Professional Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--color-gray-200);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            backdrop-filter: blur(8px);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .header-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: var(--font-size-lg);
+        }
+        
+        .header-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--color-gray-900);
+            letter-spacing: -0.025em;
+        }
+        
+        .header-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--color-gray-500);
+            font-weight: 400;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+        
+        .btn-management {
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
+            border: 1px solid var(--color-gray-200);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .btn-management:hover {
+            background: var(--color-gray-200);
+            border-color: var(--color-gray-300);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Professional Main Layout */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: var(--space-8);
+            align-items: start;
+        }
+        
+        /* Professional Processing Card */
+        .processing-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-gray-200);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: var(--space-8);
+            border-bottom: 1px solid var(--color-gray-100);
+            background: linear-gradient(135deg, var(--color-gray-50) 0%, white 100%);
+        }
+        
+        .card-title {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--color-gray-900);
+            letter-spacing: -0.025em;
+            margin-bottom: var(--space-2);
+        }
+        
+        .card-description {
+            font-size: var(--font-size-lg);
+            color: var(--color-gray-600);
+            line-height: 1.7;
+        }
+        
+        .card-body {
+            padding: var(--space-8);
+        }
+        
+        /* Professional Form Elements */
+        .form-group {
+            margin-bottom: var(--space-6);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-gray-700);
+            margin-bottom: var(--space-2);
+            letter-spacing: 0.025em;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--space-4);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            font-family: var(--font-family-sans);
+            background: var(--color-gray-50);
+            transition: all var(--transition-base);
+            outline: none;
+        }
+        
+        .form-input:focus {
+            border-color: var(--color-accent);
+            background: white;
+            box-shadow: 0 0 0 4px rgb(37 99 235 / 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: var(--color-gray-400);
+        }
+        
+        /* Professional Button */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+            color: white;
+            border: none;
+            padding: var(--space-4) var(--space-8);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            width: 100%;
+            letter-spacing: 0.025em;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        .btn-primary:disabled {
+            background: var(--color-gray-300);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Professional Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+        
+        .sidebar-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-base);
+            border: 1px solid var(--color-gray-200);
+            overflow: hidden;
+        }
+        
+        .sidebar-header {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--color-gray-100);
+            background: var(--color-gray-50);
+        }
+        
+        .sidebar-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        .sidebar-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--color-gray-500);
+        }
+        
+        .sidebar-content {
+            padding: var(--space-5);
+        }
+        
+        /* Professional Progress Display */
+        .progress-section {
+            margin-top: var(--space-8);
+            padding-top: var(--space-8);
+            border-top: 1px solid var(--color-gray-100);
+        }
+        
+        .progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+        }
+        
+        .progress-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+        
+        .progress-status {
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-base);
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
+        }
+        
+        .progress-status.processing {
+            background: var(--color-accent);
+            color: white;
+        }
+        
+        .progress-status.completed {
+            background: var(--color-success);
+            color: white;
+        }
+        
+        /* Professional Phase Cards */
+        .phases-grid {
+            display: grid;
+            gap: var(--space-4);
+        }
+        
+        .phase-card {
+            background: var(--color-gray-50);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            transition: all var(--transition-base);
+        }
+        
+        .phase-card.active {
+            border-color: var(--color-accent);
+            background: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .phase-card.completed {
+            border-color: var(--color-success);
+            background: rgb(16 185 129 / 0.05);
+        }
+        
+        .phase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-3);
+        }
+        
+        .phase-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+        
+        .phase-status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            color: white;
+        }
+        
+        .phase-status.active {
+            background: var(--color-accent);
+            animation: pulse 2s infinite;
+        }
+        
+        .phase-status.completed {
+            background: var(--color-success);
+        }
+        
+        .patterns-list {
+            display: grid;
+            gap: var(--space-2);
+        }
+        
+        .pattern-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-2) var(--space-3);
+            background: white;
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+            transition: all var(--transition-fast);
+        }
+        
+        .pattern-item.active {
+            background: var(--color-accent);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .pattern-item.completed {
+            background: var(--color-success);
+            color: white;
+        }
+        
+        .pattern-status {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--color-gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: var(--color-gray-600);
+        }
+        
+        .pattern-item.active .pattern-status {
+            background: white;
+            color: var(--color-accent);
+        }
+        
+        .pattern-item.completed .pattern-status {
+            background: white;
+            color: var(--color-success);
+        }
+        
+        /* Professional Fabric Patterns Info */
+        .patterns-info {
+            display: grid;
+            gap: var(--space-3);
+        }
+        
+        .pattern-category {
+            padding: var(--space-3);
+            background: var(--color-gray-50);
+            border-radius: var(--radius-base);
+            border-left: 4px solid var(--color-accent);
+        }
+        
+        .category-title {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-gray-800);
+            margin-bottom: var(--space-2);
+        }
+        
+        .category-patterns {
+            display: grid;
+            gap: var(--space-1);
+        }
+        
+        .category-pattern {
+            font-size: var(--font-size-xs);
+            color: var(--color-gray-600);
+            padding: var(--space-1) var(--space-2);
+            background: white;
+            border-radius: var(--radius-sm);
+        }
+        
+        /* Professional Management Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgb(0 0 0 / 0.5);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.95) translateY(20px);
+            transition: all var(--transition-base);
+        }
+        
+        .modal-overlay.show .modal-content {
+            transform: scale(1) translateY(0);
+        }
+        
+        .modal-header {
+            padding: var(--space-6);
+            border-bottom: 1px solid var(--color-gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--color-gray-50);
+        }
+        
+        .modal-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+        
+        .btn-close {
+            background: none;
+            border: none;
+            color: var(--color-gray-500);
+            cursor: pointer;
+            padding: var(--space-2);
+            border-radius: var(--radius-base);
+            transition: all var(--transition-fast);
+        }
+        
+        .btn-close:hover {
+            background: var(--color-gray-200);
+            color: var(--color-gray-700);
+        }
+        
+        .modal-body {
+            padding: var(--space-6);
+            overflow-y: auto;
+            max-height: calc(90vh - 140px);
+        }
+        
+        .management-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--color-gray-200);
+            margin-bottom: var(--space-6);
+        }
+        
+        .tab-button {
+            background: none;
+            border: none;
+            padding: var(--space-3) var(--space-4);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--color-gray-600);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+        
+        .tab-button.active {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Professional Status Display */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+        
+        .status-card {
+            background: var(--color-gray-50);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-gray-200);
+        }
+        
+        .status-label {
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            color: var(--color-gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-1);
+        }
+        
+        .status-value {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+        
+        /* Professional Results Display */
+        .results-section {
+            margin-top: var(--space-8);
+            padding-top: var(--space-8);
+            border-top: 1px solid var(--color-gray-100);
+        }
+        
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+        }
+        
+        .results-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+        
+        .btn-download {
+            background: var(--color-success);
+            color: white;
+            border: none;
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .btn-download:hover {
+            background: var(--color-success-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .results-grid {
+            display: grid;
+            gap: var(--space-4);
+        }
+        
+        .result-item {
+            background: white;
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            transition: all var(--transition-fast);
+        }
+        
+        .result-item:hover {
+            border-color: var(--color-accent);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+        
+        .result-title {
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+        
+        .result-size {
+            font-size: var(--font-size-xs);
+            color: var(--color-gray-500);
+            font-family: var(--font-family-mono);
+        }
+        
+        .result-description {
+            font-size: var(--font-size-sm);
+            color: var(--color-gray-600);
+            line-height: 1.6;
+        }
+        
+        /* Professional Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn var(--transition-base) ease-out;
+        }
+        
+        /* Professional Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-6);
+            }
+            
+            .header-content {
+                padding: var(--space-3) var(--space-4);
+                flex-direction: column;
+                gap: var(--space-3);
+                align-items: flex-start;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .main-container {
+                padding: var(--space-6) var(--space-4);
+            }
+            
+            .card-header,
+            .card-body {
+                padding: var(--space-6);
+            }
+            
+            .modal-content {
+                margin: var(--space-4);
+                max-width: none;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Professional Print Styles */
+        @media print {
+            .header,
+            .sidebar,
+            .btn-primary,
+            .btn-management,
+            .modal-overlay {
+                display: none !important;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .processing-card {
+                box-shadow: none;
+                border: 1px solid var(--color-gray-300);
+            }
+        }
+        
+        /* Professional Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Professional Focus Indicators */
+        *:focus {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+        }
+        
+        .btn-primary:focus,
+        .btn-management:focus {
+            outline-offset: 4px;
+        }
+        
+        /* Professional Loading States */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-brand">
+                <div class="header-logo">YF</div>
+                <div>
+                    <div class="header-title">YouTube Fabric Processor</div>
+                    <div class="header-subtitle">Professional Analysis Platform</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-management" onclick="openManagementModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Management
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Professional Main Content -->
+    <main class="main-container">
+        <div class="main-content">
+            <!-- Processing Card -->
+            <div class="processing-card">
+                <div class="card-header">
+                    <h1 class="card-title">Intelligent Video Analysis</h1>
+                    <p class="card-description">Transform YouTube content into structured insights using 13 specialized AI patterns. Our professional-grade processing delivers comprehensive analysis in under 70 seconds.</p>
+                </div>
+                
+                <div class="card-body">
+                    <form id="processForm">
+                        <div class="form-group">
+                            <label class="form-label" for="youtubeUrl">YouTube Video URL</label>
+                            <input 
+                                type="url" 
+                                id="youtubeUrl" 
+                                class="form-input" 
+                                placeholder="https://www.youtube.com/watch?v=..."
+                                required
+                            >
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="processBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5,3 19,12 5,21 5,3"></polygon>
+                            </svg>
+                            Begin Analysis
+                        </button>
+                    </form>
+
+                    <!-- Progress Section -->
+                    <div id="progressSection" class="progress-section" style="display: none;">
+                        <div class="progress-header">
+                            <h2 class="progress-title">Processing Progress</h2>
+                            <div id="progressStatus" class="progress-status">Initializing</div>
+                        </div>
+                        
+                        <div id="phasesGrid" class="phases-grid">
+                            <!-- Phase cards will be generated here -->
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="resultsSection" class="results-section" style="display: none;">
+                        <div class="results-header">
+                            <h2 class="results-title">Analysis Complete</h2>
+                            <button id="downloadBtn" class="btn-download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7,10 12,15 17,10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Download Results
+                            </button>
+                        </div>
+                        
+                        <div id="resultsGrid" class="results-grid">
+                            <!-- Results will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Sidebar -->
+            <aside class="sidebar">
+                <!-- Processing Overview -->
+                <div class="sidebar-card">
+                    <div class="sidebar-header">
+                        <h3 class="sidebar-title">Processing Overview</h3>
+                        <p class="sidebar-subtitle">Professional analysis workflow</p>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="patterns-info">
+                            <div class="pattern-category">
+                                <div class="category-title">Phase 1: Content Analysis (4 patterns)</div>
+                                <div class="category-patterns">
+                                    <div class="category-pattern">extract_wisdom</div>
+                                    <div class="category-pattern">summarize</div>
+                                    <div class="category-pattern">analyze_claims</div>
+                                    <div class="category-pattern">extract_questions</div>
+                                </div>
+                            </div>
+                            <div class="pattern-category">
+                                <div class="category-title">Phase 2: Deep Insights (3 patterns)</div>
+                                <div class="category-patterns">
+                                    <div class="category-pattern">create_quiz</div>
+                                    <div class="category-pattern">extract_ideas</div>
+                                    <div class="category-pattern">rate_content</div>
+                                </div>
+                            </div>
+                            <div class="pattern-category">
+                                <div class="category-title">Phase 3: Specialized Analysis (3 patterns)</div>
+                                <div class="category-patterns">
+                                    <div class="category-pattern">analyze_presentation</div>
+                                    <div class="category-pattern">extract_recommendations</div>
+                                    <div class="category-pattern">create_summary</div>
+                                </div>
+                            </div>
+                            <div class="pattern-category">
+                                <div class="category-title">Phase 4: Advanced Processing (3 patterns)</div>
+                                <div class="category-patterns">
+                                    <div class="category-pattern">extract_sponsors</div>
+                                    <div class="category-pattern">create_visualization</div>
+                                    <div class="category-pattern">analyze_tech_impact</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Specifications -->
+                <div class="sidebar-card">
+                    <div class="sidebar-header">
+                        <h3 class="sidebar-title">Technical Specifications</h3>
+                        <p class="sidebar-subtitle">Professional-grade performance</p>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <div class="status-label">Processing Time</div>
+                                <div class="status-value">~70s</div>
+                            </div>
+                            <div class="status-card">
+                                <div class="status-label">AI Model</div>
+                                <div class="status-value">Claude 3.5</div>
+                            </div>
+                            <div class="status-card">
+                                <div class="status-label">Patterns</div>
+                                <div class="status-value">13</div>
+                            </div>
+                            <div class="status-card">
+                                <div class="status-label">Output Format</div>
+                                <div class="status-value">Markdown</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Professional Management Modal -->
+    <div id="managementModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">System Management</h2>
+                <button class="btn-close" onclick="closeManagementModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="management-tabs">
+                    <button class="tab-button active" onclick="switchTab('status')">System Status</button>
+                    <button class="tab-button" onclick="switchTab('history')">Processing History</button>
+                    <button class="tab-button" onclick="switchTab('maintenance')">Maintenance</button>
+                </div>
+                
+                <div id="statusTab" class="tab-content active">
+                    <div class="status-grid">
+                        <div class="status-card">
+                            <div class="status-label">Server Status</div>
+                            <div class="status-value">Online</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-label">Active Processes</div>
+                            <div class="status-value">0</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-label">Queue Length</div>
+                            <div class="status-value">0</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-label">System Load</div>
+                            <div class="status-value">Low</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="historyTab" class="tab-content">
+                    <div id="historyList">
+                        <p style="text-align: center; color: var(--color-gray-500); padding: var(--space-8);">
+                            No processing history available
+                        </p>
+                    </div>
+                </div>
+                
+                <div id="maintenanceTab" class="tab-content">
+                    <div style="display: grid; gap: var(--space-4);">
+                        <button class="btn-primary" onclick="cleanupOldFiles()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18"></path>
+                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                            </svg>
+                            Clean Old Files
+                        </button>
+                        <button class="btn-primary" onclick="restartServer()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23,4 23,10 17,10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                            Restart Server
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Professional State Management
+        class ProcessorState {
+            constructor() {
+                this.currentProcess = null;
+                this.isProcessing = false;
+                this.socket = null;
+                this.phases = [
+                    {
+                        id: 1,
+                        title: 'Content Analysis',
+                        patterns: ['extract_wisdom', 'summarize', 'analyze_claims', 'extract_questions'],
+                        status: 'pending'
+                    },
+                    {
+                        id: 2,
+                        title: 'Deep Insights',
+                        patterns: ['create_quiz', 'extract_ideas', 'rate_content'],
+                        status: 'pending'
+                    },
+                    {
+                        id: 3,
+                        title: 'Specialized Analysis',
+                        patterns: ['analyze_presentation', 'extract_recommendations', 'create_summary'],
+                        status: 'pending'
+                    },
+                    {
+                        id: 4,
+                        title: 'Advanced Processing',
+                        patterns: ['extract_sponsors', 'create_visualization', 'analyze_tech_impact'],
+                        status: 'pending'
+                    }
+                ];
+            }
+
+            resetPhases() {
+                this.phases.forEach(phase => {
+                    phase.status = 'pending';
+                    phase.patterns.forEach((pattern, index) => {
+                        phase.patterns[index] = { name: pattern, status: 'pending' };
+                    });
+                });
+            }
+
+            updatePhaseStatus(phaseId, status) {
+                const phase = this.phases.find(p => p.id === phaseId);
+                if (phase) {
+                    phase.status = status;
+                    this.renderPhases();
+                }
+            }
+
+            updatePatternStatus(phaseName, patternName, status) {
+                const phase = this.phases.find(p => p.title === phaseName);
+                if (phase) {
+                    const pattern = phase.patterns.find(p => p.name === patternName || p === patternName);
+                    if (pattern) {
+                        if (typeof pattern === 'object') {
+                            pattern.status = status;
+                        }
+                    }
+                    this.renderPhases();
+                }
+            }
+
+            renderPhases() {
+                const phasesGrid = document.getElementById('phasesGrid');
+                phasesGrid.innerHTML = this.phases.map(phase => `
+                    <div class="phase-card ${phase.status}">
+                        <div class="phase-header">
+                            <h3 class="phase-title">${phase.title}</h3>
+                            <div class="phase-status ${phase.status}">
+                                ${phase.status === 'completed' ? '✓' : 
+                                  phase.status === 'active' ? '●' : 
+                                  phase.id}
+                            </div>
+                        </div>
+                        <div class="patterns-list">
+                            ${phase.patterns.map(pattern => {
+                                const patternName = typeof pattern === 'object' ? pattern.name : pattern;
+                                const patternStatus = typeof pattern === 'object' ? pattern.status : 'pending';
+                                return `
+                                    <div class="pattern-item ${patternStatus}">
+                                        <span>${patternName}</span>
+                                        <div class="pattern-status">
+                                            ${patternStatus === 'completed' ? '✓' : 
+                                              patternStatus === 'active' ? '●' : '○'}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Global state
+        const state = new ProcessorState();
+
+        // Professional Form Handling
+        document.getElementById('processForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const url = document.getElementById('youtubeUrl').value;
+            const processBtn = document.getElementById('processBtn');
+            const progressSection = document.getElementById('progressSection');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            if (!url) return;
+            
+            // Reset state
+            state.isProcessing = true;
+            state.resetPhases();
+            
+            // Update UI
+            processBtn.disabled = true;
+            processBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="animate-spin">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-1 .05 9.72 9.72 0 0 0-1 .195M21 12a9 9 0 0 1-9 9 9.72 9.72 0 0 1-1-.195 9.75 9.75 0 0 1-1-.05M21 12c0-.64-.11-1.26-.32-1.85l-1.1.5a8 8 0 0 1 .31 1.35M12 3v9l-4-4"></path>
+                </svg>
+                Processing...
+            `;
+            
+            progressSection.style.display = 'block';
+            resultsSection.style.display = 'none';
+            
+            document.getElementById('progressStatus').textContent = 'Processing';
+            document.getElementById('progressStatus').className = 'progress-status processing';
+            
+            state.renderPhases();
+            
+            try {
+                // Simulate processing with realistic timing
+                await simulateProcessing(url);
+            } catch (error) {
+                console.error('Processing error:', error);
+                showError('Processing failed. Please try again.');
+            } finally {
+                state.isProcessing = false;
+                processBtn.disabled = false;
+                processBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5,3 19,12 5,21 5,3"></polygon>
+                    </svg>
+                    Begin Analysis
+                `;
+            }
+        });
+
+        // Professional Processing Simulation
+        async function simulateProcessing(url) {
+            const phases = [
+                { name: 'Content Analysis', patterns: ['extract_wisdom', 'summarize', 'analyze_claims', 'extract_questions'] },
+                { name: 'Deep Insights', patterns: ['create_quiz', 'extract_ideas', 'rate_content'] },
+                { name: 'Specialized Analysis', patterns: ['analyze_presentation', 'extract_recommendations', 'create_summary'] },
+                { name: 'Advanced Processing', patterns: ['extract_sponsors', 'create_visualization', 'analyze_tech_impact'] }
+            ];
+
+            // Initial setup
+            await sleep(1000);
+            updateProgressStatus('Downloading transcript...');
+            await sleep(2000);
+
+            // Process each phase
+            for (let i = 0; i < phases.length; i++) {
+                const phase = phases[i];
+                state.updatePhaseStatus(i + 1, 'active');
+                
+                updateProgressStatus(`Processing ${phase.name}...`);
+                
+                // Process patterns in parallel simulation
+                for (const pattern of phase.patterns) {
+                    state.updatePatternStatus(phase.name, pattern, 'active');
+                    await sleep(1500 + Math.random() * 1000);
+                    state.updatePatternStatus(phase.name, pattern, 'completed');
+                }
+                
+                state.updatePhaseStatus(i + 1, 'completed');
+                await sleep(500);
+            }
+
+            // Complete processing
+            updateProgressStatus('Generating results...');
+            await sleep(1500);
+            
+            document.getElementById('progressStatus').textContent = 'Completed';
+            document.getElementById('progressStatus').className = 'progress-status completed';
+            
+            // Show results
+            showResults();
+        }
+
+        function updateProgressStatus(message) {
+            document.getElementById('progressStatus').textContent = message;
+        }
+
+        function showResults() {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            const results = [
+                { title: 'Wisdom Extraction', description: 'Key insights and valuable knowledge extracted from the content', size: '2.3 KB' },
+                { title: 'Content Summary', description: 'Comprehensive summary of the main points and themes', size: '1.8 KB' },
+                { title: 'Claims Analysis', description: 'Analysis of claims made and their supporting evidence', size: '2.1 KB' },
+                { title: 'Question Extraction', description: 'Important questions raised by the content', size: '1.2 KB' },
+                { title: 'Knowledge Quiz', description: 'Interactive quiz based on the content', size: '2.5 KB' },
+                { title: 'Ideas Extraction', description: 'Novel ideas and creative concepts identified', size: '1.9 KB' },
+                { title: 'Content Rating', description: 'Professional assessment and rating of the content', size: '1.4 KB' },
+                { title: 'Presentation Analysis', description: 'Analysis of presentation style and effectiveness', size: '2.0 KB' },
+                { title: 'Recommendations', description: 'Actionable recommendations derived from the content', size: '1.7 KB' },
+                { title: 'Executive Summary', description: 'High-level executive summary for leadership review', size: '1.5 KB' },
+                { title: 'Sponsor Analysis', description: 'Analysis of sponsorships and commercial elements', size: '1.1 KB' },
+                { title: 'Data Visualization', description: 'Visual representation of key data points', size: '3.2 KB' },
+                { title: 'Technology Impact', description: 'Assessment of technological implications and impact', size: '2.4 KB' }
+            ];
+            
+            resultsGrid.innerHTML = results.map(result => `
+                <div class="result-item fade-in">
+                    <div class="result-header">
+                        <h4 class="result-title">${result.title}</h4>
+                        <span class="result-size">${result.size}</span>
+                    </div>
+                    <p class="result-description">${result.description}</p>
+                </div>
+            `).join('');
+            
+            resultsSection.style.display = 'block';
+            
+            // Setup download button
+            document.getElementById('downloadBtn').onclick = () => {
+                // Simulate download
+                const link = document.createElement('a');
+                link.href = '#';
+                link.download = 'youtube_analysis.zip';
+                link.click();
+                
+                showSuccess('Download initiated successfully');
+            };
+        }
+
+        // Professional Modal Management
+        function openManagementModal() {
+            document.getElementById('managementModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        // Professional Maintenance Functions
+        async function cleanupOldFiles() {
+            try {
+                showSuccess('Cleanup initiated successfully');
+            } catch (error) {
+                showError('Cleanup failed');
+            }
+        }
+
+        async function restartServer() {
+            try {
+                showSuccess('Server restart initiated');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } catch (error) {
+                showError('Server restart failed');
+            }
+        }
+
+        // Professional Utility Functions
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function showSuccess(message) {
+            console.log('Success:', message);
+            // In a real implementation, you would show a toast notification
+        }
+
+        function showError(message) {
+            console.error('Error:', message);
+            // In a real implementation, you would show an error toast
+        }
+
+        // Professional Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Escape to close modals
+            if (e.key === 'Escape') {
+                closeManagementModal();
+            }
+            
+            // Ctrl/Cmd + Enter to submit form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                if (!state.isProcessing) {
+                    document.getElementById('processForm').dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+
+        // Professional Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Focus the URL input on page load
+            document.getElementById('youtubeUrl').focus();
+            
+            // Close modal when clicking outside
+            document.getElementById('managementModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    closeManagementModal();
+                }
+            });
+        });
+
+        // Professional URL Validation
+        document.getElementById('youtubeUrl').addEventListener('input', (e) => {
+            const url = e.target.value;
+            const isValid = url.includes('youtube.com/watch') || url.includes('youtu.be/');
+            
+            if (url && !isValid) {
+                e.target.style.borderColor = 'var(--color-error)';
+            } else {
+                e.target.style.borderColor = '';
+            }
+        });
+    </script>
+</body>
+</html>

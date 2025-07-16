@@ -27,7 +27,8 @@ if command -v fabric &> /dev/null; then
 else
     echo "⚠️  Fabric not found - Running in simulation mode"
     echo "   To enable full processing, install fabric with:"
-    echo "   npm install -g fabric-mcp-server"
+    echo "   go install github.com/danielmiessler/fabric@latest"
+    echo "   Then run: fabric --setup"
 fi
 
 echo ""

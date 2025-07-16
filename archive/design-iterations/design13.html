@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Porsche Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --porsche-black: #000000;
+            --porsche-gray-dark: #1a1a1a;
+            --porsche-gray: #333333;
+            --porsche-gray-light: #666666;
+            --porsche-red: #E31E24;
+            --porsche-red-dark: #B8161B;
+            --porsche-silver: #C0C0C0;
+            --porsche-gold: #D4AF37;
+            --carbon-texture: linear-gradient(45deg, #1a1a1a 25%, #2a2a2a 25%, #2a2a2a 50%, #1a1a1a 50%, #1a1a1a 75%, #2a2a2a 75%);
+            --metal-gradient: linear-gradient(135deg, #404040 0%, #2a2a2a 25%, #1a1a1a 50%, #2a2a2a 75%, #404040 100%);
+            --gauge-glow: 0 0 20px rgba(227, 30, 36, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--porsche-black);
+            color: var(--porsche-silver);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(227, 30, 36, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+                var(--carbon-texture);
+            background-size: 100% 100%, 100% 100%, 4px 4px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: var(--metal-gradient);
+            border: 2px solid var(--porsche-gray);
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(227, 30, 36, 0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--porsche-silver);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(227, 30, 36, 0.5);
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            color: var(--porsche-red);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .main-panel {
+            background: var(--metal-gradient);
+            border: 2px solid var(--porsche-gray);
+            padding: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .main-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--porsche-red), transparent);
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--porsche-red);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--porsche-gray-dark);
+            border: 2px solid var(--porsche-gray);
+            color: var(--porsche-silver);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            outline: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .url-input:focus {
+            border-color: var(--porsche-red);
+            box-shadow: 
+                0 0 0 2px rgba(227, 30, 36, 0.3),
+                inset 0 0 20px rgba(227, 30, 36, 0.1);
+        }
+
+        .url-input::placeholder {
+            color: var(--porsche-gray-light);
+        }
+
+        .process-btn {
+            background: linear-gradient(135deg, var(--porsche-red) 0%, var(--porsche-red-dark) 100%);
+            color: white;
+            border: 2px solid var(--porsche-red);
+            padding: 16px 40px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(227, 30, 36, 0.3);
+        }
+
+        .process-btn:hover {
+            background: linear-gradient(135deg, var(--porsche-red-dark) 0%, var(--porsche-red) 100%);
+            box-shadow: 
+                0 6px 30px rgba(227, 30, 36, 0.5),
+                var(--gauge-glow);
+            transform: translateY(-2px);
+        }
+
+        .process-btn:active {
+            transform: translateY(0);
+        }
+
+        .process-btn:disabled {
+            background: var(--porsche-gray);
+            border-color: var(--porsche-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .progress-section {
+            margin: 40px 0;
+            display: none;
+        }
+
+        .progress-section.visible {
+            display: block;
+        }
+
+        .phase-container {
+            margin-bottom: 30px;
+            background: var(--porsche-gray-dark);
+            border: 1px solid var(--porsche-gray);
+            padding: 25px;
+            position: relative;
+        }
+
+        .phase-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--porsche-red);
+        }
+
+        .phase-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--porsche-red);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .pattern-item {
+            background: var(--metal-gradient);
+            border: 1px solid var(--porsche-gray);
+            padding: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.processing {
+            border-color: var(--porsche-red);
+            box-shadow: var(--gauge-glow);
+        }
+
+        .pattern-item.completed {
+            border-color: var(--porsche-gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .pattern-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--porsche-silver);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .pattern-progress {
+            width: 100%;
+            height: 8px;
+            background: var(--porsche-gray-dark);
+            border: 1px solid var(--porsche-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pattern-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--porsche-red), var(--porsche-gold));
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .pattern-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .pattern-status {
+            font-size: 0.8rem;
+            color: var(--porsche-gray-light);
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .results-section {
+            background: var(--metal-gradient);
+            border: 2px solid var(--porsche-gray);
+            padding: 40px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results-section.visible {
+            display: block;
+        }
+
+        .results-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--porsche-red);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--porsche-gold) 0%, #B8941F 100%);
+            color: var(--porsche-black);
+            border: 2px solid var(--porsche-gold);
+            padding: 16px 40px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #B8941F 0%, var(--porsche-gold) 100%);
+            box-shadow: 0 6px 30px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .management-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--metal-gradient);
+            border: 2px solid var(--porsche-gray);
+            color: var(--porsche-silver);
+            padding: 12px 20px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .management-btn:hover {
+            border-color: var(--porsche-red);
+            color: var(--porsche-red);
+            box-shadow: var(--gauge-glow);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.visible {
+            display: block;
+        }
+
+        .modal-content {
+            background: var(--metal-gradient);
+            border: 2px solid var(--porsche-gray);
+            margin: 5% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-header {
+            background: var(--porsche-gray-dark);
+            border-bottom: 2px solid var(--porsche-gray);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--porsche-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .close {
+            color: var(--porsche-gray-light);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: var(--porsche-red);
+        }
+
+        .modal-tabs {
+            display: flex;
+            background: var(--porsche-gray-dark);
+            border-bottom: 1px solid var(--porsche-gray);
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            color: var(--porsche-gray-light);
+            padding: 15px 25px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid var(--porsche-gray);
+        }
+
+        .tab-button:hover {
+            color: var(--porsche-silver);
+            background: rgba(227, 30, 36, 0.1);
+        }
+
+        .tab-button.active {
+            color: var(--porsche-red);
+            background: rgba(227, 30, 36, 0.2);
+            border-bottom: 2px solid var(--porsche-red);
+        }
+
+        .tab-content {
+            padding: 30px;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .control-button {
+            background: var(--metal-gradient);
+            border: 2px solid var(--porsche-gray);
+            color: var(--porsche-silver);
+            padding: 12px 24px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 10px 10px 0;
+        }
+
+        .control-button:hover {
+            border-color: var(--porsche-red);
+            color: var(--porsche-red);
+            box-shadow: var(--gauge-glow);
+        }
+
+        .control-button.danger {
+            border-color: var(--porsche-red);
+            color: var(--porsche-red);
+        }
+
+        .control-button.danger:hover {
+            background: var(--porsche-red);
+            color: white;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-card {
+            background: var(--porsche-gray-dark);
+            border: 1px solid var(--porsche-gray);
+            padding: 20px;
+            border-left: 4px solid var(--porsche-red);
+        }
+
+        .status-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--porsche-red);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .status-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--porsche-silver);
+        }
+
+        .history-item {
+            background: var(--porsche-gray-dark);
+            border: 1px solid var(--porsche-gray);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--porsche-gold);
+        }
+
+        .history-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--porsche-silver);
+            margin-bottom: 10px;
+        }
+
+        .history-details {
+            color: var(--porsche-gray-light);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--porsche-red);
+            background: rgba(227, 30, 36, 0.1);
+            color: var(--porsche-silver);
+            font-weight: 600;
+        }
+
+        .message.success {
+            border-left-color: var(--porsche-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .message.error {
+            border-left-color: var(--porsche-red);
+            background: rgba(227, 30, 36, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .main-panel {
+                padding: 20px;
+            }
+            
+            .pattern-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+            
+            .modal-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-button {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--porsche-gray-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--porsche-gray);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--porsche-red);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <div class="subtitle">Porsche Performance Edition</div>
+        </div>
+
+        <button class="management-btn" onclick="openManagementModal()">Management Console</button>
+
+        <div class="main-panel">
+            <div class="input-section">
+                <div class="input-group">
+                    <label class="input-label" for="youtubeUrl">YouTube Video URL</label>
+                    <input type="text" id="youtubeUrl" class="url-input" 
+                           placeholder="https://www.youtube.com/watch?v=..." 
+                           autocomplete="off">
+                </div>
+                <button id="processBtn" class="process-btn" onclick="startProcessing()">
+                    Initialize Processing Sequence
+                </button>
+            </div>
+
+            <div id="messageContainer"></div>
+
+            <div id="progressSection" class="progress-section">
+                <div class="phase-container">
+                    <div class="phase-title">Phase 1: Foundation Analysis</div>
+                    <div class="pattern-grid">
+                        <div class="pattern-item" data-pattern="extract_wisdom">
+                            <div class="pattern-name">Extract Wisdom</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="summarize">
+                            <div class="pattern-name">Summarize</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_article_wisdom">
+                            <div class="pattern-name">Extract Article Wisdom</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-container">
+                    <div class="phase-title">Phase 2: Deep Analysis</div>
+                    <div class="pattern-grid">
+                        <div class="pattern-item" data-pattern="analyze_claims">
+                            <div class="pattern-name">Analyze Claims</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_insights">
+                            <div class="pattern-name">Extract Insights</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_recommendations">
+                            <div class="pattern-name">Extract Recommendations</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-container">
+                    <div class="phase-title">Phase 3: Content Mining</div>
+                    <div class="pattern-grid">
+                        <div class="pattern-item" data-pattern="extract_ideas">
+                            <div class="pattern-name">Extract Ideas</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_questions">
+                            <div class="pattern-name">Extract Questions</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_references">
+                            <div class="pattern-name">Extract References</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-container">
+                    <div class="phase-title">Phase 4: Specialized Output</div>
+                    <div class="pattern-grid">
+                        <div class="pattern-item" data-pattern="create_quiz">
+                            <div class="pattern-name">Create Quiz</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="rate_content">
+                            <div class="pattern-name">Rate Content</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="create_study_guide">
+                            <div class="pattern-name">Create Study Guide</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                        <div class="pattern-item" data-pattern="create_summary">
+                            <div class="pattern-name">Create Summary</div>
+                            <div class="pattern-progress">
+                                <div class="pattern-progress-bar"></div>
+                            </div>
+                            <div class="pattern-status">Pending</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultsSection" class="results-section">
+                <div class="results-title">Processing Complete</div>
+                <p style="margin-bottom: 20px; color: var(--porsche-gray-light);">
+                    All 13 fabric patterns have been successfully processed. Download your comprehensive analysis package.
+                </p>
+                <a id="downloadBtn" class="download-btn" href="#" download>
+                    Download Analysis Package
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Management Console</div>
+                <span class="close" onclick="closeManagementModal()">&times;</span>
+            </div>
+            <div class="modal-tabs">
+                <button class="tab-button active" onclick="showTab('status')">System Status</button>
+                <button class="tab-button" onclick="showTab('history')">Process History</button>
+                <button class="tab-button" onclick="showTab('cleanup')">Maintenance</button>
+                <button class="tab-button" onclick="showTab('controls')">System Controls</button>
+            </div>
+            <div class="tab-content">
+                <div id="statusTab" class="tab-panel active">
+                    <div class="status-grid">
+                        <div class="status-card">
+                            <div class="status-label">Server Status</div>
+                            <div class="status-value" id="serverStatus">Online</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-label">Active Processes</div>
+                            <div class="status-value" id="activeProcesses">0</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-label">Total Processed</div>
+                            <div class="status-value" id="totalProcessed">47</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-label">System Load</div>
+                            <div class="status-value" id="systemLoad">23%</div>
+                        </div>
+                    </div>
+                    <button class="control-button" onclick="refreshStatus()">Refresh Status</button>
+                </div>
+                
+                <div id="historyTab" class="tab-panel">
+                    <div id="historyContainer">
+                        <div class="history-item">
+                            <div class="history-title">Tesla Model S Review Analysis</div>
+                            <div class="history-details">
+                                Processed: 2024-01-15 14:32:15<br>
+                                Duration: 68 seconds<br>
+                                Status: Completed Successfully
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-title">AI Development Tutorial</div>
+                            <div class="history-details">
+                                Processed: 2024-01-15 13:45:22<br>
+                                Duration: 72 seconds<br>
+                                Status: Completed Successfully
+                            </div>
+                        </div>
+                    </div>
+                    <button class="control-button" onclick="refreshHistory()">Refresh History</button>
+                </div>
+                
+                <div id="cleanupTab" class="tab-panel">
+                    <p style="margin-bottom: 20px; color: var(--porsche-gray-light);">
+                        Manage system resources and cleanup old processing outputs.
+                    </p>
+                    <button class="control-button" onclick="cleanupOldFiles()">Clean Old Files</button>
+                    <button class="control-button" onclick="clearCache()">Clear Cache</button>
+                    <button class="control-button" onclick="optimizeStorage()">Optimize Storage</button>
+                </div>
+                
+                <div id="controlsTab" class="tab-panel">
+                    <p style="margin-bottom: 20px; color: var(--porsche-gray-light);">
+                        Critical system control operations. Use with caution.
+                    </p>
+                    <button class="control-button danger" onclick="restartServer()">Restart Server</button>
+                    <button class="control-button danger" onclick="shutdownServer()">Shutdown Server</button>
+                    <button class="control-button" onclick="exportLogs()">Export Logs</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProcessId = null;
+        let ws = null;
+
+        // Mock data for demonstration
+        const patterns = [
+            'extract_wisdom', 'summarize', 'extract_article_wisdom',
+            'analyze_claims', 'extract_insights', 'extract_recommendations',
+            'extract_ideas', 'extract_questions', 'extract_references',
+            'create_quiz', 'rate_content', 'create_study_guide', 'create_summary'
+        ];
+
+        function showMessage(message, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            container.innerHTML = '';
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        function startProcessing() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            
+            if (!url) {
+                showMessage('Please enter a YouTube URL', 'error');
+                return;
+            }
+
+            if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                showMessage('Please enter a valid YouTube URL', 'error');
+                return;
+            }
+
+            // Reset progress
+            resetProgress();
+            
+            // Show progress section
+            document.getElementById('progressSection').classList.add('visible');
+            document.getElementById('resultsSection').classList.remove('visible');
+            
+            // Disable button
+            const btn = document.getElementById('processBtn');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+            
+            showMessage('Initializing transcript-first processing...', 'success');
+            
+            // Simulate processing
+            simulateProcessing();
+        }
+
+        function resetProgress() {
+            patterns.forEach(pattern => {
+                const item = document.querySelector(`[data-pattern="${pattern}"]`);
+                if (item) {
+                    item.classList.remove('processing', 'completed');
+                    const progressBar = item.querySelector('.pattern-progress-bar');
+                    const status = item.querySelector('.pattern-status');
+                    progressBar.style.width = '0%';
+                    status.textContent = 'Pending';
+                }
+            });
+        }
+
+        function simulateProcessing() {
+            let currentIndex = 0;
+            
+            function processNext() {
+                if (currentIndex >= patterns.length) {
+                    // All done
+                    completeProcessing();
+                    return;
+                }
+                
+                const pattern = patterns[currentIndex];
+                const item = document.querySelector(`[data-pattern="${pattern}"]`);
+                const progressBar = item.querySelector('.pattern-progress-bar');
+                const status = item.querySelector('.pattern-status');
+                
+                // Start processing this pattern
+                item.classList.add('processing');
+                status.textContent = 'Processing...';
+                
+                // Animate progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        
+                        // Complete this pattern
+                        item.classList.remove('processing');
+                        item.classList.add('completed');
+                        status.textContent = 'Completed';
+                        
+                        currentIndex++;
+                        setTimeout(processNext, 500);
+                    }
+                    progressBar.style.width = progress + '%';
+                }, 100);
+            }
+            
+            processNext();
+        }
+
+        function completeProcessing() {
+            // Generate mock process ID
+            currentProcessId = 'proc_' + Date.now();
+            
+            // Show results
+            document.getElementById('resultsSection').classList.add('visible');
+            
+            // Update download link
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = `/api/download/${currentProcessId}`;
+            
+            // Reset button
+            const btn = document.getElementById('processBtn');
+            btn.disabled = false;
+            btn.textContent = 'Initialize Processing Sequence';
+            
+            showMessage('Processing completed successfully! Download your analysis package.', 'success');
+        }
+
+        // Management Modal Functions
+        function openManagementModal() {
+            document.getElementById('managementModal').classList.add('visible');
+        }
+
+        function closeManagementModal() {
+            document.getElementById('managementModal').classList.remove('visible');
+        }
+
+        function showTab(tabName) {
+            // Remove active class from all buttons and panels
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding panel
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function refreshStatus() {
+            showMessage('Status refreshed', 'success');
+            // Simulate status update
+            document.getElementById('systemLoad').textContent = Math.floor(Math.random() * 50) + '%';
+        }
+
+        function refreshHistory() {
+            showMessage('History refreshed', 'success');
+        }
+
+        function cleanupOldFiles() {
+            showMessage('Cleanup initiated', 'success');
+        }
+
+        function clearCache() {
+            showMessage('Cache cleared', 'success');
+        }
+
+        function optimizeStorage() {
+            showMessage('Storage optimized', 'success');
+        }
+
+        function restartServer() {
+            if (confirm('Are you sure you want to restart the server?')) {
+                showMessage('Server restart initiated', 'success');
+            }
+        }
+
+        function shutdownServer() {
+            if (confirm('Are you sure you want to shutdown the server?')) {
+                showMessage('Server shutdown initiated', 'error');
+            }
+        }
+
+        function exportLogs() {
+            showMessage('Logs exported', 'success');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('managementModal');
+            if (event.target === modal) {
+                closeManagementModal();
+            }
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus on URL input
+            document.getElementById('youtubeUrl').focus();
+            
+            // Add enter key handler
+            document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startProcessing();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

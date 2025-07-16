@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ CYBERPUNK FABRIC PROCESSOR ⚡</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono:wght@400&display=swap');
+        
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-green: #00ff00;
+            --cyber-blue: #00ffff;
+            --dark-black: #000000;
+            --dark-gray: #111111;
+            --medium-gray: #222222;
+            --light-gray: #333333;
+            --glow-intensity: 0 0 20px;
+            --pulse-speed: 2s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Orbitron', monospace;
+            background: var(--dark-black);
+            color: var(--cyber-blue);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Cyberpunk background with digital rain effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at center, rgba(0,255,255,0.1) 0%, transparent 70%),
+                linear-gradient(45deg, rgba(255,0,255,0.05) 0%, transparent 100%),
+                linear-gradient(-45deg, rgba(0,255,0,0.05) 0%, transparent 100%);
+            z-index: -2;
+            animation: backgroundShift 10s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundShift {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+        
+        /* Scan lines overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,255,255,0.03) 0px,
+                rgba(0,255,255,0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            z-index: -1;
+            animation: scanLines 0.1s linear infinite;
+        }
+        
+        @keyframes scanLines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            position: relative;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--neon-pink), transparent);
+            transform: translateX(-50%);
+            animation: verticalPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes verticalPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-pink), var(--cyber-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: var(--glow-intensity) var(--neon-pink);
+            animation: glitchText 3s ease-in-out infinite;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes glitchText {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        header p {
+            font-size: 1.2em;
+            color: var(--neon-green);
+            text-shadow: var(--glow-intensity) var(--neon-green);
+            font-family: 'Share Tech Mono', monospace;
+            animation: pulse 2s ease-in-out infinite;
+            letter-spacing: 2px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .input-section {
+            background: linear-gradient(135deg, var(--dark-gray), var(--medium-gray));
+            border: 2px solid var(--cyber-blue);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 50px rgba(0,255,255,0.1),
+                var(--glow-intensity) var(--cyber-blue);
+        }
+        
+        .input-section::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--cyber-blue), transparent, var(--neon-pink), transparent);
+            animation: rotate 4s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: var(--neon-green);
+            text-shadow: var(--glow-intensity) var(--neon-green);
+            font-weight: 700;
+        }
+        
+        input[type="url"] {
+            width: 100%;
+            padding: 15px;
+            background: var(--dark-black);
+            border: 2px solid var(--neon-pink);
+            border-radius: 10px;
+            color: var(--cyber-blue);
+            font-size: 1em;
+            font-family: 'Share Tech Mono', monospace;
+            transition: all 0.3s ease;
+            box-shadow: inset var(--glow-intensity) var(--neon-pink);
+        }
+        
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--cyber-blue);
+            box-shadow: 
+                inset var(--glow-intensity) var(--cyber-blue),
+                var(--glow-intensity) var(--cyber-blue);
+            animation: inputGlow 1s ease-in-out infinite;
+        }
+        
+        @keyframes inputGlow {
+            0%, 100% { box-shadow: inset var(--glow-intensity) var(--cyber-blue), var(--glow-intensity) var(--cyber-blue); }
+            50% { box-shadow: inset 0 0 30px var(--cyber-blue), 0 0 30px var(--cyber-blue); }
+        }
+        
+        .process-btn {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-green));
+            border: none;
+            color: var(--dark-black);
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--glow-intensity) var(--neon-pink);
+        }
+        
+        .process-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .process-btn:hover::before {
+            left: 100%;
+        }
+        
+        .process-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--neon-pink);
+        }
+        
+        .status-section {
+            background: linear-gradient(135deg, var(--dark-gray), var(--medium-gray));
+            border: 2px solid var(--neon-green);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 
+                inset 0 0 50px rgba(0,255,0,0.1),
+                var(--glow-intensity) var(--neon-green);
+        }
+        
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .status-header h2 {
+            color: var(--neon-green);
+            text-shadow: var(--glow-intensity) var(--neon-green);
+            font-size: 2em;
+        }
+        
+        .status-badge {
+            background: var(--neon-pink);
+            color: var(--dark-black);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            animation: badgePulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .progress-container {
+            margin-bottom: 30px;
+        }
+        
+        .progress-bar {
+            background: var(--dark-black);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--cyber-blue);
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-pink), var(--cyber-blue), var(--neon-green));
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes progressGlow {
+            0%, 100% { box-shadow: inset 0 0 20px rgba(255,255,255,0.2); }
+            50% { box-shadow: inset 0 0 40px rgba(255,255,255,0.4); }
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1em;
+            color: var(--cyber-blue);
+        }
+        
+        .current-step {
+            background: var(--dark-black);
+            border: 2px solid var(--neon-pink);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: inset var(--glow-intensity) var(--neon-pink);
+        }
+        
+        .current-step h3 {
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+            text-shadow: var(--glow-intensity) var(--neon-pink);
+        }
+        
+        .pattern-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pattern-name {
+            font-weight: 700;
+            color: var(--neon-green);
+            font-family: 'Share Tech Mono', monospace;
+        }
+        
+        .pattern-description {
+            color: var(--cyber-blue);
+            font-style: italic;
+        }
+        
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .phase-card {
+            background: var(--dark-black);
+            border: 2px solid var(--cyber-blue);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--cyber-blue), var(--neon-green));
+            animation: topGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes topGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,255,255,0.3);
+        }
+        
+        .phase-card h4 {
+            color: var(--neon-green);
+            margin-bottom: 15px;
+            text-shadow: var(--glow-intensity) var(--neon-green);
+        }
+        
+        .phase-patterns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .pattern-item {
+            background: var(--medium-gray);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid var(--neon-pink);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pattern-item::before {
+            content: "●";
+            color: var(--neon-pink);
+            margin-right: 8px;
+            animation: itemPulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes itemPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .pattern-item:hover {
+            background: var(--light-gray);
+            border-left-color: var(--neon-green);
+            transform: translateX(5px);
+        }
+        
+        .pattern-item.completed {
+            background: var(--neon-green);
+            color: var(--dark-black);
+            border-left-color: var(--neon-green);
+        }
+        
+        .pattern-item.active {
+            background: var(--neon-pink);
+            color: var(--dark-black);
+            border-left-color: var(--neon-pink);
+            animation: activePattern 1s ease-in-out infinite;
+        }
+        
+        @keyframes activePattern {
+            0%, 100% { box-shadow: 0 0 10px var(--neon-pink); }
+            50% { box-shadow: 0 0 20px var(--neon-pink); }
+        }
+        
+        .results-section {
+            background: linear-gradient(135deg, var(--dark-gray), var(--medium-gray));
+            border: 2px solid var(--neon-green);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 
+                inset 0 0 50px rgba(0,255,0,0.1),
+                var(--glow-intensity) var(--neon-green);
+        }
+        
+        .results-header h2 {
+            color: var(--neon-green);
+            text-shadow: var(--glow-intensity) var(--neon-green);
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .results-summary {
+            font-size: 1.2em;
+            color: var(--cyber-blue);
+            margin-bottom: 30px;
+        }
+        
+        .download-btn {
+            background: linear-gradient(45deg, var(--neon-green), var(--cyber-blue));
+            border: none;
+            color: var(--dark-black);
+            padding: 20px 40px;
+            font-size: 1.3em;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--glow-intensity) var(--neon-green);
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px var(--neon-green);
+        }
+        
+        .download-info {
+            margin-top: 20px;
+            color: var(--cyber-blue);
+            font-style: italic;
+        }
+        
+        .error-section {
+            background: linear-gradient(135deg, var(--dark-gray), var(--medium-gray));
+            border: 2px solid var(--neon-pink);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 
+                inset 0 0 50px rgba(255,0,255,0.1),
+                var(--glow-intensity) var(--neon-pink);
+        }
+        
+        .error-header h2 {
+            color: var(--neon-pink);
+            text-shadow: var(--glow-intensity) var(--neon-pink);
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            font-size: 1.2em;
+            color: var(--cyber-blue);
+            margin-bottom: 30px;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-green));
+            border: none;
+            color: var(--dark-black);
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: var(--glow-intensity) var(--neon-pink);
+        }
+        
+        .retry-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--neon-pink);
+        }
+        
+        footer {
+            background: var(--dark-black);
+            border: 2px solid var(--cyber-blue);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: var(--glow-intensity) var(--cyber-blue);
+        }
+        
+        .system-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9em;
+        }
+        
+        .separator {
+            color: var(--neon-pink);
+            font-size: 1.2em;
+        }
+        
+        .management-toggle {
+            background: var(--neon-green);
+            color: var(--dark-black);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .management-toggle:hover {
+            background: var(--cyber-blue);
+            transform: scale(1.1);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark-gray), var(--medium-gray));
+            border: 2px solid var(--cyber-blue);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 
+                inset 0 0 50px rgba(0,255,255,0.1),
+                0 0 50px rgba(0,255,255,0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--neon-pink);
+            padding-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: var(--neon-green);
+            text-shadow: var(--glow-intensity) var(--neon-green);
+        }
+        
+        .close-btn {
+            background: var(--neon-pink);
+            color: var(--dark-black);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: var(--neon-green);
+            transform: scale(1.1);
+        }
+        
+        .management-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .tab-btn {
+            background: var(--dark-black);
+            color: var(--cyber-blue);
+            border: 2px solid var(--cyber-blue);
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+        
+        .tab-btn.active {
+            background: var(--cyber-blue);
+            color: var(--dark-black);
+        }
+        
+        .tab-btn:hover {
+            background: var(--neon-green);
+            color: var(--dark-black);
+            border-color: var(--neon-green);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .status-card {
+            background: var(--dark-black);
+            border: 2px solid var(--neon-pink);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: inset var(--glow-intensity) var(--neon-pink);
+        }
+        
+        .status-card h3 {
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+            text-shadow: var(--glow-intensity) var(--neon-pink);
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .label {
+            color: var(--neon-green);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Digital noise animation */
+        @keyframes digitalNoise {
+            0% { transform: translate(0, 0); }
+            10% { transform: translate(-1px, -1px); }
+            20% { transform: translate(-2px, 0); }
+            30% { transform: translate(1px, 1px); }
+            40% { transform: translate(1px, -1px); }
+            50% { transform: translate(-1px, 1px); }
+            60% { transform: translate(-1px, 0); }
+            70% { transform: translate(1px, 1px); }
+            80% { transform: translate(-1px, -1px); }
+            90% { transform: translate(1px, 0); }
+            100% { transform: translate(0, 0); }
+        }
+        
+        .glitch-effect {
+            animation: digitalNoise 0.3s ease-in-out infinite;
+        }
+        
+        /* Flickering effect */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .flicker {
+            animation: flicker 0.15s ease-in-out infinite;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .system-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+        
+        /* Glitch text animation */
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 var(--neon-pink), -0.05em -0.025em 0 var(--cyber-blue),
+                    0.025em 0.05em 0 var(--neon-green);
+            }
+            15% {
+                text-shadow: 0.05em 0 0 var(--neon-pink), -0.05em -0.025em 0 var(--cyber-blue),
+                    0.025em 0.05em 0 var(--neon-green);
+            }
+            16% {
+                text-shadow: -0.05em -0.025em 0 var(--neon-pink), 0.025em 0.025em 0 var(--cyber-blue),
+                    -0.05em -0.05em 0 var(--neon-green);
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 var(--neon-pink), 0.025em 0.025em 0 var(--cyber-blue),
+                    -0.05em -0.05em 0 var(--neon-green);
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 var(--neon-pink), 0.05em 0 0 var(--cyber-blue),
+                    0 -0.05em 0 var(--neon-green);
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 var(--neon-pink), 0.05em 0 0 var(--cyber-blue),
+                    0 -0.05em 0 var(--neon-green);
+            }
+            100% {
+                text-shadow: -0.025em 0 0 var(--neon-pink), -0.025em -0.025em 0 var(--cyber-blue),
+                    -0.025em -0.05em 0 var(--neon-green);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ CYBERPUNK FABRIC PROCESSOR ⚡</h1>
+            <p>NEURAL NETWORK ANALYSIS CHAMBER :: FABRIC PATTERN EXTRACTION</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="input-group">
+                    <label for="youtube-url">► VIDEO TARGET URL</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        required
+                    >
+                </div>
+                
+                <button id="process-btn" class="process-btn">
+                    ⚡ INITIALIZE NEURAL SCAN ⚡
+                </button>
+            </section>
+
+            <section id="status-section" class="status-section hidden">
+                <div class="status-header">
+                    <h2>◢ NEURAL SCAN STATUS ◣</h2>
+                    <div id="status-badge" class="status-badge">⚡ SYSTEM ONLINE</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-current">0</span> of <span id="progress-total">13</span> patterns processed
+                    </div>
+                </div>
+
+                <div class="current-step">
+                    <h3>◢ ACTIVE NEURAL PATHWAY ◣</h3>
+                    <div id="current-pattern" class="pattern-info">
+                        <span class="pattern-name">SYSTEM CALIBRATION...</span>
+                        <span class="pattern-description">Initializing neural matrix</span>
+                    </div>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <h4>◢ PHASE 1: DATA EXTRACTION ◣</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="youtube_summary">youtube_summary</div>
+                            <div class="pattern-item" data-pattern="extract_core_message">extract_core_message</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="2">
+                        <h4>◢ PHASE 2: NEURAL PROCESSING ◣</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_wisdom">extract_wisdom</div>
+                            <div class="pattern-item" data-pattern="extract_insights">extract_insights</div>
+                            <div class="pattern-item" data-pattern="extract_ideas">extract_ideas</div>
+                            <div class="pattern-item" data-pattern="extract_patterns">extract_patterns</div>
+                            <div class="pattern-item" data-pattern="extract_recommendations">extract_recommendations</div>
+                            <div class="pattern-item" data-pattern="extract_predictions">extract_predictions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="3">
+                        <h4>◢ PHASE 3: PATTERN MAPPING ◣</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_references">extract_references</div>
+                            <div class="pattern-item" data-pattern="extract_questions">extract_questions</div>
+                            <div class="pattern-item" data-pattern="create_tags">create_tags</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="4">
+                        <h4>◢ PHASE 4: DATA SYNTHESIS ◣</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="create_5_sentence_summary">create_5_sentence_summary</div>
+                            <div class="pattern-item" data-pattern="to_flashcards">to_flashcards</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="results-section" class="results-section hidden">
+                <div class="results-header">
+                    <h2>◢ NEURAL SCAN COMPLETE ◣</h2>
+                    <div class="results-summary">
+                        <span id="results-count">13</span> pattern files generated
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button id="download-btn" class="download-btn">
+                        ⚡ DOWNLOAD NEURAL DATA ⚡
+                    </button>
+                    <p class="download-info">
+                        Neural patterns exported as encrypted text files (.txt) with cyberpunk formatting
+                    </p>
+                </div>
+            </section>
+
+            <section id="error-section" class="error-section hidden">
+                <div class="error-header">
+                    <h2>◢ SYSTEM ERROR ◣</h2>
+                </div>
+                <div id="error-message" class="error-message">
+                    Neural pathway disruption detected.
+                </div>
+                <button id="retry-btn" class="retry-btn">⚡ RETRY CONNECTION ⚡</button>
+            </section>
+        </main>
+
+        <footer>
+            <div class="system-info">
+                <span id="fabric-status">Checking neural fabric status...</span>
+                <span class="separator">●</span>
+                <span>13 neural patterns online</span>
+                <span class="separator">●</span>
+                <button id="management-toggle" class="management-toggle">⚙ SYSTEM CONTROL</button>
+            </div>
+        </footer>
+
+        <!-- Management Panel Modal -->
+        <div id="management-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>◢ NEURAL SYSTEM CONTROL ◣</h2>
+                    <button id="close-management" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="management-tabs">
+                        <button class="tab-btn active" data-tab="status">◢ STATUS ◣</button>
+                        <button class="tab-btn" data-tab="history">◢ HISTORY ◣</button>
+                        <button class="tab-btn" data-tab="cleanup">◢ CLEANUP ◣</button>
+                    </div>
+
+                    <!-- Status Tab -->
+                    <div id="status-tab" class="tab-content active">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <h3>◢ NEURAL STATUS ◣</h3>
+                                <div class="status-item">
+                                    <span class="label">Uptime:</span>
+                                    <span id="server-uptime">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Memory Usage:</span>
+                                    <span id="memory-usage">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Fabric Available:</span>
+                                    <span id="fabric-available">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <h3>◢ ACTIVE PROCESSES ◣</h3>
+                                <div class="status-item">
+                                    <span class="label">Running:</span>
+                                    <span id="active-processes">-</span>
+                                </div>
+                                <div id="process-list" class="process-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="history-tab" class="tab-content">
+                        <div class="history-controls">
+                            <button id="refresh-history" class="refresh-btn">⚡ REFRESH NEURAL LOG</button>
+                            <span class="history-count">Loading...</span>
+                        </div>
+                        <div id="history-list" class="history-list">
+                            <div class="loading">Loading neural history...</div>
+                        </div>
+                    </div>
+
+                    <!-- Cleanup Tab -->
+                    <div id="cleanup-tab" class="tab-content">
+                        <div class="cleanup-section">
+                            <h3>◢ NEURAL CLEANUP ◣</h3>
+                            <p>Remove old neural patterns to free up memory</p>
+                            
+                            <div class="cleanup-controls">
+                                <div class="cleanup-option">
+                                    <label for="cleanup-days">Remove patterns older than:</label>
+                                    <select id="cleanup-days">
+                                        <option value="7">7 days</option>
+                                        <option value="30" selected>30 days</option>
+                                        <option value="90">90 days</option>
+                                    </select>
+                                    <button id="cleanup-old-btn" class="cleanup-btn">DELETE OLD PATTERNS</button>
+                                </div>
+                            </div>
+                            
+                            <div class="cleanup-warning">
+                                <p><strong>⚠ WARNING:</strong> This action cannot be undone. Neural patterns will be permanently deleted.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cyberpunk JavaScript functionality
+        class CyberpunkFabricProcessor {
+            constructor() {
+                this.initializeElements();
+                this.setupEventListeners();
+                this.startGlitchEffects();
+            }
+
+            initializeElements() {
+                this.processBtn = document.getElementById('process-btn');
+                this.statusSection = document.getElementById('status-section');
+                this.resultsSection = document.getElementById('results-section');
+                this.errorSection = document.getElementById('error-section');
+                this.progressFill = document.getElementById('progress-fill');
+                this.progressCurrent = document.getElementById('progress-current');
+                this.currentPattern = document.getElementById('current-pattern');
+                this.statusBadge = document.getElementById('status-badge');
+                this.managementModal = document.getElementById('management-modal');
+                this.managementToggle = document.getElementById('management-toggle');
+                this.closeManagement = document.getElementById('close-management');
+                this.tabButtons = document.querySelectorAll('.tab-btn');
+                this.tabContents = document.querySelectorAll('.tab-content');
+            }
+
+            setupEventListeners() {
+                this.processBtn.addEventListener('click', () => this.startProcessing());
+                this.managementToggle.addEventListener('click', () => this.openManagement());
+                this.closeManagement.addEventListener('click', () => this.closeManagement());
+                
+                // Tab switching
+                this.tabButtons.forEach(btn => {
+                    btn.addEventListener('click', () => this.switchTab(btn.dataset.tab));
+                });
+
+                // Close modal on outside click
+                this.managementModal.addEventListener('click', (e) => {
+                    if (e.target === this.managementModal) {
+                        this.closeManagement();
+                    }
+                });
+
+                // Retry button
+                document.getElementById('retry-btn').addEventListener('click', () => {
+                    this.hideAllSections();
+                    this.resetProgress();
+                });
+            }
+
+            startGlitchEffects() {
+                // Add random glitch effects to various elements
+                setInterval(() => {
+                    const elements = document.querySelectorAll('h1, h2, .status-badge, .pattern-item');
+                    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+                    
+                    if (randomElement && Math.random() > 0.95) {
+                        randomElement.classList.add('glitch-effect');
+                        setTimeout(() => {
+                            randomElement.classList.remove('glitch-effect');
+                        }, 200);
+                    }
+                }, 100);
+
+                // Random flicker effects
+                setInterval(() => {
+                    const elements = document.querySelectorAll('.neon-text, .status-badge');
+                    elements.forEach(el => {
+                        if (Math.random() > 0.98) {
+                            el.classList.add('flicker');
+                            setTimeout(() => {
+                                el.classList.remove('flicker');
+                            }, 150);
+                        }
+                    });
+                }, 50);
+            }
+
+            startProcessing() {
+                this.hideAllSections();
+                this.statusSection.classList.remove('hidden');
+                this.processBtn.disabled = true;
+                this.statusBadge.textContent = '⚡ NEURAL SCAN ACTIVE';
+                
+                // Simulate processing
+                this.simulateProcessing();
+            }
+
+            simulateProcessing() {
+                const patterns = [
+                    { name: 'youtube_summary', description: 'Extracting video neural patterns' },
+                    { name: 'extract_core_message', description: 'Decoding core message matrix' },
+                    { name: 'extract_wisdom', description: 'Mining wisdom data streams' },
+                    { name: 'extract_insights', description: 'Analyzing insight vectors' },
+                    { name: 'extract_ideas', description: 'Harvesting idea fragments' },
+                    { name: 'extract_patterns', description: 'Mapping pattern networks' },
+                    { name: 'extract_recommendations', description: 'Generating recommendation algorithms' },
+                    { name: 'extract_predictions', description: 'Calculating prediction matrices' },
+                    { name: 'extract_references', description: 'Linking reference nodes' },
+                    { name: 'extract_questions', description: 'Parsing question structures' },
+                    { name: 'create_tags', description: 'Tagging data fragments' },
+                    { name: 'create_5_sentence_summary', description: 'Synthesizing neural summary' },
+                    { name: 'to_flashcards', description: 'Converting to memory cards' }
+                ];
+
+                let currentIndex = 0;
+                const processInterval = setInterval(() => {
+                    if (currentIndex >= patterns.length) {
+                        clearInterval(processInterval);
+                        this.completeProcessing();
+                        return;
+                    }
+
+                    const pattern = patterns[currentIndex];
+                    this.updateProgress(currentIndex + 1, patterns.length);
+                    this.updateCurrentPattern(pattern);
+                    this.updatePatternStatus(pattern.name, 'active');
+                    
+                    setTimeout(() => {
+                        this.updatePatternStatus(pattern.name, 'completed');
+                        currentIndex++;
+                    }, 500);
+                }, 1000);
+            }
+
+            updateProgress(current, total) {
+                const percentage = (current / total) * 100;
+                this.progressFill.style.width = `${percentage}%`;
+                this.progressCurrent.textContent = current;
+            }
+
+            updateCurrentPattern(pattern) {
+                const nameSpan = this.currentPattern.querySelector('.pattern-name');
+                const descSpan = this.currentPattern.querySelector('.pattern-description');
+                nameSpan.textContent = pattern.name;
+                descSpan.textContent = pattern.description;
+            }
+
+            updatePatternStatus(patternName, status) {
+                const patternElement = document.querySelector(`[data-pattern="${patternName}"]`);
+                if (patternElement) {
+                    patternElement.classList.remove('active', 'completed');
+                    patternElement.classList.add(status);
+                }
+            }
+
+            completeProcessing() {
+                this.hideAllSections();
+                this.resultsSection.classList.remove('hidden');
+                this.statusBadge.textContent = '⚡ NEURAL SCAN COMPLETE';
+                this.processBtn.disabled = false;
+                
+                // Add download functionality
+                document.getElementById('download-btn').addEventListener('click', () => {
+                    this.downloadResults();
+                });
+            }
+
+            downloadResults() {
+                // Simulate download
+                const downloadBtn = document.getElementById('download-btn');
+                downloadBtn.textContent = '⚡ DOWNLOADING...';
+                downloadBtn.disabled = true;
+                
+                setTimeout(() => {
+                    downloadBtn.textContent = '⚡ DOWNLOAD NEURAL DATA ⚡';
+                    downloadBtn.disabled = false;
+                    alert('Neural patterns downloaded successfully!');
+                }, 2000);
+            }
+
+            hideAllSections() {
+                [this.statusSection, this.resultsSection, this.errorSection].forEach(section => {
+                    section.classList.add('hidden');
+                });
+            }
+
+            resetProgress() {
+                this.progressFill.style.width = '0%';
+                this.progressCurrent.textContent = '0';
+                document.querySelectorAll('.pattern-item').forEach(item => {
+                    item.classList.remove('active', 'completed');
+                });
+            }
+
+            openManagement() {
+                this.managementModal.classList.remove('hidden');
+                this.loadSystemStatus();
+            }
+
+            closeManagement() {
+                this.managementModal.classList.add('hidden');
+            }
+
+            switchTab(tabName) {
+                this.tabButtons.forEach(btn => btn.classList.remove('active'));
+                this.tabContents.forEach(content => content.classList.remove('active'));
+                
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            }
+
+            loadSystemStatus() {
+                // Simulate loading system status
+                document.getElementById('server-uptime').textContent = '72h 15m';
+                document.getElementById('memory-usage').textContent = '2.4GB / 8GB';
+                document.getElementById('fabric-available').textContent = 'ONLINE';
+                document.getElementById('active-processes').textContent = '3';
+            }
+        }
+
+        // Initialize the cyberpunk processor when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new CyberpunkFabricProcessor();
+        });
+
+        // Add random digital noise to background
+        setInterval(() => {
+            const body = document.body;
+            if (Math.random() > 0.98) {
+                body.style.filter = 'hue-rotate(10deg) brightness(1.1)';
+                setTimeout(() => {
+                    body.style.filter = 'none';
+                }, 100);
+            }
+        }, 100);
+    </script>
+</body>
+</html>

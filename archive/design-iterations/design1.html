@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Data Center Protocol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #001122;
+            --bg-secondary: #001a33;
+            --bg-tertiary: #002244;
+            --accent-cyan: #00ffff;
+            --accent-blue: #0080ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b0c4de;
+            --text-muted: #708090;
+            --border-glow: rgba(0, 255, 255, 0.3);
+            --grid-color: rgba(0, 255, 255, 0.1);
+            --success-color: #00ff88;
+            --error-color: #ff4444;
+            --warning-color: #ffaa00;
+        }
+
+        body {
+            font-family: 'Courier New', Monaco, monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Matrix-style background animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: gridMove 10s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(20px, 20px); }
+        }
+
+        /* Scanning line animation */
+        .container::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            animation: scanLine 3s linear infinite;
+            z-index: 1000;
+        }
+
+        @keyframes scanLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100vw); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            border: 2px solid var(--border-glow);
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            box-shadow: 0 0 20px var(--border-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--accent-cyan), transparent);
+            animation: rotate 4s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1::before {
+            content: '>';
+            color: var(--accent-cyan);
+            animation: blink 1s infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            animation: dataFlow 2s linear infinite;
+        }
+
+        @keyframes dataFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent-cyan);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="url"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-glow);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .process-btn {
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-cyan));
+            border: none;
+            color: var(--text-primary);
+            padding: 15px 30px;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 128, 255, 0.3);
+        }
+
+        .process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.4);
+        }
+
+        .process-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Status Section */
+        .status-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .status-header h2 {
+            color: var(--accent-cyan);
+            font-size: 1.8em;
+        }
+
+        .status-badge {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border-glow);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* Current Step */
+        .current-step {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-glow);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .current-step h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+        }
+
+        .pattern-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pattern-name {
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .pattern-description {
+            color: var(--text-secondary);
+        }
+
+        /* Phases Grid */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .phase-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .phase-card:hover::before {
+            left: 100%;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 255, 255, 0.2);
+        }
+
+        .phase-card h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .phase-patterns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pattern-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glow);
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pattern-item:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--accent-cyan);
+        }
+
+        .pattern-item.active {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+            font-weight: bold;
+        }
+
+        .pattern-item.completed {
+            background: var(--success-color);
+            color: var(--bg-primary);
+        }
+
+        .pattern-item.completed::after {
+            content: '✓';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--success-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+        }
+
+        .results-header h2 {
+            color: var(--success-color);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .results-summary {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, var(--success-color), #00ccaa);
+            border: none;
+            color: var(--text-primary);
+            padding: 15px 30px;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .download-info {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        /* Error Section */
+        .error-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--error-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.1);
+        }
+
+        .error-header h2 {
+            color: var(--error-color);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            background: linear-gradient(45deg, var(--error-color), #cc3333);
+            border: none;
+            color: var(--text-primary);
+            padding: 15px 30px;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 68, 68, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 2px solid var(--border-glow);
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .system-info {
+            text-align: center;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .separator {
+            color: var(--accent-cyan);
+        }
+
+        .management-toggle {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-glow);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .management-toggle:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-glow);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .modal-header h2 {
+            color: var(--accent-cyan);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--error-color);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Tabs */
+        .management-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-glow);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Status Cards */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .status-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .status-card h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .label {
+            color: var(--text-secondary);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .system-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+        }
+
+        /* Terminal-style typing animation */
+        .typing::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>YOUTUBE FABRIC PROCESSOR</h1>
+            <p>// DATA CENTER PROTOCOL v2.1 - NEURAL PATTERN ANALYSIS SYSTEM //</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="input-group">
+                    <label for="youtube-url">:: TARGET VIDEO URL ::</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        required
+                    >
+                </div>
+                
+                <button id="process-btn" class="process-btn">
+                    INITIATE DEEP SCAN
+                </button>
+            </section>
+
+            <section id="status-section" class="status-section hidden">
+                <div class="status-header">
+                    <h2>:: NEURAL ANALYSIS STATUS ::</h2>
+                    <div id="status-badge" class="status-badge">INITIALIZING MATRIX</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-current">0</span> of <span id="progress-total">13</span> patterns processed
+                    </div>
+                </div>
+
+                <div class="current-step">
+                    <h3>:: ACTIVE SCAN SEQUENCE ::</h3>
+                    <div id="current-pattern" class="pattern-info">
+                        <span class="pattern-name">Calibrating neural pathways...</span>
+                        <span class="pattern-description">Preparing data center analysis matrix</span>
+                    </div>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <h4>:: PHASE 1: DATA ACQUISITION ::</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="youtube_summary">youtube_summary</div>
+                            <div class="pattern-item" data-pattern="extract_core_message">extract_core_message</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="2">
+                        <h4>:: PHASE 2: DEEP MATRIX ANALYSIS ::</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_wisdom">extract_wisdom</div>
+                            <div class="pattern-item" data-pattern="extract_insights">extract_insights</div>
+                            <div class="pattern-item" data-pattern="extract_ideas">extract_ideas</div>
+                            <div class="pattern-item" data-pattern="extract_patterns">extract_patterns</div>
+                            <div class="pattern-item" data-pattern="extract_recommendations">extract_recommendations</div>
+                            <div class="pattern-item" data-pattern="extract_predictions">extract_predictions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="3">
+                        <h4>:: PHASE 3: NEURAL MAPPING ::</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_references">extract_references</div>
+                            <div class="pattern-item" data-pattern="extract_questions">extract_questions</div>
+                            <div class="pattern-item" data-pattern="create_tags">create_tags</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="4">
+                        <h4>:: PHASE 4: SYNTHESIS PROTOCOL ::</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="create_5_sentence_summary">create_5_sentence_summary</div>
+                            <div class="pattern-item" data-pattern="to_flashcards">to_flashcards</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="results-section" class="results-section hidden">
+                <div class="results-header">
+                    <h2>:: ANALYSIS COMPLETE ::</h2>
+                    <div class="results-summary">
+                        <span id="results-count">13</span> neural pattern files generated
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button id="download-btn" class="download-btn">
+                        DOWNLOAD MATRIX DATA
+                    </button>
+                    <p class="download-info">
+                        Files delivered as encrypted text archives (.txt) with neural formatting protocols
+                    </p>
+                </div>
+            </section>
+
+            <section id="error-section" class="error-section hidden">
+                <div class="error-header">
+                    <h2>:: SYSTEM ERROR ::</h2>
+                </div>
+                <div id="error-message" class="error-message">
+                    Neural pathway disruption detected during processing sequence.
+                </div>
+                <button id="retry-btn" class="retry-btn">RETRY PROTOCOL</button>
+            </section>
+        </main>
+
+        <footer>
+            <div class="system-info">
+                <span id="fabric-status">Checking neural fabric availability...</span>
+                <span class="separator">●</span>
+                <span>13 neural patterns online</span>
+                <span class="separator">●</span>
+                <button id="management-toggle" class="management-toggle">SYSTEM CONTROL</button>
+            </div>
+        </footer>
+
+        <!-- Management Panel Modal -->
+        <div id="management-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>:: DATA CENTER MANAGEMENT ::</h2>
+                    <button id="close-management" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="management-tabs">
+                        <button class="tab-btn active" data-tab="status">STATUS</button>
+                        <button class="tab-btn" data-tab="history">HISTORY</button>
+                        <button class="tab-btn" data-tab="cleanup">CLEANUP</button>
+                    </div>
+
+                    <!-- Status Tab -->
+                    <div id="status-tab" class="tab-content active">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <h3>:: SYSTEM STATUS ::</h3>
+                                <div class="status-item">
+                                    <span class="label">Uptime:</span>
+                                    <span id="server-uptime">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Memory Usage:</span>
+                                    <span id="memory-usage">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Neural Fabric:</span>
+                                    <span id="fabric-available">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <h3>:: ACTIVE PROCESSES ::</h3>
+                                <div class="status-item">
+                                    <span class="label">Running:</span>
+                                    <span id="active-processes">-</span>
+                                </div>
+                                <div id="process-list" class="process-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="history-tab" class="tab-content">
+                        <div class="history-controls">
+                            <button id="refresh-history" class="refresh-btn">REFRESH</button>
+                            <span class="history-count">Loading neural history...</span>
+                        </div>
+                        <div id="history-list" class="history-list">
+                            <div class="loading">Accessing data center archives...</div>
+                        </div>
+                    </div>
+
+                    <!-- Cleanup Tab -->
+                    <div id="cleanup-tab" class="tab-content">
+                        <div class="cleanup-section">
+                            <h3>:: STORAGE CLEANUP PROTOCOL ::</h3>
+                            <p>Purge obsolete neural pattern files to optimize matrix storage</p>
+                            
+                            <div class="cleanup-controls">
+                                <div class="cleanup-option">
+                                    <label for="cleanup-days">Purge files older than:</label>
+                                    <select id="cleanup-days">
+                                        <option value="7">7 cycles</option>
+                                        <option value="30" selected>30 cycles</option>
+                                        <option value="90">90 cycles</option>
+                                    </select>
+                                    <button id="cleanup-old-btn" class="cleanup-btn">EXECUTE PURGE</button>
+                                </div>
+                            </div>
+                            
+                            <div class="cleanup-warning">
+                                <p><strong>WARNING:</strong> Data purge is irreversible. Neural patterns will be permanently deleted from the matrix.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced JavaScript with futuristic animations
+        
+        const elements = {
+            processBtn: document.getElementById('process-btn'),
+            statusSection: document.getElementById('status-section'),
+            resultsSection: document.getElementById('results-section'),
+            errorSection: document.getElementById('error-section'),
+            managementToggle: document.getElementById('management-toggle'),
+            managementModal: document.getElementById('management-modal'),
+            closeManagement: document.getElementById('close-management'),
+            urlInput: document.getElementById('youtube-url'),
+            progressFill: document.getElementById('progress-fill'),
+            progressCurrent: document.getElementById('progress-current'),
+            progressTotal: document.getElementById('progress-total'),
+            statusBadge: document.getElementById('status-badge'),
+            currentPattern: document.getElementById('current-pattern'),
+            fabricStatus: document.getElementById('fabric-status'),
+            downloadBtn: document.getElementById('download-btn'),
+            retryBtn: document.getElementById('retry-btn'),
+            tabBtns: document.querySelectorAll('.tab-btn'),
+            tabContents: document.querySelectorAll('.tab-content')
+        };
+
+        // Neural pattern definitions
+        const patterns = [
+            { name: 'youtube_summary', phase: 1, description: 'Extracting core video metadata' },
+            { name: 'extract_core_message', phase: 1, description: 'Identifying primary message vector' },
+            { name: 'extract_wisdom', phase: 2, description: 'Processing wisdom neural pathways' },
+            { name: 'extract_insights', phase: 2, description: 'Analyzing insight data streams' },
+            { name: 'extract_ideas', phase: 2, description: 'Mapping ideation patterns' },
+            { name: 'extract_patterns', phase: 2, description: 'Detecting cognitive patterns' },
+            { name: 'extract_recommendations', phase: 2, description: 'Generating recommendation matrix' },
+            { name: 'extract_predictions', phase: 2, description: 'Calculating prediction algorithms' },
+            { name: 'extract_references', phase: 3, description: 'Mapping reference networks' },
+            { name: 'extract_questions', phase: 3, description: 'Analyzing question matrices' },
+            { name: 'create_tags', phase: 3, description: 'Generating semantic tags' },
+            { name: 'create_5_sentence_summary', phase: 4, description: 'Synthesizing neural summary' },
+            { name: 'to_flashcards', phase: 4, description: 'Creating memory enhancement cards' }
+        ];
+
+        let currentProcessIndex = 0;
+        let isProcessing = false;
+
+        // Initialize system
+        function initializeSystem() {
+            elements.fabricStatus.textContent = 'Neural fabric systems online';
+            elements.progressTotal.textContent = patterns.length;
+            
+            // Add terminal-style typing effect to headers
+            typeWriter(elements.fabricStatus, 'Neural fabric systems online', 50);
+        }
+
+        // Terminal typing effect
+        function typeWriter(element, text, speed) {
+            element.textContent = '';
+            let i = 0;
+            const timer = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(timer);
+                }
+            }, speed);
+        }
+
+        // Process video simulation
+        async function processVideo(url) {
+            if (isProcessing) return;
+            isProcessing = true;
+            
+            // Reset UI
+            elements.statusSection.classList.remove('hidden');
+            elements.resultsSection.classList.add('hidden');
+            elements.errorSection.classList.add('hidden');
+            elements.processBtn.disabled = true;
+            
+            currentProcessIndex = 0;
+            elements.progressFill.style.width = '0%';
+            elements.progressCurrent.textContent = '0';
+            elements.statusBadge.textContent = 'NEURAL SCAN ACTIVE';
+            
+            // Reset pattern items
+            document.querySelectorAll('.pattern-item').forEach(item => {
+                item.classList.remove('active', 'completed');
+            });
+
+            try {
+                // Process each pattern
+                for (let i = 0; i < patterns.length; i++) {
+                    const pattern = patterns[i];
+                    const patternElement = document.querySelector(`[data-pattern="${pattern.name}"]`);
+                    
+                    // Update current pattern display
+                    elements.currentPattern.innerHTML = `
+                        <span class="pattern-name">${pattern.name}</span>
+                        <span class="pattern-description">${pattern.description}</span>
+                    `;
+                    
+                    // Activate pattern
+                    if (patternElement) {
+                        patternElement.classList.add('active');
+                    }
+                    
+                    // Simulate processing time
+                    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+                    
+                    // Complete pattern
+                    if (patternElement) {
+                        patternElement.classList.remove('active');
+                        patternElement.classList.add('completed');
+                    }
+                    
+                    // Update progress
+                    currentProcessIndex = i + 1;
+                    const progress = (currentProcessIndex / patterns.length) * 100;
+                    elements.progressFill.style.width = `${progress}%`;
+                    elements.progressCurrent.textContent = currentProcessIndex;
+                    
+                    // Update status badge
+                    elements.statusBadge.textContent = `PROCESSING PHASE ${pattern.phase}`;
+                }
+                
+                // Complete processing
+                elements.statusBadge.textContent = 'MATRIX ANALYSIS COMPLETE';
+                elements.currentPattern.innerHTML = `
+                    <span class="pattern-name">All patterns processed</span>
+                    <span class="pattern-description">Neural analysis matrix complete</span>
+                `;
+                
+                // Show results after delay
+                setTimeout(() => {
+                    elements.statusSection.classList.add('hidden');
+                    elements.resultsSection.classList.remove('hidden');
+                }, 2000);
+                
+            } catch (error) {
+                // Show error
+                elements.statusSection.classList.add('hidden');
+                elements.errorSection.classList.remove('hidden');
+                document.getElementById('error-message').textContent = 
+                    'Neural pathway disruption detected: ' + error.message;
+            } finally {
+                isProcessing = false;
+                elements.processBtn.disabled = false;
+            }
+        }
+
+        // Event listeners
+        elements.processBtn.addEventListener('click', () => {
+            const url = elements.urlInput.value.trim();
+            if (!url) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+            processVideo(url);
+        });
+
+        elements.downloadBtn.addEventListener('click', () => {
+            // Simulate download
+            const blob = new Blob(['Neural pattern analysis complete.\nMatrix data exported successfully.'], 
+                { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'neural-matrix-analysis.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        elements.retryBtn.addEventListener('click', () => {
+            elements.errorSection.classList.add('hidden');
+            const url = elements.urlInput.value.trim();
+            if (url) {
+                processVideo(url);
+            }
+        });
+
+        // Management modal
+        elements.managementToggle.addEventListener('click', () => {
+            elements.managementModal.classList.remove('hidden');
+        });
+
+        elements.closeManagement.addEventListener('click', () => {
+            elements.managementModal.classList.add('hidden');
+        });
+
+        elements.managementModal.addEventListener('click', (e) => {
+            if (e.target === elements.managementModal) {
+                elements.managementModal.classList.add('hidden');
+            }
+        });
+
+        // Tab switching
+        elements.tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                
+                // Update active tab button
+                elements.tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update active tab content
+                elements.tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${tabName}-tab`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeSystem);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                elements.processBtn.click();
+            }
+            if (e.key === 'Escape') {
+                elements.managementModal.classList.add('hidden');
+            }
+        });
+
+        // Add some dynamic status updates
+        setInterval(() => {
+            if (!isProcessing) {
+                const statusMessages = [
+                    'Neural fabric systems online',
+                    'Matrix pathways stable',
+                    'Data center operational',
+                    'Pattern recognition active',
+                    'Quantum processors ready'
+                ];
+                const randomMessage = statusMessages[Math.floor(Math.random() * statusMessages.length)];
+                if (elements.fabricStatus.textContent !== randomMessage) {
+                    elements.fabricStatus.textContent = randomMessage;
+                }
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

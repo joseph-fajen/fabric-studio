@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Sea Video Analysis Laboratory</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Oxanium:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --deep-ocean: #001f3f;
+            --bioluminescent: #00ced1;
+            --teal: #20b2aa;
+            --coral: #ff7f50;
+            --dark-blue: #0a2a4a;
+            --light-blue: #4a90e2;
+            --glass-blue: rgba(0, 206, 209, 0.1);
+            --glow-blue: rgba(0, 206, 209, 0.3);
+            --surface-blue: rgba(32, 178, 170, 0.05);
+        }
+        
+        body {
+            font-family: 'Oxanium', sans-serif;
+            background: linear-gradient(180deg, #001f3f 0%, #0a2a4a 50%, #001f3f 100%);
+            color: var(--bioluminescent);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 206, 209, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(32, 178, 170, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 127, 80, 0.05) 0%, transparent 50%);
+            animation: underwaterAmbient 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes underwaterAmbient {
+            0%, 100% { opacity: 0.3; }
+            25% { opacity: 0.6; }
+            50% { opacity: 0.4; }
+            75% { opacity: 0.8; }
+        }
+        
+        /* Floating Bubbles */
+        .bubble {
+            position: fixed;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 206, 209, 0.8), rgba(0, 206, 209, 0.2));
+            border-radius: 50%;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 2;
+            animation: float-up linear infinite;
+        }
+        
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        /* Wave Animation */
+        .wave-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 200px;
+            background: linear-gradient(45deg, transparent, rgba(0, 206, 209, 0.1), transparent);
+            animation: wave-motion 15s linear infinite;
+            border-radius: 50%;
+        }
+        
+        .wave:nth-child(1) {
+            animation-delay: 0s;
+            opacity: 0.3;
+        }
+        
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            opacity: 0.2;
+        }
+        
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            opacity: 0.1;
+        }
+        
+        @keyframes wave-motion {
+            0% { transform: translateX(-100%) rotate(0deg); }
+            100% { transform: translateX(0%) rotate(360deg); }
+        }
+        
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 31, 63, 0.8);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(0, 206, 209, 0.3);
+            box-shadow: 0 0 40px rgba(0, 206, 209, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--bioluminescent);
+            text-shadow: 0 0 20px rgba(0, 206, 209, 0.8);
+            margin-bottom: 10px;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 206, 209, 0.8); }
+            50% { text-shadow: 0 0 30px rgba(0, 206, 209, 1), 0 0 40px rgba(0, 206, 209, 0.5); }
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: var(--teal);
+            opacity: 0.9;
+        }
+        
+        /* Glass Panel Effect */
+        .glass-panel {
+            background: rgba(0, 31, 63, 0.6);
+            border: 2px solid rgba(0, 206, 209, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 8px 32px rgba(0, 206, 209, 0.1),
+                inset 0 2px 0 rgba(0, 206, 209, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-panel:hover {
+            box-shadow: 
+                0 8px 32px rgba(0, 206, 209, 0.2),
+                inset 0 2px 0 rgba(0, 206, 209, 0.2);
+        }
+        
+        /* Input Section */
+        .input-section {
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 30px;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--bioluminescent);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            background: rgba(0, 31, 63, 0.8);
+            border: 2px solid rgba(0, 206, 209, 0.3);
+            border-radius: 10px;
+            color: var(--bioluminescent);
+            font-family: 'Oxanium', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--bioluminescent);
+            box-shadow: 0 0 20px rgba(0, 206, 209, 0.3);
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(0, 206, 209, 0.6);
+        }
+        
+        /* Process Button */
+        .process-btn {
+            background: linear-gradient(45deg, var(--teal), var(--bioluminescent));
+            color: var(--deep-ocean);
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 206, 209, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(0, 206, 209, 0.5);
+        }
+        
+        .process-btn:active {
+            transform: translateY(0);
+        }
+        
+        .process-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Status Section */
+        .status-section {
+            margin-top: 40px;
+        }
+        
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .status-header h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            color: var(--bioluminescent);
+        }
+        
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+        
+        .status-badge.starting {
+            background: linear-gradient(45deg, var(--coral), #ff9f7f);
+            color: var(--deep-ocean);
+        }
+        
+        .status-badge.processing {
+            background: linear-gradient(45deg, var(--bioluminescent), var(--teal));
+            color: var(--deep-ocean);
+        }
+        
+        .status-badge.completed {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+        }
+        
+        .status-badge.error {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        @keyframes pulse-badge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 31, 63, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 206, 209, 0.3);
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--bioluminescent), var(--teal));
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 206, 209, 0.5);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { box-shadow: 0 0 20px rgba(0, 206, 209, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 206, 209, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(0, 206, 209, 0.5); }
+        }
+        
+        .progress-text {
+            text-align: center;
+            color: var(--bioluminescent);
+            font-size: 0.9rem;
+        }
+        
+        /* Current Step */
+        .current-step {
+            margin-bottom: 30px;
+        }
+        
+        .current-step h3 {
+            font-family: 'Orbitron', monospace;
+            color: var(--bioluminescent);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .pattern-info {
+            background: rgba(0, 31, 63, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 206, 209, 0.2);
+        }
+        
+        .pattern-name {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--bioluminescent);
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+        
+        .pattern-description {
+            color: var(--teal);
+            font-size: 0.9rem;
+        }
+        
+        /* Phases Grid */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .phase-card {
+            background: rgba(0, 31, 63, 0.4);
+            border: 2px solid rgba(0, 206, 209, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-card:hover {
+            border-color: rgba(0, 206, 209, 0.4);
+            box-shadow: 0 5px 25px rgba(0, 206, 209, 0.2);
+        }
+        
+        .phase-card h4 {
+            font-family: 'Orbitron', monospace;
+            color: var(--bioluminescent);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .phase-patterns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .pattern-item {
+            padding: 12px 15px;
+            background: rgba(0, 31, 63, 0.6);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 206, 209, 0.1);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pattern-item.active {
+            border-color: var(--bioluminescent);
+            background: rgba(0, 206, 209, 0.2);
+            box-shadow: 0 0 15px rgba(0, 206, 209, 0.3);
+            animation: pattern-pulse 1.5s ease-in-out infinite;
+        }
+        
+        .pattern-item.completed {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.2);
+            color: #2ecc71;
+        }
+        
+        .pattern-item.completed::after {
+            content: '✓';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        @keyframes pattern-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        /* Results Section */
+        .results-section {
+            text-align: center;
+        }
+        
+        .results-header h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            color: var(--bioluminescent);
+            margin-bottom: 20px;
+        }
+        
+        .results-summary {
+            font-size: 1.2rem;
+            color: var(--teal);
+            margin-bottom: 30px;
+        }
+        
+        .download-section {
+            margin-top: 30px;
+        }
+        
+        .download-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(39, 174, 96, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(39, 174, 96, 0.5);
+        }
+        
+        .download-info {
+            color: var(--teal);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Error Section */
+        .error-section {
+            text-align: center;
+        }
+        
+        .error-header h2 {
+            font-family: 'Orbitron', monospace;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            border: 2px solid rgba(231, 76, 60, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
+        }
+        
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            padding: 30px 0;
+            text-align: center;
+            border-top: 2px solid rgba(0, 206, 209, 0.2);
+        }
+        
+        .system-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: var(--teal);
+            font-size: 0.9rem;
+        }
+        
+        .separator {
+            color: rgba(0, 206, 209, 0.5);
+        }
+        
+        .management-toggle {
+            background: rgba(0, 206, 209, 0.2);
+            color: var(--bioluminescent);
+            border: 1px solid rgba(0, 206, 209, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .management-toggle:hover {
+            background: rgba(0, 206, 209, 0.3);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background: var(--deep-ocean);
+            border: 2px solid var(--bioluminescent);
+            border-radius: 20px;
+            padding: 0;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(0, 206, 209, 0.3);
+        }
+        
+        .modal-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(0, 206, 209, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-family: 'Orbitron', monospace;
+            color: var(--bioluminescent);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--bioluminescent);
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .close-btn:hover {
+            color: var(--coral);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        /* Management Panel Styles */
+        .management-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(0, 206, 209, 0.2);
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 15px 25px;
+            color: var(--teal);
+            font-size: 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: var(--bioluminescent);
+            border-bottom-color: var(--bioluminescent);
+        }
+        
+        .tab-btn:hover {
+            color: var(--bioluminescent);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .status-card {
+            background: rgba(0, 31, 63, 0.5);
+            border: 1px solid rgba(0, 206, 209, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .status-card h3 {
+            color: var(--bioluminescent);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 206, 209, 0.1);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-item .label {
+            color: var(--teal);
+        }
+        
+        .process-list {
+            margin-top: 15px;
+        }
+        
+        .process-item {
+            background: rgba(0, 31, 63, 0.3);
+            border: 1px solid rgba(0, 206, 209, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .process-title {
+            color: var(--bioluminescent);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .process-details {
+            color: var(--teal);
+            font-size: 0.9rem;
+        }
+        
+        /* History Tab */
+        .history-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn {
+            background: var(--bioluminescent);
+            color: var(--deep-ocean);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .refresh-btn:hover {
+            background: var(--teal);
+        }
+        
+        .history-count {
+            color: var(--teal);
+        }
+        
+        .history-item {
+            background: rgba(0, 31, 63, 0.3);
+            border: 1px solid rgba(0, 206, 209, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .item-title {
+            color: var(--bioluminescent);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+        
+        .item-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            color: var(--teal);
+            font-size: 0.9rem;
+        }
+        
+        /* Cleanup Tab */
+        .cleanup-section h3 {
+            color: var(--bioluminescent);
+            margin-bottom: 15px;
+        }
+        
+        .cleanup-section p {
+            color: var(--teal);
+            margin-bottom: 20px;
+        }
+        
+        .cleanup-controls {
+            margin-bottom: 20px;
+        }
+        
+        .cleanup-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .cleanup-option label {
+            color: var(--teal);
+            min-width: 150px;
+        }
+        
+        .cleanup-option select {
+            background: rgba(0, 31, 63, 0.8);
+            color: var(--bioluminescent);
+            border: 1px solid rgba(0, 206, 209, 0.3);
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        
+        .cleanup-btn {
+            background: var(--coral);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .cleanup-btn:hover {
+            background: #ff6b3d;
+        }
+        
+        .cleanup-warning {
+            background: rgba(255, 127, 80, 0.1);
+            border: 1px solid rgba(255, 127, 80, 0.3);
+            border-radius: 5px;
+            padding: 15px;
+            color: var(--coral);
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            text-align: center;
+            color: var(--teal);
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        .simulation-notice {
+            background: rgba(255, 127, 80, 0.1);
+            border: 1px solid rgba(255, 127, 80, 0.3);
+            color: var(--coral);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .glass-panel {
+                padding: 20px;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .system-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-content {
+                max-width: 95%;
+                max-height: 95%;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .management-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .input-group input {
+                font-size: 0.9rem;
+            }
+            
+            .process-btn {
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+            
+            .glass-panel {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>🌊 Deep Sea Video Analysis Lab</h1>
+            <p>Submerge videos into the depths of comprehensive fabric pattern analysis</p>
+        </header>
+
+        <main>
+            <section class="input-section glass-panel">
+                <div class="input-group">
+                    <label for="youtube-url">🎬 YouTube Video URL</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        required
+                    >
+                </div>
+                
+                <button id="process-btn" class="process-btn">
+                    🔬 Initiate Deep Analysis
+                </button>
+            </section>
+
+            <section id="status-section" class="status-section glass-panel hidden">
+                <div class="status-header">
+                    <h2>📡 Deep Sea Analysis Status</h2>
+                    <div id="status-badge" class="status-badge">⚡ Initializing Sonar</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-current">0</span> of <span id="progress-total">13</span> patterns
+                    </div>
+                </div>
+
+                <div class="current-step">
+                    <h3>🔍 Active Scan Sequence</h3>
+                    <div id="current-pattern" class="pattern-info">
+                        <span class="pattern-name">Calibrating Sensors...</span>
+                        <span class="pattern-description">Preparing deep sea analysis chamber</span>
+                    </div>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <h4>🌊 Phase 1: Specimen Collection</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="youtube_summary">youtube_summary</div>
+                            <div class="pattern-item" data-pattern="extract_core_message">extract_core_message</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="2">
+                        <h4>🔬 Phase 2: Deep Laboratory Analysis</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_wisdom">extract_wisdom</div>
+                            <div class="pattern-item" data-pattern="extract_insights">extract_insights</div>
+                            <div class="pattern-item" data-pattern="extract_ideas">extract_ideas</div>
+                            <div class="pattern-item" data-pattern="extract_patterns">extract_patterns</div>
+                            <div class="pattern-item" data-pattern="extract_recommendations">extract_recommendations</div>
+                            <div class="pattern-item" data-pattern="extract_predictions">extract_predictions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="3">
+                        <h4>🧬 Phase 3: Neural Network Mapping</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_references">extract_references</div>
+                            <div class="pattern-item" data-pattern="extract_questions">extract_questions</div>
+                            <div class="pattern-item" data-pattern="create_tags">create_tags</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="4">
+                        <h4>🧪 Phase 4: Synthesis Materials</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="create_5_sentence_summary">create_5_sentence_summary</div>
+                            <div class="pattern-item" data-pattern="to_flashcards">to_flashcards</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="results-section" class="results-section glass-panel hidden">
+                <div class="results-header">
+                    <h2>🎯 Analysis Complete</h2>
+                    <div class="results-summary">
+                        <span id="results-count">13</span> analysis files generated
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button id="download-btn" class="download-btn">
+                        📥 Download Analysis Files
+                    </button>
+                    <p class="download-info">
+                        Files are provided as text files (.txt) with professional markdown formatting
+                    </p>
+                </div>
+            </section>
+
+            <section id="error-section" class="error-section glass-panel hidden">
+                <div class="error-header">
+                    <h2>⚠️ Processing Error</h2>
+                </div>
+                <div id="error-message" class="error-message">
+                    An error occurred during processing.
+                </div>
+                <button id="retry-btn" class="retry-btn">🔄 Try Again</button>
+            </section>
+        </main>
+
+        <footer>
+            <div class="system-info">
+                <span id="fabric-status">Checking fabric availability...</span>
+                <span class="separator">•</span>
+                <span>13 fabric patterns available</span>
+                <span class="separator">•</span>
+                <button id="management-toggle" class="management-toggle">⚙️ Management</button>
+            </div>
+        </footer>
+
+        <!-- Management Panel Modal -->
+        <div id="management-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🛠️ Server Management</h2>
+                    <button id="close-management" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="management-tabs">
+                        <button class="tab-btn active" data-tab="status">📊 Status</button>
+                        <button class="tab-btn" data-tab="history">📁 History</button>
+                        <button class="tab-btn" data-tab="cleanup">🧹 Cleanup</button>
+                    </div>
+
+                    <!-- Status Tab -->
+                    <div id="status-tab" class="tab-content active">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <h3>Server Status</h3>
+                                <div class="status-item">
+                                    <span class="label">Uptime:</span>
+                                    <span id="server-uptime">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Memory Usage:</span>
+                                    <span id="memory-usage">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Fabric Available:</span>
+                                    <span id="fabric-available">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <h3>Active Processes</h3>
+                                <div class="status-item">
+                                    <span class="label">Running:</span>
+                                    <span id="active-processes">-</span>
+                                </div>
+                                <div id="process-list" class="process-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="history-tab" class="tab-content">
+                        <div class="history-controls">
+                            <button id="refresh-history" class="refresh-btn">🔄 Refresh</button>
+                            <span class="history-count">Loading...</span>
+                        </div>
+                        <div id="history-list" class="history-list">
+                            <div class="loading">Loading history...</div>
+                        </div>
+                    </div>
+
+                    <!-- Cleanup Tab -->
+                    <div id="cleanup-tab" class="tab-content">
+                        <div class="cleanup-section">
+                            <h3>🧹 Storage Cleanup</h3>
+                            <p>Remove old analysis files to free up space</p>
+                            
+                            <div class="cleanup-controls">
+                                <div class="cleanup-option">
+                                    <label for="cleanup-days">Remove files older than:</label>
+                                    <select id="cleanup-days">
+                                        <option value="7">7 days</option>
+                                        <option value="30" selected>30 days</option>
+                                        <option value="90">90 days</option>
+                                    </select>
+                                    <button id="cleanup-old-btn" class="cleanup-btn">Remove Old Files</button>
+                                </div>
+                            </div>
+                            
+                            <div class="cleanup-warning">
+                                <p><strong>⚠️ Warning:</strong> This action cannot be undone. Files will be permanently deleted.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Bubble animation system
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            // Random size and position
+            const size = Math.random() * 20 + 10;
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.left = Math.random() * window.innerWidth + 'px';
+            
+            // Random animation duration
+            const duration = Math.random() * 10 + 10;
+            bubble.style.animationDuration = duration + 's';
+            
+            document.body.appendChild(bubble);
+            
+            // Remove bubble after animation
+            setTimeout(() => {
+                if (bubble.parentNode) {
+                    bubble.parentNode.removeChild(bubble);
+                }
+            }, duration * 1000);
+        }
+        
+        // Create bubbles periodically
+        setInterval(createBubble, 1000);
+        
+        // YouTube Fabric Processor Client-side JavaScript
+        class YouTubeFabricProcessor {
+            constructor() {
+                this.ws = null;
+                this.currentProcessId = null;
+                this.isProcessing = false;
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.checkSystemStatus();
+            }
+
+            initializeElements() {
+                // Input elements
+                this.urlInput = document.getElementById('youtube-url');
+                this.processBtn = document.getElementById('process-btn');
+                
+                // Management elements
+                this.managementToggle = document.getElementById('management-toggle');
+                this.managementModal = document.getElementById('management-modal');
+                this.closeManagement = document.getElementById('close-management');
+                
+                // Status elements
+                this.statusSection = document.getElementById('status-section');
+                this.statusBadge = document.getElementById('status-badge');
+                this.progressFill = document.getElementById('progress-fill');
+                this.progressCurrent = document.getElementById('progress-current');
+                this.progressTotal = document.getElementById('progress-total');
+                this.currentPatternName = document.querySelector('.pattern-name');
+                this.currentPatternDescription = document.querySelector('.pattern-description');
+                
+                // Results elements
+                this.resultsSection = document.getElementById('results-section');
+                this.resultsCount = document.getElementById('results-count');
+                this.downloadBtn = document.getElementById('download-btn');
+                
+                // Error elements
+                this.errorSection = document.getElementById('error-section');
+                this.errorMessage = document.getElementById('error-message');
+                this.retryBtn = document.getElementById('retry-btn');
+                
+                // Footer elements
+                this.fabricStatus = document.getElementById('fabric-status');
+            }
+
+            setupEventListeners() {
+                this.processBtn.addEventListener('click', () => this.startProcessing());
+                this.downloadBtn.addEventListener('click', () => this.downloadResults());
+                this.retryBtn.addEventListener('click', () => this.resetInterface());
+                
+                // Management panel
+                this.managementToggle.addEventListener('click', () => this.openManagementPanel());
+                this.closeManagement.addEventListener('click', () => this.closeManagementPanel());
+                
+                // Close modal on outside click
+                this.managementModal.addEventListener('click', (e) => {
+                    if (e.target === this.managementModal) {
+                        this.closeManagementPanel();
+                    }
+                });
+                
+                // Tab switching
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
+                });
+                
+                // Management controls
+                document.getElementById('refresh-history').addEventListener('click', () => this.loadHistory());
+                document.getElementById('cleanup-old-btn').addEventListener('click', () => this.cleanupOldFiles());
+                
+                // URL input validation
+                this.urlInput.addEventListener('input', () => this.validateUrl());
+                this.urlInput.addEventListener('paste', () => {
+                    setTimeout(() => this.validateUrl(), 100);
+                });
+            }
+
+            validateUrl() {
+                const url = this.urlInput.value.trim();
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+                
+                if (url === '') {
+                    this.processBtn.disabled = false;
+                    this.processBtn.innerHTML = '🔬 Initiate Deep Analysis';
+                    return;
+                }
+                
+                if (youtubeRegex.test(url)) {
+                    this.processBtn.disabled = false;
+                    this.processBtn.innerHTML = '🔬 Initiate Deep Analysis';
+                    this.urlInput.style.borderColor = 'var(--bioluminescent)';
+                } else {
+                    this.processBtn.disabled = true;
+                    this.processBtn.innerHTML = '❌ Invalid YouTube URL';
+                    this.urlInput.style.borderColor = '#e74c3c';
+                }
+            }
+
+            async checkSystemStatus() {
+                try {
+                    const response = await fetch('/health');
+                    const data = await response.json();
+                    
+                    if (data.fabricAvailable) {
+                        this.fabricStatus.textContent = 'Fabric integration ready';
+                        this.fabricStatus.style.color = 'var(--bioluminescent)';
+                    } else {
+                        this.fabricStatus.textContent = 'Fabric not available (simulation mode)';
+                        this.fabricStatus.style.color = 'var(--coral)';
+                    }
+                } catch (error) {
+                    this.fabricStatus.textContent = 'Server connection error';
+                    this.fabricStatus.style.color = '#e74c3c';
+                }
+            }
+
+            async startProcessing() {
+                if (this.isProcessing) return;
+                
+                const url = this.urlInput.value.trim();
+                if (!url) {
+                    alert('Please enter a YouTube URL');
+                    return;
+                }
+
+                this.isProcessing = true;
+                this.processBtn.disabled = true;
+                this.processBtn.innerHTML = '🌊 Starting Deep Dive...';
+                
+                this.hideAllSections();
+                this.showSection(this.statusSection);
+                this.updateStatusBadge('starting', '🔄 Initializing');
+                
+                try {
+                    const response = await fetch('/api/process', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ youtubeUrl: url })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Failed to start processing');
+                    }
+                    
+                    this.currentProcessId = data.processId;
+                    this.setupWebSocket();
+                    this.updateStatusBadge('processing', '🔬 Processing');
+                    
+                } catch (error) {
+                    this.showError(error.message);
+                }
+            }
+
+            setupWebSocket() {
+                const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const wsUrl = `${wsProtocol}//${window.location.host}`;
+                
+                this.ws = new WebSocket(wsUrl);
+                
+                this.ws.onopen = () => {
+                    console.log('WebSocket connected');
+                };
+                
+                this.ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    this.handleWebSocketMessage(data);
+                };
+                
+                this.ws.onclose = () => {
+                    console.log('WebSocket disconnected');
+                };
+                
+                this.ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+            }
+
+            handleWebSocketMessage(data) {
+                switch (data.type) {
+                    case 'process_started':
+                        this.progressTotal.textContent = data.totalSteps;
+                        break;
+                        
+                    case 'progress':
+                        this.updateProgress(data);
+                        break;
+                        
+                    case 'process_completed':
+                        this.handleProcessCompleted(data);
+                        break;
+                        
+                    case 'process_failed':
+                        this.showError(data.error);
+                        break;
+                }
+            }
+
+            updateProgress(data) {
+                const percentage = (data.current / data.total) * 100;
+                this.progressFill.style.width = `${percentage}%`;
+                this.progressCurrent.textContent = data.current;
+                
+                // Update current pattern info
+                this.currentPatternName.textContent = data.pattern.replace(/_/g, ' ');
+                this.currentPatternDescription.textContent = data.description;
+                
+                // Update pattern visual indicators
+                this.updatePatternIndicators(data.pattern, data.phase);
+            }
+
+            updatePatternIndicators(currentPattern, currentPhase) {
+                // Reset all patterns
+                document.querySelectorAll('.pattern-item').forEach(item => {
+                    item.classList.remove('active', 'completed');
+                });
+                
+                // Mark current pattern as active
+                const currentItem = document.querySelector(`[data-pattern="${currentPattern}"]`);
+                if (currentItem) {
+                    currentItem.classList.add('active');
+                }
+                
+                // Mark completed patterns
+                const allPatterns = ['youtube_summary', 'extract_core_message', 'extract_wisdom', 
+                                   'extract_insights', 'extract_ideas', 'extract_patterns', 
+                                   'extract_recommendations', 'extract_predictions', 'extract_references', 
+                                   'extract_questions', 'create_tags', 'create_5_sentence_summary', 'to_flashcards'];
+                
+                const currentIndex = allPatterns.indexOf(currentPattern);
+                for (let i = 0; i < currentIndex; i++) {
+                    const item = document.querySelector(`[data-pattern="${allPatterns[i]}"]`);
+                    if (item) {
+                        item.classList.add('completed');
+                    }
+                }
+            }
+
+            handleProcessCompleted(data) {
+                this.isProcessing = false;
+                this.updateStatusBadge('completed', '✅ Complete');
+                
+                // Update final progress
+                this.progressFill.style.width = '100%';
+                this.progressCurrent.textContent = data.total;
+                
+                // Mark all patterns as completed
+                document.querySelectorAll('.pattern-item').forEach(item => {
+                    item.classList.remove('active');
+                    item.classList.add('completed');
+                });
+                
+                // Show results section
+                this.resultsCount.textContent = data.completed;
+                this.showSection(this.resultsSection);
+                
+                // Add simulation notice if applicable
+                if (data.simulated) {
+                    const notice = document.createElement('div');
+                    notice.className = 'simulation-notice';
+                    notice.textContent = 'Note: This was a simulation run. Install fabric-mcp-server for actual processing.';
+                    this.resultsSection.insertBefore(notice, this.resultsSection.firstChild);
+                }
+                
+                // Close WebSocket
+                if (this.ws) {
+                    this.ws.close();
+                }
+            }
+
+            async downloadResults() {
+                if (!this.currentProcessId) return;
+                
+                try {
+                    const response = await fetch(`/api/download/${this.currentProcessId}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Download failed');
+                    }
+                    
+                    // Create download link
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `youtube_analysis_${this.currentProcessId.substring(0, 8)}.zip`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    
+                } catch (error) {
+                    alert('Download failed: ' + error.message);
+                }
+            }
+
+            showError(message) {
+                this.isProcessing = false;
+                this.hideAllSections();
+                this.showSection(this.errorSection);
+                this.errorMessage.textContent = message;
+                this.updateStatusBadge('error', '❌ Error');
+                
+                if (this.ws) {
+                    this.ws.close();
+                }
+            }
+
+            resetInterface() {
+                this.isProcessing = false;
+                this.currentProcessId = null;
+                this.processBtn.disabled = false;
+                this.processBtn.innerHTML = '🔬 Initiate Deep Analysis';
+                this.urlInput.value = '';
+                this.urlInput.style.borderColor = 'rgba(0, 206, 209, 0.3)';
+                
+                this.hideAllSections();
+                this.resetProgress();
+                
+                if (this.ws) {
+                    this.ws.close();
+                    this.ws = null;
+                }
+            }
+
+            resetProgress() {
+                this.progressFill.style.width = '0%';
+                this.progressCurrent.textContent = '0';
+                this.currentPatternName.textContent = 'Calibrating Sensors...';
+                this.currentPatternDescription.textContent = 'Preparing deep sea analysis chamber';
+                
+                // Reset all pattern indicators
+                document.querySelectorAll('.pattern-item').forEach(item => {
+                    item.classList.remove('active', 'completed');
+                });
+            }
+
+            hideAllSections() {
+                this.statusSection.classList.add('hidden');
+                this.resultsSection.classList.add('hidden');
+                this.errorSection.classList.add('hidden');
+            }
+
+            showSection(section) {
+                section.classList.remove('hidden');
+            }
+
+            updateStatusBadge(status, text) {
+                this.statusBadge.className = `status-badge ${status}`;
+                this.statusBadge.textContent = text;
+            }
+
+            // Management Panel Methods
+            openManagementPanel() {
+                this.managementModal.classList.remove('hidden');
+                this.loadManagementData();
+            }
+
+            closeManagementPanel() {
+                this.managementModal.classList.add('hidden');
+            }
+
+            switchTab(tabName) {
+                // Update tab buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+
+                // Load data for the selected tab
+                if (tabName === 'status') {
+                    this.loadStatus();
+                } else if (tabName === 'history') {
+                    this.loadHistory();
+                }
+            }
+
+            async loadManagementData() {
+                this.loadStatus();
+                this.loadHistory();
+            }
+
+            async loadStatus() {
+                try {
+                    const response = await fetch('/api/management/status');
+                    const data = await response.json();
+
+                    // Update server status
+                    document.getElementById('server-uptime').textContent = data.server.uptimeFormatted;
+                    document.getElementById('memory-usage').textContent = data.server.memoryUsage.heapUsed;
+                    document.getElementById('fabric-available').textContent = data.server.fabricAvailable ? 'Yes' : 'No';
+
+                    // Update process info
+                    document.getElementById('active-processes').textContent = data.processes.active;
+
+                    // Update process list
+                    const processList = document.getElementById('process-list');
+                    processList.innerHTML = '';
+
+                    if (data.processes.list.length === 0) {
+                        processList.innerHTML = '<div class="process-item">No active processes</div>';
+                    } else {
+                        data.processes.list.forEach(process => {
+                            const processItem = document.createElement('div');
+                            processItem.className = 'process-item';
+                            processItem.innerHTML = `
+                                <div class="process-title">${process.folderName || process.id}</div>
+                                <div class="process-details">
+                                    Status: ${process.status} | Step: ${process.currentStep || 0}/${process.totalSteps || 13}
+                                </div>
+                            `;
+                            processList.appendChild(processItem);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading status:', error);
+                }
+            }
+
+            async loadHistory() {
+                try {
+                    const historyList = document.getElementById('history-list');
+                    historyList.innerHTML = '<div class="loading">Loading history...</div>';
+
+                    const response = await fetch('/api/management/history');
+                    const history = await response.json();
+
+                    document.querySelector('.history-count').textContent = `${history.length} analyses found`;
+
+                    historyList.innerHTML = '';
+                    if (history.length === 0) {
+                        historyList.innerHTML = '<div class="loading">No analysis history found</div>';
+                        return;
+                    }
+
+                    history.forEach(item => {
+                        const historyItem = document.createElement('div');
+                        historyItem.className = 'history-item';
+                        
+                        const title = item.metadata?.title || item.folderName;
+                        const channel = item.metadata?.channel || 'Unknown Channel';
+                        const created = new Date(item.created).toLocaleDateString();
+                        
+                        historyItem.innerHTML = `
+                            <div class="item-header">
+                                <div class="item-title">${title}</div>
+                                <div class="item-actions">
+                                    <button class="delete-btn" onclick="app.deleteFolder('${item.folderName}')">🗑️ Delete</button>
+                                </div>
+                            </div>
+                            <div class="item-details">
+                                <div>Channel: ${channel}</div>
+                                <div>Created: ${created}</div>
+                                <div>Files: ${item.filesCount}</div>
+                                <div>Size: ${item.size}</div>
+                                <div>ZIP: ${item.hasZip ? 'Yes' : 'No'}</div>
+                            </div>
+                        `;
+                        historyList.appendChild(historyItem);
+                    });
+                } catch (error) {
+                    console.error('Error loading history:', error);
+                    document.getElementById('history-list').innerHTML = '<div class="loading">Error loading history</div>';
+                }
+            }
+
+            async deleteFolder(folderName) {
+                if (!confirm(`Are you sure you want to delete "${folderName}"? This action cannot be undone.`)) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/api/management/cleanup/${folderName}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        this.loadHistory();
+                        alert('Folder deleted successfully');
+                    } else {
+                        const error = await response.json();
+                        alert('Error deleting folder: ' + error.error);
+                    }
+                } catch (error) {
+                    console.error('Error deleting folder:', error);
+                    alert('Error deleting folder');
+                }
+            }
+
+            async cleanupOldFiles() {
+                const daysOld = document.getElementById('cleanup-days').value;
+                
+                if (!confirm(`Are you sure you want to remove all files older than ${daysOld} days? This action cannot be undone.`)) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/management/cleanup-old', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ daysOld: parseInt(daysOld) })
+                    });
+
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        alert(result.message);
+                        this.loadHistory();
+                    } else {
+                        alert('Error: ' + result.error);
+                    }
+                } catch (error) {
+                    console.error('Error cleaning up old files:', error);
+                    alert('Error cleaning up old files');
+                }
+            }
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new YouTubeFabricProcessor();
+        });
+    </script>
+</body>
+</html>

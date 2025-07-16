@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Tesla Interface</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --tesla-black: #000000;
+            --tesla-white: #FFFFFF;
+            --tesla-red: #E31E24;
+            --tesla-gray: #171A20;
+            --tesla-light-gray: #393C41;
+            --tesla-silver: #5C5E62;
+            --energy-blue: #00D4FF;
+            --success-green: #00FF88;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--tesla-black);
+            color: var(--tesla-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated Background Grid */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.03;
+        }
+        
+        .bg-grid::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, var(--tesla-white) 1px, transparent 1px),
+                linear-gradient(0deg, var(--tesla-white) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--tesla-red), transparent);
+            animation: headerGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes headerGlow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--tesla-white), var(--tesla-red), var(--tesla-white));
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s ease-in-out infinite;
+        }
+        
+        @keyframes textShine {
+            0%, 100% { background-position: 200% 0; }
+            50% { background-position: -200% 0; }
+        }
+        
+        .header p {
+            font-size: 1rem;
+            color: var(--tesla-silver);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+        
+        /* Input Section */
+        .input-section {
+            background: linear-gradient(135deg, var(--tesla-gray), rgba(23, 26, 32, 0.8));
+            border: 1px solid var(--tesla-light-gray);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02), transparent);
+            animation: scanLine 3s infinite;
+        }
+        
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 20px;
+            align-items: flex-end;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--tesla-silver);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .url-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--tesla-black);
+            border: 2px solid var(--tesla-light-gray);
+            border-radius: 8px;
+            color: var(--tesla-white);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .url-input:focus {
+            border-color: var(--energy-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .url-input::placeholder {
+            color: var(--tesla-silver);
+        }
+        
+        /* Tesla Style Button */
+        .tesla-btn {
+            background: var(--tesla-red);
+            color: var(--tesla-white);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            min-width: 140px;
+        }
+        
+        .tesla-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .tesla-btn:hover::before {
+            left: 100%;
+        }
+        
+        .tesla-btn:hover {
+            background: #ff3339;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(227, 30, 36, 0.4);
+        }
+        
+        .tesla-btn:active {
+            transform: translateY(0);
+        }
+        
+        .tesla-btn:disabled {
+            background: var(--tesla-light-gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            background: linear-gradient(135deg, var(--tesla-gray), rgba(23, 26, 32, 0.8));
+            border: 1px solid var(--tesla-light-gray);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: none;
+        }
+        
+        .progress-section.active {
+            display: block;
+        }
+        
+        .progress-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .progress-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--energy-blue);
+        }
+        
+        .progress-subtitle {
+            color: var(--tesla-silver);
+            font-size: 0.9rem;
+        }
+        
+        /* Energy Bar Progress */
+        .energy-progress {
+            background: var(--tesla-black);
+            border: 1px solid var(--tesla-light-gray);
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--energy-blue), var(--success-green));
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .energy-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -10px;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8));
+            animation: energyFlow 1s infinite;
+        }
+        
+        @keyframes energyFlow {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        /* Phase Indicators */
+        .phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .phase {
+            background: var(--tesla-black);
+            border: 1px solid var(--tesla-light-gray);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .phase.active {
+            border-color: var(--energy-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+        
+        .phase.completed {
+            border-color: var(--success-green);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), transparent);
+        }
+        
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .phase-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .phase-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--tesla-light-gray);
+            transition: all 0.3s ease;
+        }
+        
+        .phase.active .phase-status {
+            background: var(--energy-blue);
+            animation: pulse 1s infinite;
+        }
+        
+        .phase.completed .phase-status {
+            background: var(--success-green);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .patterns-list {
+            font-size: 0.8rem;
+            color: var(--tesla-silver);
+            line-height: 1.4;
+        }
+        
+        /* Results Section */
+        .results-section {
+            background: linear-gradient(135deg, var(--tesla-gray), rgba(23, 26, 32, 0.8));
+            border: 1px solid var(--tesla-light-gray);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: none;
+        }
+        
+        .results-section.active {
+            display: block;
+            animation: slideInUp 0.5s ease;
+        }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--success-green);
+        }
+        
+        .results-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-card {
+            background: var(--tesla-black);
+            border: 1px solid var(--tesla-light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--energy-blue);
+            margin-bottom: 5px;
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--tesla-silver);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Management Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: var(--tesla-gray);
+            border: 1px solid var(--tesla-light-gray);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--tesla-light-gray);
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--tesla-silver);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--tesla-red);
+        }
+        
+        .modal-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--tesla-light-gray);
+        }
+        
+        .modal-tab {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            color: var(--tesla-silver);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .modal-tab.active {
+            color: var(--energy-blue);
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        .modal-content {
+            padding: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Management Button */
+        .management-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(23, 26, 32, 0.9);
+            border: 1px solid var(--tesla-light-gray);
+            color: var(--tesla-white);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .management-btn:hover {
+            background: var(--tesla-light-gray);
+            transform: translateY(-2px);
+        }
+        
+        /* Status Cards */
+        .status-card {
+            background: var(--tesla-black);
+            border: 1px solid var(--tesla-light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .status-label {
+            color: var(--tesla-silver);
+            font-size: 0.9rem;
+        }
+        
+        .status-value {
+            color: var(--tesla-white);
+            font-weight: 500;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid var(--tesla-light-gray);
+            background: var(--tesla-black);
+            color: var(--tesla-white);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .action-btn:hover {
+            background: var(--tesla-light-gray);
+        }
+        
+        .action-btn.danger:hover {
+            background: var(--tesla-red);
+            border-color: var(--tesla-red);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .phases {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .management-btn {
+                top: 20px;
+                right: 20px;
+                padding: 10px 15px;
+                font-size: 0.8rem;
+            }
+            
+            .modal {
+                width: 95%;
+                margin: 20px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>FABRIC PROCESSOR</h1>
+            <p>NEURAL PATTERN ANALYSIS SYSTEM</p>
+        </div>
+        
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <label class="input-label">YouTube URL</label>
+                    <input type="text" id="urlInput" class="url-input" placeholder="https://youtube.com/watch?v=..." />
+                </div>
+                <button id="processBtn" class="tesla-btn">ANALYZE</button>
+            </div>
+        </div>
+        
+        <!-- Progress Section -->
+        <div id="progressSection" class="progress-section">
+            <div class="progress-header">
+                <div class="progress-title">PROCESSING NEURAL PATTERNS</div>
+                <div class="progress-subtitle">Sustainable intelligence extraction in progress</div>
+            </div>
+            
+            <div class="energy-progress">
+                <div id="energyFill" class="energy-fill"></div>
+            </div>
+            
+            <div class="phases">
+                <div class="phase" data-phase="1">
+                    <div class="phase-header">
+                        <div class="phase-name">PHASE 1: ANALYSIS</div>
+                        <div class="phase-status"></div>
+                    </div>
+                    <div class="patterns-list">
+                        extract_wisdom<br>
+                        summarize<br>
+                        extract_main_idea
+                    </div>
+                </div>
+                
+                <div class="phase" data-phase="2">
+                    <div class="phase-header">
+                        <div class="phase-name">PHASE 2: SYNTHESIS</div>
+                        <div class="phase-status"></div>
+                    </div>
+                    <div class="patterns-list">
+                        create_summary<br>
+                        extract_insights<br>
+                        explain_docs
+                    </div>
+                </div>
+                
+                <div class="phase" data-phase="3">
+                    <div class="phase-header">
+                        <div class="phase-name">PHASE 3: EXTRACTION</div>
+                        <div class="phase-status"></div>
+                    </div>
+                    <div class="patterns-list">
+                        extract_patterns<br>
+                        extract_sponsors<br>
+                        find_hidden_message
+                    </div>
+                </div>
+                
+                <div class="phase" data-phase="4">
+                    <div class="phase-header">
+                        <div class="phase-name">PHASE 4: OPTIMIZATION</div>
+                        <div class="phase-status"></div>
+                    </div>
+                    <div class="patterns-list">
+                        extract_predictions<br>
+                        extract_questions<br>
+                        extract_references<br>
+                        label_and_rate
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section">
+            <div class="results-header">
+                <div class="results-title">ANALYSIS COMPLETE</div>
+                <div class="progress-subtitle">Neural patterns successfully extracted</div>
+            </div>
+            
+            <div class="results-info">
+                <div class="info-card">
+                    <div id="processingTime" class="info-value">--</div>
+                    <div class="info-label">Processing Time</div>
+                </div>
+                <div class="info-card">
+                    <div id="patternsCount" class="info-value">13</div>
+                    <div class="info-label">Patterns Analyzed</div>
+                </div>
+                <div class="info-card">
+                    <div id="outputSize" class="info-value">--</div>
+                    <div class="info-label">Data Generated</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button id="downloadBtn" class="tesla-btn">DOWNLOAD RESULTS</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Management Button -->
+    <button class="management-btn" onclick="openManagement()">SYSTEM STATUS</button>
+    
+    <!-- Management Modal -->
+    <div id="managementModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">SYSTEM MANAGEMENT</div>
+                <button class="modal-close" onclick="closeManagement()">&times;</button>
+            </div>
+            
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchTab('status')">STATUS</button>
+                <button class="modal-tab" onclick="switchTab('history')">HISTORY</button>
+                <button class="modal-tab" onclick="switchTab('cleanup')">CLEANUP</button>
+                <button class="modal-tab" onclick="switchTab('control')">CONTROL</button>
+            </div>
+            
+            <div class="modal-content">
+                <div id="statusTab" class="tab-content active">
+                    <div class="status-card">
+                        <div class="status-row">
+                            <span class="status-label">Server Status:</span>
+                            <span class="status-value" id="serverStatus">ONLINE</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Active Processes:</span>
+                            <span class="status-value" id="activeProcesses">0</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Memory Usage:</span>
+                            <span class="status-value" id="memoryUsage">--</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Uptime:</span>
+                            <span class="status-value" id="uptime">--</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="historyTab" class="tab-content">
+                    <div id="historyList">
+                        <div class="status-card">
+                            <div class="status-row">
+                                <span class="status-label">Recent Processing:</span>
+                                <span class="status-value">No recent activity</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="cleanupTab" class="tab-content">
+                    <div class="status-card">
+                        <div class="status-row">
+                            <span class="status-label">Output Folders:</span>
+                            <span class="status-value" id="outputFolders">--</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Disk Usage:</span>
+                            <span class="status-value" id="diskUsage">--</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn danger" onclick="cleanupOld()">CLEANUP OLD FILES</button>
+                    </div>
+                </div>
+                
+                <div id="controlTab" class="tab-content">
+                    <div class="status-card">
+                        <div class="status-row">
+                            <span class="status-label">Server Control:</span>
+                            <span class="status-value">Administrative Functions</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="restartServer()">RESTART</button>
+                        <button class="action-btn danger" onclick="shutdownServer()">SHUTDOWN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // WebSocket connection
+        let ws = null;
+        let currentProcessId = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const processBtn = document.getElementById('processBtn');
+            const urlInput = document.getElementById('urlInput');
+            
+            processBtn.addEventListener('click', startProcessing);
+            urlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startProcessing();
+                }
+            });
+            
+            // Load management data
+            loadManagementData();
+        });
+        
+        // Start processing
+        async function startProcessing() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+            
+            // Validate YouTube URL
+            if (!isValidYouTubeUrl(url)) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+            
+            const processBtn = document.getElementById('processBtn');
+            const progressSection = document.getElementById('progressSection');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Update UI
+            processBtn.textContent = 'PROCESSING...';
+            processBtn.disabled = true;
+            progressSection.classList.add('active');
+            resultsSection.classList.remove('active');
+            
+            // Reset progress
+            resetProgress();
+            
+            try {
+                // Connect WebSocket
+                connectWebSocket();
+                
+                // Start processing
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentProcessId = result.processId;
+                    // Progress will be updated via WebSocket
+                } else {
+                    throw new Error(result.error || 'Processing failed');
+                }
+                
+            } catch (error) {
+                console.error('Processing error:', error);
+                alert('Error starting processing: ' + error.message);
+                resetUI();
+            }
+        }
+        
+        // WebSocket connection
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}`;
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleProgressUpdate(data);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket disconnected');
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+        }
+        
+        // Handle progress updates
+        function handleProgressUpdate(data) {
+            if (data.processId !== currentProcessId) return;
+            
+            switch (data.type) {
+                case 'progress':
+                    updateProgress(data);
+                    break;
+                case 'phase_start':
+                    updatePhase(data.phase, 'active');
+                    break;
+                case 'phase_complete':
+                    updatePhase(data.phase, 'completed');
+                    break;
+                case 'complete':
+                    handleProcessingComplete(data);
+                    break;
+                case 'error':
+                    handleProcessingError(data);
+                    break;
+            }
+        }
+        
+        // Update progress bar
+        function updateProgress(data) {
+            const energyFill = document.getElementById('energyFill');
+            const percentage = Math.round((data.completed / data.total) * 100);
+            energyFill.style.width = percentage + '%';
+        }
+        
+        // Update phase status
+        function updatePhase(phaseNumber, status) {
+            const phase = document.querySelector(`[data-phase="${phaseNumber}"]`);
+            if (phase) {
+                phase.classList.remove('active', 'completed');
+                if (status) {
+                    phase.classList.add(status);
+                }
+            }
+        }
+        
+        // Handle processing complete
+        function handleProcessingComplete(data) {
+            const resultsSection = document.getElementById('resultsSection');
+            const processingTime = document.getElementById('processingTime');
+            const outputSize = document.getElementById('outputSize');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            // Update results
+            processingTime.textContent = data.processingTime || '70s';
+            outputSize.textContent = data.outputSize || '~2MB';
+            
+            // Show results
+            resultsSection.classList.add('active');
+            
+            // Setup download
+            downloadBtn.onclick = function() {
+                window.location.href = `/api/download/${currentProcessId}`;
+            };
+            
+            // Reset UI
+            resetUI();
+        }
+        
+        // Handle processing error
+        function handleProcessingError(data) {
+            alert('Processing error: ' + data.error);
+            resetUI();
+        }
+        
+        // Reset UI
+        function resetUI() {
+            const processBtn = document.getElementById('processBtn');
+            processBtn.textContent = 'ANALYZE';
+            processBtn.disabled = false;
+        }
+        
+        // Reset progress
+        function resetProgress() {
+            const energyFill = document.getElementById('energyFill');
+            energyFill.style.width = '0%';
+            
+            // Reset all phases
+            document.querySelectorAll('.phase').forEach(phase => {
+                phase.classList.remove('active', 'completed');
+            });
+        }
+        
+        // Validate YouTube URL
+        function isValidYouTubeUrl(url) {
+            const regex = /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/;
+            return regex.test(url);
+        }
+        
+        // Management Modal Functions
+        function openManagement() {
+            document.getElementById('managementModal').classList.add('active');
+            loadManagementData();
+        }
+        
+        function closeManagement() {
+            document.getElementById('managementModal').classList.remove('active');
+        }
+        
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.modal-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+        
+        // Load management data
+        async function loadManagementData() {
+            try {
+                const response = await fetch('/api/management/status');
+                const data = await response.json();
+                
+                // Update status
+                document.getElementById('serverStatus').textContent = 'ONLINE';
+                document.getElementById('activeProcesses').textContent = data.activeProcesses || '0';
+                document.getElementById('memoryUsage').textContent = data.memoryUsage || '--';
+                document.getElementById('uptime').textContent = data.uptime || '--';
+                document.getElementById('outputFolders').textContent = data.outputFolders || '--';
+                document.getElementById('diskUsage').textContent = data.diskUsage || '--';
+                
+            } catch (error) {
+                console.error('Failed to load management data:', error);
+                document.getElementById('serverStatus').textContent = 'OFFLINE';
+            }
+        }
+        
+        // Management actions
+        async function cleanupOld() {
+            if (confirm('This will delete old output folders. Continue?')) {
+                try {
+                    const response = await fetch('/api/management/cleanup-old', {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    alert(result.message || 'Cleanup completed');
+                    loadManagementData();
+                } catch (error) {
+                    alert('Cleanup failed: ' + error.message);
+                }
+            }
+        }
+        
+        async function restartServer() {
+            if (confirm('This will restart the server. Continue?')) {
+                try {
+                    await fetch('/api/management/restart', {
+                        method: 'POST'
+                    });
+                    alert('Server restart initiated');
+                } catch (error) {
+                    alert('Restart failed: ' + error.message);
+                }
+            }
+        }
+        
+        async function shutdownServer() {
+            if (confirm('This will shutdown the server. Continue?')) {
+                try {
+                    await fetch('/api/management/shutdown', {
+                        method: 'POST'
+                    });
+                    alert('Server shutdown initiated');
+                } catch (error) {
+                    alert('Shutdown failed: ' + error.message);
+                }
+            }
+        }
+        
+        // Close modal on outside click
+        document.getElementById('managementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeManagement();
+            }
+        });
+    </script>
+</body>
+</html>

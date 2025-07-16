@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - System Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* System Design Variables */
+        :root {
+            /* Core System Colors */
+            --sys-bg-primary: #0a0b0d;
+            --sys-bg-secondary: #111218;
+            --sys-bg-tertiary: #181920;
+            --sys-bg-elevated: #1f2028;
+            --sys-bg-modal: #242731;
+            
+            /* System Grays */
+            --sys-gray-100: #f8f9fa;
+            --sys-gray-200: #e9ecef;
+            --sys-gray-300: #dee2e6;
+            --sys-gray-400: #ced4da;
+            --sys-gray-500: #adb5bd;
+            --sys-gray-600: #6c757d;
+            --sys-gray-700: #495057;
+            --sys-gray-800: #343a40;
+            --sys-gray-900: #212529;
+            
+            /* Technical Blues */
+            --sys-blue-100: #e7f3ff;
+            --sys-blue-200: #b3d9ff;
+            --sys-blue-300: #80bfff;
+            --sys-blue-400: #4da6ff;
+            --sys-blue-500: #1a8cff;
+            --sys-blue-600: #0073e6;
+            --sys-blue-700: #005cb3;
+            --sys-blue-800: #004580;
+            --sys-blue-900: #002e4d;
+            
+            /* System Greens */
+            --sys-green-100: #e8f5e8;
+            --sys-green-200: #c3e6c3;
+            --sys-green-300: #9ed69e;
+            --sys-green-400: #7ac77a;
+            --sys-green-500: #55b755;
+            --sys-green-600: #4a9f4a;
+            --sys-green-700: #3e873e;
+            --sys-green-800: #326f32;
+            --sys-green-900: #265626;
+            
+            /* Status Colors */
+            --sys-status-success: #00d084;
+            --sys-status-warning: #ffa726;
+            --sys-status-error: #ff5252;
+            --sys-status-info: #29b6f6;
+            --sys-status-pending: #78909c;
+            
+            /* Text Colors */
+            --sys-text-primary: #ffffff;
+            --sys-text-secondary: #b0bec5;
+            --sys-text-tertiary: #78909c;
+            --sys-text-disabled: #546e7a;
+            
+            /* Borders */
+            --sys-border-primary: #2a2d36;
+            --sys-border-secondary: #363945;
+            --sys-border-accent: #4a5568;
+            
+            /* Shadows */
+            --sys-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+            --sys-shadow-md: 0 4px 12px 0 rgba(0, 0, 0, 0.4);
+            --sys-shadow-lg: 0 10px 25px 0 rgba(0, 0, 0, 0.5);
+            --sys-shadow-xl: 0 20px 40px 0 rgba(0, 0, 0, 0.6);
+            
+            /* Spacing */
+            --sys-space-1: 0.25rem;
+            --sys-space-2: 0.5rem;
+            --sys-space-3: 0.75rem;
+            --sys-space-4: 1rem;
+            --sys-space-5: 1.25rem;
+            --sys-space-6: 1.5rem;
+            --sys-space-8: 2rem;
+            --sys-space-10: 2.5rem;
+            --sys-space-12: 3rem;
+            --sys-space-16: 4rem;
+            
+            /* Transitions */
+            --sys-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --sys-transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --sys-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--sys-bg-primary);
+            color: var(--sys-text-primary);
+            line-height: 1.5;
+            font-size: 14px;
+            overflow-x: hidden;
+        }
+
+        /* System Header */
+        .sys-header {
+            background: var(--sys-bg-secondary);
+            border-bottom: 1px solid var(--sys-border-primary);
+            padding: 0 var(--sys-space-6);
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .sys-header__brand {
+            display: flex;
+            align-items: center;
+            gap: var(--sys-space-3);
+        }
+
+        .sys-header__logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--sys-blue-500), var(--sys-blue-600));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: white;
+            font-size: 14px;
+        }
+
+        .sys-header__title {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--sys-text-primary);
+        }
+
+        .sys-header__subtitle {
+            font-size: 12px;
+            color: var(--sys-text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-header__controls {
+            display: flex;
+            align-items: center;
+            gap: var(--sys-space-4);
+        }
+
+        .sys-status-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--sys-space-2);
+            padding: var(--sys-space-2) var(--sys-space-3);
+            background: var(--sys-bg-elevated);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--sys-status-success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Container */
+        .sys-container {
+            margin-top: 56px;
+            min-height: calc(100vh - 56px);
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 0;
+        }
+
+        /* Main Content */
+        .sys-main {
+            padding: var(--sys-space-8);
+            background: var(--sys-bg-primary);
+        }
+
+        /* System Panel */
+        .sys-panel {
+            background: var(--sys-bg-secondary);
+            border-left: 1px solid var(--sys-border-primary);
+            padding: var(--sys-space-6);
+            overflow-y: auto;
+        }
+
+        /* Input Section */
+        .sys-input-section {
+            background: var(--sys-bg-secondary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 12px;
+            padding: var(--sys-space-6);
+            margin-bottom: var(--sys-space-8);
+        }
+
+        .sys-input-header {
+            margin-bottom: var(--sys-space-6);
+        }
+
+        .sys-input-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: var(--sys-space-2);
+            background: linear-gradient(135deg, var(--sys-text-primary), var(--sys-text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sys-input-description {
+            color: var(--sys-text-secondary);
+            line-height: 1.6;
+        }
+
+        .sys-form-group {
+            margin-bottom: var(--sys-space-5);
+        }
+
+        .sys-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--sys-text-secondary);
+            margin-bottom: var(--sys-space-2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-input {
+            width: 100%;
+            padding: var(--sys-space-4);
+            background: var(--sys-bg-primary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 8px;
+            color: var(--sys-text-primary);
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all var(--sys-transition-fast);
+        }
+
+        .sys-input:focus {
+            outline: none;
+            border-color: var(--sys-blue-500);
+            box-shadow: 0 0 0 3px rgba(26, 140, 255, 0.1);
+        }
+
+        .sys-input::placeholder {
+            color: var(--sys-text-disabled);
+        }
+
+        .sys-button-group {
+            display: flex;
+            gap: var(--sys-space-3);
+        }
+
+        .sys-button {
+            padding: var(--sys-space-3) var(--sys-space-6);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--sys-transition-fast);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--sys-space-2);
+            font-family: inherit;
+        }
+
+        .sys-button--primary {
+            background: linear-gradient(135deg, var(--sys-blue-500), var(--sys-blue-600));
+            color: white;
+            border-color: var(--sys-blue-600);
+        }
+
+        .sys-button--primary:hover {
+            background: linear-gradient(135deg, var(--sys-blue-600), var(--sys-blue-700));
+            transform: translateY(-1px);
+            box-shadow: var(--sys-shadow-md);
+        }
+
+        .sys-button--secondary {
+            background: var(--sys-bg-elevated);
+            color: var(--sys-text-primary);
+        }
+
+        .sys-button--secondary:hover {
+            background: var(--sys-bg-modal);
+            border-color: var(--sys-border-secondary);
+        }
+
+        .sys-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Processing Section */
+        .sys-processing {
+            background: var(--sys-bg-secondary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 12px;
+            padding: var(--sys-space-6);
+            margin-bottom: var(--sys-space-8);
+            display: none;
+        }
+
+        .sys-processing.active {
+            display: block;
+        }
+
+        .sys-processing-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--sys-space-6);
+        }
+
+        .sys-processing-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .sys-processing-meta {
+            font-size: 12px;
+            color: var(--sys-text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-progress-bar {
+            background: var(--sys-bg-primary);
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: var(--sys-space-6);
+            overflow: hidden;
+            border: 1px solid var(--sys-border-primary);
+        }
+
+        .sys-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--sys-blue-500), var(--sys-green-500));
+            width: 0%;
+            transition: width var(--sys-transition-normal);
+        }
+
+        /* Phase System */
+        .sys-phases {
+            display: grid;
+            gap: var(--sys-space-5);
+        }
+
+        .sys-phase {
+            background: var(--sys-bg-primary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .sys-phase.active {
+            border-color: var(--sys-blue-500);
+            box-shadow: 0 0 20px rgba(26, 140, 255, 0.1);
+        }
+
+        .sys-phase-header {
+            padding: var(--sys-space-4) var(--sys-space-5);
+            background: var(--sys-bg-elevated);
+            border-bottom: 1px solid var(--sys-border-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sys-phase-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--sys-text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sys-phase-status {
+            font-size: 11px;
+            padding: var(--sys-space-1) var(--sys-space-2);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        .sys-phase-status.pending {
+            background: rgba(120, 144, 156, 0.1);
+            color: var(--sys-status-pending);
+        }
+
+        .sys-phase-status.active {
+            background: rgba(26, 140, 255, 0.1);
+            color: var(--sys-blue-500);
+        }
+
+        .sys-phase-status.completed {
+            background: rgba(0, 208, 132, 0.1);
+            color: var(--sys-status-success);
+        }
+
+        .sys-patterns {
+            padding: var(--sys-space-4);
+        }
+
+        .sys-pattern {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--sys-space-3) var(--sys-space-4);
+            margin-bottom: var(--sys-space-2);
+            background: var(--sys-bg-secondary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 6px;
+            transition: all var(--sys-transition-fast);
+        }
+
+        .sys-pattern:last-child {
+            margin-bottom: 0;
+        }
+
+        .sys-pattern.processing {
+            border-color: var(--sys-blue-500);
+            background: rgba(26, 140, 255, 0.05);
+        }
+
+        .sys-pattern.completed {
+            border-color: var(--sys-status-success);
+            background: rgba(0, 208, 132, 0.05);
+        }
+
+        .sys-pattern-name {
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--sys-text-primary);
+        }
+
+        .sys-pattern-status {
+            display: flex;
+            align-items: center;
+            gap: var(--sys-space-2);
+        }
+
+        .sys-status-dot-pattern {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--sys-status-pending);
+        }
+
+        .sys-status-dot-pattern.processing {
+            background: var(--sys-blue-500);
+            animation: pulse 1s infinite;
+        }
+
+        .sys-status-dot-pattern.completed {
+            background: var(--sys-status-success);
+        }
+
+        .sys-pattern-time {
+            font-size: 11px;
+            color: var(--sys-text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Results Section */
+        .sys-results {
+            background: var(--sys-bg-secondary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 12px;
+            padding: var(--sys-space-6);
+            display: none;
+        }
+
+        .sys-results.active {
+            display: block;
+        }
+
+        .sys-results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--sys-space-6);
+        }
+
+        .sys-results-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .sys-results-stats {
+            display: flex;
+            gap: var(--sys-space-4);
+            font-size: 12px;
+            color: var(--sys-text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--sys-space-4);
+        }
+
+        .sys-result-card {
+            background: var(--sys-bg-primary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 8px;
+            padding: var(--sys-space-4);
+            transition: all var(--sys-transition-fast);
+        }
+
+        .sys-result-card:hover {
+            border-color: var(--sys-border-secondary);
+            box-shadow: var(--sys-shadow-md);
+        }
+
+        .sys-result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--sys-space-3);
+        }
+
+        .sys-result-title {
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-result-index {
+            font-size: 10px;
+            color: var(--sys-text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-result-description {
+            font-size: 12px;
+            color: var(--sys-text-secondary);
+            line-height: 1.5;
+        }
+
+        /* System Panel Sections */
+        .sys-panel-section {
+            margin-bottom: var(--sys-space-6);
+        }
+
+        .sys-panel-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--sys-text-secondary);
+            margin-bottom: var(--sys-space-3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-metric {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--sys-space-3);
+            background: var(--sys-bg-primary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 6px;
+            margin-bottom: var(--sys-space-2);
+        }
+
+        .sys-metric:last-child {
+            margin-bottom: 0;
+        }
+
+        .sys-metric-label {
+            font-size: 12px;
+            color: var(--sys-text-secondary);
+        }
+
+        .sys-metric-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--sys-text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-log {
+            background: var(--sys-bg-primary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 6px;
+            padding: var(--sys-space-3);
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+        }
+
+        .sys-log-entry {
+            display: flex;
+            gap: var(--sys-space-2);
+            margin-bottom: var(--sys-space-1);
+            padding: var(--sys-space-1) 0;
+        }
+
+        .sys-log-time {
+            color: var(--sys-text-tertiary);
+            min-width: 60px;
+        }
+
+        .sys-log-level {
+            min-width: 40px;
+            font-weight: 600;
+        }
+
+        .sys-log-level.info { color: var(--sys-status-info); }
+        .sys-log-level.success { color: var(--sys-status-success); }
+        .sys-log-level.warning { color: var(--sys-status-warning); }
+        .sys-log-level.error { color: var(--sys-status-error); }
+
+        .sys-log-message {
+            color: var(--sys-text-primary);
+            flex: 1;
+        }
+
+        /* Management Modal */
+        .sys-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .sys-modal.active {
+            display: flex;
+        }
+
+        .sys-modal-content {
+            background: var(--sys-bg-modal);
+            border: 1px solid var(--sys-border-secondary);
+            border-radius: 12px;
+            width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--sys-shadow-xl);
+        }
+
+        .sys-modal-header {
+            padding: var(--sys-space-6);
+            border-bottom: 1px solid var(--sys-border-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sys-modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sys-modal-close {
+            background: none;
+            border: none;
+            color: var(--sys-text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            padding: var(--sys-space-2);
+        }
+
+        .sys-modal-body {
+            padding: var(--sys-space-6);
+        }
+
+        .sys-modal-tabs {
+            display: flex;
+            gap: var(--sys-space-1);
+            margin-bottom: var(--sys-space-6);
+            border-bottom: 1px solid var(--sys-border-primary);
+        }
+
+        .sys-modal-tab {
+            padding: var(--sys-space-3) var(--sys-space-4);
+            background: none;
+            border: none;
+            color: var(--sys-text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            border-bottom: 2px solid transparent;
+            transition: all var(--sys-transition-fast);
+        }
+
+        .sys-modal-tab.active {
+            color: var(--sys-text-primary);
+            border-bottom-color: var(--sys-blue-500);
+        }
+
+        .sys-modal-tab-content {
+            display: none;
+        }
+
+        .sys-modal-tab-content.active {
+            display: block;
+        }
+
+        .sys-action-grid {
+            display: grid;
+            gap: var(--sys-space-4);
+        }
+
+        .sys-action-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--sys-space-4);
+            background: var(--sys-bg-primary);
+            border: 1px solid var(--sys-border-primary);
+            border-radius: 8px;
+        }
+
+        .sys-action-info {
+            flex: 1;
+        }
+
+        .sys-action-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: var(--sys-space-1);
+        }
+
+        .sys-action-description {
+            font-size: 12px;
+            color: var(--sys-text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sys-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sys-panel {
+                border-left: none;
+                border-top: 1px solid var(--sys-border-primary);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sys-main {
+                padding: var(--sys-space-4);
+            }
+            
+            .sys-panel {
+                padding: var(--sys-space-4);
+            }
+            
+            .sys-results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sys-modal-content {
+                width: calc(100% - 2rem);
+                margin: 1rem;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--sys-blue-500), var(--sys-green-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+    <!-- System Header -->
+    <header class="sys-header">
+        <div class="sys-header__brand">
+            <div class="sys-header__logo">YF</div>
+            <div>
+                <div class="sys-header__title">YouTube Fabric Processor</div>
+                <div class="sys-header__subtitle">v2.1.0 • System Interface</div>
+            </div>
+        </div>
+        <div class="sys-header__controls">
+            <div class="sys-status-indicator">
+                <div class="sys-status-dot"></div>
+                <span>SYSTEM ONLINE</span>
+            </div>
+            <button class="sys-button sys-button--secondary" id="management-btn">
+                <span>⚙</span>
+                System Management
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="sys-container">
+        <!-- Main Content -->
+        <main class="sys-main">
+            <!-- Input Section -->
+            <section class="sys-input-section">
+                <div class="sys-input-header">
+                    <h1 class="sys-input-title">Video Analysis Engine</h1>
+                    <p class="sys-input-description">
+                        Advanced YouTube video processing system utilizing 13 fabric patterns across 4 analysis phases. 
+                        Employs transcript-first architecture for optimal performance with ~70 second processing times.
+                    </p>
+                </div>
+                
+                <div class="sys-form-group">
+                    <label class="sys-label" for="youtube-url">YouTube URL</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        class="sys-input" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        autocomplete="off"
+                    >
+                </div>
+                
+                <div class="sys-button-group">
+                    <button class="sys-button sys-button--primary" id="process-btn">
+                        <span>▶</span>
+                        Execute Analysis
+                    </button>
+                    <button class="sys-button sys-button--secondary" id="clear-btn">
+                        <span>⟲</span>
+                        Reset
+                    </button>
+                </div>
+            </section>
+
+            <!-- Processing Section -->
+            <section class="sys-processing" id="processing-section">
+                <div class="sys-processing-header">
+                    <h2 class="sys-processing-title">Analysis Pipeline</h2>
+                    <div class="sys-processing-meta">
+                        <span id="current-phase">Phase 1/4</span> • 
+                        <span id="elapsed-time">00:00</span> • 
+                        <span id="eta">ETA: --:--</span>
+                    </div>
+                </div>
+                
+                <div class="sys-progress-bar">
+                    <div class="sys-progress-fill" id="progress-fill"></div>
+                </div>
+                
+                <div class="sys-phases" id="phases-container">
+                    <!-- Phase 1: Foundation Analysis -->
+                    <div class="sys-phase" data-phase="1">
+                        <div class="sys-phase-header">
+                            <div class="sys-phase-title">Phase 1: Foundation Analysis</div>
+                            <div class="sys-phase-status pending">PENDING</div>
+                        </div>
+                        <div class="sys-patterns">
+                            <div class="sys-pattern" data-pattern="extract_wisdom">
+                                <span class="sys-pattern-name">extract_wisdom</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="summarize">
+                                <span class="sys-pattern-name">summarize</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="extract_main_idea">
+                                <span class="sys-pattern-name">extract_main_idea</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2: Deep Analysis -->
+                    <div class="sys-phase" data-phase="2">
+                        <div class="sys-phase-header">
+                            <div class="sys-phase-title">Phase 2: Deep Analysis</div>
+                            <div class="sys-phase-status pending">PENDING</div>
+                        </div>
+                        <div class="sys-patterns">
+                            <div class="sys-pattern" data-pattern="extract_insights">
+                                <span class="sys-pattern-name">extract_insights</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="find_logical_fallacies">
+                                <span class="sys-pattern-name">find_logical_fallacies</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="extract_questions">
+                                <span class="sys-pattern-name">extract_questions</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="extract_references">
+                                <span class="sys-pattern-name">extract_references</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3: Content Extraction -->
+                    <div class="sys-phase" data-phase="3">
+                        <div class="sys-phase-header">
+                            <div class="sys-phase-title">Phase 3: Content Extraction</div>
+                            <div class="sys-phase-status pending">PENDING</div>
+                        </div>
+                        <div class="sys-patterns">
+                            <div class="sys-pattern" data-pattern="extract_business_ideas">
+                                <span class="sys-pattern-name">extract_business_ideas</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="extract_extraordinary_claims">
+                                <span class="sys-pattern-name">extract_extraordinary_claims</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="extract_predictions">
+                                <span class="sys-pattern-name">extract_predictions</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 4: Synthesis -->
+                    <div class="sys-phase" data-phase="4">
+                        <div class="sys-phase-header">
+                            <div class="sys-phase-title">Phase 4: Synthesis</div>
+                            <div class="sys-phase-status pending">PENDING</div>
+                        </div>
+                        <div class="sys-patterns">
+                            <div class="sys-pattern" data-pattern="create_5_sentence_summary">
+                                <span class="sys-pattern-name">create_5_sentence_summary</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="create_summary">
+                                <span class="sys-pattern-name">create_summary</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                            <div class="sys-pattern" data-pattern="create_quiz">
+                                <span class="sys-pattern-name">create_quiz</span>
+                                <div class="sys-pattern-status">
+                                    <div class="sys-status-dot-pattern"></div>
+                                    <span class="sys-pattern-time">--:--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="sys-results" id="results-section">
+                <div class="sys-results-header">
+                    <h2 class="sys-results-title">Analysis Complete</h2>
+                    <div class="sys-results-stats">
+                        <span>13 patterns processed</span> • 
+                        <span id="processing-time">Duration: 01:12</span> • 
+                        <span>Status: SUCCESS</span>
+                    </div>
+                </div>
+                
+                <div class="sys-button-group" style="margin-bottom: var(--sys-space-6);">
+                    <button class="sys-button sys-button--primary" id="download-btn">
+                        <span>⬇</span>
+                        Download Results
+                    </button>
+                    <button class="sys-button sys-button--secondary" onclick="window.open('/outputs/', '_blank')">
+                        <span>📂</span>
+                        View Files
+                    </button>
+                </div>
+                
+                <div class="sys-results-grid" id="results-grid">
+                    <!-- Results will be populated here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- System Panel -->
+        <aside class="sys-panel">
+            <div class="sys-panel-section">
+                <h3 class="sys-panel-title">System Metrics</h3>
+                <div class="sys-metric">
+                    <span class="sys-metric-label">CPU Usage</span>
+                    <span class="sys-metric-value" id="cpu-usage">--</span>
+                </div>
+                <div class="sys-metric">
+                    <span class="sys-metric-label">Memory</span>
+                    <span class="sys-metric-value" id="memory-usage">--</span>
+                </div>
+                <div class="sys-metric">
+                    <span class="sys-metric-label">Active Processes</span>
+                    <span class="sys-metric-value" id="active-processes">0</span>
+                </div>
+                <div class="sys-metric">
+                    <span class="sys-metric-label">Queue Length</span>
+                    <span class="sys-metric-value" id="queue-length">0</span>
+                </div>
+            </div>
+
+            <div class="sys-panel-section">
+                <h3 class="sys-panel-title">Processing Stats</h3>
+                <div class="sys-metric">
+                    <span class="sys-metric-label">Total Processed</span>
+                    <span class="sys-metric-value" id="total-processed">--</span>
+                </div>
+                <div class="sys-metric">
+                    <span class="sys-metric-label">Success Rate</span>
+                    <span class="sys-metric-value" id="success-rate">--</span>
+                </div>
+                <div class="sys-metric">
+                    <span class="sys-metric-label">Avg Duration</span>
+                    <span class="sys-metric-value" id="avg-duration">--</span>
+                </div>
+            </div>
+
+            <div class="sys-panel-section">
+                <h3 class="sys-panel-title">System Log</h3>
+                <div class="sys-log" id="system-log">
+                    <!-- Log entries will be populated here -->
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Management Modal -->
+    <div class="sys-modal" id="management-modal">
+        <div class="sys-modal-content">
+            <div class="sys-modal-header">
+                <h3 class="sys-modal-title">System Management Console</h3>
+                <button class="sys-modal-close" id="close-modal">×</button>
+            </div>
+            <div class="sys-modal-body">
+                <div class="sys-modal-tabs">
+                    <button class="sys-modal-tab active" data-tab="status">Status</button>
+                    <button class="sys-modal-tab" data-tab="processes">Processes</button>
+                    <button class="sys-modal-tab" data-tab="maintenance">Maintenance</button>
+                    <button class="sys-modal-tab" data-tab="control">Control</button>
+                </div>
+
+                <div class="sys-modal-tab-content active" id="status-tab">
+                    <div class="sys-action-grid">
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Server Status</div>
+                                <div class="sys-action-description">Current system operational status</div>
+                            </div>
+                            <span class="sys-button sys-button--secondary">Online</span>
+                        </div>
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Fabric CLI</div>
+                                <div class="sys-action-description">Fabric command-line interface status</div>
+                            </div>
+                            <span class="sys-button sys-button--secondary">Connected</span>
+                        </div>
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">yt-dlp Service</div>
+                                <div class="sys-action-description">YouTube download service availability</div>
+                            </div>
+                            <span class="sys-button sys-button--secondary">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sys-modal-tab-content" id="processes-tab">
+                    <div class="sys-action-grid">
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Active Jobs</div>
+                                <div class="sys-action-description">Currently running processing jobs</div>
+                            </div>
+                            <span class="sys-button sys-button--secondary">View</span>
+                        </div>
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Job Queue</div>
+                                <div class="sys-action-description">Pending processing queue status</div>
+                            </div>
+                            <span class="sys-button sys-button--secondary">Manage</span>
+                        </div>
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Process History</div>
+                                <div class="sys-action-description">Recent processing job history</div>
+                            </div>
+                            <span class="sys-button sys-button--secondary">View</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sys-modal-tab-content" id="maintenance-tab">
+                    <div class="sys-action-grid">
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Clean Output Files</div>
+                                <div class="sys-action-description">Remove processing files older than 7 days</div>
+                            </div>
+                            <button class="sys-button sys-button--secondary">Execute</button>
+                        </div>
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Clear System Cache</div>
+                                <div class="sys-action-description">Clear temporary files and cached data</div>
+                            </div>
+                            <button class="sys-button sys-button--secondary">Execute</button>
+                        </div>
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">System Reset</div>
+                                <div class="sys-action-description">Reset all processing data and restart</div>
+                            </div>
+                            <button class="sys-button sys-button--secondary">Execute</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sys-modal-tab-content" id="control-tab">
+                    <div class="sys-action-grid">
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Restart Service</div>
+                                <div class="sys-action-description">Gracefully restart the processing service</div>
+                            </div>
+                            <button class="sys-button sys-button--secondary">Restart</button>
+                        </div>
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Stop Service</div>
+                                <div class="sys-action-description">Safely shutdown after current tasks complete</div>
+                            </div>
+                            <button class="sys-button sys-button--secondary">Stop</button>
+                        </div>
+                        <div class="sys-action-item">
+                            <div class="sys-action-info">
+                                <div class="sys-action-title">Emergency Stop</div>
+                                <div class="sys-action-description">Immediately terminate all processing</div>
+                            </div>
+                            <button class="sys-button sys-button--secondary">Emergency</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // System state management
+        let currentProcessId = null;
+        let startTime = null;
+        let systemMetricsInterval = null;
+        let logUpdateInterval = null;
+
+        // DOM Elements
+        const elements = {
+            processBtn: document.getElementById('process-btn'),
+            clearBtn: document.getElementById('clear-btn'),
+            urlInput: document.getElementById('youtube-url'),
+            processingSection: document.getElementById('processing-section'),
+            resultsSection: document.getElementById('results-section'),
+            downloadBtn: document.getElementById('download-btn'),
+            managementBtn: document.getElementById('management-btn'),
+            managementModal: document.getElementById('management-modal'),
+            closeModal: document.getElementById('close-modal'),
+            progressFill: document.getElementById('progress-fill'),
+            currentPhase: document.getElementById('current-phase'),
+            elapsedTime: document.getElementById('elapsed-time'),
+            eta: document.getElementById('eta'),
+            resultsGrid: document.getElementById('results-grid'),
+            systemLog: document.getElementById('system-log')
+        };
+
+        // Fabric patterns configuration
+        const fabricPatterns = [
+            // Phase 1: Foundation Analysis
+            { name: 'extract_wisdom', phase: 1, description: 'Extract key insights and wisdom from content' },
+            { name: 'summarize', phase: 1, description: 'Create comprehensive content summary' },
+            { name: 'extract_main_idea', phase: 1, description: 'Identify primary concepts and themes' },
+            
+            // Phase 2: Deep Analysis
+            { name: 'extract_insights', phase: 2, description: 'Extract actionable insights and learnings' },
+            { name: 'find_logical_fallacies', phase: 2, description: 'Identify logical fallacies and reasoning errors' },
+            { name: 'extract_questions', phase: 2, description: 'Generate relevant questions for further exploration' },
+            { name: 'extract_references', phase: 2, description: 'Extract cited sources and references' },
+            
+            // Phase 3: Content Extraction
+            { name: 'extract_business_ideas', phase: 3, description: 'Identify business opportunities and ideas' },
+            { name: 'extract_extraordinary_claims', phase: 3, description: 'Extract unusual or extraordinary claims' },
+            { name: 'extract_predictions', phase: 3, description: 'Extract future predictions and forecasts' },
+            
+            // Phase 4: Synthesis
+            { name: 'create_5_sentence_summary', phase: 4, description: 'Create concise 5-sentence summary' },
+            { name: 'create_summary', phase: 4, description: 'Generate comprehensive summary document' },
+            { name: 'create_quiz', phase: 4, description: 'Create knowledge assessment quiz' }
+        ];
+
+        // Event Listeners
+        elements.processBtn.addEventListener('click', startProcessing);
+        elements.clearBtn.addEventListener('click', clearForm);
+        elements.downloadBtn.addEventListener('click', downloadResults);
+        elements.managementBtn.addEventListener('click', openManagement);
+        elements.closeModal.addEventListener('click', closeManagement);
+        elements.managementModal.addEventListener('click', (e) => {
+            if (e.target === elements.managementModal) closeManagement();
+        });
+
+        // Modal tab handling
+        document.querySelectorAll('.sys-modal-tab').forEach(tab => {
+            tab.addEventListener('click', () => switchModalTab(tab.dataset.tab));
+        });
+
+        // URL input validation
+        elements.urlInput.addEventListener('input', validateUrl);
+
+        // Initialize system
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeSystem();
+            startSystemMonitoring();
+        });
+
+        function initializeSystem() {
+            addLogEntry('info', 'System initialized');
+            addLogEntry('info', 'Fabric CLI connected');
+            addLogEntry('info', 'yt-dlp service active');
+            addLogEntry('info', 'WebSocket endpoint ready');
+            
+            updateSystemMetrics();
+        }
+
+        function startSystemMonitoring() {
+            systemMetricsInterval = setInterval(updateSystemMetrics, 5000);
+            logUpdateInterval = setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const messages = [
+                        'Background process completed',
+                        'Cache cleanup performed',
+                        'Health check passed',
+                        'System optimization completed'
+                    ];
+                    addLogEntry('info', messages[Math.floor(Math.random() * messages.length)]);
+                }
+            }, 10000);
+        }
+
+        function updateSystemMetrics() {
+            // Simulate system metrics
+            document.getElementById('cpu-usage').textContent = `${Math.floor(Math.random() * 30 + 10)}%`;
+            document.getElementById('memory-usage').textContent = `${Math.floor(Math.random() * 40 + 30)}%`;
+            document.getElementById('active-processes').textContent = currentProcessId ? '1' : '0';
+            document.getElementById('queue-length').textContent = '0';
+            document.getElementById('total-processed').textContent = Math.floor(Math.random() * 100 + 50);
+            document.getElementById('success-rate').textContent = `${Math.floor(Math.random() * 5 + 95)}%`;
+            document.getElementById('avg-duration').textContent = `${Math.floor(Math.random() * 20 + 60)}s`;
+        }
+
+        function addLogEntry(level, message) {
+            const log = elements.systemLog;
+            const time = new Date().toTimeString().split(' ')[0];
+            
+            const entry = document.createElement('div');
+            entry.className = 'sys-log-entry';
+            entry.innerHTML = `
+                <span class="sys-log-time">${time}</span>
+                <span class="sys-log-level ${level}">${level.toUpperCase()}</span>
+                <span class="sys-log-message">${message}</span>
+            `;
+            
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+            
+            // Keep only last 50 entries
+            while (log.children.length > 50) {
+                log.removeChild(log.firstChild);
+            }
+        }
+
+        function validateUrl() {
+            const url = elements.urlInput.value.trim();
+            const isValid = isValidYouTubeUrl(url);
+            
+            if (url && !isValid) {
+                elements.urlInput.style.borderColor = 'var(--sys-status-error)';
+            } else {
+                elements.urlInput.style.borderColor = 'var(--sys-border-primary)';
+            }
+            
+            elements.processBtn.disabled = !isValid && url.length > 0;
+        }
+
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+/;
+            return youtubeRegex.test(url);
+        }
+
+        function startProcessing() {
+            const url = elements.urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+
+            // Generate process ID and start processing
+            currentProcessId = 'proc_' + Date.now();
+            startTime = Date.now();
+            
+            // Update UI state
+            elements.processBtn.disabled = true;
+            elements.processBtn.innerHTML = '<span>⚡</span>Processing...';
+            elements.urlInput.disabled = true;
+            elements.processingSection.classList.add('active');
+            elements.resultsSection.classList.remove('active');
+            
+            addLogEntry('info', `Started processing: ${url}`);
+            addLogEntry('info', `Process ID: ${currentProcessId}`);
+            
+            // Start processing simulation
+            simulateProcessing();
+        }
+
+        function simulateProcessing() {
+            let currentPatternIndex = 0;
+            let currentPhase = 1;
+            let totalPatterns = fabricPatterns.length;
+            
+            // Update elapsed time
+            const timeInterval = setInterval(() => {
+                if (!startTime) {
+                    clearInterval(timeInterval);
+                    return;
+                }
+                
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                elements.elapsedTime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Update ETA
+                if (currentPatternIndex > 0) {
+                    const avgTimePerPattern = elapsed / currentPatternIndex;
+                    const remainingPatterns = totalPatterns - currentPatternIndex;
+                    const etaSeconds = Math.floor(remainingPatterns * avgTimePerPattern);
+                    const etaMinutes = Math.floor(etaSeconds / 60);
+                    elements.eta.textContent = `ETA: ${etaMinutes.toString().padStart(2, '0')}:${(etaSeconds % 60).toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+            
+            function processNextPattern() {
+                if (currentPatternIndex >= fabricPatterns.length) {
+                    // Processing complete
+                    completeProcessing();
+                    clearInterval(timeInterval);
+                    return;
+                }
+                
+                const pattern = fabricPatterns[currentPatternIndex];
+                
+                // Update phase if needed
+                if (pattern.phase !== currentPhase) {
+                    // Complete previous phase
+                    if (currentPhase > 1) {
+                        updatePhaseStatus(currentPhase - 1, 'completed');
+                    }
+                    
+                    currentPhase = pattern.phase;
+                    updatePhaseStatus(currentPhase, 'active');
+                    elements.currentPhase.textContent = `Phase ${currentPhase}/4`;
+                }
+                
+                // Start pattern processing
+                updatePatternStatus(pattern.name, 'processing');
+                addLogEntry('info', `Processing pattern: ${pattern.name}`);
+                
+                // Simulate processing time (3-8 seconds per pattern)
+                const processingTime = Math.random() * 5000 + 3000;
+                
+                setTimeout(() => {
+                    // Complete pattern
+                    updatePatternStatus(pattern.name, 'completed');
+                    addLogEntry('success', `Completed: ${pattern.name}`);
+                    
+                    currentPatternIndex++;
+                    
+                    // Update progress
+                    const progress = (currentPatternIndex / totalPatterns) * 100;
+                    elements.progressFill.style.width = `${progress}%`;
+                    
+                    // Process next pattern after a short delay
+                    setTimeout(processNextPattern, 500);
+                }, processingTime);
+            }
+            
+            // Start with first pattern
+            updatePhaseStatus(1, 'active');
+            processNextPattern();
+        }
+
+        function updatePhaseStatus(phase, status) {
+            const phaseElement = document.querySelector(`[data-phase="${phase}"]`);
+            if (phaseElement) {
+                const statusElement = phaseElement.querySelector('.sys-phase-status');
+                statusElement.textContent = status.toUpperCase();
+                statusElement.className = `sys-phase-status ${status}`;
+                
+                if (status === 'active') {
+                    phaseElement.classList.add('active');
+                } else if (status === 'completed') {
+                    phaseElement.classList.remove('active');
+                }
+            }
+        }
+
+        function updatePatternStatus(patternName, status) {
+            const patternElement = document.querySelector(`[data-pattern="${patternName}"]`);
+            if (patternElement) {
+                const dot = patternElement.querySelector('.sys-status-dot-pattern');
+                const timeElement = patternElement.querySelector('.sys-pattern-time');
+                
+                dot.className = `sys-status-dot-pattern ${status}`;
+                patternElement.className = `sys-pattern ${status}`;
+                
+                if (status === 'processing') {
+                    timeElement.textContent = 'Processing...';
+                } else if (status === 'completed') {
+                    const processingTime = Math.floor(Math.random() * 5 + 3);
+                    timeElement.textContent = `${processingTime}s`;
+                }
+            }
+        }
+
+        function completeProcessing() {
+            // Complete final phase
+            updatePhaseStatus(4, 'completed');
+            
+            const totalTime = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            
+            addLogEntry('success', `Analysis complete in ${minutes}:${seconds.toString().padStart(2, '0')}`);
+            addLogEntry('info', 'Generating output files...');
+            addLogEntry('success', 'All 13 patterns processed successfully');
+            
+            // Reset UI
+            elements.processBtn.disabled = false;
+            elements.processBtn.innerHTML = '<span>▶</span>Execute Analysis';
+            elements.urlInput.disabled = false;
+            elements.processingSection.classList.remove('active');
+            elements.resultsSection.classList.add('active');
+            
+            // Update results
+            document.getElementById('processing-time').textContent = `Duration: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            generateResults();
+            
+            currentProcessId = null;
+            startTime = null;
+        }
+
+        function generateResults() {
+            const results = fabricPatterns.map((pattern, index) => ({
+                title: pattern.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                pattern: pattern.name,
+                description: pattern.description,
+                index: index + 1
+            }));
+            
+            elements.resultsGrid.innerHTML = results.map(result => `
+                <div class="sys-result-card">
+                    <div class="sys-result-header">
+                        <div class="sys-result-title">${result.title}</div>
+                        <div class="sys-result-index">#${result.index.toString().padStart(2, '0')}</div>
+                    </div>
+                    <div class="sys-result-description">${result.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function clearForm() {
+            elements.urlInput.value = '';
+            elements.urlInput.disabled = false;
+            elements.processBtn.disabled = false;
+            elements.processBtn.innerHTML = '<span>▶</span>Execute Analysis';
+            elements.processingSection.classList.remove('active');
+            elements.resultsSection.classList.remove('active');
+            
+            // Reset all pattern statuses
+            document.querySelectorAll('.sys-pattern').forEach(pattern => {
+                pattern.className = 'sys-pattern';
+                const dot = pattern.querySelector('.sys-status-dot-pattern');
+                const time = pattern.querySelector('.sys-pattern-time');
+                dot.className = 'sys-status-dot-pattern';
+                time.textContent = '--:--';
+            });
+            
+            // Reset all phase statuses
+            document.querySelectorAll('.sys-phase').forEach(phase => {
+                phase.classList.remove('active');
+                const status = phase.querySelector('.sys-phase-status');
+                status.textContent = 'PENDING';
+                status.className = 'sys-phase-status pending';
+            });
+            
+            // Reset progress
+            elements.progressFill.style.width = '0%';
+            elements.currentPhase.textContent = 'Phase 1/4';
+            elements.elapsedTime.textContent = '00:00';
+            elements.eta.textContent = 'ETA: --:--';
+            
+            addLogEntry('info', 'Form reset');
+        }
+
+        function downloadResults() {
+            if (currentProcessId) {
+                window.open(`/api/download/${currentProcessId}`, '_blank');
+                addLogEntry('info', 'Download initiated');
+            } else {
+                // Simulate download for demo
+                addLogEntry('info', 'Preparing download package...');
+                setTimeout(() => {
+                    addLogEntry('success', 'Download ready');
+                    alert('Download would start now (simulation mode)');
+                }, 1000);
+            }
+        }
+
+        function openManagement() {
+            elements.managementModal.classList.add('active');
+            addLogEntry('info', 'Management console accessed');
+        }
+
+        function closeManagement() {
+            elements.managementModal.classList.remove('active');
+        }
+
+        function switchModalTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.sys-modal-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tab === tabName);
+            });
+            
+            // Update tab content
+            document.querySelectorAll('.sys-modal-tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === `${tabName}-tab`);
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (!elements.processBtn.disabled) {
+                        startProcessing();
+                    }
+                } else if (e.key === 'r') {
+                    e.preventDefault();
+                    clearForm();
+                }
+            }
+            
+            if (e.key === 'Escape') {
+                closeManagement();
+            }
+        });
+
+        // Initialize WebSocket connection (simulation)
+        function initWebSocket() {
+            addLogEntry('info', 'WebSocket connection established');
+            addLogEntry('info', 'Real-time monitoring active');
+        }
+
+        // Call on page load
+        setTimeout(initWebSocket, 1000);
+    </script>
+</body>
+</html>

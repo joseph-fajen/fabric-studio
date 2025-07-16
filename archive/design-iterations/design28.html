@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Premium Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Premium Dashboard Color Palette */
+            --primary-brand: #0F172A;
+            --primary-accent: #3B82F6;
+            --secondary-accent: #06B6D4;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --error-color: #EF4444;
+            
+            /* Neutral Grays */
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            
+            /* Dashboard Surfaces */
+            --surface-primary: #FFFFFF;
+            --surface-secondary: #F8FAFC;
+            --surface-elevated: #FFFFFF;
+            --surface-glass: rgba(255, 255, 255, 0.8);
+            --surface-overlay: rgba(15, 23, 42, 0.9);
+            
+            /* Shadows & Effects */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-dashboard: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            
+            /* Spacing System */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            
+            /* Animation */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-premium: 500ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: var(--surface-secondary);
+            color: var(--gray-900);
+            line-height: 1.6;
+            font-size: 14px;
+            overflow-x: hidden;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: var(--gradient-dashboard);
+            padding: var(--space-6) 0;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%233B82F6" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            pointer-events: none;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .brand-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .brand-text h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: var(--space-1);
+        }
+
+        .brand-text p {
+            color: var(--gray-300);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: var(--space-8);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: var(--space-1);
+        }
+
+        .stat-label {
+            color: var(--gray-300);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .header-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            transition: var(--transition-smooth);
+        }
+
+        .metric-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+
+        .metric-title {
+            color: var(--gray-200);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .metric-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--secondary-accent);
+        }
+
+        .metric-value {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        /* Main Dashboard */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6);
+        }
+
+        /* Processing Control Panel */
+        .control-panel {
+            background: var(--surface-elevated);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+
+        .panel-header {
+            margin-bottom: var(--space-6);
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .panel-subtitle {
+            color: var(--gray-600);
+            font-size: 14px;
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: var(--space-4);
+            align-items: end;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: var(--space-2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: var(--space-4);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            font-weight: 400;
+            background: var(--surface-primary);
+            color: var(--gray-900);
+            transition: var(--transition-fast);
+            outline: none;
+        }
+
+        .url-input:focus {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .url-input:disabled {
+            background: var(--gray-100);
+            color: var(--gray-500);
+        }
+
+        .btn {
+            padding: var(--space-4) var(--space-6);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--surface-primary);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        /* Processing Dashboard */
+        .processing-dashboard {
+            display: none;
+            background: var(--surface-elevated);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+
+        .processing-dashboard.visible {
+            display: block;
+            animation: slideInUp 0.5s var(--transition-premium);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .processing-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-8);
+        }
+
+        .processing-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .processing-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: var(--gradient-success);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Phase Progress Grid */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .phase-dashboard {
+            background: var(--surface-primary);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-dashboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gray-200);
+            transition: var(--transition-smooth);
+        }
+
+        .phase-dashboard.active {
+            border-color: var(--primary-accent);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .phase-dashboard.active::before {
+            background: var(--gradient-primary);
+        }
+
+        .phase-dashboard.completed {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%);
+        }
+
+        .phase-dashboard.completed::before {
+            background: var(--success-color);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+        }
+
+        .phase-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: var(--space-1);
+        }
+
+        .phase-subtitle {
+            font-size: 12px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .phase-status-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-100);
+            transition: var(--transition-smooth);
+        }
+
+        .phase-dashboard.active .phase-status-icon {
+            background: var(--primary-accent);
+            animation: pulse 2s infinite;
+        }
+
+        .phase-dashboard.completed .phase-status-icon {
+            background: var(--success-color);
+        }
+
+        .phase-status-icon svg {
+            width: 16px;
+            height: 16px;
+            color: var(--gray-500);
+        }
+
+        .phase-dashboard.active .phase-status-icon svg,
+        .phase-dashboard.completed .phase-status-icon svg {
+            color: white;
+        }
+
+        /* Pattern Progress */
+        .patterns-progress {
+            space-y: var(--space-3);
+        }
+
+        .pattern-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            border-radius: var(--radius-md);
+            transition: var(--transition-fast);
+            margin-bottom: var(--space-2);
+        }
+
+        .pattern-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+        }
+
+        .pattern-indicator svg {
+            width: 10px;
+            height: 10px;
+            color: var(--gray-500);
+            opacity: 0;
+            transition: var(--transition-fast);
+        }
+
+        .pattern-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            flex: 1;
+        }
+
+        .pattern-item.active {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .pattern-item.active .pattern-indicator {
+            background: var(--primary-accent);
+            animation: pulse 2s infinite;
+        }
+
+        .pattern-item.completed .pattern-indicator {
+            background: var(--success-color);
+        }
+
+        .pattern-item.completed .pattern-indicator svg {
+            opacity: 1;
+            color: white;
+        }
+
+        .pattern-item.completed .pattern-name {
+            color: var(--gray-900);
+        }
+
+        /* Results Dashboard */
+        .results-dashboard {
+            display: none;
+            background: var(--surface-elevated);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+
+        .results-dashboard.visible {
+            display: block;
+            animation: slideInUp 0.5s var(--transition-premium);
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .results-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .results-subtitle {
+            font-size: 16px;
+            color: var(--gray-600);
+            margin-bottom: var(--space-6);
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+        }
+
+        .result-stat {
+            background: var(--surface-primary);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            text-align: center;
+        }
+
+        .result-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-accent);
+            margin-bottom: var(--space-1);
+        }
+
+        .result-stat-label {
+            font-size: 12px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .download-section {
+            text-align: center;
+        }
+
+        .download-btn {
+            background: var(--gradient-success);
+            color: white;
+            padding: var(--space-5) var(--space-10);
+            border: none;
+            border-radius: var(--radius-xl);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Management Button */
+        .management-toggle {
+            position: fixed;
+            bottom: var(--space-8);
+            right: var(--space-8);
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-dashboard);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-xl);
+            transition: var(--transition-smooth);
+            z-index: 1000;
+        }
+
+        .management-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .management-toggle svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        /* Management Modal */
+        .management-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--surface-overlay);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-6);
+        }
+
+        .management-modal.visible {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--surface-elevated);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-2xl);
+            animation: modalSlideIn 0.3s var(--transition-premium);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-8);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .close-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+        }
+
+        .close-btn:hover {
+            background: var(--gray-200);
+        }
+
+        .close-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--gray-600);
+        }
+
+        /* Modal Tabs */
+        .modal-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--gray-200);
+            margin-bottom: var(--space-6);
+        }
+
+        .modal-tab {
+            padding: var(--space-4) var(--space-6);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            transition: var(--transition-fast);
+            border-bottom: 2px solid transparent;
+        }
+
+        .modal-tab.active {
+            color: var(--primary-accent);
+            border-bottom-color: var(--primary-accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Analytics Grid */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .analytics-card {
+            background: var(--surface-primary);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            text-align: center;
+            transition: var(--transition-smooth);
+        }
+
+        .analytics-card:hover {
+            border-color: var(--primary-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .analytics-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-accent);
+            margin-bottom: var(--space-2);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .analytics-label {
+            font-size: 12px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .analytics-trend {
+            font-size: 11px;
+            color: var(--success-color);
+            margin-top: var(--space-1);
+        }
+
+        /* History List */
+        .history-list {
+            space-y: var(--space-3);
+        }
+
+        .history-item {
+            background: var(--surface-primary);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-3);
+            transition: var(--transition-fast);
+        }
+
+        .history-item:hover {
+            border-color: var(--primary-accent);
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: var(--space-2);
+        }
+
+        .history-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            flex: 1;
+        }
+
+        .history-status {
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--success-color);
+            color: white;
+        }
+
+        .history-meta {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        /* Control Actions */
+        .control-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .control-card {
+            background: var(--surface-primary);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            text-align: center;
+            transition: var(--transition-smooth);
+        }
+
+        .control-card:hover {
+            border-color: var(--primary-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .control-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-4);
+            box-shadow: var(--shadow-md);
+        }
+
+        .control-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .control-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .control-description {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: var(--space-4);
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                padding: var(--space-6) var(--space-4);
+            }
+            
+            .header-content {
+                padding: 0 var(--space-4);
+            }
+            
+            .header-stats {
+                gap: var(--space-4);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: var(--space-4);
+                text-align: center;
+            }
+            
+            .header-stats {
+                justify-content: center;
+            }
+            
+            .input-section {
+                grid-template-columns: 1fr;
+                gap: var(--space-4);
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .control-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .management-toggle {
+                width: 56px;
+                height: 56px;
+                bottom: var(--space-6);
+                right: var(--space-6);
+            }
+            
+            .modal-content {
+                margin: var(--space-4);
+                padding: var(--space-6);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: var(--space-4) var(--space-3);
+            }
+            
+            .control-panel {
+                padding: var(--space-6);
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="header-top">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <h1>YouTube Fabric Processor</h1>
+                        <p>Premium Analytics Dashboard</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">13</div>
+                        <div class="stat-label">Patterns</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Phases</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">70s</div>
+                        <div class="stat-label">Avg Process</div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-metrics">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Server Status</span>
+                        <svg class="metric-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="metric-value">Online</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Active Processes</span>
+                        <svg class="metric-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <div class="metric-value">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Memory Usage</span>
+                        <svg class="metric-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/>
+                            <path d="M9 9h6v6H9z"/>
+                        </svg>
+                    </div>
+                    <div class="metric-value">2.1 GB</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">System Uptime</span>
+                        <svg class="metric-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                    </div>
+                    <div class="metric-value">98.5%</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <section class="control-panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Video Processing Control</h2>
+                <p class="panel-subtitle">Transform YouTube videos into actionable insights using 13 specialized fabric patterns</p>
+            </div>
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="youtube-url" class="input-label">YouTube URL</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        class="url-input" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                    />
+                </div>
+                <button id="process-btn" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5,3 19,12 5,21"/>
+                    </svg>
+                    Process Video
+                </button>
+                <button id="clear-btn" class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 4h4v4l-1.5-1.5L16 9l-1.5-1.5L16 4z"/>
+                        <path d="M8 8l1.5 1.5L8 12l1.5 1.5L8 16H4v-4l1.5 1.5L8 8z"/>
+                    </svg>
+                    Clear
+                </button>
+            </div>
+        </section>
+
+        <section id="processing-dashboard" class="processing-dashboard">
+            <div class="processing-header">
+                <h2 class="processing-title">Analysis in Progress</h2>
+                <div class="processing-status">
+                    <div class="status-indicator"></div>
+                    Processing
+                </div>
+            </div>
+            
+            <div class="phases-grid">
+                <div class="phase-dashboard" data-phase="1">
+                    <div class="phase-header">
+                        <div class="phase-info">
+                            <h3>Phase 1: Foundation</h3>
+                            <div class="phase-subtitle">Core Analysis</div>
+                        </div>
+                        <div class="phase-status-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="patterns-progress">
+                        <div class="pattern-item" data-pattern="extract_wisdom">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Extract Wisdom</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="summarize">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Summarize</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="analyze_claims">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Analyze Claims</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-dashboard" data-phase="2">
+                    <div class="phase-header">
+                        <div class="phase-info">
+                            <h3>Phase 2: Analysis</h3>
+                            <div class="phase-subtitle">Deep Inspection</div>
+                        </div>
+                        <div class="phase-status-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="patterns-progress">
+                        <div class="pattern-item" data-pattern="find_logical_fallacies">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Find Logical Fallacies</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_ideas">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Extract Ideas</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="get_youtube_rss">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Get YouTube RSS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-dashboard" data-phase="3">
+                    <div class="phase-header">
+                        <div class="phase-info">
+                            <h3>Phase 3: Insights</h3>
+                            <div class="phase-subtitle">Knowledge Extraction</div>
+                        </div>
+                        <div class="phase-status-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="patterns-progress">
+                        <div class="pattern-item" data-pattern="create_quiz">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Create Quiz</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_questions">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Extract Questions</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_references">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Extract References</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-dashboard" data-phase="4">
+                    <div class="phase-header">
+                        <div class="phase-info">
+                            <h3>Phase 4: Knowledge</h3>
+                            <div class="phase-subtitle">Final Processing</div>
+                        </div>
+                        <div class="phase-status-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="patterns-progress">
+                        <div class="pattern-item" data-pattern="create_keynote">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Create Keynote</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="extract_poc">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Extract POC</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="create_security_update">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Create Security Update</span>
+                        </div>
+                        <div class="pattern-item" data-pattern="create_investigation_visualization">
+                            <div class="pattern-indicator">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span class="pattern-name">Create Investigation Visualization</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results-dashboard" class="results-dashboard">
+            <div class="results-header">
+                <h2 class="results-title">Analysis Complete</h2>
+                <p class="results-subtitle">Your video has been successfully processed through all 13 fabric patterns</p>
+            </div>
+            
+            <div class="results-stats">
+                <div class="result-stat">
+                    <div class="result-stat-value">13</div>
+                    <div class="result-stat-label">Patterns Processed</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">4</div>
+                    <div class="result-stat-label">Phases Completed</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">68s</div>
+                    <div class="result-stat-label">Processing Time</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value">100%</div>
+                    <div class="result-stat-label">Success Rate</div>
+                </div>
+            </div>
+            
+            <div class="download-section">
+                <button id="download-btn" class="download-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7,10 12,15 17,10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download Analysis Results
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <button id="management-toggle" class="management-toggle">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+    </button>
+
+    <div id="management-modal" class="management-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Management Console</h2>
+                <button id="close-modal" class="close-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="analytics">Analytics</button>
+                <button class="modal-tab" data-tab="history">History</button>
+                <button class="modal-tab" data-tab="maintenance">Maintenance</button>
+                <button class="modal-tab" data-tab="control">Control</button>
+            </div>
+
+            <div id="analytics-tab" class="tab-content active">
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-value">Online</div>
+                        <div class="analytics-label">Server Status</div>
+                        <div class="analytics-trend">↗ 99.8% uptime</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value">0</div>
+                        <div class="analytics-label">Active Processes</div>
+                        <div class="analytics-trend">← 0 queued</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value">2.1 GB</div>
+                        <div class="analytics-label">Memory Usage</div>
+                        <div class="analytics-trend">↓ -12% vs avg</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value">98.5%</div>
+                        <div class="analytics-label">System Uptime</div>
+                        <div class="analytics-trend">↗ +2.1% this week</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value">142</div>
+                        <div class="analytics-label">Total Processed</div>
+                        <div class="analytics-trend">↗ +18 this week</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value">68.2s</div>
+                        <div class="analytics-label">Avg Process Time</div>
+                        <div class="analytics-trend">↓ -5.3s improvement</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history-tab" class="tab-content">
+                <div class="history-list">
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-title">Machine Learning Fundamentals</span>
+                            <span class="history-status">Success</span>
+                        </div>
+                        <div class="history-meta">Processed 2 hours ago • 13 patterns • 67.2 seconds</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-title">Web Development Best Practices</span>
+                            <span class="history-status">Success</span>
+                        </div>
+                        <div class="history-meta">Processed 5 hours ago • 13 patterns • 71.8 seconds</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-title">Data Science Tutorial Series</span>
+                            <span class="history-status">Success</span>
+                        </div>
+                        <div class="history-meta">Processed yesterday • 13 patterns • 64.1 seconds</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-title">Cloud Architecture Patterns</span>
+                            <span class="history-status">Success</span>
+                        </div>
+                        <div class="history-meta">Processed 2 days ago • 13 patterns • 69.5 seconds</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="maintenance-tab" class="tab-content">
+                <div class="control-actions">
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 6h18l-2 12H5L3 6z"/>
+                                <path d="M16 10a4 4 0 1 1-8 0"/>
+                            </svg>
+                        </div>
+                        <h3 class="control-title">Clean Old Files</h3>
+                        <p class="control-description">Remove processing files older than 7 days to free up storage space</p>
+                        <button class="btn btn-secondary">Clean Files</button>
+                    </div>
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 12h18m-9-9v18"/>
+                            </svg>
+                        </div>
+                        <h3 class="control-title">Clear Cache</h3>
+                        <p class="control-description">Clear temporary files and cached data to improve performance</p>
+                        <button class="btn btn-secondary">Clear Cache</button>
+                    </div>
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 3v18h18V3H3zm16 16H5V5h14v14z"/>
+                            </svg>
+                        </div>
+                        <h3 class="control-title">Reset System</h3>
+                        <p class="control-description">Remove all processing data and reset system to default state</p>
+                        <button class="btn btn-secondary">Reset All</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="control-tab" class="tab-content">
+                <div class="control-actions">
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 12a11.05 11.05 0 0 0-3.139-7.897c.04-.024.084-.039.139-.039a.5.5 0 0 1 .5.5v2.331a.5.5 0 0 1-.112.316L19.5 8.5v3a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-3l-.888-1.289a.5.5 0 0 1-.112-.316V4.395a.5.5 0 0 1 .5-.5c.055 0 .099.015.139.039A11.05 11.05 0 0 0 1 12c0 6.075 4.925 11 11 11s11-4.925 11-11z"/>
+                            </svg>
+                        </div>
+                        <h3 class="control-title">Restart Server</h3>
+                        <p class="control-description">Gracefully restart the processing server with zero downtime</p>
+                        <button class="btn btn-secondary">Restart Server</button>
+                    </div>
+                    <div class="control-card">
+                        <div class="control-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="4" width="4" height="16"/>
+                                <rect x="14" y="4" width="4" height="16"/>
+                            </svg>
+                        </div>
+                        <h3 class="control-title">Stop Server</h3>
+                        <p class="control-description">Safely shutdown the server after completing current tasks</p>
+                        <button class="btn btn-secondary">Stop Server</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const processBtn = document.getElementById('process-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const urlInput = document.getElementById('youtube-url');
+        const processingDashboard = document.getElementById('processing-dashboard');
+        const resultsDashboard = document.getElementById('results-dashboard');
+        const downloadBtn = document.getElementById('download-btn');
+        const managementToggle = document.getElementById('management-toggle');
+        const managementModal = document.getElementById('management-modal');
+        const closeModal = document.getElementById('close-modal');
+        const modalTabs = document.querySelectorAll('.modal-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Event Listeners
+        processBtn.addEventListener('click', startProcessing);
+        clearBtn.addEventListener('click', clearForm);
+        downloadBtn.addEventListener('click', downloadResults);
+        managementToggle.addEventListener('click', openManagement);
+        closeModal.addEventListener('click', closeManagement);
+        managementModal.addEventListener('click', (e) => {
+            if (e.target === managementModal) closeManagement();
+        });
+
+        // Tab handling
+        modalTabs.forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+        });
+
+        // Main Functions
+        function startProcessing() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+
+            // Disable form
+            processBtn.disabled = true;
+            processBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m9 12 2 2 4-4"/>
+                </svg>
+                Processing...
+            `;
+            urlInput.disabled = true;
+
+            // Show processing dashboard
+            processingDashboard.classList.add('visible');
+            resultsDashboard.classList.remove('visible');
+
+            // Start processing simulation
+            simulateProcessing();
+        }
+
+        function clearForm() {
+            urlInput.value = '';
+            urlInput.disabled = false;
+            processBtn.disabled = false;
+            processBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5,3 19,12 5,21"/>
+                </svg>
+                Process Video
+            `;
+            processingDashboard.classList.remove('visible');
+            resultsDashboard.classList.remove('visible');
+            resetProgress();
+        }
+
+        function downloadResults() {
+            // Simulate download
+            alert('Downloading analysis results...');
+        }
+
+        function openManagement() {
+            managementModal.classList.add('visible');
+        }
+
+        function closeManagement() {
+            managementModal.classList.remove('visible');
+        }
+
+        function switchTab(tabName) {
+            modalTabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+            return youtubeRegex.test(url);
+        }
+
+        function simulateProcessing() {
+            const phases = [1, 2, 3, 4];
+            const patterns = [
+                'extract_wisdom', 'summarize', 'analyze_claims',
+                'find_logical_fallacies', 'extract_ideas', 'get_youtube_rss',
+                'create_quiz', 'extract_questions', 'extract_references',
+                'create_keynote', 'extract_poc', 'create_security_update', 'create_investigation_visualization'
+            ];
+
+            let currentPhase = 0;
+            let currentPattern = 0;
+
+            function processNextPattern() {
+                if (currentPattern >= patterns.length) {
+                    // Processing complete
+                    setTimeout(() => {
+                        processingDashboard.classList.remove('visible');
+                        resultsDashboard.classList.add('visible');
+                        processBtn.disabled = false;
+                        processBtn.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5,3 19,12 5,21"/>
+                            </svg>
+                            Process Video
+                        `;
+                        urlInput.disabled = false;
+                    }, 1000);
+                    return;
+                }
+
+                // Update phase if needed
+                if (currentPattern === 0 || currentPattern === 3 || currentPattern === 6 || currentPattern === 9) {
+                    if (currentPhase > 0) {
+                        // Mark previous phase as completed
+                        const prevPhaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                        prevPhaseCard.classList.remove('active');
+                        prevPhaseCard.classList.add('completed');
+                    }
+                    
+                    currentPhase++;
+                    const phaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                    phaseCard.classList.add('active');
+                }
+
+                // Mark current pattern as active
+                const patternElement = document.querySelector(`[data-pattern="${patterns[currentPattern]}"]`);
+                patternElement.classList.add('active');
+
+                // Simulate pattern processing time
+                setTimeout(() => {
+                    patternElement.classList.remove('active');
+                    patternElement.classList.add('completed');
+                    currentPattern++;
+                    processNextPattern();
+                }, Math.random() * 2000 + 1000); // 1-3 seconds per pattern
+            }
+
+            processNextPattern();
+        }
+
+        function resetProgress() {
+            document.querySelectorAll('.phase-dashboard').forEach(card => {
+                card.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.pattern-item').forEach(pattern => {
+                pattern.classList.remove('active', 'completed');
+            });
+        }
+
+        // Auto-focus URL input
+        urlInput.focus();
+
+        // Add some dynamic interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate metric cards on load
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.animation = 'slideInUp 0.5s ease forwards';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

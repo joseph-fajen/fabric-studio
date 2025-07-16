@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #007AFF;
+            --primary-blue-hover: #0056CC;
+            --background: #FBFBFD;
+            --card-background: rgba(255, 255, 255, 0.8);
+            --glass-background: rgba(255, 255, 255, 0.25);
+            --text-primary: #1C1C1E;
+            --text-secondary: #3A3A3C;
+            --text-tertiary: #8E8E93;
+            --border-color: rgba(0, 0, 0, 0.04);
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.03);
+            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --border-radius-small: 8px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 17px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 19px;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-card {
+            background: var(--card-background);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 17px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .url-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            font-size: 17px;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass-background);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-section {
+            display: none;
+            margin-top: 32px;
+        }
+
+        .progress-section.visible {
+            display: block;
+            animation: slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .progress-header h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .progress-header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .phase-card {
+            background: var(--glass-background);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card.active {
+            border-color: var(--primary-blue);
+            background: rgba(0, 122, 255, 0.05);
+        }
+
+        .phase-card.completed {
+            border-color: #34C759;
+            background: rgba(52, 199, 89, 0.05);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .phase-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .phase-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .phase-status.active {
+            background: var(--primary-blue);
+            animation: pulse 2s infinite;
+        }
+
+        .phase-status.completed {
+            background: #34C759;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .patterns-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .pattern-item::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-tertiary);
+            margin-right: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.completed::before {
+            background: #34C759;
+        }
+
+        .pattern-item.active::before {
+            background: var(--primary-blue);
+            animation: pulse 2s infinite;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 32px;
+        }
+
+        .results-section.visible {
+            display: block;
+            animation: slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .results-card {
+            background: var(--card-background);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .results-header {
+            margin-bottom: 24px;
+        }
+
+        .results-header h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #34C759;
+        }
+
+        .results-header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .download-btn {
+            padding: 16px 40px;
+            font-size: 17px;
+            font-weight: 500;
+            background: #34C759;
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .download-btn:hover {
+            background: #30B652;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(52, 199, 89, 0.3);
+        }
+
+        .management-section {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .management-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--glass-background);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-light);
+        }
+
+        .management-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .management-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-primary);
+            stroke-width: 2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.visible {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--card-background);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-heavy);
+            animation: modalSlideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--glass-background);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .status-item {
+            background: var(--glass-background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 4px;
+        }
+
+        .status-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .history-item {
+            background: var(--glass-background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .history-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .history-meta {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .cleanup-options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .cleanup-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--glass-background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+        }
+
+        .cleanup-info {
+            flex: 1;
+        }
+
+        .cleanup-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .cleanup-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .control-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .control-item {
+            background: var(--glass-background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .control-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .control-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .main-card {
+                padding: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .management-section {
+                position: static;
+                display: flex;
+                justify-content: center;
+                margin-top: 32px;
+            }
+
+            .modal-content {
+                margin: 16px;
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Transform YouTube videos into actionable insights using 13 specialized fabric patterns</p>
+        </header>
+
+        <main class="main-card">
+            <div class="input-group">
+                <label for="youtube-url" class="input-label">YouTube URL</label>
+                <input 
+                    type="url" 
+                    id="youtube-url" 
+                    class="url-input" 
+                    placeholder="https://www.youtube.com/watch?v=..."
+                />
+            </div>
+
+            <div class="button-group">
+                <button id="process-btn" class="btn btn-primary">Process Video</button>
+                <button id="clear-btn" class="btn btn-secondary">Clear</button>
+            </div>
+
+            <div id="progress-section" class="progress-section">
+                <div class="progress-header">
+                    <h3>Processing Video</h3>
+                    <p>Analyzing content through 13 fabric patterns in 4 phases</p>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <div class="phase-header">
+                            <span class="phase-title">Phase 1: Foundation</span>
+                            <div class="phase-status"></div>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="extract_wisdom">Extract Wisdom</li>
+                            <li class="pattern-item" data-pattern="summarize">Summarize</li>
+                            <li class="pattern-item" data-pattern="analyze_claims">Analyze Claims</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="2">
+                        <div class="phase-header">
+                            <span class="phase-title">Phase 2: Analysis</span>
+                            <div class="phase-status"></div>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="find_logical_fallacies">Find Logical Fallacies</li>
+                            <li class="pattern-item" data-pattern="extract_ideas">Extract Ideas</li>
+                            <li class="pattern-item" data-pattern="get_youtube_rss">Get YouTube RSS</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="3">
+                        <div class="phase-header">
+                            <span class="phase-title">Phase 3: Insights</span>
+                            <div class="phase-status"></div>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="create_quiz">Create Quiz</li>
+                            <li class="pattern-item" data-pattern="extract_questions">Extract Questions</li>
+                            <li class="pattern-item" data-pattern="extract_references">Extract References</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-card" data-phase="4">
+                        <div class="phase-header">
+                            <span class="phase-title">Phase 4: Knowledge</span>
+                            <div class="phase-status"></div>
+                        </div>
+                        <ul class="patterns-list">
+                            <li class="pattern-item" data-pattern="create_keynote">Create Keynote</li>
+                            <li class="pattern-item" data-pattern="extract_poc">Extract POC</li>
+                            <li class="pattern-item" data-pattern="create_security_update">Create Security Update</li>
+                            <li class="pattern-item" data-pattern="create_investigation_visualization">Create Investigation Visualization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results-section" class="results-section">
+                <div class="results-card">
+                    <div class="results-header">
+                        <h3>Processing Complete</h3>
+                        <p>Your video has been successfully analyzed through all 13 fabric patterns</p>
+                    </div>
+                    <button id="download-btn" class="download-btn">Download Results</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="management-section">
+        <button id="management-btn" class="management-btn">
+            <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+        </button>
+    </div>
+
+    <div id="management-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Management Console</h2>
+                <button id="close-modal" class="close-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="status">Status</button>
+                <button class="tab" data-tab="history">History</button>
+                <button class="tab" data-tab="cleanup">Cleanup</button>
+                <button class="tab" data-tab="control">Control</button>
+            </div>
+
+            <div id="status-tab" class="tab-content active">
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-value">Online</div>
+                        <div class="status-label">Server Status</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">0</div>
+                        <div class="status-label">Active Processes</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">2.1 GB</div>
+                        <div class="status-label">Memory Usage</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">98.5%</div>
+                        <div class="status-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history-tab" class="tab-content">
+                <div class="history-item">
+                    <div class="history-title">Machine Learning Fundamentals</div>
+                    <div class="history-meta">Processed 2 hours ago • 13 patterns • Success</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-title">Web Development Best Practices</div>
+                    <div class="history-meta">Processed 5 hours ago • 13 patterns • Success</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-title">Data Science Tutorial</div>
+                    <div class="history-meta">Processed yesterday • 13 patterns • Success</div>
+                </div>
+            </div>
+
+            <div id="cleanup-tab" class="tab-content">
+                <div class="cleanup-options">
+                    <div class="cleanup-option">
+                        <div class="cleanup-info">
+                            <div class="cleanup-title">Clean Old Files</div>
+                            <div class="cleanup-desc">Remove processing files older than 7 days</div>
+                        </div>
+                        <button class="btn btn-secondary">Clean</button>
+                    </div>
+                    <div class="cleanup-option">
+                        <div class="cleanup-info">
+                            <div class="cleanup-title">Clear Cache</div>
+                            <div class="cleanup-desc">Clear temporary files and cached data</div>
+                        </div>
+                        <button class="btn btn-secondary">Clear</button>
+                    </div>
+                    <div class="cleanup-option">
+                        <div class="cleanup-info">
+                            <div class="cleanup-title">Reset All</div>
+                            <div class="cleanup-desc">Remove all processing data and reset system</div>
+                        </div>
+                        <button class="btn btn-secondary">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="control-tab" class="tab-content">
+                <div class="control-grid">
+                    <div class="control-item">
+                        <div class="control-title">Restart Server</div>
+                        <div class="control-desc">Gracefully restart the processing server</div>
+                        <button class="btn btn-secondary">Restart</button>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-title">Stop Server</div>
+                        <div class="control-desc">Safely shutdown the server after current tasks</div>
+                        <button class="btn btn-secondary">Stop</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const processBtn = document.getElementById('process-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const urlInput = document.getElementById('youtube-url');
+        const progressSection = document.getElementById('progress-section');
+        const resultsSection = document.getElementById('results-section');
+        const downloadBtn = document.getElementById('download-btn');
+        const managementBtn = document.getElementById('management-btn');
+        const managementModal = document.getElementById('management-modal');
+        const closeModal = document.getElementById('close-modal');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Event Listeners
+        processBtn.addEventListener('click', startProcessing);
+        clearBtn.addEventListener('click', clearForm);
+        downloadBtn.addEventListener('click', downloadResults);
+        managementBtn.addEventListener('click', openManagement);
+        closeModal.addEventListener('click', closeManagement);
+        managementModal.addEventListener('click', (e) => {
+            if (e.target === managementModal) closeManagement();
+        });
+
+        // Tab handling
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+        });
+
+        // Processing simulation
+        function startProcessing() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+
+            // Disable form
+            processBtn.disabled = true;
+            processBtn.textContent = 'Processing...';
+            urlInput.disabled = true;
+
+            // Show progress section
+            progressSection.classList.add('visible');
+            resultsSection.classList.remove('visible');
+
+            // Simulate processing phases
+            simulateProcessing();
+        }
+
+        function clearForm() {
+            urlInput.value = '';
+            urlInput.disabled = false;
+            processBtn.disabled = false;
+            processBtn.textContent = 'Process Video';
+            progressSection.classList.remove('visible');
+            resultsSection.classList.remove('visible');
+            resetProgress();
+        }
+
+        function downloadResults() {
+            // Simulate download
+            alert('Downloading results...');
+        }
+
+        function openManagement() {
+            managementModal.classList.add('visible');
+        }
+
+        function closeManagement() {
+            managementModal.classList.remove('visible');
+        }
+
+        function switchTab(tabName) {
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+            return youtubeRegex.test(url);
+        }
+
+        function simulateProcessing() {
+            const phases = [1, 2, 3, 4];
+            const patterns = [
+                'extract_wisdom', 'summarize', 'analyze_claims',
+                'find_logical_fallacies', 'extract_ideas', 'get_youtube_rss',
+                'create_quiz', 'extract_questions', 'extract_references',
+                'create_keynote', 'extract_poc', 'create_security_update', 'create_investigation_visualization'
+            ];
+
+            let currentPhase = 0;
+            let currentPattern = 0;
+
+            function processNextPattern() {
+                if (currentPattern >= patterns.length) {
+                    // Processing complete
+                    setTimeout(() => {
+                        progressSection.classList.remove('visible');
+                        resultsSection.classList.add('visible');
+                        processBtn.disabled = false;
+                        processBtn.textContent = 'Process Video';
+                        urlInput.disabled = false;
+                    }, 1000);
+                    return;
+                }
+
+                // Update phase if needed
+                if (currentPattern === 0 || currentPattern === 3 || currentPattern === 6 || currentPattern === 9) {
+                    if (currentPhase > 0) {
+                        // Mark previous phase as completed
+                        const prevPhaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                        prevPhaseCard.classList.remove('active');
+                        prevPhaseCard.classList.add('completed');
+                        prevPhaseCard.querySelector('.phase-status').classList.remove('active');
+                        prevPhaseCard.querySelector('.phase-status').classList.add('completed');
+                    }
+                    
+                    currentPhase++;
+                    const phaseCard = document.querySelector(`[data-phase="${currentPhase}"]`);
+                    phaseCard.classList.add('active');
+                    phaseCard.querySelector('.phase-status').classList.add('active');
+                }
+
+                // Mark current pattern as active
+                const patternElement = document.querySelector(`[data-pattern="${patterns[currentPattern]}"]`);
+                patternElement.classList.add('active');
+
+                // Simulate pattern processing time
+                setTimeout(() => {
+                    patternElement.classList.remove('active');
+                    patternElement.classList.add('completed');
+                    currentPattern++;
+                    processNextPattern();
+                }, Math.random() * 2000 + 1000); // 1-3 seconds per pattern
+            }
+
+            processNextPattern();
+        }
+
+        function resetProgress() {
+            document.querySelectorAll('.phase-card').forEach(card => {
+                card.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.phase-status').forEach(status => {
+                status.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.pattern-item').forEach(pattern => {
+                pattern.classList.remove('active', 'completed');
+            });
+        }
+
+        // Auto-focus URL input
+        urlInput.focus();
+    </script>
+</body>
+</html>

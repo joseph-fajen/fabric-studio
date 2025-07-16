@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Fabric Processor - Cosmic Star Cluster</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cosmic-dark: #2c1810;
+            --cosmic-purple: #6a0572;
+            --nebula-pink: #ab83a1;
+            --star-white: #ffffff;
+            --cosmic-blue: #1e3a8a;
+            --deep-space: #0f0f23;
+            --stardust: #ffd700;
+            --cosmic-teal: #008080;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, var(--deep-space) 0%, var(--cosmic-dark) 50%, var(--cosmic-purple) 100%);
+            color: var(--star-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(2px 2px at 20px 30px, var(--star-white), transparent),
+                radial-gradient(2px 2px at 40px 70px, var(--star-white), transparent),
+                radial-gradient(1px 1px at 90px 40px, var(--star-white), transparent),
+                radial-gradient(1px 1px at 130px 80px, var(--star-white), transparent),
+                radial-gradient(2px 2px at 160px 30px, var(--star-white), transparent),
+                radial-gradient(1px 1px at 200px 90px, var(--star-white), transparent),
+                radial-gradient(1px 1px at 240px 50px, var(--star-white), transparent),
+                radial-gradient(2px 2px at 280px 10px, var(--star-white), transparent);
+            background-repeat: repeat;
+            background-size: 300px 200px;
+            animation: twinkle 3s infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .cosmic-dust {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .cosmic-dust::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(171, 131, 161, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(106, 5, 114, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 20%, rgba(0, 128, 128, 0.05) 0%, transparent 50%);
+            animation: nebulaDrift 20s infinite linear;
+        }
+
+        @keyframes nebulaDrift {
+            0% { transform: translateX(-100px) rotate(0deg); }
+            100% { transform: translateX(100px) rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, rgba(106, 5, 114, 0.3), rgba(30, 58, 138, 0.3));
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--star-white), var(--stardust), var(--nebula-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--nebula-pink);
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input-section {
+            background: linear-gradient(135deg, rgba(44, 24, 16, 0.8), rgba(106, 5, 114, 0.3));
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--star-white);
+            font-size: 1.1rem;
+        }
+
+        #youtube-url {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(15, 15, 35, 0.8);
+            color: var(--star-white);
+            font-size: 1rem;
+            font-family: 'Exo 2', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #youtube-url:focus {
+            outline: none;
+            border-color: var(--stardust);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .process-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, var(--cosmic-purple), var(--cosmic-blue));
+            color: var(--star-white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .process-btn:hover::before {
+            left: 100%;
+        }
+
+        .process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(106, 5, 114, 0.4);
+        }
+
+        .status-section {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.3), rgba(44, 24, 16, 0.8));
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .status-header h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            color: var(--star-white);
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            background: linear-gradient(45deg, var(--cosmic-teal), var(--cosmic-blue));
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(15, 15, 35, 0.8);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cosmic-purple), var(--stardust), var(--cosmic-teal));
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--nebula-pink);
+            font-weight: 600;
+        }
+
+        .current-step {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(15, 15, 35, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .current-step h3 {
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 15px;
+            color: var(--stardust);
+        }
+
+        .pattern-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pattern-name {
+            font-weight: 700;
+            color: var(--star-white);
+        }
+
+        .pattern-description {
+            color: var(--nebula-pink);
+            font-style: italic;
+        }
+
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .phase-card {
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.8), rgba(106, 5, 114, 0.2));
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cosmic-purple), var(--stardust), var(--cosmic-teal));
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(106, 5, 114, 0.3);
+        }
+
+        .phase-card h4 {
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 15px;
+            color: var(--star-white);
+            font-size: 1.1rem;
+        }
+
+        .phase-patterns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pattern-item {
+            padding: 10px;
+            background: rgba(15, 15, 35, 0.6);
+            border-radius: 8px;
+            border-left: 3px solid var(--cosmic-teal);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.9rem;
+            color: var(--star-white);
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item:hover {
+            background: rgba(106, 5, 114, 0.3);
+            border-left-color: var(--stardust);
+        }
+
+        .pattern-item.active {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), rgba(106, 5, 114, 0.3));
+            border-left-color: var(--stardust);
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, rgba(0, 128, 128, 0.3), rgba(44, 24, 16, 0.8));
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .results-header h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            color: var(--star-white);
+            margin-bottom: 10px;
+        }
+
+        .results-summary {
+            color: var(--nebula-pink);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .download-btn {
+            padding: 18px 40px;
+            background: linear-gradient(45deg, var(--cosmic-teal), var(--cosmic-purple));
+            color: var(--star-white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 128, 128, 0.4);
+        }
+
+        .download-info {
+            color: var(--nebula-pink);
+            font-size: 0.9rem;
+        }
+
+        .error-section {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.3), rgba(220, 20, 60, 0.3));
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .error-header h2 {
+            font-family: 'Orbitron', monospace;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            color: #ffcccb;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .retry-btn {
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #dc143c, #8b4513);
+            color: var(--star-white);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 20, 60, 0.4);
+        }
+
+        footer {
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.8), rgba(44, 24, 16, 0.8));
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .system-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            color: var(--nebula-pink);
+            font-size: 0.9rem;
+        }
+
+        .separator {
+            color: var(--cosmic-teal);
+        }
+
+        .management-toggle {
+            background: linear-gradient(45deg, var(--cosmic-purple), var(--cosmic-blue));
+            color: var(--star-white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Exo 2', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .management-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(106, 5, 114, 0.3);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95), rgba(44, 24, 16, 0.95));
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            font-family: 'Orbitron', monospace;
+            color: var(--star-white);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--star-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--stardust);
+        }
+
+        .management-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: rgba(15, 15, 35, 0.6);
+            color: var(--star-white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Exo 2', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(45deg, var(--cosmic-purple), var(--cosmic-blue));
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .status-card {
+            background: rgba(15, 15, 35, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-card h3 {
+            color: var(--stardust);
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--star-white);
+        }
+
+        .label {
+            color: var(--nebula-pink);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .system-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        /* Constellation Pattern Effect */
+        .constellation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .constellation svg {
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .constellation line {
+            stroke: var(--star-white);
+            stroke-width: 1;
+            opacity: 0.3;
+        }
+
+        .constellation circle {
+            fill: var(--star-white);
+            opacity: 0.6;
+        }
+
+        /* Floating cosmic particles */
+        .cosmic-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--stardust);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Constellation Pattern Background -->
+    <div class="constellation">
+        <svg>
+            <defs>
+                <pattern id="constellationPattern" patternUnits="userSpaceOnUse" width="400" height="300">
+                    <circle cx="50" cy="50" r="2" />
+                    <circle cx="150" cy="80" r="1.5" />
+                    <circle cx="200" cy="120" r="2" />
+                    <circle cx="320" cy="90" r="1" />
+                    <circle cx="80" cy="180" r="1.5" />
+                    <circle cx="250" cy="200" r="2" />
+                    <circle cx="370" cy="160" r="1" />
+                    <line x1="50" y1="50" x2="150" y2="80" />
+                    <line x1="150" y1="80" x2="200" y2="120" />
+                    <line x1="200" y1="120" x2="320" y2="90" />
+                    <line x1="80" y1="180" x2="250" y2="200" />
+                    <line x1="250" y1="200" x2="370" y2="160" />
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#constellationPattern)" />
+        </svg>
+    </div>
+
+    <!-- Cosmic Dust Effect -->
+    <div class="cosmic-dust"></div>
+
+    <!-- Floating Particles -->
+    <div class="cosmic-particles" id="particles"></div>
+
+    <div class="container">
+        <header>
+            <h1>⭐ Cosmic Fabric Processor</h1>
+            <p>Navigate through the infinite cosmos of comprehensive video analysis</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="input-group">
+                    <label for="youtube-url">YouTube Video URL</label>
+                    <input 
+                        type="url" 
+                        id="youtube-url" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        required
+                    >
+                </div>
+                
+                <button id="process-btn" class="process-btn">
+                    🚀 Launch Cosmic Analysis
+                </button>
+            </section>
+
+            <section id="status-section" class="status-section hidden">
+                <div class="status-header">
+                    <h2>🌌 Cosmic Analysis Status</h2>
+                    <div id="status-badge" class="status-badge">⚡ Calibrating Sensors</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-current">0</span> of <span id="progress-total">13</span> stellar patterns
+                    </div>
+                </div>
+
+                <div class="current-step">
+                    <h3>🔭 Active Constellation Scan</h3>
+                    <div id="current-pattern" class="pattern-info">
+                        <span class="pattern-name">Initializing Stellar Array...</span>
+                        <span class="pattern-description">Preparing cosmic analysis chamber</span>
+                    </div>
+                </div>
+
+                <div class="phases-grid">
+                    <div class="phase-card" data-phase="1">
+                        <h4>🌟 Phase 1: Stellar Collection</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="youtube_summary">youtube_summary</div>
+                            <div class="pattern-item" data-pattern="extract_core_message">extract_core_message</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="2">
+                        <h4>🔬 Phase 2: Cosmic Laboratory Analysis</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_wisdom">extract_wisdom</div>
+                            <div class="pattern-item" data-pattern="extract_insights">extract_insights</div>
+                            <div class="pattern-item" data-pattern="extract_ideas">extract_ideas</div>
+                            <div class="pattern-item" data-pattern="extract_patterns">extract_patterns</div>
+                            <div class="pattern-item" data-pattern="extract_recommendations">extract_recommendations</div>
+                            <div class="pattern-item" data-pattern="extract_predictions">extract_predictions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="3">
+                        <h4>🌌 Phase 3: Galactic Network Mapping</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="extract_references">extract_references</div>
+                            <div class="pattern-item" data-pattern="extract_questions">extract_questions</div>
+                            <div class="pattern-item" data-pattern="create_tags">create_tags</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-card" data-phase="4">
+                        <h4>✨ Phase 4: Nebula Synthesis</h4>
+                        <div class="phase-patterns">
+                            <div class="pattern-item" data-pattern="create_5_sentence_summary">create_5_sentence_summary</div>
+                            <div class="pattern-item" data-pattern="to_flashcards">to_flashcards</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="results-section" class="results-section hidden">
+                <div class="results-header">
+                    <h2>🌠 Cosmic Analysis Complete</h2>
+                    <div class="results-summary">
+                        <span id="results-count">13</span> stellar analysis files generated
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button id="download-btn" class="download-btn">
+                        📥 Download Cosmic Archive
+                    </button>
+                    <p class="download-info">
+                        Files are provided as text files (.txt) with professional markdown formatting
+                    </p>
+                </div>
+            </section>
+
+            <section id="error-section" class="error-section hidden">
+                <div class="error-header">
+                    <h2>⚠️ Cosmic Disturbance Detected</h2>
+                </div>
+                <div id="error-message" class="error-message">
+                    A cosmic anomaly occurred during processing.
+                </div>
+                <button id="retry-btn" class="retry-btn">🔄 Recalibrate Systems</button>
+            </section>
+        </main>
+
+        <footer>
+            <div class="system-info">
+                <span id="fabric-status">Checking stellar fabric availability...</span>
+                <span class="separator">⭐</span>
+                <span>13 cosmic patterns available</span>
+                <span class="separator">⭐</span>
+                <button id="management-toggle" class="management-toggle">⚙️ Mission Control</button>
+            </div>
+        </footer>
+
+        <!-- Management Panel Modal -->
+        <div id="management-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🛸 Mission Control Center</h2>
+                    <button id="close-management" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="management-tabs">
+                        <button class="tab-btn active" data-tab="status">📊 System Status</button>
+                        <button class="tab-btn" data-tab="history">📁 Mission History</button>
+                        <button class="tab-btn" data-tab="cleanup">🧹 Cosmic Cleanup</button>
+                    </div>
+
+                    <!-- Status Tab -->
+                    <div id="status-tab" class="tab-content active">
+                        <div class="status-grid">
+                            <div class="status-card">
+                                <h3>🚀 System Status</h3>
+                                <div class="status-item">
+                                    <span class="label">Uptime:</span>
+                                    <span id="server-uptime">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Memory Usage:</span>
+                                    <span id="memory-usage">-</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="label">Fabric Available:</span>
+                                    <span id="fabric-available">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <h3>🌌 Active Processes</h3>
+                                <div class="status-item">
+                                    <span class="label">Running:</span>
+                                    <span id="active-processes">-</span>
+                                </div>
+                                <div id="process-list" class="process-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div id="history-tab" class="tab-content">
+                        <div class="history-controls">
+                            <button id="refresh-history" class="refresh-btn">🔄 Refresh</button>
+                            <span class="history-count">Loading...</span>
+                        </div>
+                        <div id="history-list" class="history-list">
+                            <div class="loading">Loading mission history...</div>
+                        </div>
+                    </div>
+
+                    <!-- Cleanup Tab -->
+                    <div id="cleanup-tab" class="tab-content">
+                        <div class="cleanup-section">
+                            <h3>🧹 Cosmic Storage Cleanup</h3>
+                            <p>Remove old analysis files to free up space in the cosmic archive</p>
+                            
+                            <div class="cleanup-controls">
+                                <div class="cleanup-option">
+                                    <label for="cleanup-days">Remove files older than:</label>
+                                    <select id="cleanup-days">
+                                        <option value="7">7 days</option>
+                                        <option value="30" selected>30 days</option>
+                                        <option value="90">90 days</option>
+                                    </select>
+                                    <button id="cleanup-old-btn" class="cleanup-btn">🗑️ Purge Old Files</button>
+                                </div>
+                            </div>
+                            
+                            <div class="cleanup-warning">
+                                <p><strong>⚠️ Warning:</strong> This action cannot be undone. Files will be permanently deleted from the cosmic archive.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cosmic particle system
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 17000);
+            }, 2000);
+        }
+
+        // Start particle system
+        createParticles();
+
+        // Mock JavaScript functionality (same as original but with cosmic theming)
+        document.addEventListener('DOMContentLoaded', function() {
+            const processBtn = document.getElementById('process-btn');
+            const statusSection = document.getElementById('status-section');
+            const resultsSection = document.getElementById('results-section');
+            const errorSection = document.getElementById('error-section');
+            const managementToggle = document.getElementById('management-toggle');
+            const managementModal = document.getElementById('management-modal');
+            const closeManagement = document.getElementById('close-management');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const retryBtn = document.getElementById('retry-btn');
+            const downloadBtn = document.getElementById('download-btn');
+
+            // Mock processing function
+            function startProcessing() {
+                const urlInput = document.getElementById('youtube-url');
+                if (!urlInput.value.trim()) {
+                    alert('Please enter a YouTube URL');
+                    return;
+                }
+
+                statusSection.classList.remove('hidden');
+                resultsSection.classList.add('hidden');
+                errorSection.classList.add('hidden');
+                
+                // Mock progress
+                const progressFill = document.getElementById('progress-fill');
+                const progressCurrent = document.getElementById('progress-current');
+                const currentPattern = document.getElementById('current-pattern');
+                const statusBadge = document.getElementById('status-badge');
+                
+                const patterns = [
+                    { name: 'youtube_summary', description: 'Extracting stellar essence from video content' },
+                    { name: 'extract_core_message', description: 'Identifying core cosmic message' },
+                    { name: 'extract_wisdom', description: 'Mining ancient wisdom from stellar data' },
+                    { name: 'extract_insights', description: 'Discovering hidden cosmic insights' },
+                    { name: 'extract_ideas', description: 'Capturing innovative stellar concepts' },
+                    { name: 'extract_patterns', description: 'Mapping cosmic behavioral patterns' },
+                    { name: 'extract_recommendations', description: 'Generating stellar recommendations' },
+                    { name: 'extract_predictions', description: 'Forecasting cosmic outcomes' },
+                    { name: 'extract_references', description: 'Cataloging stellar references' },
+                    { name: 'extract_questions', description: 'Formulating cosmic inquiries' },
+                    { name: 'create_tags', description: 'Creating stellar classification tags' },
+                    { name: 'create_5_sentence_summary', description: 'Synthesizing cosmic summary' },
+                    { name: 'to_flashcards', description: 'Converting to stellar memory cards' }
+                ];
+
+                let currentIndex = 0;
+                statusBadge.textContent = '🌌 Processing Cosmic Data';
+
+                const processInterval = setInterval(() => {
+                    if (currentIndex < patterns.length) {
+                        const pattern = patterns[currentIndex];
+                        const progress = ((currentIndex + 1) / patterns.length) * 100;
+                        
+                        progressFill.style.width = progress + '%';
+                        progressCurrent.textContent = currentIndex + 1;
+                        
+                        currentPattern.querySelector('.pattern-name').textContent = pattern.name;
+                        currentPattern.querySelector('.pattern-description').textContent = pattern.description;
+                        
+                        // Highlight current pattern
+                        document.querySelectorAll('.pattern-item').forEach(item => {
+                            item.classList.remove('active');
+                            if (item.dataset.pattern === pattern.name) {
+                                item.classList.add('active');
+                            }
+                        });
+                        
+                        currentIndex++;
+                    } else {
+                        clearInterval(processInterval);
+                        statusSection.classList.add('hidden');
+                        resultsSection.classList.remove('hidden');
+                        statusBadge.textContent = '✨ Cosmic Analysis Complete';
+                    }
+                }, 1000);
+            }
+
+            // Event listeners
+            processBtn.addEventListener('click', startProcessing);
+            retryBtn.addEventListener('click', startProcessing);
+            
+            downloadBtn.addEventListener('click', function() {
+                alert('Cosmic archive download initiated! 🌟');
+            });
+
+            managementToggle.addEventListener('click', function() {
+                managementModal.classList.remove('hidden');
+            });
+
+            closeManagement.addEventListener('click', function() {
+                managementModal.classList.add('hidden');
+            });
+
+            // Tab switching
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTab = this.dataset.tab;
+                    
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(targetTab + '-tab').classList.add('active');
+                });
+            });
+
+            // Close modal when clicking outside
+            managementModal.addEventListener('click', function(e) {
+                if (e.target === managementModal) {
+                    managementModal.classList.add('hidden');
+                }
+            });
+
+            // Mock status updates
+            function updateStatus() {
+                document.getElementById('server-uptime').textContent = '2d 14h 23m';
+                document.getElementById('memory-usage').textContent = '45% (2.1GB)';
+                document.getElementById('fabric-available').textContent = '✅ Online';
+                document.getElementById('active-processes').textContent = '3';
+                document.getElementById('fabric-status').textContent = 'Stellar fabric patterns: Online';
+            }
+
+            updateStatus();
+        });
+    </script>
+</body>
+</html>
