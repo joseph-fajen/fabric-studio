@@ -1226,6 +1226,15 @@
             
             <div class="lab-content">
                 <div class="lab-section">
+                    <h3 class="section-header">API Key Configuration</h3>
+                    <div class="lab-controls">
+                        <button class="control-organism" onclick="configureApiKeys()">Configure API Keys</button>
+                        <button class="control-organism" onclick="testApiConnections()">Test API Connections</button>
+                        <button class="control-organism" onclick="viewCurrentKeys()">View Current Configuration</button>
+                    </div>
+                </div>
+                
+                <div class="lab-section">
                     <h3 class="section-header">Server Status</h3>
                     <div class="lab-controls">
                         <button class="control-organism" onclick="checkReefStatus()">Check Server Status</button>
@@ -1254,6 +1263,87 @@
         </div>
     </div>
 
+    <!-- API Key Configuration Modal -->
+    <div id="api-key-modal" class="lab-depths">
+        <div class="laboratory">
+            <div class="lab-header">
+                <h2 class="lab-title">API Key Configuration</h2>
+                <button id="api-key-exit" class="lab-exit">×</button>
+            </div>
+            
+            <div class="lab-content">
+                <div class="lab-section">
+                    <h3 class="section-header">LLM Provider API Keys</h3>
+                    <p style="color: var(--text-reef-secondary); margin-bottom: 25px; font-size: 0.95rem;">
+                        Configure API keys for fallback model support. Keys are stored securely on the server.
+                    </p>
+                    
+                    <div class="input-group">
+                        <label for="anthropic-key" class="input-label">Anthropic API Key (Claude Models)</label>
+                        <input 
+                            type="password" 
+                            id="anthropic-key" 
+                            class="url-input" 
+                            placeholder="sk-ant-api03-..."
+                            style="font-family: monospace; font-size: 0.9rem;"
+                        />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="openai-key" class="input-label">OpenAI API Key (GPT Models)</label>
+                        <input 
+                            type="password" 
+                            id="openai-key" 
+                            class="url-input" 
+                            placeholder="sk-proj-..."
+                            style="font-family: monospace; font-size: 0.9rem;"
+                        />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="google-key" class="input-label">Google API Key (Gemini Models)</label>
+                        <input 
+                            type="password" 
+                            id="google-key" 
+                            class="url-input" 
+                            placeholder="AIzaSy..."
+                            style="font-family: monospace; font-size: 0.9rem;"
+                        />
+                    </div>
+                    
+                    <div class="lab-controls" style="margin-top: 30px;">
+                        <button class="control-organism" onclick="saveApiKeys()" style="background: var(--sea-green); color: white;">Save Configuration</button>
+                        <button class="control-organism" onclick="loadApiKeys()">Load Current Keys</button>
+                        <button class="control-organism danger" onclick="clearApiKeys()">Clear All Keys</button>
+                    </div>
+                </div>
+                
+                <div class="lab-section">
+                    <h3 class="section-header">Fallback Model Configuration</h3>
+                    <p style="color: var(--text-reef-secondary); margin-bottom: 25px; font-size: 0.95rem;">
+                        Configure the order of model fallbacks when API calls fail.
+                    </p>
+                    
+                    <div class="input-group">
+                        <label for="fallback-models" class="input-label">Fallback Model Order</label>
+                        <textarea 
+                            id="fallback-models" 
+                            class="url-input" 
+                            rows="6" 
+                            placeholder="claude-3-5-sonnet-20241022&#10;gpt-4o&#10;OpenAI o3&#10;gpt-4o-mini&#10;claude-3-5-haiku-20241022&#10;gpt-4-turbo"
+                            style="font-family: monospace; font-size: 0.9rem; resize: vertical;"
+                        ></textarea>
+                    </div>
+                    
+                    <div class="lab-controls" style="margin-top: 20px;">
+                        <button class="control-organism" onclick="saveFallbackConfig()">Save Fallback Order</button>
+                        <button class="control-organism" onclick="resetToDefaults()">Reset to Defaults</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // DOM Elements
         const processBtn = document.getElementById('process-btn');
@@ -1264,6 +1354,8 @@
         const labPortal = document.getElementById('lab-portal');
         const labModal = document.getElementById('lab-modal');
         const labExit = document.getElementById('lab-exit');
+        const apiKeyModal = document.getElementById('api-key-modal');
+        const apiKeyExit = document.getElementById('api-key-exit');
 
         // Processing state
         let isProcessing = false;
@@ -1327,6 +1419,10 @@
         labExit.addEventListener('click', closeLaboratory);
         labModal.addEventListener('click', (e) => {
             if (e.target === labModal) closeLaboratory();
+        });
+        apiKeyExit.addEventListener('click', closeApiKeyModal);
+        apiKeyModal.addEventListener('click', (e) => {
+            if (e.target === apiKeyModal) closeApiKeyModal();
         });
 
         // Particle interaction effects
@@ -1584,6 +1680,171 @@
                         showNotification('Shutdown failed', 'error');
                     });
             }
+        }
+
+        // API Key Management functions
+        function configureApiKeys() {
+            apiKeyModal.classList.add('visible');
+            loadApiKeys(); // Load current keys when opening
+        }
+
+        function closeApiKeyModal() {
+            apiKeyModal.classList.remove('visible');
+        }
+
+        function saveApiKeys() {
+            const apiKeys = {
+                anthropic: document.getElementById('anthropic-key').value,
+                openai: document.getElementById('openai-key').value,
+                google: document.getElementById('google-key').value
+            };
+
+            fetch('/api/management/config/api-keys', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(apiKeys)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('API keys saved successfully', 'success');
+                } else {
+                    showNotification('Failed to save API keys: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Error saving API keys: ' + error.message, 'error');
+            });
+        }
+
+        function loadApiKeys() {
+            fetch('/api/management/config/api-keys')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show masked versions of keys
+                    document.getElementById('anthropic-key').placeholder = data.keys.anthropic ? '••••••••••••••••' : 'sk-ant-api03-...';
+                    document.getElementById('openai-key').placeholder = data.keys.openai ? '••••••••••••••••' : 'sk-proj-...';
+                    document.getElementById('google-key').placeholder = data.keys.google ? '••••••••••••••••' : 'AIzaSy...';
+                    
+                    // Load fallback model configuration
+                    if (data.fallbackModels) {
+                        document.getElementById('fallback-models').value = data.fallbackModels.join('\n');
+                    }
+                } else {
+                    showNotification('Failed to load API keys: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Error loading API keys: ' + error.message, 'error');
+            });
+        }
+
+        function clearApiKeys() {
+            if (confirm('Clear all API keys? This will remove all stored credentials.')) {
+                fetch('/api/management/config/api-keys', {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('API keys cleared successfully', 'success');
+                        // Clear the form
+                        document.getElementById('anthropic-key').value = '';
+                        document.getElementById('openai-key').value = '';
+                        document.getElementById('google-key').value = '';
+                        loadApiKeys(); // Refresh placeholders
+                    } else {
+                        showNotification('Failed to clear API keys: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Error clearing API keys: ' + error.message, 'error');
+                });
+            }
+        }
+
+        function testApiConnections() {
+            fetch('/api/management/config/test-apis', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const results = data.results;
+                    const workingApis = Object.keys(results).filter(key => results[key].working).length;
+                    const totalApis = Object.keys(results).length;
+                    
+                    showNotification(`API Test Results: ${workingApis}/${totalApis} providers working`, 
+                        workingApis > 0 ? 'success' : 'error');
+                } else {
+                    showNotification('Failed to test API connections: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Error testing API connections: ' + error.message, 'error');
+            });
+        }
+
+        function viewCurrentKeys() {
+            fetch('/api/management/config/api-keys')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const keys = data.keys;
+                    const configured = Object.keys(keys).filter(key => keys[key]).length;
+                    const total = Object.keys(keys).length;
+                    
+                    showNotification(`API Configuration: ${configured}/${total} keys configured`, 'info');
+                } else {
+                    showNotification('Failed to load API configuration: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Error loading API configuration: ' + error.message, 'error');
+            });
+        }
+
+        function saveFallbackConfig() {
+            const fallbackModels = document.getElementById('fallback-models').value
+                .split('\n')
+                .map(model => model.trim())
+                .filter(model => model.length > 0);
+
+            fetch('/api/management/config/fallback-models', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fallbackModels })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Fallback model configuration saved successfully', 'success');
+                } else {
+                    showNotification('Failed to save fallback configuration: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('Error saving fallback configuration: ' + error.message, 'error');
+            });
+        }
+
+        function resetToDefaults() {
+            const defaultModels = [
+                'claude-3-5-sonnet-20241022',
+                'gpt-4o',
+                'OpenAI o3',
+                'gpt-4o-mini',
+                'claude-3-5-haiku-20241022',
+                'gpt-4-turbo'
+            ];
+            
+            document.getElementById('fallback-models').value = defaultModels.join('\n');
+            showNotification('Fallback models reset to defaults', 'info');
         }
 
         // Utility functions

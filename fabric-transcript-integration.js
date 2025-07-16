@@ -15,6 +15,23 @@ class FabricTranscriptIntegration {
     this.maxConcurrent = 3; // Reduced to avoid API rate limits
     this.timeoutMs = 60000; // Increased for API calls
     this.fabricPath = '/Users/josephfajen/go/bin/fabric';
+    
+    // Fallback model hierarchy for API resilience (latest working models)
+    this.fallbackModels = [
+      'claude-3-5-sonnet-20241022',          // Latest Claude Sonnet
+      'gpt-4o',                              // Latest GPT-4o
+      'gpt-4o-mini',                         // Latest GPT-4o Mini (efficient)
+      'claude-3-5-haiku-20241022',           // Latest Claude Haiku (fastest)
+      'gpt-4-turbo',                         // GPT-4 Turbo fallback
+      'gpt-3.5-turbo'                        // GPT-3.5 Turbo fallback
+    ];
+    
+    this.maxRetries = 3;
+    this.baseRetryDelay = 2000; // 2 seconds
+    this.apiKeys = {};
+    
+    // Load API keys from config on startup
+    this.loadApiKeysFromConfig();
   }
 
   // Test fabric availability
@@ -40,15 +57,19 @@ class FabricTranscriptIntegration {
     }
   }
 
-  // Execute a single pattern with transcript text
+  // Execute a single pattern with transcript text and fallback model strategy
   async executePatternWithTranscript(patternName, transcript, videoMetadata = null) {
+    return await this.executePatternWithRetry(patternName, transcript, videoMetadata, 0);
+  }
+  
+  // Execute pattern with retry logic and model fallback
+  async executePatternWithRetry(patternName, transcript, videoMetadata = null, attemptCount = 0) {
+    const tempDir = path.join(__dirname, 'temp');
+    await fs.ensureDir(tempDir);
+    
+    const tempFile = path.join(tempDir, `temp_transcript_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.txt`);
+    
     try {
-      // Create temporary file for the transcript
-      const tempDir = path.join(__dirname, 'temp');
-      await fs.ensureDir(tempDir);
-      
-      const tempFile = path.join(tempDir, `temp_transcript_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.txt`);
-      
       // Add metadata header to transcript for context
       let processableText = '';
       if (videoMetadata) {
@@ -63,41 +84,68 @@ class FabricTranscriptIntegration {
       // Write transcript to temporary file
       await fs.writeFile(tempFile, processableText, 'utf8');
       
-      try {
-        // Execute fabric pattern with the transcript file using cat pipe
-        const command = `cat "${tempFile}" | ${this.fabricPath} -p ${patternName} --model claude-3-5-sonnet-20241022`;
+      // Try each model in fallback hierarchy
+      for (let modelIndex = 0; modelIndex < this.fallbackModels.length; modelIndex++) {
+        const currentModel = this.fallbackModels[modelIndex];
         
-        console.log(`Processing pattern: ${patternName}...`);
-        
-        const { stdout, stderr } = await execAsync(command, { 
-          timeout: 60000, // Increased to 60 seconds for API calls
-          maxBuffer: 1024 * 1024 * 10, // 10MB buffer
-          shell: '/bin/bash' // Ensure proper shell for pipe operations
-        });
+        try {
+          console.log(`Processing pattern: ${patternName} with model: ${currentModel} (attempt ${attemptCount + 1}/${this.maxRetries + 1})`);
+          
+          const command = `cat "${tempFile}" | ${this.fabricPath} -p ${patternName} --model ${currentModel}`;
+          
+          const { stdout, stderr } = await execAsync(command, { 
+            timeout: this.timeoutMs,
+            maxBuffer: 1024 * 1024 * 10, // 10MB buffer
+            shell: '/bin/bash'
+          });
 
-        if (stderr && !stderr.includes('WARNING')) {
-          console.warn(`Pattern ${patternName} stderr:`, stderr);
-        }
+          if (stderr && !stderr.includes('WARNING')) {
+            console.warn(`Pattern ${patternName} stderr:`, stderr);
+          }
 
-        const result = stdout?.trim() || 'Pattern executed but returned no output';
-        
-        if (result.length < 50) {
-          throw new Error('Pattern returned suspiciously short output');
+          const result = stdout?.trim() || 'Pattern executed but returned no output';
+          
+          if (result.length < 50) {
+            throw new Error('Pattern returned suspiciously short output');
+          }
+          
+          // Success! Clean up and return
+          await fs.remove(tempFile);
+          console.log(`✅ Pattern ${patternName} successful with model: ${currentModel}`);
+          return result;
+          
+        } catch (modelError) {
+          console.warn(`Model ${currentModel} failed for pattern ${patternName}:`, modelError.message);
+          
+          // Check if this is an API overload error
+          const isAPIOverload = modelError.message.includes('529') || 
+                               modelError.message.includes('Overloaded') ||
+                               modelError.message.includes('rate limit') ||
+                               modelError.message.includes('quota');
+          
+          // If it's the last model and we haven't exhausted retries, try again with exponential backoff
+          if (modelIndex === this.fallbackModels.length - 1 && attemptCount < this.maxRetries && isAPIOverload) {
+            const delay = this.baseRetryDelay * Math.pow(2, attemptCount);
+            console.log(`All models failed, retrying in ${delay}ms... (${attemptCount + 1}/${this.maxRetries})`);
+            
+            await fs.remove(tempFile);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return await this.executePatternWithRetry(patternName, transcript, videoMetadata, attemptCount + 1);
+          }
+          
+          // If not API overload or last model, continue to next model
+          continue;
         }
-        
-        // Clean up temp file
-        await fs.remove(tempFile);
-        
-        return result;
-        
-      } catch (execError) {
-        // Clean up temp file even on error
-        await fs.remove(tempFile);
-        throw execError;
       }
       
+      // All models failed
+      await fs.remove(tempFile);
+      throw new Error(`All fallback models failed for pattern ${patternName}`);
+      
     } catch (error) {
-      console.error(`Pattern ${patternName} failed:`, error.message);
+      // Clean up temp file on any error
+      await fs.remove(tempFile).catch(() => {});
+      console.error(`Pattern ${patternName} failed after all retries:`, error.message);
       throw new Error(`Pattern execution failed: ${error.message}`);
     }
   }
@@ -309,6 +357,89 @@ Key insights would include:
       console.log('Fabric processing failed, falling back to simulation:', error.message);
       return await this.simulateProcessing(youtubeUrl, patterns, progressCallback);
     }
+  }
+
+  // Load API keys from config file
+  async loadApiKeysFromConfig() {
+    try {
+      const configPath = path.join(__dirname, 'config', 'api-keys.json');
+      if (await fs.pathExists(configPath)) {
+        const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
+        this.apiKeys = config;
+        if (config.fallbackModels) {
+          this.fallbackModels = config.fallbackModels;
+        }
+        console.log('✅ API keys loaded from config');
+      }
+    } catch (error) {
+      console.warn('⚠️  Failed to load API keys from config:', error.message);
+    }
+  }
+
+  // Update API keys
+  updateApiKeys(apiKeys) {
+    this.apiKeys = { ...this.apiKeys, ...apiKeys };
+    console.log('✅ API keys updated');
+  }
+
+  // Update fallback models
+  updateFallbackModels(fallbackModels) {
+    this.fallbackModels = fallbackModels;
+    console.log('✅ Fallback models updated:', fallbackModels);
+  }
+
+  // Test API connections
+  async testApiConnections(config = null) {
+    const keysToTest = config || this.apiKeys;
+    const results = {};
+
+    // Test Anthropic
+    if (keysToTest.anthropic) {
+      try {
+        const command = `echo "test" | ${this.fabricPath} -p youtube_summary --model claude-3-5-sonnet-20241022`;
+        await execAsync(command, { timeout: 10000 });
+        results.anthropic = { working: true, model: 'claude-3-5-sonnet-20241022' };
+      } catch (error) {
+        results.anthropic = { working: false, error: error.message };
+      }
+    } else {
+      results.anthropic = { working: false, error: 'No API key configured' };
+    }
+
+    // Test OpenAI with latest working model
+    if (keysToTest.openai) {
+      try {
+        const command = `echo "test" | ${this.fabricPath} -p youtube_summary --model gpt-4o`;
+        await execAsync(command, { timeout: 10000 });
+        results.openai = { working: true, model: 'gpt-4o' };
+      } catch (error) {
+        // Try fallback to gpt-4o-mini if gpt-4o fails
+        try {
+          const fallbackCommand = `echo "test" | ${this.fabricPath} -p youtube_summary --model gpt-4o-mini`;
+          await execAsync(fallbackCommand, { timeout: 10000 });
+          results.openai = { working: true, model: 'gpt-4o-mini' };
+        } catch (fallbackError) {
+          results.openai = { working: false, error: error.message };
+        }
+      }
+    } else {
+      results.openai = { working: false, error: 'No API key configured' };
+    }
+
+    // Test Google with latest model
+    if (keysToTest.google) {
+      try {
+        const command = `echo "test" | ${this.fabricPath} -p youtube_summary --model gemini-2.0-flash-exp`;
+        await execAsync(command, { timeout: 10000 });
+        results.google = { working: true, model: 'gemini-2.0-flash-exp' };
+      } catch (error) {
+        results.google = { working: false, error: error.message };
+      }
+    } else {
+      results.google = { working: false, error: 'No API key configured' };
+    }
+
+    return results;
   }
 }
 

@@ -57,9 +57,11 @@ The application uses a revolutionary approach:
 
 ### Fabric Integration
 - **Method**: Direct fabric CLI execution (NOT fabric-mcp-server)
-- **Command Pattern**: `cat transcript.txt | fabric -p {pattern} --model claude-3-5-sonnet-20241022`
-- **Model**: claude-3-5-sonnet-20241022 (optimized for speed and cost)
+- **Command Pattern**: `cat transcript.txt | fabric -p {pattern} --model {fallback_model}`
+- **Primary Model**: claude-3-5-sonnet-20241022 (optimized for speed and cost)
+- **Fallback Models**: 6-level hierarchy with GPT-4o, GPT-4o-mini, Claude Haiku, GPT-4 Turbo, GPT-3.5 Turbo
 - **Patterns**: 13 predefined patterns in 4 phases
+- **Retry Logic**: 3 attempts per model with exponential backoff (2s, 4s, 8s)
 
 ### Fallback Hierarchy
 1. Transcript-first with fabric CLI (primary)
@@ -79,6 +81,13 @@ The application uses a revolutionary approach:
 - `POST /api/management/cleanup-old` - Clean old output folders
 - `POST /api/management/shutdown` - Graceful server shutdown
 - `POST /api/management/restart` - Server restart
+
+### API Key Management
+- `GET /api/management/config/api-keys` - Get API key configuration status
+- `POST /api/management/config/api-keys` - Save API keys for fallback providers
+- `DELETE /api/management/config/api-keys` - Clear all API keys
+- `POST /api/management/config/test-apis` - Test API connections
+- `POST /api/management/config/fallback-models` - Configure fallback model order
 
 ## Output Structure
 
@@ -100,6 +109,18 @@ Users must configure fabric with:
 fabric --setup
 fabric -S  # Set API keys
 ```
+
+### API Key Configuration
+Configure fallback providers via Reef Laboratory Console:
+1. Access 🧪 lab portal → "Configure API Keys" 
+2. Add API keys for Anthropic, OpenAI, and Google
+3. Use "Test API Connections" to verify functionality
+4. Configure fallback model order as needed
+
+**Current Working Models:**
+- ✅ Anthropic: claude-3-5-sonnet-20241022, claude-3-5-haiku-20241022
+- ✅ OpenAI: gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-3.5-turbo
+- ❌ Google: Gemini models not yet available in fabric
 
 ## Development Guidelines
 

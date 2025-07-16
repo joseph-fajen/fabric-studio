@@ -43,6 +43,15 @@ fabricIntegration.initialize()
     fabricAvailable = false;
   });
 
+// Initialize fabric transcript integration with API keys
+fabricTranscriptIntegration.loadApiKeysFromConfig()
+  .then(() => {
+    console.log('FabricTranscriptIntegration initialized with API keys');
+  })
+  .catch(error => {
+    console.warn('Failed to load API keys for FabricTranscriptIntegration:', error.message);
+  });
+
 // WebSocket connection handler
 wss.on('connection', (ws) => {
   console.log('New WebSocket connection');
@@ -399,6 +408,148 @@ app.post('/api/management/clear-all-data', async (req, res) => {
   } catch (error) {
     console.error('Error clearing all data:', error);
     res.status(500).json({ error: 'Failed to clear all data' });
+  }
+});
+
+// API Key Management endpoints
+app.get('/api/management/config/api-keys', (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'config', 'api-keys.json');
+    let config = {};
+    
+    if (fs.existsSync(configPath)) {
+      config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    }
+    
+    // Return masked keys for security
+    const maskedKeys = {
+      anthropic: config.anthropic ? true : false,
+      openai: config.openai ? true : false,
+      google: config.google ? true : false
+    };
+    
+    res.json({
+      success: true,
+      keys: maskedKeys,
+      fallbackModels: config.fallbackModels || [
+        'claude-3-5-sonnet-20241022',
+        'gpt-4o',
+        'OpenAI o3',
+        'gpt-4o-mini',
+        'claude-3-5-haiku-20241022',
+        'gpt-4-turbo'
+      ]
+    });
+  } catch (error) {
+    console.error('Error loading API keys:', error);
+    res.status(500).json({ success: false, message: 'Failed to load API keys' });
+  }
+});
+
+app.post('/api/management/config/api-keys', async (req, res) => {
+  try {
+    const { anthropic, openai, google } = req.body;
+    const configDir = path.join(__dirname, 'config');
+    const configPath = path.join(configDir, 'api-keys.json');
+    
+    // Ensure config directory exists
+    await fs.ensureDir(configDir);
+    
+    // Load existing config
+    let config = {};
+    if (await fs.pathExists(configPath)) {
+      config = JSON.parse(await fs.readFile(configPath, 'utf8'));
+    }
+    
+    // Update only non-empty keys
+    if (anthropic && anthropic.trim()) config.anthropic = anthropic.trim();
+    if (openai && openai.trim()) config.openai = openai.trim();
+    if (google && google.trim()) config.google = google.trim();
+    
+    // Save config
+    await fs.writeFile(configPath, JSON.stringify(config, null, 2));
+    
+    // Update fabric integration with new keys
+    fabricTranscriptIntegration.updateApiKeys(config);
+    
+    console.log('API keys updated successfully');
+    res.json({ success: true, message: 'API keys saved successfully' });
+  } catch (error) {
+    console.error('Error saving API keys:', error);
+    res.status(500).json({ success: false, message: 'Failed to save API keys' });
+  }
+});
+
+app.delete('/api/management/config/api-keys', async (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'config', 'api-keys.json');
+    
+    if (await fs.pathExists(configPath)) {
+      await fs.remove(configPath);
+    }
+    
+    // Clear keys from fabric integration
+    fabricTranscriptIntegration.updateApiKeys({});
+    
+    console.log('API keys cleared successfully');
+    res.json({ success: true, message: 'API keys cleared successfully' });
+  } catch (error) {
+    console.error('Error clearing API keys:', error);
+    res.status(500).json({ success: false, message: 'Failed to clear API keys' });
+  }
+});
+
+app.post('/api/management/config/fallback-models', async (req, res) => {
+  try {
+    const { fallbackModels } = req.body;
+    const configDir = path.join(__dirname, 'config');
+    const configPath = path.join(configDir, 'api-keys.json');
+    
+    // Ensure config directory exists
+    await fs.ensureDir(configDir);
+    
+    // Load existing config
+    let config = {};
+    if (await fs.pathExists(configPath)) {
+      config = JSON.parse(await fs.readFile(configPath, 'utf8'));
+    }
+    
+    // Update fallback models
+    config.fallbackModels = fallbackModels;
+    
+    // Save config
+    await fs.writeFile(configPath, JSON.stringify(config, null, 2));
+    
+    // Update fabric integration with new fallback models
+    fabricTranscriptIntegration.updateFallbackModels(fallbackModels);
+    
+    console.log('Fallback models updated successfully');
+    res.json({ success: true, message: 'Fallback models saved successfully' });
+  } catch (error) {
+    console.error('Error saving fallback models:', error);
+    res.status(500).json({ success: false, message: 'Failed to save fallback models' });
+  }
+});
+
+app.post('/api/management/config/test-apis', async (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'config', 'api-keys.json');
+    let config = {};
+    
+    if (await fs.pathExists(configPath)) {
+      config = JSON.parse(await fs.readFile(configPath, 'utf8'));
+    }
+    
+    // Test API connections
+    const results = await fabricTranscriptIntegration.testApiConnections(config);
+    
+    res.json({
+      success: true,
+      results: results
+    });
+  } catch (error) {
+    console.error('Error testing API connections:', error);
+    res.status(500).json({ success: false, message: 'Failed to test API connections' });
   }
 });
 

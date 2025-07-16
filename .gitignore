@@ -67,3 +67,6 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
+
+# API keys and sensitive configuration
+config/api-keys.json

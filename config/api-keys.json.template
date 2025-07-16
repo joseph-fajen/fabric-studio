@@ -1,0 +1,13 @@
+{
+  "anthropic": "your-anthropic-api-key-here",
+  "openai": "your-openai-api-key-here",
+  "google": "your-google-api-key-here",
+  "fallbackModels": [
+    "claude-3-5-sonnet-20241022",
+    "gpt-4o",
+    "o3",
+    "gemini-2.5-flash",
+    "claude-3-5-haiku-20241022",
+    "gpt-4o-mini"
+  ]
+}
