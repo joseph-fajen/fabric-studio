@@ -330,8 +330,20 @@ app.post('/api/management/restart', (req, res) => {
     console.log('Restarting server...');
     server.close(() => {
       console.log('Server closed for restart');
-      // Restart the process
-      process.exit(1); // Exit with code 1 to indicate restart needed
+      // Check if we have a process manager (like PM2 or similar)
+      if (process.env.PM_ID || process.env.PM2_HOME) {
+        // Running under PM2 or similar, exit with code 1 to trigger restart
+        process.exit(1);
+      } else {
+        // Manual restart attempt - spawn a new process
+        const { spawn } = require('child_process');
+        const child = spawn(process.argv[0], process.argv.slice(1), {
+          detached: true,
+          stdio: 'ignore'
+        });
+        child.unref();
+        process.exit(0);
+      }
     });
   }, 1000);
 });
@@ -357,6 +369,36 @@ app.post('/api/management/stop-processing', (req, res) => {
   } catch (error) {
     console.error('Error stopping processing:', error);
     res.status(500).json({ error: 'Failed to stop processing' });
+  }
+});
+
+app.post('/api/management/clear-all-data', async (req, res) => {
+  console.log('Clear all data requested via web interface');
+  
+  try {
+    // Clear all active processes
+    const processCount = activeProcesses.size;
+    activeProcesses.clear();
+    
+    // Clear all output directories
+    const outputsDir = path.join(__dirname, 'outputs');
+    if (await fs.pathExists(outputsDir)) {
+      await fs.emptyDir(outputsDir);
+    }
+    
+    // Broadcast clear signal to all WebSocket clients
+    broadcast({
+      type: 'data_cleared',
+      message: 'All data cleared by user request'
+    });
+    
+    res.json({ 
+      message: `Cleared all data: ${processCount} active processes stopped, all output files removed`,
+      processesCleared: processCount
+    });
+  } catch (error) {
+    console.error('Error clearing all data:', error);
+    res.status(500).json({ error: 'Failed to clear all data' });
   }
 });
 
@@ -575,7 +617,10 @@ async function createZipFile(outputDir, zipPath, results) {
     // Add all files in the output directory
     archive.directory(outputDir, false, (entry) => {
       // Exclude the zip file itself
-      return entry.name !== 'youtube_analysis.zip';
+      if (entry.name === 'youtube_analysis.zip') {
+        return false;
+      }
+      return entry;
     });
 
     archive.finalize();

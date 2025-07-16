@@ -3,258 +3,1658 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Fabric Processor</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>YouTube Fabric Processor - Coral Reef Laboratory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Coral Reef Laboratory Color Palette */
+            --coral-primary: rgba(255, 127, 80, 0.9);
+            --coral-secondary: rgba(255, 160, 122, 0.7);
+            --sea-green: rgba(32, 178, 170, 0.8);
+            --sea-green-light: rgba(32, 178, 170, 0.4);
+            --tropical-blue: rgba(70, 130, 180, 0.9);
+            --tropical-blue-light: rgba(70, 130, 180, 0.3);
+            --deep-teal: rgba(0, 139, 139, 0.8);
+            --aqua-glow: rgba(0, 255, 255, 0.3);
+            --bioluminescent: rgba(173, 255, 47, 0.6);
+            --sandy-beige: rgba(245, 222, 179, 0.2);
+            
+            /* Living Glass Backgrounds */
+            --reef-bg-primary: rgba(255, 255, 255, 0.08);
+            --reef-bg-secondary: rgba(255, 255, 255, 0.12);
+            --reef-bg-tertiary: rgba(255, 255, 255, 0.16);
+            --reef-bg-elevated: rgba(255, 255, 255, 0.2);
+            --reef-bg-modal: rgba(255, 255, 255, 0.25);
+            
+            /* Organic Borders */
+            --reef-border: rgba(255, 255, 255, 0.25);
+            --reef-border-subtle: rgba(255, 255, 255, 0.15);
+            --reef-border-strong: rgba(255, 255, 255, 0.35);
+            --reef-border-glow: rgba(32, 178, 170, 0.4);
+            
+            /* Bioluminescent Text */
+            --text-reef-primary: rgba(255, 255, 255, 0.96);
+            --text-reef-secondary: rgba(255, 255, 255, 0.82);
+            --text-reef-tertiary: rgba(255, 255, 255, 0.68);
+            --text-reef-muted: rgba(255, 255, 255, 0.54);
+            --text-reef-accent: rgba(32, 178, 170, 0.95);
+            
+            /* Organic Shadows */
+            --reef-shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --reef-shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.2);
+            --reef-shadow-deep: 0 16px 80px rgba(0, 0, 0, 0.3);
+            --reef-shadow-bioluminescent: 0 0 40px rgba(32, 178, 170, 0.2);
+            --reef-shadow-coral: 0 0 30px rgba(255, 127, 80, 0.15);
+            
+            /* Flowing Blur Effects */
+            --reef-blur-gentle: blur(8px);
+            --reef-blur-medium: blur(16px);
+            --reef-blur-deep: blur(24px);
+            --reef-blur-mystical: blur(40px);
+            
+            /* Organic Dimensions */
+            --border-radius-coral: 20px;
+            --border-radius-anemone: 32px;
+            --border-radius-pearl: 16px;
+            --border-radius-organic: 50px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: radial-gradient(ellipse at top, 
+                #1a3b5c 0%, 
+                #2c5f7e 20%, 
+                #1e4a6b 40%, 
+                #0f2a44 70%, 
+                #081c2e 100%);
+            background-attachment: fixed;
+            color: var(--text-reef-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Coral Reef Ambient Environment */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 25%, var(--coral-primary) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, var(--sea-green) 0%, transparent 40%),
+                radial-gradient(circle at 45% 85%, var(--tropical-blue) 0%, transparent 35%),
+                radial-gradient(circle at 75% 15%, var(--bioluminescent) 0%, transparent 30%);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -2;
+            animation: coralBreathing 12s ease-in-out infinite;
+        }
+
+        @keyframes coralBreathing {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.02); }
+        }
+
+        /* Floating Bioluminescent Particles */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, var(--bioluminescent) 1px, transparent 1px),
+                radial-gradient(circle at 70% 60%, var(--aqua-glow) 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, var(--coral-secondary) 1px, transparent 1px),
+                radial-gradient(circle at 90% 20%, var(--sea-green-light) 1px, transparent 1px);
+            background-size: 120px 120px, 180px 180px, 240px 240px, 300px 300px;
+            animation: bioFlow 25s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        @keyframes bioFlow {
+            0%, 100% { 
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                opacity: 0.4;
+            }
+            25% { 
+                transform: translateX(-15px) translateY(-8px) rotate(2deg);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateX(8px) translateY(12px) rotate(-1deg);
+                opacity: 0.5;
+            }
+            75% { 
+                transform: translateX(12px) translateY(-5px) rotate(1deg);
+                opacity: 0.7;
+            }
+        }
+
+        /* Underwater Current Effect */
+        .current-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(32, 178, 170, 0.1) 49%, rgba(32, 178, 170, 0.1) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(70, 130, 180, 0.08) 49%, rgba(70, 130, 180, 0.08) 51%, transparent 52%);
+            background-size: 200px 200px, 150px 150px;
+            animation: currentFlow 20s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        @keyframes currentFlow {
+            0% { background-position: 0% 0%, 0% 0%; }
+            100% { background-position: 200px 200px, -150px 150px; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Organic Header with Coral Growth Pattern */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--sea-green) 0%, var(--coral-primary) 30%, transparent 70%);
+            border-radius: 60% 40% 70% 30%;
+            filter: var(--reef-blur-medium);
+            z-index: -1;
+            animation: coralGrowth 15s ease-in-out infinite;
+        }
+
+        @keyframes coralGrowth {
+            0%, 100% { 
+                border-radius: 60% 40% 70% 30%;
+                transform: translateX(-50%) scale(1) rotate(0deg);
+            }
+            50% { 
+                border-radius: 40% 60% 30% 70%;
+                transform: translateX(-50%) scale(1.1) rotate(5deg);
+            }
+        }
+
+        .header h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, 
+                var(--text-reef-primary) 0%, 
+                var(--coral-primary) 25%,
+                var(--sea-green) 50%, 
+                var(--tropical-blue) 75%,
+                var(--text-reef-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 50px var(--sea-green);
+            position: relative;
+            animation: textGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 50px var(--sea-green); }
+            50% { text-shadow: 0 0 70px var(--coral-primary), 0 0 90px var(--sea-green); }
+        }
+
+        .header p {
+            color: var(--text-reef-secondary);
+            font-size: 1.3rem;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+            animation: subtleGlow 10s ease-in-out infinite;
+        }
+
+        @keyframes subtleGlow {
+            0%, 100% { color: var(--text-reef-secondary); }
+            50% { color: var(--text-reef-accent); }
+        }
+
+        /* Living Coral Card */
+        .coral-card {
+            background: var(--reef-bg-secondary);
+            backdrop-filter: var(--reef-blur-medium);
+            -webkit-backdrop-filter: var(--reef-blur-medium);
+            border: 2px solid var(--reef-border);
+            border-radius: var(--border-radius-anemone);
+            padding: 45px;
+            margin-bottom: 40px;
+            box-shadow: var(--reef-shadow-medium), var(--reef-shadow-bioluminescent);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coral-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--coral-primary) 25%,
+                var(--sea-green) 50%,
+                var(--tropical-blue) 75%,
+                transparent 100%);
+            animation: reefShimmer 6s ease-in-out infinite;
+        }
+
+        @keyframes reefShimmer {
+            0%, 100% { opacity: 0.6; transform: translateX(-100%); }
+            50% { opacity: 1; transform: translateX(100%); }
+        }
+
+        .coral-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                transparent 50%, 
+                rgba(32, 178, 170, 0.03) 100%);
+            pointer-events: none;
+            border-radius: var(--border-radius-anemone);
+        }
+
+        .coral-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: var(--reef-shadow-deep), var(--reef-shadow-bioluminescent), var(--reef-shadow-coral);
+            border-color: var(--reef-border-glow);
+            background: var(--reef-bg-tertiary);
+        }
+
+        /* Elevated Reef Structure */
+        .coral-card-elevated {
+            background: var(--reef-bg-elevated);
+            backdrop-filter: var(--reef-blur-deep);
+            -webkit-backdrop-filter: var(--reef-blur-deep);
+            border: 2px solid var(--reef-border-strong);
+            border-radius: var(--border-radius-organic);
+            padding: 50px;
+            box-shadow: var(--reef-shadow-deep), 
+                        0 0 80px rgba(32, 178, 170, 0.2),
+                        inset 0 2px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: organicPulse 12s ease-in-out infinite;
+        }
+
+        @keyframes organicPulse {
+            0%, 100% { border-radius: var(--border-radius-organic); }
+            50% { border-radius: 45px 25px 40px 30px; }
+        }
+
+        .coral-card-elevated::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, 
+                rgba(255, 127, 80, 0.08) 0%, 
+                transparent 40%),
+                radial-gradient(circle at 70% 80%, 
+                rgba(32, 178, 170, 0.06) 0%, 
+                transparent 40%);
+            pointer-events: none;
+            animation: organicAmbient 18s ease-in-out infinite;
+        }
+
+        @keyframes organicAmbient {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Input Elements with Coral Texture */
+        .input-group {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-reef-primary);
+            margin-bottom: 15px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 22px 28px;
+            font-size: 1.15rem;
+            background: var(--reef-bg-primary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border);
+            border-radius: var(--border-radius-coral);
+            color: var(--text-reef-primary);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-family: inherit;
+            box-shadow: inset 0 3px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .url-input::placeholder {
+            color: var(--text-reef-muted);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--reef-border-glow);
+            background: var(--reef-bg-secondary);
+            box-shadow: 0 0 0 4px rgba(32, 178, 170, 0.2),
+                        inset 0 3px 12px rgba(0, 0, 0, 0.15),
+                        0 0 40px rgba(32, 178, 170, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Bioluminescent Button */
+        .bio-button {
+            background: linear-gradient(135deg, 
+                var(--sea-green) 0%, 
+                var(--tropical-blue) 50%,
+                var(--coral-primary) 100%);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid rgba(32, 178, 170, 0.6);
+            border-radius: var(--border-radius-coral);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 22px 45px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--reef-shadow-soft), 
+                        0 0 30px rgba(32, 178, 170, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-family: inherit;
+        }
+
+        .bio-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            transition: left 0.6s ease;
+        }
+
+        .bio-button:hover::before {
+            left: 100%;
+        }
+
+        .bio-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--reef-shadow-medium), 
+                        0 0 50px rgba(32, 178, 170, 0.5),
+                        0 0 80px rgba(255, 127, 80, 0.3);
+            border-color: rgba(32, 178, 170, 0.9);
+        }
+
+        .bio-button:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        .bio-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            animation: disabledPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes disabledPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Current Flow Progress Section */
+        .progress-section {
+            display: none;
+            margin-top: 45px;
+        }
+
+        .progress-section.visible {
+            display: block;
+            animation: surfaceFromDepth 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes surfaceFromDepth {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Reef Phase Structure */
+        .reef-phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 45px;
+        }
+
+        .phase-polyp {
+            background: var(--reef-bg-primary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border-subtle);
+            border-radius: var(--border-radius-coral);
+            padding: 28px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-polyp::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
+                rgba(32, 178, 170, 0.1) 0%, 
+                transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .phase-polyp:hover::before {
+            opacity: 1;
+        }
+
+        .phase-polyp.active {
+            border-color: var(--reef-border-glow);
+            background: var(--reef-bg-secondary);
+            box-shadow: 0 0 40px rgba(32, 178, 170, 0.2);
+            animation: activeGrowth 3s ease-in-out infinite;
+        }
+
+        @keyframes activeGrowth {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .phase-polyp.completed {
+            border-color: rgba(255, 127, 80, 0.4);
+            background: rgba(255, 127, 80, 0.08);
+            box-shadow: 0 0 30px rgba(255, 127, 80, 0.15);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .phase-nucleus {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--reef-bg-tertiary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--text-reef-secondary);
+            transition: all 0.4s ease;
+        }
+
+        .phase-polyp.active .phase-nucleus {
+            background: var(--sea-green-light);
+            border-color: var(--sea-green);
+            color: white;
+            box-shadow: 0 0 20px rgba(32, 178, 170, 0.4);
+            animation: nucleusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes nucleusPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .phase-polyp.completed .phase-nucleus {
+            background: var(--coral-primary);
+            border-color: rgba(255, 127, 80, 0.6);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 127, 80, 0.4);
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-reef-primary);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .pattern-tentacles {
+            list-style: none;
+        }
+
+        .pattern-organism {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pattern-organism:last-child {
+            border-bottom: none;
+        }
+
+        .pattern-organism:hover {
+            padding-left: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .pattern-symbiont {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-reef-muted);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pattern-organism.active .pattern-symbiont {
+            background: var(--sea-green);
+            box-shadow: 0 0 15px rgba(32, 178, 170, 0.6);
+            animation: symbiontPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes symbiontPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(32, 178, 170, 0.6);
+            }
+            50% { 
+                transform: scale(1.3);
+                box-shadow: 0 0 25px rgba(32, 178, 170, 0.8);
+            }
+        }
+
+        .pattern-organism.completed .pattern-symbiont {
+            background: var(--coral-primary);
+            box-shadow: 0 0 12px rgba(255, 127, 80, 0.5);
+        }
+
+        .pattern-name {
+            font-weight: 600;
+            color: var(--text-reef-secondary);
+            flex: 1;
+            transition: color 0.3s ease;
+        }
+
+        .pattern-organism.active .pattern-name {
+            color: var(--text-reef-accent);
+            text-shadow: 0 0 10px rgba(32, 178, 170, 0.3);
+        }
+
+        .pattern-organism.completed .pattern-name {
+            color: var(--text-reef-primary);
+        }
+
+        /* Results Treasure */
+        .results-section {
+            display: none;
+            margin-top: 45px;
+        }
+
+        .results-section.visible {
+            display: block;
+            animation: surfaceFromDepth 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .treasure-card {
+            background: var(--reef-bg-elevated);
+            backdrop-filter: var(--reef-blur-medium);
+            -webkit-backdrop-filter: var(--reef-blur-medium);
+            border: 2px solid var(--reef-border-strong);
+            border-radius: var(--border-radius-anemone);
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--reef-shadow-medium), 
+                        0 0 60px rgba(255, 127, 80, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .treasure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(255, 127, 80, 0.1) 0%, 
+                transparent 60%);
+            animation: treasureGlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes treasureGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .treasure-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-reef-primary);
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 127, 80, 0.3);
+        }
+
+        .treasure-description {
+            color: var(--text-reef-secondary);
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .harvest-button {
+            background: linear-gradient(135deg, 
+                var(--coral-primary) 0%, 
+                rgba(255, 127, 80, 0.9) 100%);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid rgba(255, 127, 80, 0.6);
+            border-radius: var(--border-radius-coral);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 18px 40px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--reef-shadow-soft), 
+                        0 0 30px rgba(255, 127, 80, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .harvest-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--reef-shadow-medium), 
+                        0 0 50px rgba(255, 127, 80, 0.5);
+            border-color: rgba(255, 127, 80, 0.9);
+        }
+
+        /* Management Laboratory */
+        .lab-portal {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: var(--reef-bg-secondary);
+            backdrop-filter: var(--reef-blur-medium);
+            -webkit-backdrop-filter: var(--reef-blur-medium);
+            border: 2px solid var(--reef-border);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-reef-primary);
+            font-size: 1.4rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 999;
+            box-shadow: var(--reef-shadow-soft);
+        }
+
+        .lab-portal:hover {
+            background: var(--reef-bg-tertiary);
+            border-color: var(--reef-border-glow);
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: var(--reef-shadow-medium), 0 0 30px rgba(32, 178, 170, 0.3);
+        }
+
+        /* Laboratory Modal */
+        .lab-depths {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: var(--reef-blur-mystical);
+            -webkit-backdrop-filter: var(--reef-blur-mystical);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 25px;
+        }
+
+        .lab-depths.visible {
+            display: flex;
+            animation: depthDive 0.5s ease-out;
+        }
+
+        @keyframes depthDive {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .laboratory {
+            background: var(--reef-bg-modal);
+            backdrop-filter: var(--reef-blur-mystical);
+            -webkit-backdrop-filter: var(--reef-blur-mystical);
+            border: 2px solid var(--reef-border-strong);
+            border-radius: var(--border-radius-organic);
+            padding: 45px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--reef-shadow-deep), 
+                        0 0 100px rgba(0, 0, 0, 0.4);
+            position: relative;
+            animation: labAscent 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes labAscent {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .laboratory::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(32, 178, 170, 0.05) 100%);
+            border-radius: var(--border-radius-organic);
+            pointer-events: none;
+        }
+
+        .lab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lab-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-reef-primary);
+            text-shadow: 0 0 15px rgba(32, 178, 170, 0.3);
+        }
+
+        .lab-exit {
+            background: var(--reef-bg-primary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-reef-secondary);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .lab-exit:hover {
+            background: var(--reef-bg-secondary);
+            border-color: var(--reef-border-strong);
+            color: var(--text-reef-primary);
+            transform: rotate(90deg);
+        }
+
+        .lab-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .lab-section {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--reef-border-subtle);
+        }
+
+        .lab-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-reef-primary);
+            margin-bottom: 18px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .lab-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .control-organism {
+            background: var(--reef-bg-secondary);
+            backdrop-filter: var(--reef-blur-gentle);
+            -webkit-backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border);
+            border-radius: var(--border-radius-pearl);
+            color: var(--text-reef-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .control-organism:hover {
+            background: var(--reef-bg-tertiary);
+            border-color: var(--reef-border-glow);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(32, 178, 170, 0.15);
+        }
+
+        .control-organism.danger {
+            border-color: rgba(255, 127, 80, 0.4);
+            color: rgba(255, 127, 80, 0.9);
+        }
+
+        .control-organism.danger:hover {
+            background: rgba(255, 127, 80, 0.1);
+            border-color: rgba(255, 127, 80, 0.6);
+            box-shadow: 0 4px 15px rgba(255, 127, 80, 0.15);
+        }
+
+        /* Responsive Reef */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px 18px;
+            }
+
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .coral-card {
+                padding: 30px;
+            }
+
+            .coral-card-elevated {
+                padding: 35px;
+            }
+
+            .reef-phases {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .laboratory {
+                padding: 30px;
+                margin: 20px;
+            }
+
+            .lab-portal {
+                width: 52px;
+                height: 52px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Current Flow Loading */
+        .current-loading {
+            background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(32, 178, 170, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 100%);
+            background-size: 200% 100%;
+            animation: currentShimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes currentShimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Reef Reflection Effects */
+        .reef-reflection {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reef-reflection::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 100%);
+            transform: skewX(-20deg);
+            transition: left 0.8s ease;
+        }
+
+        .reef-reflection:hover::after {
+            left: 150%;
+        }
+
+        /* Progress Flow Animation */
+        .progress-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .progress-header h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-reef-primary);
+            text-shadow: 0 0 20px rgba(32, 178, 170, 0.3);
+        }
+
+        .progress-header p {
+            color: var(--text-reef-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Hover Effects */
+        .phase-polyp {
+            cursor: pointer;
+        }
+
+        .phase-polyp:hover {
+            transform: translateY(-2px);
+            border-color: var(--reef-border-glow);
+        }
+
+        /* Add current lines to body */
+        body {
+            position: relative;
+        }
+
+        body > .current-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(32, 178, 170, 0.1) 49%, rgba(32, 178, 170, 0.1) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(70, 130, 180, 0.08) 49%, rgba(70, 130, 180, 0.08) 51%, transparent 52%);
+            background-size: 200px 200px, 150px 150px;
+            animation: currentFlow 20s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+    </style>
 </head>
 <body>
+    <div class="current-lines"></div>
+    
     <div class="container">
-        <header>
-            <h1>🌊 Deep Sea Video Analysis Lab</h1>
-            <p>Submerge videos into the depths of comprehensive fabric pattern analysis</p>
+        <header class="header">
+            <h1>YouTube Fabric Processor</h1>
+            <p>Dive deep into the coral reef laboratory where YouTube videos transform into vibrant insights through 13 specialized fabric patterns</p>
         </header>
 
-        <main>
-            <section class="input-section">
-                <div class="input-group">
-                    <label for="youtube-url">YouTube Video URL</label>
-                    <input 
-                        type="url" 
-                        id="youtube-url" 
-                        placeholder="https://www.youtube.com/watch?v=..."
-                        required
-                    >
-                </div>
-                
-                <button id="process-btn" class="process-btn">
-                    🔬 Initiate Deep Analysis
-                </button>
-            </section>
+        <main class="coral-card coral-card-elevated">
+            <div class="input-group">
+                <label for="youtube-url" class="input-label">YouTube Video URL</label>
+                <input 
+                    type="url" 
+                    id="youtube-url" 
+                    class="url-input" 
+                    placeholder="https://www.youtube.com/watch?v=..."
+                />
+            </div>
 
-            <section id="status-section" class="status-section hidden">
-                <div class="status-header">
-                    <h2>📡 Deep Sea Analysis Status</h2>
-                    <div id="status-badge" class="status-badge">⚡ Initializing Sonar</div>
-                </div>
-                
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div id="progress-fill" class="progress-fill"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span id="progress-current">0</span> of <span id="progress-total">13</span> patterns
-                    </div>
-                </div>
-
-                <div class="current-step">
-                    <h3>🔍 Active Scan Sequence</h3>
-                    <div id="current-pattern" class="pattern-info">
-                        <span class="pattern-name">Calibrating Sensors...</span>
-                        <span class="pattern-description">Preparing deep sea analysis chamber</span>
-                    </div>
-                </div>
-
-                <div class="phases-grid">
-                    <div class="phase-card" data-phase="1">
-                        <h4>🌊 Phase 1: Specimen Collection</h4>
-                        <div class="phase-patterns">
-                            <div class="pattern-item" data-pattern="youtube_summary">youtube_summary</div>
-                            <div class="pattern-item" data-pattern="extract_core_message">extract_core_message</div>
-                        </div>
-                    </div>
-                    
-                    <div class="phase-card" data-phase="2">
-                        <h4>🔬 Phase 2: Deep Laboratory Analysis</h4>
-                        <div class="phase-patterns">
-                            <div class="pattern-item" data-pattern="extract_wisdom">extract_wisdom</div>
-                            <div class="pattern-item" data-pattern="extract_insights">extract_insights</div>
-                            <div class="pattern-item" data-pattern="extract_ideas">extract_ideas</div>
-                            <div class="pattern-item" data-pattern="extract_patterns">extract_patterns</div>
-                            <div class="pattern-item" data-pattern="extract_recommendations">extract_recommendations</div>
-                            <div class="pattern-item" data-pattern="extract_predictions">extract_predictions</div>
-                        </div>
-                    </div>
-                    
-                    <div class="phase-card" data-phase="3">
-                        <h4>🧬 Phase 3: Neural Network Mapping</h4>
-                        <div class="phase-patterns">
-                            <div class="pattern-item" data-pattern="extract_references">extract_references</div>
-                            <div class="pattern-item" data-pattern="extract_questions">extract_questions</div>
-                            <div class="pattern-item" data-pattern="create_tags">create_tags</div>
-                        </div>
-                    </div>
-                    
-                    <div class="phase-card" data-phase="4">
-                        <h4>Phase 4: Synthesis Materials</h4>
-                        <div class="phase-patterns">
-                            <div class="pattern-item" data-pattern="create_5_sentence_summary">create_5_sentence_summary</div>
-                            <div class="pattern-item" data-pattern="to_flashcards">to_flashcards</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="results-section" class="results-section hidden">
-                <div class="results-header">
-                    <h2>Results Ready</h2>
-                    <div class="results-summary">
-                        <span id="results-count">13</span> analysis files generated
-                    </div>
-                </div>
-                
-                <div class="download-section">
-                    <button id="download-btn" class="download-btn">
-                        📥 Download Analysis Files
-                    </button>
-                    <p class="download-info">
-                        Files are provided as text files (.txt) with professional markdown formatting
-                    </p>
-                </div>
-            </section>
-
-            <section id="error-section" class="error-section hidden">
-                <div class="error-header">
-                    <h2>Processing Error</h2>
-                </div>
-                <div id="error-message" class="error-message">
-                    An error occurred during processing.
-                </div>
-                <button id="retry-btn" class="retry-btn">Try Again</button>
-            </section>
+            <button id="process-btn" class="bio-button reef-reflection">Begin Deep Analysis</button>
         </main>
 
-        <footer>
-            <div class="system-info">
-                <span id="fabric-status">Checking fabric availability...</span>
-                <span class="separator">•</span>
-                <span>13 fabric patterns available</span>
-                <span class="separator">•</span>
-                <button id="management-toggle" class="management-toggle">⚙️ Management</button>
-            </div>
-        </footer>
+        <div id="progress-section" class="progress-section">
+            <div class="coral-card">
+                <div class="progress-header">
+                    <h3>Exploring the Reef Depths</h3>
+                    <p>Your video is being processed through our coral reef laboratory using 13 specialized patterns across 4 evolutionary phases</p>
+                </div>
 
-        <!-- Management Panel Modal -->
-        <div id="management-modal" class="modal hidden">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>🛠️ Server Management</h2>
-                    <button id="close-management" class="close-btn">&times;</button>
+                <div class="reef-phases">
+                    <div class="phase-polyp" data-phase="1">
+                        <div class="phase-header">
+                            <div class="phase-nucleus">1</div>
+                            <span class="phase-title">Primary Extraction</span>
+                        </div>
+                        <ul class="pattern-tentacles">
+                            <li class="pattern-organism" data-pattern="youtube_summary">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">YouTube Summary</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_core_message">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Core Message</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-polyp" data-phase="2">
+                        <div class="phase-header">
+                            <div class="phase-nucleus">2</div>
+                            <span class="phase-title">Content Analysis</span>
+                        </div>
+                        <ul class="pattern-tentacles">
+                            <li class="pattern-organism" data-pattern="extract_wisdom">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Wisdom</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_insights">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Insights</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_ideas">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Ideas</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_patterns">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Patterns</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_recommendations">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Recommendations</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_predictions">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Predictions</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-polyp" data-phase="3">
+                        <div class="phase-header">
+                            <div class="phase-nucleus">3</div>
+                            <span class="phase-title">Knowledge Graph Building</span>
+                        </div>
+                        <ul class="pattern-tentacles">
+                            <li class="pattern-organism" data-pattern="extract_references">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract References</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="extract_questions">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Extract Questions</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="create_tags">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Create Tags</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="phase-polyp" data-phase="4">
+                        <div class="phase-header">
+                            <div class="phase-nucleus">4</div>
+                            <span class="phase-title">Synthesis Materials</span>
+                        </div>
+                        <ul class="pattern-tentacles">
+                            <li class="pattern-organism" data-pattern="create_5_sentence_summary">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">Create 5 Sentence Summary</span>
+                            </li>
+                            <li class="pattern-organism" data-pattern="to_flashcards">
+                                <div class="pattern-symbiont"></div>
+                                <span class="pattern-name">To Flashcards</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-section" class="results-section">
+            <div class="coral-card">
+                <div class="treasure-card">
+                    <h3 class="treasure-title">Reef Exploration Complete!</h3>
+                    <p class="treasure-description">Your YouTube video has been thoroughly explored through our coral reef laboratory. All 13 fabric patterns have been processed and are ready for harvest.</p>
+                    <a href="#" id="download-btn" class="harvest-button reef-reflection">Harvest Results</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lab-portal" id="lab-portal">
+        🧪
+    </div>
+
+    <div id="lab-modal" class="lab-depths">
+        <div class="laboratory">
+            <div class="lab-header">
+                <h2 class="lab-title">Reef Laboratory Console</h2>
+                <button id="lab-exit" class="lab-exit">×</button>
+            </div>
+            
+            <div class="lab-content">
+                <div class="lab-section">
+                    <h3 class="section-header">Server Status</h3>
+                    <div class="lab-controls">
+                        <button class="control-organism" onclick="checkReefStatus()">Check Server Status</button>
+                        <button class="control-organism" onclick="viewExplorationHistory()">View Processing History</button>
+                        <button class="control-organism" onclick="monitorCurrents()">Monitor System Health</button>
+                    </div>
                 </div>
                 
-                <div class="modal-body">
-                    <div class="management-tabs">
-                        <button class="tab-btn active" data-tab="status">📊 Status</button>
-                        <button class="tab-btn" data-tab="history">📁 History</button>
-                        <button class="tab-btn" data-tab="cleanup">🧹 Cleanup</button>
-                        <button class="tab-btn" data-tab="control">🎛️ Control</button>
+                <div class="lab-section">
+                    <h3 class="section-header">File Management</h3>
+                    <div class="lab-controls">
+                        <button class="control-organism" onclick="cleanReef()">Clean Old Files</button>
+                        <button class="control-organism" onclick="refreshEcosystem()">Refresh File System</button>
+                        <button class="control-organism danger" onclick="resetLaboratory()">Clear All Data</button>
                     </div>
-
-                    <!-- Status Tab -->
-                    <div id="status-tab" class="tab-content active">
-                        <div class="status-grid">
-                            <div class="status-card">
-                                <h3>Server Status</h3>
-                                <div class="status-item">
-                                    <span class="label">Uptime:</span>
-                                    <span id="server-uptime">-</span>
-                                </div>
-                                <div class="status-item">
-                                    <span class="label">Memory Usage:</span>
-                                    <span id="memory-usage">-</span>
-                                </div>
-                                <div class="status-item">
-                                    <span class="label">Fabric Available:</span>
-                                    <span id="fabric-available">-</span>
-                                </div>
-                            </div>
-                            
-                            <div class="status-card">
-                                <h3>Active Processes</h3>
-                                <div class="status-item">
-                                    <span class="label">Running:</span>
-                                    <span id="active-processes">-</span>
-                                </div>
-                                <div id="process-list" class="process-list"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- History Tab -->
-                    <div id="history-tab" class="tab-content">
-                        <div class="history-controls">
-                            <button id="refresh-history" class="refresh-btn">🔄 Refresh</button>
-                            <span class="history-count">Loading...</span>
-                        </div>
-                        <div id="history-list" class="history-list">
-                            <div class="loading">Loading history...</div>
-                        </div>
-                    </div>
-
-                    <!-- Cleanup Tab -->
-                    <div id="cleanup-tab" class="tab-content">
-                        <div class="cleanup-section">
-                            <h3>🧹 Storage Cleanup</h3>
-                            <p>Remove old analysis files to free up space</p>
-                            
-                            <div class="cleanup-controls">
-                                <div class="cleanup-option">
-                                    <label for="cleanup-days">Remove files older than:</label>
-                                    <select id="cleanup-days">
-                                        <option value="7">7 days</option>
-                                        <option value="30" selected>30 days</option>
-                                        <option value="90">90 days</option>
-                                    </select>
-                                    <button id="cleanup-old-btn" class="cleanup-btn">Remove Old Files</button>
-                                </div>
-                            </div>
-                            
-                            <div class="cleanup-warning">
-                                <p><strong>⚠️ Warning:</strong> This action cannot be undone. Files will be permanently deleted.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Control Tab -->
-                    <div id="control-tab" class="tab-content">
-                        <div class="control-section">
-                            <h3>🎛️ Server Control</h3>
-                            <p>Manage server operations and restart with optimizations</p>
-                            
-                            <div class="control-grid">
-                                <div class="control-card">
-                                    <h4>🔄 Restart Server</h4>
-                                    <p>Restart with the new optimized processing engine</p>
-                                    <button id="restart-server-btn" class="control-btn restart-btn">
-                                        🔄 Restart Server
-                                    </button>
-                                </div>
-                                
-                                <div class="control-card">
-                                    <h4>🛑 Shutdown Server</h4>
-                                    <p>Gracefully stop the server (requires manual restart)</p>
-                                    <button id="shutdown-server-btn" class="control-btn shutdown-btn">
-                                        🛑 Shutdown Server
-                                    </button>
-                                </div>
-                                
-                                <div class="control-card">
-                                    <h4>⚡ Force Stop Processing</h4>
-                                    <p>Stop all active video processing jobs</p>
-                                    <button id="stop-processing-btn" class="control-btn stop-btn">
-                                        ⚡ Stop All Processing
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="control-warning">
-                                <p><strong>⚠️ Warning:</strong> Shutdown requires manual restart from command line.</p>
-                            </div>
-                        </div>
+                </div>
+                
+                <div class="lab-section">
+                    <h3 class="section-header">Server Controls</h3>
+                    <div class="lab-controls">
+                        <button class="control-organism danger" onclick="restartReef()">Restart Server</button>
+                        <button class="control-organism danger" onclick="shutdownLab()">Shutdown Server</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // DOM Elements
+        const processBtn = document.getElementById('process-btn');
+        const urlInput = document.getElementById('youtube-url');
+        const progressSection = document.getElementById('progress-section');
+        const resultsSection = document.getElementById('results-section');
+        const downloadBtn = document.getElementById('download-btn');
+        const labPortal = document.getElementById('lab-portal');
+        const labModal = document.getElementById('lab-modal');
+        const labExit = document.getElementById('lab-exit');
+
+        // Processing state
+        let isProcessing = false;
+        let currentProcessId = null;
+        let socket = null;
+
+        // Initialize WebSocket connection
+        function initializeWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}`;
+            
+            socket = new WebSocket(wsUrl);
+            
+            socket.onopen = function(event) {
+                console.log('WebSocket connected');
+            };
+            
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+            
+            socket.onclose = function(event) {
+                console.log('WebSocket disconnected');
+                // Attempt to reconnect after 3 seconds
+                setTimeout(initializeWebSocket, 3000);
+            };
+            
+            socket.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        // Handle WebSocket messages
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'progress':
+                    updateProgress(data.pattern, data.phase, data.completed);
+                    break;
+                case 'process_completed':
+                    processComplete(data.processId);
+                    break;
+                case 'process_failed':
+                    processError(data.error);
+                    break;
+                case 'processing_stopped':
+                    processError('Processing stopped by user request');
+                    break;
+                default:
+                    console.log('Unknown WebSocket message type:', data.type);
+            }
+        }
+
+        // Event Listeners
+        processBtn.addEventListener('click', beginDeepAnalysis);
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') beginDeepAnalysis();
+        });
+        downloadBtn.addEventListener('click', harvestResults);
+        labPortal.addEventListener('click', openLaboratory);
+        labExit.addEventListener('click', closeLaboratory);
+        labModal.addEventListener('click', (e) => {
+            if (e.target === labModal) closeLaboratory();
+        });
+
+        // Particle interaction effects
+        document.addEventListener('mousemove', (e) => {
+            const phasePolyps = document.querySelectorAll('.phase-polyp');
+            phasePolyps.forEach(polyp => {
+                const rect = polyp.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                polyp.style.setProperty('--x', x + '%');
+                polyp.style.setProperty('--y', y + '%');
+            });
+        });
+
+        // Processing functions
+        async function beginDeepAnalysis() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showNotification('Please enter a YouTube URL to begin reef exploration', 'error');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showNotification('Please enter a valid YouTube URL for proper reef analysis', 'error');
+                return;
+            }
+
+            if (isProcessing) return;
+
+            isProcessing = true;
+            currentProcessId = null;
+
+            // Update UI
+            processBtn.disabled = true;
+            processBtn.textContent = 'Diving Deep...';
+            urlInput.disabled = true;
+
+            // Show progress section
+            progressSection.classList.add('visible');
+            resultsSection.classList.remove('visible');
+
+            // Reset all organisms
+            resetReefState();
+
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ youtubeUrl: url }),
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentProcessId = data.processId;
+                    showNotification('Deep analysis initiated! Monitoring reef progress...', 'success');
+                } else {
+                    throw new Error(data.message || data.error || 'Failed to start processing');
+                }
+            } catch (error) {
+                processError(error.message);
+            }
+        }
+
+        function updateProgress(pattern, phase, completed) {
+            // Update pattern status
+            const patternElement = document.querySelector(`[data-pattern="${pattern}"]`);
+            if (patternElement) {
+                if (completed) {
+                    patternElement.classList.remove('active');
+                    patternElement.classList.add('completed');
+                } else {
+                    patternElement.classList.add('active');
+                }
+            }
+
+            // Update phase status
+            const phaseElement = document.querySelector(`[data-phase="${phase}"]`);
+            if (phaseElement) {
+                if (completed) {
+                    // Check if all patterns in this phase are completed
+                    const patternsInPhase = phaseElement.querySelectorAll('.pattern-organism');
+                    const completedPatterns = phaseElement.querySelectorAll('.pattern-organism.completed');
+                    
+                    if (patternsInPhase.length === completedPatterns.length) {
+                        phaseElement.classList.remove('active');
+                        phaseElement.classList.add('completed');
+                    }
+                } else {
+                    phaseElement.classList.add('active');
+                }
+            }
+        }
+
+        function processComplete(processId) {
+            currentProcessId = processId;
+            
+            // Show results section
+            resultsSection.classList.add('visible');
+            
+            // Update download link
+            downloadBtn.href = `/api/download/${processId}`;
+            
+            // Reset button
+            processBtn.disabled = false;
+            processBtn.textContent = 'Begin Deep Analysis';
+            urlInput.disabled = false;
+            isProcessing = false;
+
+            showNotification('Reef exploration complete! All patterns have been successfully processed.', 'success');
+        }
+
+        function processError(message) {
+            showNotification(`Processing error: ${message}`, 'error');
+            
+            // Reset button
+            processBtn.disabled = false;
+            processBtn.textContent = 'Begin Deep Analysis';
+            urlInput.disabled = false;
+            isProcessing = false;
+        }
+
+        function harvestResults() {
+            if (currentProcessId) {
+                // Trigger download
+                window.location.href = `/api/download/${currentProcessId}`;
+                showNotification('Harvesting your reef exploration results...', 'info');
+            }
+        }
+
+        function resetReefState() {
+            // Reset all phases
+            document.querySelectorAll('.phase-polyp').forEach(polyp => {
+                polyp.classList.remove('active', 'completed');
+            });
+            
+            // Reset all patterns
+            document.querySelectorAll('.pattern-organism').forEach(organism => {
+                organism.classList.remove('active', 'completed');
+            });
+        }
+
+        // Laboratory functions
+        function openLaboratory() {
+            labModal.classList.add('visible');
+        }
+
+        function closeLaboratory() {
+            labModal.classList.remove('visible');
+        }
+
+        function checkReefStatus() {
+            fetch('/api/management/status')
+                .then(response => response.json())
+                .then(data => {
+                    const uptime = data.server.uptimeFormatted;
+                    const activeProcesses = data.processes.active;
+                    const fabricStatus = data.server.fabricAvailable ? 'Available' : 'Not Available';
+                    showNotification(`Server: Online (${uptime}). Active processes: ${activeProcesses}. Fabric: ${fabricStatus}`, 'info');
+                })
+                .catch(error => {
+                    showNotification('Unable to check server status', 'error');
+                });
+        }
+
+        function viewExplorationHistory() {
+            fetch('/api/management/history')
+                .then(response => response.json())
+                .then(data => {
+                    const totalAnalyses = data.length;
+                    const completedAnalyses = data.filter(item => item.filesCount > 0).length;
+                    showNotification(`Processing History: ${totalAnalyses} total analyses, ${completedAnalyses} completed successfully`, 'info');
+                })
+                .catch(error => {
+                    showNotification('Unable to load processing history', 'error');
+                });
+        }
+
+        function monitorCurrents() {
+            fetch('/api/management/status')
+                .then(response => response.json())
+                .then(data => {
+                    const memoryUsage = data.server.memoryUsage;
+                    const fabricStatus = data.server.fabricAvailable ? 'Operational' : 'Offline';
+                    showNotification(`System Health: Memory ${memoryUsage.heapUsed}/${memoryUsage.heapTotal}. Fabric: ${fabricStatus}`, 'info');
+                })
+                .catch(error => {
+                    showNotification('Unable to monitor system health', 'error');
+                });
+        }
+
+        function cleanReef() {
+            if (confirm('Clean old specimens from the reef laboratory?')) {
+                fetch('/api/management/cleanup-old', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showNotification(`Reef cleaning complete: ${data.message}`, 'success');
+                    })
+                    .catch(error => {
+                        showNotification('Reef cleaning failed', 'error');
+                    });
+            }
+        }
+
+        function refreshEcosystem() {
+            // This function could refresh the file system or clear caches
+            fetch('/api/management/status')
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(`File System Refreshed - ${data.server.patternsLoaded} patterns loaded, ${data.processes.active} active processes`, 'success');
+                })
+                .catch(error => {
+                    showNotification('Unable to refresh file system', 'error');
+                });
+        }
+
+        function resetLaboratory() {
+            if (confirm('Reset the entire laboratory? This will clear all data and stop all processes.')) {
+                fetch('/api/management/clear-all-data', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showNotification(`Laboratory reset complete: ${data.message}`, 'success');
+                        resetReefState(); // Reset UI state
+                    })
+                    .catch(error => {
+                        showNotification('Laboratory reset failed', 'error');
+                    });
+            }
+        }
+
+        function restartReef() {
+            if (confirm('Restart the reef system? Active explorations will be interrupted.')) {
+                fetch('/api/management/restart', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showNotification('Reef system restart initiated', 'warning');
+                    })
+                    .catch(error => {
+                        showNotification('Restart failed', 'error');
+                    });
+            }
+        }
+
+        function shutdownLab() {
+            if (confirm('Shutdown the reef laboratory? This will halt all operations.')) {
+                fetch('/api/management/shutdown', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showNotification('Laboratory shutdown initiated', 'warning');
+                    })
+                    .catch(error => {
+                        showNotification('Shutdown failed', 'error');
+                    });
+            }
+        }
+
+        // Utility functions
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+            return youtubeRegex.test(url);
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--reef-bg-elevated);
+                backdrop-filter: var(--reef-blur-medium);
+                border: 2px solid var(--reef-border-strong);
+                border-radius: var(--border-radius-coral);
+                color: var(--text-reef-primary);
+                padding: 16px 24px;
+                max-width: 350px;
+                z-index: 3000;
+                box-shadow: var(--reef-shadow-medium);
+                animation: slideInFromRight 0.3s ease-out;
+            `;
+            
+            if (type === 'error') {
+                notification.style.borderColor = 'rgba(255, 127, 80, 0.6)';
+                notification.style.background = 'rgba(255, 127, 80, 0.1)';
+            } else if (type === 'success') {
+                notification.style.borderColor = 'rgba(32, 178, 170, 0.6)';
+                notification.style.background = 'rgba(32, 178, 170, 0.1)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutToRight 0.3s ease-in forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Add CSS for notification animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInFromRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutToRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Handle escape key for laboratory
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLaboratory();
+            }
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            urlInput.focus();
+            initializeWebSocket();
+        });
+    </script>
 </body>
 </html>

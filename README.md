@@ -9,7 +9,7 @@ A high-performance web application that processes YouTube videos through 13 fabr
 - **Real-Time Progress**: WebSocket-powered progress tracking with live updates
 - **Professional Output**: 13 markdown files plus enhanced metadata and ZIP download
 - **Multiple Fallbacks**: Graceful degradation from optimized to simulation modes
-- **Management Interface**: Built-in server controls, history, and cleanup tools
+- **Management Console**: Comprehensive server management with status monitoring, processing history, file cleanup, and system controls
 
 ## Prerequisites
 
@@ -55,9 +55,9 @@ npm start
 ## Usage
 
 1. **Enter YouTube URL**: Paste any YouTube video URL in the input field
-2. **Start Processing**: Click "Process Video" to begin analysis
-3. **Monitor Progress**: Watch real-time progress as 13 patterns execute in parallel batches
-4. **Download Results**: Get ZIP file with all 13 analysis files plus metadata
+2. **Start Processing**: Click "Begin Deep Analysis" to start the analysis
+3. **Monitor Progress**: Watch real-time progress as 13 patterns execute in parallel batches across 4 phases
+4. **Download Results**: Get ZIP file with all 13 analysis files plus metadata when processing completes
 
 ### Processing Modes (Automatic Selection)
 
@@ -92,17 +92,50 @@ The processing generates 13 text files with professional markdown formatting:
 
 ## Architecture
 
-- **Frontend**: Professional HTML/CSS/JavaScript interface with real-time WebSocket updates
-- **Backend**: Node.js/Express server with direct Fabric CLI integration
-- **Processing**: Transcript-first parallel execution (3 patterns at a time)
-- **Output**: Enhanced metadata, 13 markdown files, and ZIP download
-- **Management**: Built-in server controls, process monitoring, and cleanup tools
+- **Frontend**: Coral reef laboratory themed interface with glassmorphism effects and real-time WebSocket updates
+- **Backend**: Node.js/Express server with direct Fabric CLI integration and comprehensive management API
+- **Processing**: Transcript-first parallel execution (3 patterns at a time) across 4 processing phases
+- **Output**: Enhanced metadata, 13 markdown files, and ZIP download with descriptive naming
+- **Management**: Full-featured management console with system monitoring, history tracking, and administrative controls
+
+## Management Console
+
+Access the management console by clicking the laboratory icon in the interface. Available functions:
+
+### System Monitoring
+- **Check Server Status**: View uptime, active processes, and fabric availability
+- **Monitor System Health**: Display memory usage and fabric operational status
+- **View Processing History**: Show analysis count and success rate
+
+### File Management
+- **Clean Old Files**: Remove output folders older than specified days
+- **Refresh File System**: Check current system status and loaded patterns
+- **Clear All Data**: Remove all output files and stop active processes
+
+### System Controls
+- **Restart Server**: Restart the application server (improved restart mechanism)
+- **Shutdown Server**: Graceful server shutdown
 
 ## Performance
 
 - **Time**: 70 seconds average
 - **Method**: Transcript-first parallel processing
 - **Success Rate**: 100% (13/13 patterns)
+
+## API Endpoints
+
+### Core Processing
+- `POST /api/process` - Start video processing with YouTube URL
+- `GET /api/process/:id` - Check processing status
+- `GET /api/download/:id` - Download results ZIP
+
+### Management API
+- `GET /api/management/status` - Server status and active processes
+- `GET /api/management/history` - Processing history
+- `POST /api/management/cleanup-old` - Clean old output folders
+- `POST /api/management/clear-all-data` - Clear all data and stop processes
+- `POST /api/management/restart` - Server restart
+- `POST /api/management/shutdown` - Graceful server shutdown
 
 ## Key Dependencies
 
