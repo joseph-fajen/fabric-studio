@@ -11,7 +11,7 @@ const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 
 // Import our modules
-const FabricIntegration = require('./fabric-integration');
+const FabricIntegration = require('./archive/legacy/fabric-integration');
 const FabricTranscriptIntegration = require('./fabric-transcript-integration');
 const { FABRIC_PATTERNS, PHASE_DESCRIPTIONS } = require('./fabric-patterns');
 const YouTubeMetadata = require('./youtube-metadata');
