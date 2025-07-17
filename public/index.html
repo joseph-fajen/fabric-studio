@@ -97,7 +97,6 @@
             opacity: 0.3;
             pointer-events: none;
             z-index: -2;
-            animation: coralBreathing 12s ease-in-out infinite;
         }
 
         @keyframes coralBreathing {
@@ -119,10 +118,9 @@
                 radial-gradient(circle at 40% 80%, var(--coral-secondary) 1px, transparent 1px),
                 radial-gradient(circle at 90% 20%, var(--sea-green-light) 1px, transparent 1px);
             background-size: 120px 120px, 180px 180px, 240px 240px, 300px 300px;
-            animation: bioFlow 25s ease-in-out infinite;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.4;
+            opacity: 0.2;
         }
 
         @keyframes bioFlow {
@@ -146,19 +144,7 @@
 
         /* Underwater Current Effect */
         .current-lines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(45deg, transparent 48%, rgba(32, 178, 170, 0.1) 49%, rgba(32, 178, 170, 0.1) 51%, transparent 52%),
-                linear-gradient(-45deg, transparent 48%, rgba(70, 130, 180, 0.08) 49%, rgba(70, 130, 180, 0.08) 51%, transparent 52%);
-            background-size: 200px 200px, 150px 150px;
-            animation: currentFlow 20s linear infinite;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.3;
+            display: none;
         }
 
         @keyframes currentFlow {
@@ -193,7 +179,6 @@
             border-radius: 60% 40% 70% 30%;
             filter: var(--reef-blur-medium);
             z-index: -1;
-            animation: coralGrowth 15s ease-in-out infinite;
         }
 
         @keyframes coralGrowth {
@@ -223,7 +208,6 @@
             background-clip: text;
             text-shadow: 0 0 50px var(--sea-green);
             position: relative;
-            animation: textGlow 8s ease-in-out infinite;
         }
 
         @keyframes textGlow {
@@ -238,7 +222,6 @@
             max-width: 700px;
             margin: 0 auto;
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-            animation: subtleGlow 10s ease-in-out infinite;
         }
 
         @keyframes subtleGlow {
@@ -274,7 +257,7 @@
                 var(--sea-green) 50%,
                 var(--tropical-blue) 75%,
                 transparent 100%);
-            animation: reefShimmer 6s ease-in-out infinite;
+            animation: reefShimmer 8s ease-in-out infinite;
         }
 
         @keyframes reefShimmer {
@@ -351,6 +334,47 @@
         .input-group {
             margin-bottom: 35px;
             position: relative;
+        }
+
+        .reef-info-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 15px;
+            padding: 20px;
+            background: var(--reef-bg-secondary);
+            border: 1px solid var(--reef-border-subtle);
+            border-radius: 15px;
+            backdrop-filter: blur(20px);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .info-icon {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        .info-content strong {
+            color: var(--text-reef-accent);
+            font-weight: 600;
+        }
+
+        .info-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .info-content li {
+            margin: 8px 0;
+            color: var(--text-reef-secondary);
+        }
+
+        .info-content p {
+            margin-top: 12px;
+            color: var(--text-reef-tertiary);
+            font-style: italic;
         }
 
         .input-label {
@@ -1064,19 +1088,7 @@
         }
 
         body > .current-lines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(45deg, transparent 48%, rgba(32, 178, 170, 0.1) 49%, rgba(32, 178, 170, 0.1) 51%, transparent 52%),
-                linear-gradient(-45deg, transparent 48%, rgba(70, 130, 180, 0.08) 49%, rgba(70, 130, 180, 0.08) 51%, transparent 52%);
-            background-size: 200px 200px, 150px 150px;
-            animation: currentFlow 20s linear infinite;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.3;
+            display: none;
         }
     </style>
 </head>
@@ -1097,7 +1109,23 @@
                     id="youtube-url" 
                     class="url-input" 
                     placeholder="https://www.youtube.com/watch?v=..."
+                    autocomplete="new-password"
+                    name="youtube-video-url"
+                    data-lpignore="true"
+                    data-form-type=""
                 />
+                <div class="reef-info-note">
+                    <div class="info-icon">ℹ️</div>
+                    <div class="info-content">
+                        <strong>Recommended Video Length:</strong>
+                        <ul>
+                            <li>✅ <strong>Optimal</strong> (up to 2 hours): Full effectiveness with all 13 fabric patterns</li>
+                            <li>⚠️ <strong>Acceptable</strong> (2-3 hours): Good results, may hit model limits</li>
+                            <li>❌ <strong>Not Recommended</strong> (3+ hours): Significantly reduced pattern effectiveness</li>
+                        </ul>
+                        <p>Fabric patterns work best on complete content. Longer videos require chunking which reduces analytical quality.</p>
+                    </div>
+                </div>
             </div>
 
             <button id="process-btn" class="bio-button reef-reflection">Begin Deep Analysis</button>
@@ -1380,8 +1408,10 @@
             
             socket.onclose = function(event) {
                 console.log('WebSocket disconnected');
-                // Attempt to reconnect after 3 seconds
-                setTimeout(initializeWebSocket, 3000);
+                // Only attempt to reconnect if we were processing something
+                if (isProcessing) {
+                    setTimeout(initializeWebSocket, 5000);
+                }
             };
             
             socket.onerror = function(error) {

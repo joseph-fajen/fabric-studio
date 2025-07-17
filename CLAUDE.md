@@ -139,3 +139,27 @@ Configure fallback providers via Reef Laboratory Console:
 - Use `/health` endpoint for basic functionality
 - Test with short YouTube videos first
 - Monitor WebSocket connection for real-time feedback
+
+## Recent Session Work
+**Latest Session Summary**: `SESSION-SUMMARY-2025-07-17.md` - Contains details about chunking implementation for long videos and server debugging work. Key accomplishments include intelligent transcript chunking system, enhanced server management, and resolution of pattern execution failures.
+
+## Video Length Recommendations
+**IMPORTANT**: This application is optimized for shorter videos. Fabric patterns are designed for complete content analysis and lose significant effectiveness when content is chunked.
+
+### Recommended Limits:
+- **✅ Optimal (up to 2 hours)**: Full effectiveness with all 13 fabric patterns
+- **⚠️ Acceptable (2-3 hours)**: Good results, may hit model limits  
+- **❌ Not Recommended (3+ hours)**: Significantly reduced pattern effectiveness (~25% quality)
+
+### Technical Reasoning:
+- Fabric patterns require complete context for effective analysis
+- Chunking breaks narrative flow and cross-references
+- Token limits: ~50K per model, ~250 tokens/minute average speech
+- Beyond 3 hours requires chunking which fundamentally compromises fabric pattern design
+
+## UI Stability Updates
+**Animation Optimization**: Removed aggressive background animations to prevent UI flickering:
+- Disabled coralBreathing, bioFlow, currentFlow animations
+- Removed textGlow and subtleGlow from headers
+- Optimized WebSocket reconnection to prevent connection churn
+- Maintained core processing animations for progress tracking
