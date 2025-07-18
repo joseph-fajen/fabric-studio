@@ -42,11 +42,6 @@ brew install fabric
 # Visit: https://github.com/danielmiessler/fabric/releases
 ```
 
-#### Install Fabric MCP Server (For Optimal Performance)
-```bash
-npm install -g fabric-mcp-server
-```
-
 #### Install yt-dlp (For YouTube Metadata)
 ```bash
 # Python/pip
@@ -77,24 +72,24 @@ Follow the prompts to configure:
 npm start
 ```
 
-The application will be available at: `http://localhost:3000`
+The application will automatically find an available port (starting from 3000) and display the URL. No conflicts with other local servers!
 
 ## Performance Modes
 
 The application automatically selects the best processing method:
 
-### 1. **Transcript-First Mode** (Target: 2-3 minutes)
+### 1. **Transcript-First Mode** (~70 seconds)
 - Downloads YouTube transcript once, processes through all patterns
 - Eliminates 13 separate YouTube downloads
-- Processes 6 patterns simultaneously with local transcript
-- **Requires**: yt-dlp/youtube-dl + Fabric CLI
+- Processes 3 patterns simultaneously with local transcript
+- **Requires**: yt-dlp + Fabric CLI
 
-### 2. **Standard Mode** (5-15 minutes)
-- Uses Fabric CLI with parallel batching
-- Fallback when MCP server unavailable
+### 2. **Legacy CLI Mode** (5-15 minutes)
+- Uses Fabric CLI with sequential processing
+- Fallback when transcript download fails
 - **Requires**: Fabric CLI only
 
-### 3. **Simulation Mode** (2-3 minutes)
+### 3. **Simulation Mode** (~30 seconds)
 - Mock processing for testing
 - Used when no fabric installation detected
 - **Requires**: Nothing (built-in)
@@ -121,13 +116,28 @@ The application automatically selects the best processing method:
 - **Descriptive folder names**: `2025-07-15_Video-Title_a1b2c3d4/`
 - **Descriptive downloads**: `Video-Title_analysis_a1b2c3d4.zip`
 
+## Video Length Recommendations
+
+**IMPORTANT**: This application is optimized for shorter videos. Fabric patterns are designed for complete content analysis and lose significant effectiveness when content is chunked.
+
+### Recommended Limits:
+- **✅ Optimal (up to 2 hours)**: Full effectiveness with all 13 fabric patterns
+- **⚠️ Acceptable (2-3 hours)**: Good results, may hit model token limits  
+- **❌ Not Recommended (3+ hours)**: Significantly reduced pattern effectiveness (~25% quality)
+
+### Technical Reasoning:
+- Fabric patterns require complete context for effective analysis
+- Chunking breaks narrative flow and cross-references
+- Token limits: ~50K per model, ~250 tokens/minute average speech
+- Beyond 3 hours requires chunking which fundamentally compromises fabric pattern design
+
 ## Usage Examples
 
 ### Example 1: Simon Willison Video
 ```
 URL: https://youtu.be/YpY83-kA7Bo?si=CbPFLzMVkm1h1z8f
 Expected: 13 analysis files covering AI developments
-Processing time: 10-15 minutes (with fabric) or 2-3 minutes (simulation)
+Processing time: ~70 seconds (transcript-first) or ~30 seconds (simulation)
 ```
 
 ### Example 2: Educational Content
@@ -140,7 +150,7 @@ Output: Professional text files ready for further use
 ## System Modes
 
 ### Full Processing Mode
-- **Requirements**: fabric-mcp-server installed
+- **Requirements**: Fabric CLI installed and configured
 - **Features**: Complete fabric pattern execution
 - **Output**: Actual AI-generated analysis
 - **Status**: "Fabric integration ready"
@@ -165,15 +175,6 @@ export PATH=$PATH:$(go env GOPATH)/bin
 
 # Or add to your shell profile (~/.bashrc, ~/.zshrc)
 echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> ~/.zshrc
-```
-
-#### "fabric-mcp-server not found"
-```bash
-# Reinstall globally
-npm install -g fabric-mcp-server
-
-# Check installation
-which fabric-mcp-server
 ```
 
 #### "Pattern execution failed"
@@ -208,10 +209,10 @@ yt-dlp --dump-json --no-download "https://youtube.com/watch?v=VIDEO_ID"
 ### Performance Optimization
 
 #### For Maximum Speed:
-1. Use `gpt-4o-mini` as default model
-2. Ensure fabric-mcp-server is running
+1. Use `claude-3-5-sonnet-20241022` as default model (optimal speed/cost balance)
+2. Ensure stable internet connection
 3. Use SSD storage for outputs
-4. Ensure stable internet connection
+4. Process videos under 2 hours for best results
 
 #### Resource Usage:
 - **RAM**: ~200MB base + ~50MB per concurrent pattern

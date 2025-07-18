@@ -49,7 +49,8 @@ fabric --setup
 ### 4. Start the Application
 ```bash
 npm start
-# Open browser to: http://localhost:3000
+# Application automatically finds available port (starting from 3000)
+# No conflicts with other local servers!
 ```
 
 ## Usage
@@ -58,6 +59,21 @@ npm start
 2. **Start Processing**: Click "Begin Deep Analysis" to start the analysis
 3. **Monitor Progress**: Watch real-time progress as 13 patterns execute in parallel batches across 4 phases
 4. **Download Results**: Get ZIP file with all 13 analysis files plus metadata when processing completes
+
+## Video Length Recommendations
+
+**IMPORTANT**: This application is optimized for shorter videos. Fabric patterns are designed for complete content analysis and lose significant effectiveness when content is chunked.
+
+### Recommended Limits:
+- **✅ Optimal (up to 2 hours)**: Full effectiveness with all 13 fabric patterns
+- **⚠️ Acceptable (2-3 hours)**: Good results, may hit model token limits  
+- **❌ Not Recommended (3+ hours)**: Significantly reduced pattern effectiveness (~25% quality)
+
+### Technical Reasoning:
+- Fabric patterns require complete context for effective analysis
+- Chunking breaks narrative flow and cross-references  
+- Token limits: ~50K per model, ~250 tokens/minute average speech
+- Beyond 3 hours requires chunking which fundamentally compromises fabric pattern design
 
 ### Processing Modes (Automatic Selection)
 
@@ -93,8 +109,8 @@ The processing generates 13 text files with professional markdown formatting:
 ## Architecture
 
 - **Frontend**: Coral reef laboratory themed interface with glassmorphism effects and real-time WebSocket updates
-- **Backend**: Node.js/Express server with direct Fabric CLI integration and comprehensive management API
-- **Processing**: Transcript-first parallel execution (3 patterns at a time) across 4 processing phases
+- **Backend**: Node.js/Express server with direct Fabric CLI integration, automatic port detection, and comprehensive management API
+- **Processing**: Transcript-first parallel execution (3 patterns at a time) across 4 processing phases, with intelligent chunking for large videos
 - **Output**: Enhanced metadata, 13 markdown files, and ZIP download with descriptive naming
 - **Management**: Full-featured management console with system monitoring, history tracking, and administrative controls
 
