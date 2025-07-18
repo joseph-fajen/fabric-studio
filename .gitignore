@@ -70,3 +70,6 @@ temp/
 
 # API keys and sensitive configuration
 config/api-keys.json
+
+# External repositories (for reference only)
+Fabric/
