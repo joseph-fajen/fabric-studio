@@ -6,9 +6,11 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "install:fabric-mcp": "npm install -g fabric-mcp-server",
+    "stop": "node -e \"const fs=require('fs'),path=require('path'),pidFile=path.join(__dirname,'.server.pid'); if(fs.existsSync(pidFile)){const pid=fs.readFileSync(pidFile,'utf8'); try{process.kill(parseInt(pid),'SIGTERM'); console.log('Server stopped'); fs.unlinkSync(pidFile);}catch(e){console.log('Server was not running'); fs.unlinkSync(pidFile);}} else{console.log('No server running');}\"",
+    "restart": "npm run stop && sleep 2 && npm start",
+    "status": "node -e \"const fs=require('fs'),path=require('path'),pidFile=path.join(__dirname,'.server.pid'); if(fs.existsSync(pidFile)){const pid=fs.readFileSync(pidFile,'utf8'); try{process.kill(parseInt(pid),0); console.log('Server is running (PID:',pid+')');}catch(e){console.log('Server is not running (stale PID file)'); fs.unlinkSync(pidFile);}} else{console.log('Server is not running');}\"",
     "install:yt-dlp": "pip install yt-dlp",
-    "setup": "npm run install:fabric-mcp && npm run install:yt-dlp && echo 'Please install Fabric CLI: go install github.com/danielmiessler/fabric@latest'"
+    "setup": "npm run install:yt-dlp && echo 'Please install Fabric CLI: go install github.com/danielmiessler/fabric@latest'"
   },
   "dependencies": {
     "express": "^4.18.2",
