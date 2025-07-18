@@ -10,6 +10,9 @@ const path = require('path');
 const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 
+// Import server manager
+const ServerManager = require('./server-manager');
+
 // Import our modules
 const FabricIntegration = require('./archive/legacy/fabric-integration');
 const FabricTranscriptIntegration = require('./fabric-transcript-integration');
@@ -778,14 +781,54 @@ async function createZipFile(outputDir, zipPath, results) {
   });
 }
 
-// Start server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`YouTube Fabric Processor running on port ${PORT}`);
-  console.log(`Open your browser to: http://localhost:${PORT}`);
-  console.log(`Fabric available: ${fabricAvailable}`);
-  console.log(`Patterns loaded: ${FABRIC_PATTERNS.length}`);
-});
+// Enhanced server startup with ServerManager
+async function startServer() {
+  const serverManager = new ServerManager();
+  
+  try {
+    // Validate environment
+    await serverManager.validateEnvironment();
+    
+    // Check for existing server and kill if necessary
+    await serverManager.killExistingServer();
+    
+    // Find available port
+    const PORT = await serverManager.findAvailablePort();
+    
+    // Start server
+    server.listen(PORT, '127.0.0.1', async () => {
+      console.log(`🚀 YouTube Fabric Processor running on port ${PORT}`);
+      console.log(`🌐 Open your browser to: http://localhost:${PORT}`);
+      console.log(`🔧 Fabric available: ${fabricAvailable}`);
+      console.log(`📝 Patterns loaded: ${FABRIC_PATTERNS.length}`);
+      
+      // Save PID for process management
+      await serverManager.savePid();
+      console.log(`📋 Server PID: ${process.pid}`);
+    });
+    
+    // Setup graceful shutdown
+    serverManager.setupShutdownHandlers(server);
+    
+    // Handle server startup errors
+    server.on('error', (error) => {
+      if (error.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use`);
+        process.exit(1);
+      } else {
+        console.error('❌ Server startup error:', error);
+        process.exit(1);
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Server startup failed:', error.message);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();
 
 // Helper functions for management API
 function formatUptime(uptime) {
@@ -845,13 +888,5 @@ async function getFolderSize(folderPath) {
   }
 }
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('Shutting down gracefully...');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
-  });
-});
 
 module.exports = { app, server };

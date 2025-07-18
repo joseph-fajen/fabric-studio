@@ -6,12 +6,14 @@ const { promisify } = require('util');
 const fs = require('fs-extra');
 const path = require('path');
 const TranscriptDownloader = require('./transcript-downloader');
+const TranscriptChunker = require('./transcript-chunker');
 
 const execAsync = promisify(exec);
 
 class FabricTranscriptIntegration {
   constructor() {
     this.transcriptDownloader = new TranscriptDownloader();
+    this.transcriptChunker = new TranscriptChunker();
     this.maxConcurrent = 3; // Reduced to avoid API rate limits
     this.timeoutMs = 60000; // Increased for API calls
     this.fabricPath = '/Users/josephfajen/go/bin/fabric';
@@ -59,7 +61,54 @@ class FabricTranscriptIntegration {
 
   // Execute a single pattern with transcript text and fallback model strategy
   async executePatternWithTranscript(patternName, transcript, videoMetadata = null) {
-    return await this.executePatternWithRetry(patternName, transcript, videoMetadata, 0);
+    // Check if transcript needs chunking
+    if (this.transcriptChunker.needsChunking(transcript)) {
+      console.log(`📄 Large transcript detected for ${patternName}, using chunking strategy...`);
+      return await this.executePatternWithChunking(patternName, transcript, videoMetadata);
+    } else {
+      return await this.executePatternWithRetry(patternName, transcript, videoMetadata, 0);
+    }
+  }
+
+  // Execute pattern with chunking for large transcripts
+  async executePatternWithChunking(patternName, transcript, videoMetadata = null) {
+    try {
+      // Split transcript into intelligent chunks
+      const chunks = this.transcriptChunker.splitIntoChunks(transcript);
+      const chunksWithMetadata = this.transcriptChunker.addChunkMetadata(chunks, videoMetadata);
+      
+      const stats = this.transcriptChunker.getChunkingStats(transcript, chunks);
+      console.log(`📊 Chunking stats: ${stats.totalChunks} chunks, avg ${stats.avgChunkTokens} tokens per chunk`);
+      
+      // Process each chunk
+      const chunkResults = [];
+      for (let i = 0; i < chunksWithMetadata.length; i++) {
+        const chunk = chunksWithMetadata[i];
+        console.log(`🔄 Processing chunk ${i + 1}/${chunksWithMetadata.length} for pattern ${patternName}...`);
+        
+        try {
+          const result = await this.executePatternWithRetry(patternName, chunk, videoMetadata, 0);
+          chunkResults.push(result);
+        } catch (error) {
+          console.warn(`⚠️  Chunk ${i + 1} failed for pattern ${patternName}: ${error.message}`);
+          // Continue with other chunks rather than failing completely
+          chunkResults.push(`[Chunk ${i + 1} processing failed: ${error.message}]`);
+        }
+      }
+      
+      // Aggregate results using pattern-specific strategies
+      console.log(`🔗 Aggregating ${chunkResults.length} chunk results for pattern ${patternName}...`);
+      const aggregatedResult = this.transcriptChunker.aggregateResults(chunkResults, patternName);
+      
+      // Add chunking information to the final result
+      const chunkingInfo = `\n\n---\n**Processing Info**: This content was processed in ${chunks.length} chunks due to length (${stats.originalTokens.toLocaleString()} estimated tokens).`;
+      
+      return aggregatedResult + chunkingInfo;
+      
+    } catch (error) {
+      console.error(`❌ Chunking failed for pattern ${patternName}:`, error.message);
+      throw new Error(`Chunked processing failed: ${error.message}`);
+    }
   }
   
   // Execute pattern with retry logic and model fallback
@@ -123,7 +172,7 @@ class FabricTranscriptIntegration {
                                modelError.message.includes('rate limit') ||
                                modelError.message.includes('quota');
           
-          // If it's the last model and we haven't exhausted retries, try again with exponential backoff
+          // If this is the last model and we haven't exhausted retries, try again with exponential backoff
           if (modelIndex === this.fallbackModels.length - 1 && attemptCount < this.maxRetries && isAPIOverload) {
             const delay = this.baseRetryDelay * Math.pow(2, attemptCount);
             console.log(`All models failed, retrying in ${delay}ms... (${attemptCount + 1}/${this.maxRetries})`);
@@ -133,7 +182,9 @@ class FabricTranscriptIntegration {
             return await this.executePatternWithRetry(patternName, transcript, videoMetadata, attemptCount + 1);
           }
           
-          // If not API overload or last model, continue to next model
+          // For API overload errors, continue to next model immediately
+          // For other errors, also continue to next model
+          console.log(`Trying next model in fallback hierarchy...`);
           continue;
         }
       }
