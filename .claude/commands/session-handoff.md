@@ -1,10 +1,10 @@
 # Session Handoff Procedure
 
-Execute the comprehensive 6-step session handoff procedure for maintaining development context and momentum across AI assistant sessions for the YouTube Fabric Processor.
+Execute the comprehensive 5-step session handoff procedure for maintaining development context and momentum across AI assistant sessions for the YouTube Fabric Processor.
 
 ## Instructions
 
-Follow the systematic 6-step process for seamless session transitions:
+Follow the systematic 5-step process for seamless session transitions:
 
 ### Step 1: Progress Assessment
 Document what was accomplished in this session:
@@ -24,32 +24,7 @@ Update project documentation to reflect current state:
 - Capture transcript-first architecture decisions
 - Update troubleshooting guides with new solutions
 
-### Step 3: State Validation
-Verify YouTube Fabric Processor health by running validation commands:
-```bash
-# Start the YouTube Fabric Processor
-npm start &
-sleep 3
-
-# Validate core endpoints
-curl -s -o /dev/null -w "health: %{http_code} " http://localhost:3000/health
-curl -s -o /dev/null -w "patterns: %{http_code} " http://localhost:3000/api/patterns
-curl -s -o /dev/null -w "management: %{http_code} " http://localhost:3000/api/management/status
-
-# Test fabric CLI availability
-which fabric && echo "fabric: OK" || echo "fabric: MISSING"
-
-# Test yt-dlp availability  
-which yt-dlp && echo "yt-dlp: OK" || echo "yt-dlp: MISSING"
-
-# Check processing capabilities
-fabric --version 2>/dev/null && echo "fabric configured: OK" || echo "fabric setup needed"
-
-# Stop server
-pkill -f "node server.js" || true
-```
-
-### Step 4: Git Status Cleanup & Commit Optimization
+### Step 3: Git Status Cleanup & Commit Optimization
 Ensure clean repository state:
 ```bash
 # Check git status
@@ -68,7 +43,7 @@ git commit -m "session handoff: [description of changes made]
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
 
-### Step 5: Next Session Preparation
+### Step 4: Next Session Preparation
 Document specific next steps and priorities:
 - YouTube processing improvements or optimizations needed
 - Fabric pattern additions or modifications
@@ -79,8 +54,45 @@ Document specific next steps and priorities:
 - API endpoint additions or modifications
 - Documentation gaps to address
 
-### Step 6: Handoff Summary
-Create comprehensive transition document with:
+### Step 5: Handoff Summary
+Create comprehensive transition document in session-summaries folder:
+```bash
+# Create session-summaries folder if it doesn't exist
+mkdir -p session-summaries
+
+# Create session summary with current date and session number
+DATE=$(date +%Y-%m-%d)
+SESSION_NUM=1
+while [ -f "session-summaries/SESSION-SUMMARY-${DATE}-$(printf "%02d" $SESSION_NUM).md" ]; do
+    SESSION_NUM=$((SESSION_NUM + 1))
+done
+FILENAME="session-summaries/SESSION-SUMMARY-${DATE}-$(printf "%02d" $SESSION_NUM).md"
+
+cat > "$FILENAME" << 'EOF'
+# Session Summary - ${DATE} (Session $(printf "%02d" $SESSION_NUM))
+
+## Accomplishments
+- [Document what was accomplished in this session]
+
+## Current Status
+- Current YouTube Fabric Processor status and recent changes
+- Processing performance metrics (current ~70s target)
+- Fabric CLI integration status and any issues
+
+## Next Session Priorities
+- Immediate priorities for next session
+- Known issues with fabric patterns or transcript processing
+
+## Configuration Notes
+- Any API key or configuration requirements
+- Processing mode fallback status (transcript-first → CLI → simulation)
+
+## Quick-start Commands
+- Quick-start commands for context restoration
+EOF
+```
+
+Document should include:
 - Current YouTube Fabric Processor status and recent changes
 - Processing performance metrics (current ~70s target)
 - Fabric CLI integration status and any issues
@@ -95,7 +107,6 @@ Create comprehensive transition document with:
 A complete session handoff summary providing:
 - Clear record of session accomplishments
 - Updated documentation reflecting current processing capabilities
-- Validated YouTube Fabric Processor system health
 - Clean git repository state
 - Prepared next session startup with fabric context
 - Comprehensive handoff documentation
