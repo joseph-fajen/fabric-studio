@@ -17,7 +17,6 @@ npm run dev           # Development mode with nodemon
 ### Dependencies Setup
 ```bash
 npm install                      # Install Node.js dependencies
-npm run install:fabric-mcp      # Install fabric-mcp-server (optional)
 npm run install:yt-dlp          # Install yt-dlp for transcript download
 npm run setup                   # Install all dependencies
 ```
@@ -56,7 +55,7 @@ The application uses a revolutionary approach:
 4. Total time: ~70 seconds (vs. 5+ hours with URL-based processing)
 
 ### Fabric Integration
-- **Method**: Direct fabric CLI execution (NOT fabric-mcp-server)
+- **Method**: Direct fabric CLI execution
 - **Command Pattern**: `cat transcript.txt | fabric -p {pattern} --model {fallback_model}`
 - **Primary Model**: claude-3-5-sonnet-20241022 (optimized for speed and cost)
 - **Fallback Models**: 6-level hierarchy with GPT-4o, GPT-4o-mini, Claude Haiku, GPT-4 Turbo, GPT-3.5 Turbo
@@ -128,7 +127,7 @@ Configure fallback providers via Reef Laboratory Console:
 - The transcript-first approach is critical for performance
 - Always process patterns in parallel batches (currently 3)
 - Use claude-3-5-sonnet-20241022 for optimal speed/cost balance
-- Avoid fabric-mcp-server due to reliability issues
+- Uses direct Fabric CLI calls for reliable processing
 
 ### Error Handling
 - Multiple fallback processing methods ensure reliability

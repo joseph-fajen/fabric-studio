@@ -270,7 +270,7 @@ class YouTubeFabricProcessor {
             const notice = document.createElement('div');
             notice.className = 'simulation-notice';
             notice.style.cssText = 'background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 14px;';
-            notice.textContent = 'Note: This was a simulation run. Install fabric-mcp-server for actual processing.';
+            notice.textContent = 'Note: This was a simulation run. Install Fabric CLI for actual processing: go install github.com/danielmiessler/fabric@latest';
             this.resultsSection.insertBefore(notice, this.resultsSection.firstChild);
         }
         

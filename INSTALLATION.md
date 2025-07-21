@@ -253,7 +253,11 @@ youtube-fabric-processor/
 
 1. **Start the application** with `./start.sh`
 2. **Test with a sample video** to verify functionality
-3. **Install fabric-mcp-server** for full processing capabilities
+3. **Install Fabric CLI** for full processing capabilities
+   ```bash
+   go install github.com/danielmiessler/fabric@latest
+   fabric --setup  # Configure API keys and models
+   ```
 4. **Customize patterns** by modifying `fabric-patterns.js`
 5. **Extend functionality** by adding new fabric patterns
 

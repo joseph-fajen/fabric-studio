@@ -9,7 +9,7 @@ This document captures the successful architecture developed during optimization
 ### Original Issues
 - **Hours-long processing**: Sequential pattern execution taking 5+ hours
 - **Repeated transcript downloads**: Each of 13 patterns downloaded YouTube transcript separately
-- **fabric-mcp-server integration failures**: JSON parsing errors and timeouts
+- **Complex integration failures**: JSON parsing errors and timeouts with external services
 - **Sequential bottlenecks**: No parallelization of pattern processing
 - **Poor error handling**: Stuck processes with no recovery
 
@@ -53,7 +53,7 @@ This document captures the successful architecture developed during optimization
   - Server control panel (restart, shutdown, cleanup)
 
 #### 2. **Transcript-First Processing** (`fabric-transcript-integration.js`)
-- **Purpose**: Revolutionary approach that downloads transcript once, processes all patterns
+- **Purpose**: Download transcript once, processes all patterns
 - **Key Features**:
   - Single transcript download (3-5 seconds)
   - Parallel batch processing (3 patterns at a time)
@@ -126,10 +126,10 @@ cat transcript.txt | fabric -p {pattern_name} --model claude-3-5-sonnet-20241022
 
 ## Fabric Integration
 
-### **fabric-mcp-server: NOT USED**
-- **Why**: JSON parsing errors, timeouts, complexity
-- **Attempted**: MCP protocol integration
-- **Result**: Abandoned in favor of direct CLI
+### **Direct CLI Approach**
+- **Why**: Simple, reliable, fast execution
+- **Method**: Direct fabric command execution with transcript input
+- **Result**: 70-second processing vs 5+ hour original approach
 
 ### **Direct Fabric CLI: SUCCESSFUL**
 - **Method**: Direct subprocess execution
@@ -339,7 +339,7 @@ TIMEOUT_MS=60000           # Pattern timeout
 - Real-time feedback improves user experience
 
 ### **What Didn't Work**
-- fabric-mcp-server integration (too complex, unreliable)
+- Complex service integrations (too complex, unreliable)
 - Sequential processing (too slow)
 - Complex timeout handling (fabric CLI is simpler)
 - Heavy models like opus (slow and expensive)

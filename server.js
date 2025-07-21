@@ -14,7 +14,6 @@ const { v4: uuidv4 } = require('uuid');
 const ServerManager = require('./server-manager');
 
 // Import our modules
-const FabricIntegration = require('./archive/legacy/fabric-integration');
 const FabricTranscriptIntegration = require('./fabric-transcript-integration');
 const { FABRIC_PATTERNS, PHASE_DESCRIPTIONS } = require('./fabric-patterns');
 const YouTubeMetadata = require('./youtube-metadata');
@@ -30,19 +29,18 @@ app.use(express.static('public'));
 
 // Global state
 const activeProcesses = new Map();
-const fabricIntegration = new FabricIntegration();
 const fabricTranscriptIntegration = new FabricTranscriptIntegration();
 const youtubeMetadata = new YouTubeMetadata();
 
-// Initialize fabric integration
+// Test fabric availability
 let fabricAvailable = false;
-fabricIntegration.initialize()
+fabricTranscriptIntegration.testFabricAvailability()
   .then(() => {
     fabricAvailable = true;
-    console.log('Fabric integration ready');
+    console.log('Fabric CLI available and ready');
   })
   .catch(error => {
-    console.warn('Fabric not available, using simulation mode:', error.message);
+    console.warn('Fabric CLI not available, using simulation mode. Please install Fabric CLI: go install github.com/danielmiessler/fabric@latest');
     fabricAvailable = false;
   });
 

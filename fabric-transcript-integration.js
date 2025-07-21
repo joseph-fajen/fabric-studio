@@ -16,7 +16,7 @@ class FabricTranscriptIntegration {
     this.transcriptChunker = new TranscriptChunker();
     this.maxConcurrent = 3; // Reduced to avoid API rate limits
     this.timeoutMs = 60000; // Increased for API calls
-    this.fabricPath = '/Users/josephfajen/go/bin/fabric';
+    this.fabricPath = null; // Will be detected dynamically
     
     // Fallback model hierarchy for API resilience (latest working models)
     this.fallbackModels = [
@@ -36,9 +36,50 @@ class FabricTranscriptIntegration {
     this.loadApiKeysFromConfig();
   }
 
+  // Detect fabric installation path
+  async detectFabricPath() {
+    // Try common installation locations
+    const commonPaths = [
+      'fabric', // Use PATH
+      `${process.env.HOME}/go/bin/fabric`,
+      '/usr/local/bin/fabric',
+      '/opt/homebrew/bin/fabric',
+      `${process.env.HOME}/.local/bin/fabric`
+    ];
+
+    for (const path of commonPaths) {
+      try {
+        await execAsync(`${path} --version`, { timeout: 3000 });
+        console.log(`Fabric CLI found at: ${path}`);
+        return path;
+      } catch (error) {
+        // Continue to next path
+      }
+    }
+    
+    // Try using 'which' command
+    try {
+      const { stdout } = await execAsync('which fabric', { timeout: 3000 });
+      const path = stdout.trim();
+      if (path) {
+        console.log(`Fabric CLI found via 'which': ${path}`);
+        return path;
+      }
+    } catch (error) {
+      // 'which' command failed
+    }
+    
+    throw new Error('Fabric CLI not found in common locations');
+  }
+
   // Test fabric availability
   async testFabricAvailability() {
     try {
+      // First detect the fabric path if not already set
+      if (!this.fabricPath) {
+        this.fabricPath = await this.detectFabricPath();
+      }
+      
       // Test basic fabric functionality
       const { stdout } = await execAsync(`${this.fabricPath} --version`, { timeout: 5000 });
       if (stdout && stdout.includes('v1.')) {
@@ -113,6 +154,15 @@ class FabricTranscriptIntegration {
   
   // Execute pattern with retry logic and model fallback
   async executePatternWithRetry(patternName, transcript, videoMetadata = null, attemptCount = 0) {
+    // Ensure fabric path is detected
+    if (!this.fabricPath) {
+      try {
+        this.fabricPath = await this.detectFabricPath();
+      } catch (error) {
+        throw new Error(`Fabric CLI not found. Please install it: go install github.com/danielmiessler/fabric@latest`);
+      }
+    }
+    
     const tempDir = path.join(__dirname, 'temp');
     await fs.ensureDir(tempDir);
     
@@ -441,6 +491,15 @@ Key insights would include:
 
   // Test API connections
   async testApiConnections(config = null) {
+    // Ensure fabric path is detected
+    if (!this.fabricPath) {
+      try {
+        this.fabricPath = await this.detectFabricPath();
+      } catch (error) {
+        return { error: 'Fabric CLI not found. Please install it: go install github.com/danielmiessler/fabric@latest' };
+      }
+    }
+    
     const keysToTest = config || this.apiKeys;
     const results = {};
 

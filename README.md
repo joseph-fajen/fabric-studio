@@ -20,14 +20,29 @@ A high-performance web application that processes YouTube videos through 13 fabr
 
 ## Quick Start
 
-### 1. Clone and Install
+### 1. Prerequisites Validation
+
+Before starting, ensure you have the required tools:
+```bash
+# Test Node.js (required)
+node --version  # Should show v14+
+
+# Test Go installation (required for Fabric CLI)
+go version      # Should show go1.x.x
+# If Go fails, install from: https://golang.org/dl/
+
+# Test Python (required for yt-dlp)
+python3 --version  # Should show Python 3.x
+```
+
+### 2. Clone and Install
 ```bash
 git clone https://github.com/joseph-fajen/youtube-fabric-processor.git
 cd youtube-fabric-processor
 npm install
 ```
 
-### 2. Install External Dependencies
+### 3. Install External Dependencies
 ```bash
 # Install all external tools at once
 npm run setup
@@ -37,7 +52,7 @@ go install github.com/danielmiessler/fabric@latest  # Fabric CLI
 pip install yt-dlp                                  # YouTube transcript downloader
 ```
 
-### 3. Configure Fabric CLI
+### 4. Configure Fabric CLI
 ```bash
 fabric --setup
 # Follow prompts to:
@@ -46,7 +61,7 @@ fabric --setup
 # - Set default model (claude-3-5-sonnet-20241022 recommended)
 ```
 
-### 4. Start the Application
+### 5. Start the Application
 ```bash
 npm start
 # Application automatically finds available port (starting from 3000)
