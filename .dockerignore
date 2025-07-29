@@ -1,0 +1,42 @@
+# Node modules
+node_modules
+npm-debug.log
+
+# Output directories
+outputs/
+session-summaries/
+
+# Development files
+.git/
+.gitignore
+README.md
+DEPLOYMENT.md
+INSTALLATION.md
+*.md
+
+# Test files
+test/
+tests/
+*.test.js
+
+# Environment files
+.env
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Runtime files
+.server.pid
+*.log
+
+# Temporary files
+tmp/
+temp/
