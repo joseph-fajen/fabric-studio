@@ -29,7 +29,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install Node.js dependencies
-RUN npm install --omit=dev
+RUN npm install --production
 
 # Install yt-dlp in virtual environment
 RUN python3 -m venv /opt/venv
