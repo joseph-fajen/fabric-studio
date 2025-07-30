@@ -5,6 +5,7 @@ const { exec } = require('child_process');
 const { promisify } = require('util');
 const fs = require('fs-extra');
 const path = require('path');
+const YouTubeTranscriptAPI = require('./youtube-transcript-api');
 
 const execAsync = promisify(exec);
 
@@ -12,6 +13,7 @@ class TranscriptDownloader {
   constructor() {
     this.maxRetries = 3;
     this.timeout = 60000; // 60 seconds for transcript download
+    this.youtubeAPI = new YouTubeTranscriptAPI();
   }
 
   // Extract video ID from various YouTube URL formats
@@ -282,6 +284,11 @@ class TranscriptDownloader {
 
     // Try multiple methods in order of preference
     const methods = [
+      () => this.youtubeAPI.downloadTranscript(youtubeUrl, outputDir).then(file => ({
+        transcript: require('fs').readFileSync(file, 'utf8'),
+        source: 'youtube-api',
+        file
+      })),
       () => this.downloadWithYtDlp(youtubeUrl, outputDir),
       () => this.downloadWithYoutubeDl(youtubeUrl, outputDir),
       () => this.downloadWithFabric(youtubeUrl, outputDir)

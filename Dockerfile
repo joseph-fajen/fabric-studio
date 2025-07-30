@@ -33,10 +33,14 @@ COPY package*.json ./
 # Install Node.js dependencies
 RUN npm install --production
 
-# Install yt-dlp in virtual environment
+# Install yt-dlp globally and in virtual environment
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install yt-dlp
+# Also install globally as backup
+RUN pip3 install --break-system-packages yt-dlp
+# Verify installation
+RUN yt-dlp --version || echo "yt-dlp installation verification failed"
 
 # Install Fabric CLI
 RUN go install github.com/danielmiessler/fabric/cmd/fabric@latest
