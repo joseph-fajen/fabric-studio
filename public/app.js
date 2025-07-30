@@ -9,9 +9,18 @@ class YouTubeFabricProcessor {
         this.initializeElements();
         this.setupEventListeners();
         this.checkSystemStatus();
+        this.checkAuthStatus();
     }
 
     initializeElements() {
+        // OAuth2 authentication elements
+        this.authStatus = document.getElementById('auth-status');
+        this.authUnauthenticated = document.getElementById('auth-unauthenticated');
+        this.authAuthenticated = document.getElementById('auth-authenticated');
+        this.authUserInfo = document.getElementById('auth-user-info');
+        this.loginBtn = document.getElementById('login-btn');
+        this.logoutBtn = document.getElementById('logout-btn');
+        
         // Input elements
         this.urlInput = document.getElementById('youtube-url');
         this.processBtn = document.getElementById('process-btn');
@@ -54,6 +63,10 @@ class YouTubeFabricProcessor {
     }
 
     setupEventListeners() {
+        // OAuth2 authentication listeners
+        this.loginBtn.addEventListener('click', () => this.handleLogin());
+        this.logoutBtn.addEventListener('click', () => this.handleLogout());
+        
         this.processBtn.addEventListener('click', () => this.startProcessing());
         this.downloadBtn.addEventListener('click', () => this.downloadEnhancedResults());
         this.retryBtn.addEventListener('click', () => this.resetInterface());
@@ -74,19 +87,19 @@ class YouTubeFabricProcessor {
             }
         });
         
-        // Tab switching
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
-        });
+        // Tab switching (temporarily disabled)
+        // document.querySelectorAll('.tab-btn').forEach(btn => {
+        //     btn.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
+        // });
         
-        // Management controls
-        document.getElementById('refresh-history').addEventListener('click', () => this.loadHistory());
-        document.getElementById('cleanup-old-btn').addEventListener('click', () => this.cleanupOldFiles());
+        // Management controls (temporarily disabled)
+        // document.getElementById('refresh-history').addEventListener('click', () => this.loadHistory());
+        // document.getElementById('cleanup-old-btn').addEventListener('click', () => this.cleanupOldFiles());
         
-        // Control panel buttons
-        document.getElementById('restart-server-btn').addEventListener('click', () => this.restartServer());
-        document.getElementById('shutdown-server-btn').addEventListener('click', () => this.shutdownServer());
-        document.getElementById('stop-processing-btn').addEventListener('click', () => this.stopProcessing());
+        // Control panel buttons (temporarily disabled)
+        // document.getElementById('restart-server-btn').addEventListener('click', () => this.restartServer());
+        // document.getElementById('shutdown-server-btn').addEventListener('click', () => this.shutdownServer());
+        // document.getElementById('stop-processing-btn').addEventListener('click', () => this.stopProcessing());
         
         // URL input validation
         this.urlInput.addEventListener('input', () => this.validateUrl());
@@ -486,6 +499,166 @@ class YouTubeFabricProcessor {
     documentGenerationError(error) {
         this.showError(`Document generation failed: ${error}`);
     }
+
+    // OAuth2 Authentication Methods
+    async checkAuthStatus() {
+        try {
+            const response = await fetch('/auth/status');
+            const authStatus = await response.json();
+            
+            this.updateAuthUI(authStatus);
+            
+            // Check for auth callback parameters
+            this.handleAuthCallback();
+            
+        } catch (error) {
+            console.error('Error checking auth status:', error);
+            this.showAuthError('Failed to check authentication status');
+        }
+    }
+
+    updateAuthUI(authStatus) {
+        // Hide loading state
+        this.authStatus.style.display = 'none';
+        
+        if (authStatus.authenticated) {
+            // Show authenticated state
+            this.authUnauthenticated.style.display = 'none';
+            this.authAuthenticated.style.display = 'block';
+            
+            // Update user info
+            this.authUserInfo.innerHTML = `
+                <div class="user-detail">
+                    <span class="user-label">Status:</span>
+                    <span>✅ Connected to YouTube</span>
+                </div>
+                ${authStatus.channelTitle ? `
+                <div class="user-detail">
+                    <span class="user-label">Channel:</span>
+                    <span>${authStatus.channelTitle}</span>
+                </div>
+                ` : ''}
+                <div class="user-detail">
+                    <span class="user-label">Token expires:</span>
+                    <span>${authStatus.expiresAt ? new Date(authStatus.expiresAt).toLocaleString() : 'Unknown'}</span>
+                </div>
+            `;
+        } else {
+            // Show unauthenticated state
+            this.authUnauthenticated.style.display = 'block';
+            this.authAuthenticated.style.display = 'none';
+        }
+    }
+
+    handleAuthCallback() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const authResult = urlParams.get('auth');
+        const message = urlParams.get('message');
+
+        if (authResult === 'success') {
+            this.showAuthSuccess('Successfully authenticated with Google! You can now process real YouTube videos.');
+            // Clear URL parameters
+            window.history.replaceState({}, document.title, window.location.pathname);
+            // Refresh auth status
+            setTimeout(() => this.checkAuthStatus(), 1000);
+        } else if (authResult === 'error') {
+            this.showAuthError(`Authentication failed: ${message || 'Unknown error'}`);
+            // Clear URL parameters
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }
+
+    async handleLogin() {
+        try {
+            // Disable login button
+            this.loginBtn.disabled = true;
+            this.loginBtn.innerHTML = '<div class="bio-loading-pulse"></div> Redirecting to Google...';
+            
+            // Redirect to OAuth2 flow
+            window.location.href = '/auth/google';
+            
+        } catch (error) {
+            console.error('Login error:', error);
+            this.showAuthError('Failed to initiate login');
+            this.loginBtn.disabled = false;
+            this.loginBtn.innerHTML = '<span class="button-icon">🚀</span> Authenticate with Google';
+        }
+    }
+
+    async handleLogout() {
+        try {
+            // Disable logout button
+            this.logoutBtn.disabled = true;
+            this.logoutBtn.textContent = 'Logging out...';
+            
+            const response = await fetch('/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                this.showAuthSuccess('Successfully logged out');
+                // Refresh auth status
+                setTimeout(() => this.checkAuthStatus(), 500);
+            } else {
+                throw new Error('Logout failed');
+            }
+            
+        } catch (error) {
+            console.error('Logout error:', error);
+            this.showAuthError('Failed to logout');
+        } finally {
+            this.logoutBtn.disabled = false;
+            this.logoutBtn.textContent = 'Logout';
+        }
+    }
+
+    showAuthSuccess(message) {
+        // Create a temporary success message
+        const successDiv = document.createElement('div');
+        successDiv.className = 'auth-message auth-success';
+        successDiv.innerHTML = `
+            <div style="background: rgba(32, 178, 170, 0.1); border: 1px solid rgba(32, 178, 170, 0.3); 
+                        border-radius: 8px; padding: 12px; margin: 16px 0; color: rgba(32, 178, 170, 0.95);">
+                ✅ ${message}
+            </div>
+        `;
+        
+        const authSection = document.getElementById('auth-section');
+        authSection.appendChild(successDiv);
+        
+        // Remove after 5 seconds
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                successDiv.parentNode.removeChild(successDiv);
+            }
+        }, 5000);
+    }
+
+    showAuthError(message) {
+        // Create a temporary error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'auth-message auth-error';
+        errorDiv.innerHTML = `
+            <div style="background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.3); 
+                        border-radius: 8px; padding: 12px; margin: 16px 0; color: rgba(255, 107, 107, 0.95);">
+                ❌ ${message}
+            </div>
+        `;
+        
+        const authSection = document.getElementById('auth-section');
+        authSection.appendChild(errorDiv);
+        
+        // Remove after 8 seconds
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.parentNode.removeChild(errorDiv);
+            }
+        }, 8000);
+    }
+}
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

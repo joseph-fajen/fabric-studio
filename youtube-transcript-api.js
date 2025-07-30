@@ -1,5 +1,5 @@
-// YouTube Data API v3 transcript extractor
-// More reliable than scraping, uses official Google APIs
+// YouTube Data API v3 transcript extractor with OAuth2 authentication
+// More reliable than scraping, uses official Google APIs with proper auth
 
 const { exec } = require('child_process');
 const { promisify } = require('util');
@@ -7,6 +7,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const https = require('https');
 const http = require('http');
+const oauth2Manager = require('./oauth2-config');
 
 const execAsync = promisify(exec);
 
@@ -27,52 +28,111 @@ class YouTubeTranscriptAPI {
       throw new Error('Invalid YouTube URL');
     }
 
-    if (!this.apiKey) {
-      console.log('YouTube API key not found, falling back to yt-dlp with proxies...');
-      return await this.downloadWithProxy(youtubeUrl, outputDir);
+    // Try OAuth2 authentication first (preferred method)
+    if (oauth2Manager.isAuthenticated()) {
+      try {
+        console.log('Downloading transcript with OAuth2 authenticated YouTube API...');
+        return await this.downloadWithOAuth2(videoId, outputDir);
+      } catch (error) {
+        console.error('OAuth2 method failed:', error.message);
+        // Fall back to other methods
+      }
     }
 
-    try {
-      console.log('Downloading transcript with YouTube Data API...');
-      
-      // Use YouTube Data API to get captions
-      const url = `https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId=${videoId}&key=${this.apiKey}`;
-      
-      const data = await this.makeHttpsRequest(url);
-      
-      if (data.items && data.items.length > 0) {
-        // Find English captions
-        const englishCaption = data.items.find(item => 
-          item.snippet.language === 'en' || 
-          item.snippet.language.startsWith('en')
-        ) || data.items[0];
-
-        // Download the actual transcript content
-        const captionUrl = `https://www.googleapis.com/youtube/v3/captions/${englishCaption.id}?key=${this.apiKey}`;
-        const transcriptContent = await this.makeHttpsRequest(captionUrl, true);
-
-        // Check if response is an error (contains JSON error structure)
-        if (transcriptContent.includes('"error"') || transcriptContent.includes('UNAUTHENTICATED') || transcriptContent.includes('oauth2')) {
-          throw new Error(`YouTube API authentication failed: ${transcriptContent.slice(0, 200)}...`);
-        }
-
-        // Validate transcript content
-        if (!transcriptContent || transcriptContent.length < 50) {
-          throw new Error('YouTube API returned empty or invalid transcript');
-        }
-
-        // Save to file
-        const transcriptFile = path.join(outputDir, `transcript_${videoId}.txt`);
-        await fs.writeFile(transcriptFile, transcriptContent);
-        
-        console.log('✅ Transcript downloaded successfully via YouTube API');
-        return transcriptFile;
-      } else {
-        throw new Error('No captions available for this video');
+    // Fallback to API key method if available
+    if (this.apiKey) {
+      try {
+        console.log('Downloading transcript with YouTube Data API key...');
+        return await this.downloadWithApiKey(videoId, outputDir);
+      } catch (error) {
+        console.error('API key method failed:', error.message);
+        // Fall back to yt-dlp
       }
-    } catch (error) {
-      console.error('YouTube API failed:', error.message);
-      return await this.downloadWithProxy(youtubeUrl, outputDir);
+    }
+
+    // Final fallback to yt-dlp
+    console.log('Falling back to yt-dlp with proxy options...');
+    return await this.downloadWithProxy(youtubeUrl, outputDir);
+  }
+
+  async downloadWithOAuth2(videoId, outputDir) {
+    const youtube = oauth2Manager.getYouTubeClient();
+    
+    // Get captions list
+    const captionsResponse = await youtube.captions.list({
+      part: 'snippet',
+      videoId: videoId
+    });
+
+    if (!captionsResponse.data.items || captionsResponse.data.items.length === 0) {
+      throw new Error('No captions available for this video');
+    }
+
+    // Find English captions or use first available
+    const englishCaption = captionsResponse.data.items.find(item => 
+      item.snippet.language === 'en' || 
+      item.snippet.language.startsWith('en')
+    ) || captionsResponse.data.items[0];
+
+    // Download the actual transcript content
+    const transcriptResponse = await youtube.captions.download({
+      id: englishCaption.id,
+      tfmt: 'srv1' // Plain text format
+    });
+
+    const transcriptContent = transcriptResponse.data;
+
+    // Validate transcript content
+    if (!transcriptContent || transcriptContent.length < 50) {
+      throw new Error('YouTube API returned empty or invalid transcript');
+    }
+
+    // Process and clean the transcript
+    const cleanTranscript = this.cleanTranscript(transcriptContent);
+
+    // Save to file
+    const transcriptFile = path.join(outputDir, `transcript_${videoId}.txt`);
+    await fs.writeFile(transcriptFile, cleanTranscript);
+    
+    console.log('✅ Transcript downloaded successfully via OAuth2 YouTube API');
+    return transcriptFile;
+  }
+
+  async downloadWithApiKey(videoId, outputDir) {
+    // Use YouTube Data API to get captions
+    const url = `https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId=${videoId}&key=${this.apiKey}`;
+    
+    const data = await this.makeHttpsRequest(url);
+    
+    if (data.items && data.items.length > 0) {
+      // Find English captions
+      const englishCaption = data.items.find(item => 
+        item.snippet.language === 'en' || 
+        item.snippet.language.startsWith('en')
+      ) || data.items[0];
+
+      // Download the actual transcript content
+      const captionUrl = `https://www.googleapis.com/youtube/v3/captions/${englishCaption.id}?key=${this.apiKey}`;
+      const transcriptContent = await this.makeHttpsRequest(captionUrl, true);
+
+      // Check if response is an error (contains JSON error structure)
+      if (transcriptContent.includes('"error"') || transcriptContent.includes('UNAUTHENTICATED') || transcriptContent.includes('oauth2')) {
+        throw new Error(`YouTube API authentication failed: ${transcriptContent.slice(0, 200)}...`);
+      }
+
+      // Validate transcript content
+      if (!transcriptContent || transcriptContent.length < 50) {
+        throw new Error('YouTube API returned empty or invalid transcript');
+      }
+
+      // Save to file
+      const transcriptFile = path.join(outputDir, `transcript_${videoId}.txt`);
+      await fs.writeFile(transcriptFile, transcriptContent);
+      
+      console.log('✅ Transcript downloaded successfully via YouTube API');
+      return transcriptFile;
+    } else {
+      throw new Error('No captions available for this video');
     }
   }
 
@@ -141,6 +201,23 @@ class YouTubeTranscriptAPI {
       console.error('Proxy method also failed:', error.message);
       throw new Error('All transcript download methods failed');
     }
+  }
+
+  cleanTranscript(content) {
+    // Clean transcript content from various formats
+    if (typeof content !== 'string') {
+      content = String(content);
+    }
+
+    // Remove XML tags and timestamps if present
+    content = content.replace(/<[^>]*>/g, '');
+    content = content.replace(/\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}/g, '');
+    content = content.replace(/\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}/g, '');
+    
+    // Clean up whitespace and normalize
+    content = content.replace(/\s+/g, ' ').trim();
+    
+    return content;
   }
 
   parseVTT(vttContent) {

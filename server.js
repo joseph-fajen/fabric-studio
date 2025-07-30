@@ -17,6 +17,7 @@ const ServerManager = require('./server-manager');
 const FabricTranscriptIntegration = require('./fabric-transcript-integration');
 const { FABRIC_PATTERNS, PHASE_DESCRIPTIONS } = require('./fabric-patterns');
 const YouTubeMetadata = require('./youtube-metadata');
+const oauth2Routes = require('./oauth2-routes');
 // const DocumentLaboratory = require('./document-laboratory'); // Commented out for main branch deployment
 
 const app = express();
@@ -27,6 +28,9 @@ const wss = new WebSocket.Server({ server });
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+
+// OAuth2 authentication routes
+app.use('/auth', oauth2Routes);
 
 // Global state
 const activeProcesses = new Map();

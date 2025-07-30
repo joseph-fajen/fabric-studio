@@ -71,5 +71,9 @@ temp/
 # API keys and sensitive configuration
 config/api-keys.json
 
+# OAuth2 credentials and tokens
+google-credentials.json
+oauth2-tokens.json
+
 # External repositories (for reference only)
 Fabric/

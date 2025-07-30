@@ -14,14 +14,15 @@
     "setup": "npm run install:yt-dlp && echo 'Please install Fabric CLI: go install github.com/danielmiessler/fabric@latest'"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "ws": "^8.13.0",
     "archiver": "^5.3.1",
-    "fs-extra": "^11.1.1",
-    "uuid": "^9.0.0",
-    "cors": "^2.8.5",
     "body-parser": "^1.20.2",
-    "path": "^0.12.7"
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "fs-extra": "^11.1.1",
+    "googleapis": "^154.1.0",
+    "path": "^0.12.7",
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

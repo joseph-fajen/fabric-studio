@@ -357,7 +357,7 @@
         }
 
         .info-content strong {
-            color: var(--text-reef-accent);
+            color: rgba(255, 255, 255, 0.95);
             font-weight: 600;
         }
 
@@ -368,12 +368,12 @@
 
         .info-content li {
             margin: 8px 0;
-            color: var(--text-reef-secondary);
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .info-content p {
             margin-top: 12px;
-            color: var(--text-reef-tertiary);
+            color: rgba(255, 255, 255, 0.85);
             font-style: italic;
         }
 
@@ -1379,6 +1379,271 @@
                 width: 100%;
             }
         }
+
+        /* OAuth2 Authentication Styles */
+        .auth-card {
+            margin-bottom: 24px;
+            background: var(--reef-bg-secondary);
+            border: 1px solid var(--reef-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .auth-content {
+            padding: 24px;
+        }
+
+        .auth-loading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 24px;
+            justify-content: center;
+            color: var(--text-reef-secondary);
+        }
+
+        .auth-header h3 {
+            color: var(--text-reef-primary);
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .auth-header p {
+            color: var(--text-reef-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .auth-benefits {
+            margin: 20px 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: var(--text-reef-secondary);
+        }
+
+        .benefit-icon {
+            font-size: 1.1rem;
+            min-width: 20px;
+        }
+
+        .auth-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .auth-button-secondary {
+            background: var(--reef-bg-tertiary);
+            border: 1px solid var(--reef-border);
+            color: var(--text-reef-secondary);
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .auth-button-secondary:hover {
+            background: var(--reef-bg-elevated);
+            color: var(--text-reef-primary);
+            border-color: var(--reef-border-strong);
+        }
+
+        .button-icon {
+            font-size: 1.2rem;
+        }
+
+        .auth-note {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-reef-muted);
+            margin-top: 16px;
+            font-style: italic;
+        }
+
+        .auth-user-info {
+            background: var(--reef-bg-primary);
+            border: 1px solid var(--reef-border-subtle);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            color: var(--text-reef-secondary);
+        }
+
+        .user-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .user-detail:last-child {
+            margin-bottom: 0;
+        }
+
+        .user-label {
+            font-weight: 600;
+            color: var(--text-reef-accent);
+        }
+
+        .bio-loading-pulse {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--sea-green);
+            animation: coralPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes coralPulse {
+            0%, 100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Responsive adjustments for auth */
+        @media (max-width: 768px) {
+            .auth-content {
+                padding: 20px;
+            }
+            
+            .auth-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            .benefit-item {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Error Section Styles */
+        .error-section {
+            display: none;
+            margin: 24px 0;
+        }
+
+        .error-section.visible {
+            display: block;
+        }
+
+        .error-card {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 16px;
+        }
+
+        .error-content {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .error-content h3 {
+            color: rgba(255, 107, 107, 0.95);
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+
+        .error-content p {
+            color: var(--text-reef-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Management Panel Styles */
+        .management-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--reef-bg-elevated);
+            border: 1px solid var(--reef-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .management-toggle:hover {
+            background: var(--reef-bg-modal);
+            transform: scale(1.1);
+        }
+
+        .management-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .management-content {
+            background: var(--reef-bg-modal);
+            border: 1px solid var(--reef-border);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .management-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--reef-border-subtle);
+        }
+
+        .management-header h3 {
+            color: var(--text-reef-primary);
+            margin: 0;
+        }
+
+        .close-management {
+            background: none;
+            border: none;
+            color: var(--text-reef-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-management:hover {
+            background: var(--reef-bg-tertiary);
+            color: var(--text-reef-primary);
+        }
+
+        .management-body {
+            padding: 20px;
+            color: var(--text-reef-secondary);
+        }
     </style>
 </head>
 <body>
@@ -1389,6 +1654,55 @@
             <h1>YouTube Fabric Processor</h1>
             <p>Dive deep into the coral reef laboratory where YouTube videos transform into vibrant insights through 13 specialized fabric patterns</p>
         </header>
+
+        <!-- OAuth2 Authentication Section -->
+        <div id="auth-section" class="coral-card auth-card">
+            <div class="auth-status" id="auth-status">
+                <div class="auth-loading">
+                    <div class="bio-loading-pulse"></div>
+                    <span>Checking authentication status...</span>
+                </div>
+            </div>
+            
+            <div id="auth-unauthenticated" class="auth-content" style="display: none;">
+                <div class="auth-header">
+                    <h3>🔑 YouTube Authentication Required</h3>
+                    <p>To access real YouTube transcripts and bypass bot detection, please authenticate with your Google account.</p>
+                </div>
+                <div class="auth-benefits">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">✅</span>
+                        <span>Access to all YouTube videos with captions</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">⚡</span>
+                        <span>Faster, more reliable transcript downloads</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🔒</span>
+                        <span>Secure OAuth2 authentication</span>
+                    </div>
+                </div>
+                <button id="login-btn" class="bio-button reef-reflection auth-button">
+                    <span class="button-icon">🚀</span>
+                    Authenticate with Google
+                </button>
+                <p class="auth-note">Without authentication, the system will use simulation mode with placeholder content.</p>
+            </div>
+            
+            <div id="auth-authenticated" class="auth-content" style="display: none;">
+                <div class="auth-header">
+                    <h3>✅ Authenticated Successfully</h3>
+                    <p>You're connected to YouTube! Ready to process real video transcripts.</p>
+                </div>
+                <div class="auth-user-info" id="auth-user-info">
+                    <!-- User info will be populated by JavaScript -->
+                </div>
+                <button id="logout-btn" class="bio-button auth-button-secondary">
+                    Logout
+                </button>
+            </div>
+        </div>
 
         <main class="coral-card coral-card-elevated">
             <div class="input-group">
@@ -1404,15 +1718,18 @@
                     data-form-type=""
                 />
                 <div class="reef-info-note">
-                    <div class="info-icon">ℹ️</div>
+                    <div class="info-icon">💎</div>
                     <div class="info-content">
-                        <strong>Recommended Video Length:</strong>
+                        <strong>Video Processing Recommendations:</strong>
                         <ul>
-                            <li>✅ <strong>Optimal</strong> (up to 2 hours): Full effectiveness with all 13 fabric patterns</li>
-                            <li>⚠️ <strong>Acceptable</strong> (2-3 hours): Good results, may hit model limits</li>
-                            <li>❌ <strong>Not Recommended</strong> (3+ hours): Significantly reduced pattern effectiveness</li>
+                            <li>✅ <strong>Excellent Results</strong> (15-45 minutes): 9-13 patterns typically succeed</li>
+                            <li>⚠️ <strong>Great Results</strong> (45-90 minutes): 7-11 patterns typically succeed</li>
+                            <li>🔄 <strong>Good Results</strong> (90+ minutes): 5-9 patterns typically succeed</li>
                         </ul>
-                        <p>Fabric patterns work best on complete content. Longer videos require chunking which reduces analytical quality.</p>
+                        <p style="color: rgba(255, 255, 255, 0.9);"><strong>Content density matters more than duration</strong> - a dense 30-minute lecture may process like a 90-minute casual video.</p>
+                        <div style="margin-top: 12px; padding: 12px; background: rgba(32, 178, 170, 0.15); border: 1px solid rgba(32, 178, 170, 0.3); border-radius: 8px; color: rgba(255, 255, 255, 0.95);">
+                            <strong>🚀 The Magic:</strong> Just authenticate once with Google, paste any YouTube URL, and get professional-grade analysis from 13 specialized Fabric patterns - the same patterns used by thousands of knowledge workers worldwide!
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1525,6 +1842,17 @@
                     <h3 class="treasure-title">Reef Exploration Complete!</h3>
                     <p class="treasure-description">Your YouTube video has been thoroughly explored through our coral reef laboratory. All 13 fabric patterns have been processed and are ready for harvest.</p>
                     <a href="#" id="download-btn" class="harvest-button reef-reflection">Harvest Results</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Section -->
+        <div id="error-section" class="error-section">
+            <div class="coral-card error-card">
+                <div class="error-content">
+                    <h3>⚠️ Processing Error</h3>
+                    <p id="error-message">An error occurred during processing.</p>
+                    <button id="retry-btn" class="bio-button reef-reflection">Try Again</button>
                 </div>
             </div>
         </div>
@@ -2652,5 +2980,26 @@
             initializeWebSocket();
         });
     </script>
+    
+    <!-- Management Panel Toggle -->
+    <div id="management-toggle" class="management-toggle">
+        ⚙️
+    </div>
+
+    <!-- Management Modal -->
+    <div id="management-modal" class="management-modal" style="display: none;">
+        <div class="management-content">
+            <div class="management-header">
+                <h3>🧪 System Management</h3>
+                <button id="close-management" class="close-management">✕</button>
+            </div>
+            <div class="management-body">
+                <p>System management panel - feature coming soon!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main application JavaScript -->
+    <script src="app.js"></script>
 </body>
 </html>
