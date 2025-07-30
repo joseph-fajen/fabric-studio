@@ -24,26 +24,7 @@ Update project documentation to reflect current state:
 - Capture transcript-first architecture decisions
 - Update troubleshooting guides with new solutions
 
-### Step 3: Git Status Cleanup & Commit Optimization
-Ensure clean repository state:
-```bash
-# Check git status
-git status
-
-# Review recent commits
-git log --oneline -5
-
-# If uncommitted changes exist:
-git diff --name-only
-git add [relevant-files]
-git commit -m "session handoff: [description of changes made]
-
-🤖 Generated with Claude Code
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
-```
-
-### Step 4: Next Session Preparation
+### Step 3: Next Session Preparation
 Document specific next steps and priorities:
 - YouTube processing improvements or optimizations needed
 - Fabric pattern additions or modifications
@@ -54,7 +35,7 @@ Document specific next steps and priorities:
 - API endpoint additions or modifications
 - Documentation gaps to address
 
-### Step 5: Handoff Summary
+### Step 4: Handoff Summary
 Create comprehensive transition document in session-summaries folder:
 ```bash
 # Create session-summaries folder if it doesn't exist
@@ -101,6 +82,25 @@ Document should include:
 - Quick-start commands for context restoration
 - Any API key or configuration requirements
 - Processing mode fallback status (transcript-first → CLI → simulation)
+
+### Step 5: Git Status Cleanup & Commit Optimization
+Ensure clean repository state after all files have been written:
+```bash
+# Check git status
+git status
+
+# Review recent commits
+git log --oneline -5
+
+# If uncommitted changes exist:
+git diff --name-only
+git add [relevant-files]
+git commit -m "session handoff: [description of changes made]
+
+🤖 Generated with Claude Code
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
 
 ## Expected Outcome
 
