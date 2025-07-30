@@ -23,8 +23,9 @@ npm run setup                   # Install all dependencies
 
 ### Required External Tools
 - **Fabric CLI**: `go install github.com/danielmiessler/fabric/cmd/fabric@latest`
-- **yt-dlp**: `pip install yt-dlp` (primary transcript downloader)
+- **yt-dlp**: `pip install yt-dlp` (primary transcript downloader)  
 - **youtube-dl**: Fallback transcript downloader
+- **YouTube Data API v3**: Optional API key for enhanced transcript downloading
 
 ## Architecture Overview
 
@@ -37,7 +38,8 @@ npm run setup                   # Install all dependencies
 ### Key Files
 - `server.js` - Main Express server with WebSocket support and management API
 - `fabric-transcript-integration.js` - **Primary processing engine** (transcript-first approach)
-- `transcript-downloader.js` - Robust YouTube transcript extraction with fallbacks
+- `transcript-downloader.js` - Robust YouTube transcript extraction with 4-tier fallback system
+- `youtube-transcript-api.js` - YouTube Data API v3 integration for official transcript access
 - `fabric-patterns.js` - Defines 13 fabric patterns in 4 phases
 - `youtube-metadata.js` - Video metadata extraction and folder naming
 - `public/` - Web interface with real-time progress tracking
@@ -48,9 +50,15 @@ npm run setup                   # Install all dependencies
 ## Processing Architecture
 
 ### Transcript-First Approach (PRIMARY)
-The application uses a revolutionary approach:
+The application uses a revolutionary approach with 4-tier fallback system:
+1. **YouTube Data API v3** - Official Google API (requires YOUTUBE_API_KEY)
+2. **yt-dlp with bot evasion** - Enhanced headers and YouTube-specific options
+3. **youtube-dl fallback** - Legacy tool support
+4. **Fabric CLI transcript** - Built-in YouTube support
+
+Processing Flow:
 1. Download transcript once (3-5 seconds)
-2. Process all patterns using the cached transcript
+2. Process all patterns using the cached transcript  
 3. Execute in parallel batches of 3 patterns
 4. Total time: ~70 seconds (vs. 5+ hours with URL-based processing)
 
@@ -101,6 +109,8 @@ Each processed video creates a timestamped folder in `outputs/` containing:
 - `PORT` - Server port (default: 3000)
 - `FABRIC_MODEL` - AI model for processing
 - `MAX_CONCURRENT` - Parallel pattern limit
+- `YOUTUBE_API_KEY` - YouTube Data API v3 key for enhanced transcript downloading
+- `ANTHROPIC_API_KEY` - Anthropic API key for Fabric CLI configuration
 
 ### Fabric Setup Requirements
 Users must configure fabric with:
@@ -140,7 +150,7 @@ Configure fallback providers via Reef Laboratory Console:
 - Monitor WebSocket connection for real-time feedback
 
 ## Recent Session Work
-**Latest Session Summary**: `SESSION-SUMMARY-2025-07-17.md` - Contains details about chunking implementation for long videos and server debugging work. Key accomplishments include intelligent transcript chunking system, enhanced server management, and resolution of pattern execution failures.
+**Latest Session Summary**: `session-summaries/SESSION-SUMMARY-2025-07-30-01.md` - Critical transcript download failure fixed with YouTube Data API v3 integration and Railway deployment optimization. App moved from simulation mode to real processing capability.
 
 ## Video Length Recommendations
 **IMPORTANT**: This application is optimized for shorter videos. Fabric patterns are designed for complete content analysis and lose significant effectiveness when content is chunked.
