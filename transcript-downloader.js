@@ -284,12 +284,12 @@ class TranscriptDownloader {
 
     // Try multiple methods in order of preference
     const methods = [
+      () => this.downloadWithYtDlp(youtubeUrl, outputDir),
       () => this.youtubeAPI.downloadTranscript(youtubeUrl, outputDir).then(file => ({
         transcript: require('fs').readFileSync(file, 'utf8'),
         source: 'youtube-api',
         file
       })),
-      () => this.downloadWithYtDlp(youtubeUrl, outputDir),
       () => this.downloadWithYoutubeDl(youtubeUrl, outputDir),
       () => this.downloadWithFabric(youtubeUrl, outputDir)
     ];
