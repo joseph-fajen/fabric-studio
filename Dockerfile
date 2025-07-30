@@ -18,9 +18,10 @@ RUN ARCH=$(dpkg --print-architecture) && \
     curl -L https://go.dev/dl/go1.22.10.linux-${GO_ARCH}.tar.gz | tar -C /usr/local -xz
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-# Set Go environment
+# Set Go environment and create directories
 ENV GOPATH=/go
 ENV PATH=$PATH:/go/bin
+RUN mkdir -p /go/bin
 
 # Create app directory
 WORKDIR /app
