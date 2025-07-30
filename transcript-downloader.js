@@ -40,8 +40,8 @@ class TranscriptDownloader {
     try {
       console.log('Downloading transcript with yt-dlp...');
       
-      // Download only transcript in text format
-      const command = `yt-dlp --write-subs --write-auto-subs --sub-format vtt --skip-download --sub-langs en "${youtubeUrl}" -o "${path.join(outputDir, 'temp_%(id)s.%(ext)s')}"`;
+      // Download only transcript in text format with bot evasion
+      const command = `yt-dlp --write-subs --write-auto-subs --sub-format vtt --skip-download --sub-langs en --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" --extractor-args "youtube:player_client=web" --no-check-certificate "${youtubeUrl}" -o "${path.join(outputDir, 'temp_%(id)s.%(ext)s')}"`;
       
       await execAsync(command, { 
         timeout: this.timeout,
@@ -85,7 +85,7 @@ class TranscriptDownloader {
     try {
       console.log('Downloading transcript with youtube-dl...');
       
-      const command = `youtube-dl --write-auto-sub --sub-format vtt --skip-download --sub-lang en "${youtubeUrl}" -o "${path.join(outputDir, 'temp_%(id)s.%(ext)s')}"`;
+      const command = `youtube-dl --write-auto-sub --sub-format vtt --skip-download --sub-lang en --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" "${youtubeUrl}" -o "${path.join(outputDir, 'temp_%(id)s.%(ext)s')}"`;
       
       await execAsync(command, { 
         timeout: this.timeout,
