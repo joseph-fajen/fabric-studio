@@ -51,6 +51,16 @@ class YouTubeTranscriptAPI {
         const captionUrl = `https://www.googleapis.com/youtube/v3/captions/${englishCaption.id}?key=${this.apiKey}`;
         const transcriptContent = await this.makeHttpsRequest(captionUrl, true);
 
+        // Check if response is an error (contains JSON error structure)
+        if (transcriptContent.includes('"error"') || transcriptContent.includes('UNAUTHENTICATED') || transcriptContent.includes('oauth2')) {
+          throw new Error(`YouTube API authentication failed: ${transcriptContent.slice(0, 200)}...`);
+        }
+
+        // Validate transcript content
+        if (!transcriptContent || transcriptContent.length < 50) {
+          throw new Error('YouTube API returned empty or invalid transcript');
+        }
+
         // Save to file
         const transcriptFile = path.join(outputDir, `transcript_${videoId}.txt`);
         await fs.writeFile(transcriptFile, transcriptContent);
