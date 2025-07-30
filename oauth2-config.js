@@ -16,9 +16,10 @@ class OAuth2Manager {
         this.credentials = null;
         this.tokenPath = path.join(__dirname, 'oauth2-tokens.json');
         
-        // Required scopes for YouTube Data API access
+        // Required scopes for YouTube Data API access including captions
         this.scopes = [
-            'https://www.googleapis.com/auth/youtube.readonly'
+            'https://www.googleapis.com/auth/youtube.readonly',
+            'https://www.googleapis.com/auth/youtube.force-ssl'
         ];
         
         this.initializeOAuth2Client();
