@@ -127,7 +127,7 @@ class TranscriptDownloader {
       console.log('Downloading transcript with fabric...');
       
       // Use fabric to get transcript only
-      const command = `/Users/josephfajen/go/bin/fabric --transcript "${youtubeUrl}"`;
+      const command = `fabric --transcript "${youtubeUrl}"`;
       
       const { stdout } = await execAsync(command, { 
         timeout: this.timeout,
