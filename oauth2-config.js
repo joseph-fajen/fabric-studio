@@ -19,7 +19,8 @@ class OAuth2Manager {
         // Required scopes for YouTube Data API access including captions
         this.scopes = [
             'https://www.googleapis.com/auth/youtube.readonly',
-            'https://www.googleapis.com/auth/youtube.force-ssl'
+            'https://www.googleapis.com/auth/youtube.force-ssl',
+            'https://www.googleapis.com/auth/youtube'
         ];
         
         this.initializeOAuth2Client();
