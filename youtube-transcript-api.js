@@ -77,7 +77,7 @@ class YouTubeTranscriptAPI {
     // Download the actual transcript content
     const transcriptResponse = await youtube.captions.download({
       id: englishCaption.id,
-      tfmt: 'srv1' // Plain text format
+      tfmt: 'vtt' // WebVTT format (most compatible)
     });
 
     const transcriptContent = transcriptResponse.data;
@@ -87,8 +87,9 @@ class YouTubeTranscriptAPI {
       throw new Error('YouTube API returned empty or invalid transcript');
     }
 
-    // Process and clean the transcript
-    const cleanTranscript = this.cleanTranscript(transcriptContent);
+    // Process VTT format and clean the transcript
+    const parsedTranscript = this.parseVTT(transcriptContent);
+    const cleanTranscript = this.cleanTranscript(parsedTranscript);
 
     // Save to file
     const transcriptFile = path.join(outputDir, `transcript_${videoId}.txt`);
