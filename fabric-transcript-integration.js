@@ -352,6 +352,11 @@ class FabricTranscriptIntegration {
 
       const totalTime = Date.now() - startTime;
       const successCount = Object.values(results).filter(r => !r.error).length;
+      const failedPatterns = Object.entries(results).filter(([_, r]) => r.error).map(([filename, r]) => r.pattern);
+      
+      if (failedPatterns.length > 0) {
+        console.log(`❌ Failed patterns: ${failedPatterns.join(', ')}`);
+      }
       
       console.log(`🎉 Processing complete! ${successCount}/${patterns.length} patterns successful in ${Math.round(totalTime/1000)}s`);
 
