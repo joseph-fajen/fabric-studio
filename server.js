@@ -863,9 +863,7 @@ async function processVideo(processId, youtubeUrl, outputDir) {
 
     console.log(`Process ${processId} completed successfully`);
 
-    // Document laboratory analysis (experimental feature - disabled)
-    console.log(`Analyzing document opportunities for process: ${processId}`);
-    console.log('No high-value document opportunities found.');
+    // Document laboratory analysis disabled - ready for production use
 
   } catch (error) {
     console.error(`Process ${processId} failed:`, error);
