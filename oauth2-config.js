@@ -36,7 +36,7 @@ class OAuth2Manager {
                     client_secret: process.env.GOOGLE_CLIENT_SECRET,
                     redirect_uris: [
                         process.env.OAUTH2_REDIRECT_URI || 'http://localhost:3000/auth/google/callback',
-                        'https://carefree-mindfulness-production.up.railway.app/auth/google/callback'
+                        'https://youtube-fabric-processor-production.up.railway.app/auth/google/callback'
                     ]
                 };
             } else {
