@@ -115,35 +115,55 @@ class OAuth2Manager {
     }
 
     /**
-     * Load existing tokens from file
+     * Load existing tokens from environment variables or file
      */
     async loadTokens() {
         try {
-            const tokensFile = await fs.readFile(this.tokenPath, 'utf8');
-            const tokens = JSON.parse(tokensFile);
+            let tokens = null;
+            
+            // Try environment variables first (for Railway deployment)
+            if (process.env.OAUTH2_TOKENS) {
+                console.log('Loading OAuth2 tokens from environment variables');
+                tokens = JSON.parse(process.env.OAUTH2_TOKENS);
+            } else {
+                // Fallback to file storage (for local development)
+                console.log('Loading OAuth2 tokens from file');
+                const tokensFile = await fs.readFile(this.tokenPath, 'utf8');
+                tokens = JSON.parse(tokensFile);
+            }
             
             // Set tokens on the client
             this.oauth2Client.setCredentials(tokens);
             
             // Check if tokens need refresh
             if (tokens.expiry_date && tokens.expiry_date < Date.now()) {
+                console.log('OAuth2 tokens expired, refreshing...');
                 await this.refreshTokens();
             }
             
+            console.log('OAuth2 tokens loaded successfully');
             return tokens;
         } catch (error) {
-            // No existing tokens found
+            console.log('No existing OAuth2 tokens found');
             return null;
         }
     }
 
     /**
-     * Save tokens to file
+     * Save tokens to environment variables and file
      */
     async saveTokens(tokens) {
         try {
+            // Save to file (for local development)
             await fs.writeFile(this.tokenPath, JSON.stringify(tokens, null, 2));
-            console.log('OAuth2 tokens saved successfully');
+            
+            // Also save to environment variable (for Railway deployment)
+            // Note: This only persists for the current session on Railway
+            process.env.OAUTH2_TOKENS = JSON.stringify(tokens);
+            
+            console.log('OAuth2 tokens saved successfully (file + environment)');
+            console.log('⚠️  For Railway: Copy this to environment variables for persistence:');
+            console.log('OAUTH2_TOKENS=' + JSON.stringify(tokens));
         } catch (error) {
             console.error('Failed to save OAuth2 tokens:', error);
         }
