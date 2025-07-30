@@ -2,9 +2,6 @@ Vendors:
   Anthropic:
     ApiKey: "${ANTHROPIC_API_KEY}"
     BaseURL: "https://api.anthropic.com/v1"
-  OpenAI:
-    ApiKey: "${OPENAI_API_KEY}"
-    BaseURL: "https://api.openai.com/v1"
   
 DefaultVendor: Anthropic
 DefaultModel: claude-3-5-sonnet-20241022

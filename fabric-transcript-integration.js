@@ -18,14 +18,12 @@ class FabricTranscriptIntegration {
     this.timeoutMs = 60000; // Increased for API calls
     this.fabricPath = null; // Will be detected dynamically
     
-    // Fallback model hierarchy for API resilience (latest working models)
+    // Anthropic-only fallback model hierarchy for API resilience
     this.fallbackModels = [
-      'claude-3-5-sonnet-20241022',          // Latest Claude Sonnet
-      'gpt-4o',                              // Latest GPT-4o
-      'gpt-4o-mini',                         // Latest GPT-4o Mini (efficient)
-      'claude-3-5-haiku-20241022',           // Latest Claude Haiku (fastest)
-      'gpt-4-turbo',                         // GPT-4 Turbo fallback
-      'gpt-3.5-turbo'                        // GPT-3.5 Turbo fallback
+      'claude-3-5-sonnet-20241022',          // Latest Claude Sonnet (primary)
+      'claude-3-5-haiku-20241022',           // Latest Claude Haiku (faster fallback)
+      'claude-3-sonnet-20240229',            // Older Claude Sonnet fallback
+      'claude-3-haiku-20240307'              // Older Claude Haiku fallback
     ];
     
     this.maxRetries = 3;
