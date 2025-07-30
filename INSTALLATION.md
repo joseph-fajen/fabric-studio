@@ -16,7 +16,7 @@ This application processes YouTube videos through fabric patterns to extract ins
 ### 1. Clone and Install Dependencies
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/joseph-fajen/youtube-fabric-processor.git
 cd youtube-fabric-processor
 npm install
 ```

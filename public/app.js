@@ -35,6 +35,15 @@ class YouTubeFabricProcessor {
         this.resultsCount = document.getElementById('results-count');
         this.downloadBtn = document.getElementById('download-btn');
         
+        // Document Laboratory elements
+        this.documentLaboratorySection = document.getElementById('document-laboratory-section');
+        this.documentOpportunities = document.getElementById('document-opportunities');
+        this.documentGenerationProgress = document.getElementById('document-generation-progress');
+        this.documentResults = document.getElementById('document-results');
+        this.selectAllDocumentsBtn = document.getElementById('select-all-documents');
+        this.generateDocumentsBtn = document.getElementById('generate-documents-btn');
+        this.enhancedDownloadBtn = document.getElementById('enhanced-download-btn');
+        
         // Error elements
         this.errorSection = document.getElementById('error-section');
         this.errorMessage = document.getElementById('error-message');
@@ -46,8 +55,13 @@ class YouTubeFabricProcessor {
 
     setupEventListeners() {
         this.processBtn.addEventListener('click', () => this.startProcessing());
-        this.downloadBtn.addEventListener('click', () => this.downloadResults());
+        this.downloadBtn.addEventListener('click', () => this.downloadEnhancedResults());
         this.retryBtn.addEventListener('click', () => this.resetInterface());
+        
+        // Document Laboratory event listeners
+        this.selectAllDocumentsBtn.addEventListener('click', () => this.selectAllRecommendedDocuments());
+        this.generateDocumentsBtn.addEventListener('click', () => this.generateSelectedDocuments());
+        this.enhancedDownloadBtn.addEventListener('click', () => this.downloadEnhancedResults());
         
         // Management panel
         this.managementToggle.addEventListener('click', () => this.openManagementPanel());
@@ -200,9 +214,20 @@ class YouTubeFabricProcessor {
             case 'process_completed':
                 this.handleProcessCompleted(data);
                 break;
-                
-            case 'process_failed':
-                this.showError(data.error);
+            case 'document_opportunities':
+                this.showDocumentOpportunities(data);
+                break;
+            case 'document_generation_started':
+                this.startDocumentGeneration(data);
+                break;
+            case 'document_progress':
+                this.updateDocumentGenerationProgress(data);
+                break;
+            case 'document_generation_complete':
+                this.completeDocumentGeneration(data);
+                break;
+            case 'document_generation_failed':
+                this.documentGenerationError(data.error);
                 break;
         }
     }
@@ -261,9 +286,8 @@ class YouTubeFabricProcessor {
             item.classList.add('completed');
         });
         
-        // Show results section
-        this.resultsCount.textContent = data.completed;
-        this.showSection(this.resultsSection);
+        // Show document laboratory section instead of results section
+        this.showSection(this.documentLaboratorySection);
         
         // Add simulation notice if applicable
         if (data.simulated) {
@@ -271,16 +295,21 @@ class YouTubeFabricProcessor {
             notice.className = 'simulation-notice';
             notice.style.cssText = 'background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 14px;';
             notice.textContent = 'Note: This was a simulation run. Install Fabric CLI for actual processing: go install github.com/danielmiessler/fabric@latest';
-            this.resultsSection.insertBefore(notice, this.resultsSection.firstChild);
+            this.documentLaboratorySection.insertBefore(notice, this.documentLaboratorySection.firstChild);
         }
         
         // Close WebSocket
         if (this.ws) {
             this.ws.close();
         }
+
+        // Trigger document opportunity analysis
+        this.analyzeDocumentOpportunities();
     }
 
-    async downloadResults() {
+    
+
+    async downloadEnhancedResults() {
         if (!this.currentProcessId) return;
         
         try {
@@ -295,7 +324,7 @@ class YouTubeFabricProcessor {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `youtube_analysis_${this.currentProcessId.substring(0, 8)}.zip`;
+            a.download = `youtube_enhanced_analysis_${this.currentProcessId.substring(0, 8)}.zip`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -306,335 +335,157 @@ class YouTubeFabricProcessor {
         }
     }
 
-    showError(message) {
-        this.isProcessing = false;
+    showDocumentOpportunities(data) {
+        this.documentOpportunityData = data.opportunities;
+        this.selectedDocuments = [];
+
         this.hideAllSections();
-        this.showSection(this.errorSection);
-        this.errorMessage.textContent = message;
-        this.updateStatusBadge('error', 'Error');
-        
-        if (this.ws) {
-            this.ws.close();
-        }
-    }
+        this.showSection(this.documentLaboratorySection);
+        this.documentOpportunities.classList.remove('hidden');
+        this.documentOpportunities.style.display = 'block';
+        this.documentGenerationProgress.style.display = 'none';
+        this.documentResults.style.display = 'none';
 
-    resetInterface() {
-        this.isProcessing = false;
-        this.currentProcessId = null;
-        this.processBtn.disabled = false;
-        this.processBtn.textContent = 'Process Video';
-        this.urlInput.value = '';
-        this.urlInput.style.borderColor = '#e1e5e9';
-        
-        this.hideAllSections();
-        this.resetProgress();
-        
-        if (this.ws) {
-            this.ws.close();
-            this.ws = null;
-        }
-    }
+        const documentTiers = {
+            technical: document.querySelector('[data-tier="technical"] .tier-documents'),
+            strategic: document.querySelector('[data-tier="strategic"] .tier-documents'),
+            educational: document.querySelector('[data-tier="educational"] .tier-documents'),
+            operational: document.querySelector('[data-tier="operational"] .tier-documents'),
+        };
 
-    resetProgress() {
-        this.progressFill.style.width = '0%';
-        this.progressCurrent.textContent = '0';
-        this.currentPatternName.textContent = 'Initializing...';
-        this.currentPatternDescription.textContent = 'Preparing to process video';
-        
-        // Reset all pattern indicators
-        document.querySelectorAll('.pattern-item').forEach(item => {
-            item.classList.remove('active', 'completed');
+        // Clear previous documents
+        Object.values(documentTiers).forEach(tierDiv => tierDiv.innerHTML = '');
+
+        data.opportunities.forEach(doc => {
+            const docOption = document.createElement('div');
+            docOption.className = 'document-option';
+            docOption.dataset.id = doc.id;
+            docOption.innerHTML = `
+                <div class="checkbox"></div>
+                <div class="document-title">${doc.title}</div>
+                <div class="document-details">${doc.purpose}</div>
+                <div class="document-meta">
+                    <span>Audience: ${doc.audience}</span>
+                    <span>Confidence: ${(doc.confidence_score * 100).toFixed(0)}%</span>
+                </div>
+            `;
+            docOption.addEventListener('click', () => this.toggleDocumentSelection(doc.id));
+            documentTiers[doc.tier.toLowerCase()].appendChild(docOption);
         });
+
+        this.updateGenerateButtonState();
     }
 
-    hideAllSections() {
-        this.statusSection.classList.add('hidden');
-        this.resultsSection.classList.add('hidden');
-        this.errorSection.classList.add('hidden');
+    toggleDocumentSelection(docId) {
+        const index = this.selectedDocuments.indexOf(docId);
+        const docOption = document.querySelector(`[data-id="${docId}"]`);
+
+        if (index > -1) {
+            this.selectedDocuments.splice(index, 1);
+            docOption.classList.remove('selected');
+        } else {
+            this.selectedDocuments.push(docId);
+            docOption.classList.add('selected');
+        }
+        this.updateGenerateButtonState();
     }
 
-    showSection(section) {
-        section.classList.remove('hidden');
-    }
-
-    updateStatusBadge(status, text) {
-        this.statusBadge.className = `status-badge ${status}`;
-        this.statusBadge.textContent = text;
-    }
-
-    // Management Panel Methods
-    openManagementPanel() {
-        this.managementModal.classList.remove('hidden');
-        this.loadManagementData();
-    }
-
-    closeManagementPanel() {
-        this.managementModal.classList.add('hidden');
-    }
-
-    switchTab(tabName) {
-        // Update tab buttons
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
+    selectAllRecommendedDocuments() {
+        this.selectedDocuments = [];
+        document.querySelectorAll('.document-option').forEach(docOption => {
+            const docId = docOption.dataset.id;
+            this.selectedDocuments.push(docId);
+            docOption.classList.add('selected');
         });
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-        // Update tab content
-        document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-        });
-        document.getElementById(`${tabName}-tab`).classList.add('active');
-
-        // Load data for the selected tab
-        if (tabName === 'status') {
-            this.loadStatus();
-        } else if (tabName === 'history') {
-            this.loadHistory();
-        }
+        this.updateGenerateButtonState();
     }
 
-    async loadManagementData() {
-        this.loadStatus();
-        this.loadHistory();
+    updateGenerateButtonState() {
+        this.generateDocumentsBtn.disabled = this.selectedDocuments.length === 0;
     }
 
-    async loadStatus() {
-        try {
-            const response = await fetch('/api/management/status');
-            const data = await response.json();
-
-            // Update server status
-            document.getElementById('server-uptime').textContent = data.server.uptimeFormatted;
-            document.getElementById('memory-usage').textContent = data.server.memoryUsage.heapUsed;
-            document.getElementById('fabric-available').textContent = data.server.fabricAvailable ? 'Yes' : 'No';
-
-            // Update process info
-            document.getElementById('active-processes').textContent = data.processes.active;
-
-            // Update process list
-            const processList = document.getElementById('process-list');
-            processList.innerHTML = '';
-
-            if (data.processes.list.length === 0) {
-                processList.innerHTML = '<div class="process-item">No active processes</div>';
-            } else {
-                data.processes.list.forEach(process => {
-                    const processItem = document.createElement('div');
-                    processItem.className = 'process-item';
-                    processItem.innerHTML = `
-                        <div class="process-title">${process.folderName || process.id}</div>
-                        <div class="process-details">
-                            Status: ${process.status} | Step: ${process.currentStep || 0}/${process.totalSteps || 13}
-                        </div>
-                    `;
-                    processList.appendChild(processItem);
-                });
-            }
-        } catch (error) {
-            console.error('Error loading status:', error);
-        }
-    }
-
-    async loadHistory() {
-        try {
-            const historyList = document.getElementById('history-list');
-            historyList.innerHTML = '<div class="loading">Loading history...</div>';
-
-            const response = await fetch('/api/management/history');
-            const history = await response.json();
-
-            document.querySelector('.history-count').textContent = `${history.length} analyses found`;
-
-            historyList.innerHTML = '';
-            if (history.length === 0) {
-                historyList.innerHTML = '<div class="loading">No analysis history found</div>';
-                return;
-            }
-
-            history.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                
-                const title = item.metadata?.title || item.folderName;
-                const channel = item.metadata?.channel || 'Unknown Channel';
-                const created = new Date(item.created).toLocaleDateString();
-                
-                historyItem.innerHTML = `
-                    <div class="item-header">
-                        <div class="item-title">${title}</div>
-                        <div class="item-actions">
-                            <button class="delete-btn" onclick="app.deleteFolder('${item.folderName}')">🗑️ Delete</button>
-                        </div>
-                    </div>
-                    <div class="item-details">
-                        <div>Channel: ${channel}</div>
-                        <div>Created: ${created}</div>
-                        <div>Files: ${item.filesCount}</div>
-                        <div>Size: ${item.size}</div>
-                        <div>ZIP: ${item.hasZip ? 'Yes' : 'No'}</div>
-                    </div>
-                `;
-                historyList.appendChild(historyItem);
-            });
-        } catch (error) {
-            console.error('Error loading history:', error);
-            document.getElementById('history-list').innerHTML = '<div class="loading">Error loading history</div>';
-        }
-    }
-
-    async deleteFolder(folderName) {
-        if (!confirm(`Are you sure you want to delete "${folderName}"? This action cannot be undone.`)) {
+    async generateSelectedDocuments() {
+        if (this.selectedDocuments.length === 0) {
+            alert('Please select at least one document to generate.');
             return;
         }
 
         try {
-            const response = await fetch(`/api/management/cleanup/${folderName}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                this.loadHistory(); // Refresh the list
-                alert('Folder deleted successfully');
-            } else {
-                const error = await response.json();
-                alert('Error deleting folder: ' + error.error);
-            }
-        } catch (error) {
-            console.error('Error deleting folder:', error);
-            alert('Error deleting folder');
-        }
-    }
-
-    async cleanupOldFiles() {
-        const daysOld = document.getElementById('cleanup-days').value;
-        
-        if (!confirm(`Are you sure you want to remove all files older than ${daysOld} days? This action cannot be undone.`)) {
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/management/cleanup-old', {
+            const response = await fetch(`/api/generate-documents/${this.currentProcessId}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ daysOld: parseInt(daysOld) })
+                body: JSON.stringify({ selectedDocuments: this.selectedDocuments })
             });
 
-            const result = await response.json();
-            
-            if (response.ok) {
-                alert(result.message);
-                this.loadHistory(); // Refresh the list
-            } else {
-                alert('Error: ' + result.error);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to start document generation');
             }
+            console.log('Document generation initiated.');
         } catch (error) {
-            console.error('Error cleaning up old files:', error);
-            alert('Error cleaning up old files');
+            console.error('Error initiating document generation:', error);
+            this.showError(`Document generation failed: ${error.message}`);
         }
     }
 
-    async restartServer() {
-        if (!confirm('Are you sure you want to restart the server? This will reload the optimized processing engine.')) {
-            return;
-        }
+    startDocumentGeneration(data) {
+        this.hideAllSections();
+        this.showSection(this.documentLaboratorySection);
+        this.documentOpportunities.style.display = 'none';
+        this.documentGenerationProgress.style.display = 'block';
+        this.documentResults.style.display = 'none';
 
-        try {
-            const response = await fetch('/api/management/restart', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            const result = await response.json();
-            
-            if (response.ok) {
-                alert('Server is restarting... Please wait a moment and refresh the page.');
-                // Close WebSocket connection
-                if (this.ws) {
-                    this.ws.close();
-                }
-                // Disable interface during restart
-                this.processBtn.disabled = true;
-                this.processBtn.textContent = 'Server Restarting...';
-            } else {
-                alert('Error: ' + result.error);
-            }
-        } catch (error) {
-            console.error('Error restarting server:', error);
-            alert('Server may be restarting. Please refresh the page in a few seconds.');
-        }
+        document.getElementById('total-documents').textContent = data.documentCount;
+        document.getElementById('documents-generated').textContent = '0';
+        document.getElementById('generation-progress-fill').style.width = '0%';
+        document.getElementById('current-document-title').textContent = 'Initializing...';
     }
 
-    async shutdownServer() {
-        if (!confirm('Are you sure you want to shutdown the server? You will need to restart it manually from the command line.')) {
-            return;
+    updateDocumentGenerationProgress(data) {
+        const total = parseInt(document.getElementById('total-documents').textContent);
+        const generated = parseInt(document.getElementById('documents-generated').textContent);
+
+        if (data.status === 'completed') {
+            document.getElementById('documents-generated').textContent = generated + 1;
         }
 
-        try {
-            const response = await fetch('/api/management/shutdown', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            const result = await response.json();
-            
-            if (response.ok) {
-                alert('Server is shutting down. You will need to restart it manually.');
-                // Close WebSocket connection
-                if (this.ws) {
-                    this.ws.close();
-                }
-                // Disable interface
-                this.processBtn.disabled = true;
-                this.processBtn.textContent = 'Server Offline';
-                this.fabricStatus.textContent = 'Server offline';
-                this.fabricStatus.style.color = '#e74c3c';
-            } else {
-                alert('Error: ' + result.error);
-            }
-        } catch (error) {
-            console.error('Error shutting down server:', error);
-            alert('Server may be shutting down. The interface will become unavailable.');
-        }
+        const currentGenerated = parseInt(document.getElementById('documents-generated').textContent);
+        const percentage = (currentGenerated / total) * 100;
+        document.getElementById('generation-progress-fill').style.width = `${percentage}%`;
+        document.getElementById('current-document-title').textContent = `Generating: ${data.title || '...'}`;
     }
 
-    async stopProcessing() {
-        if (!this.isProcessing && this.currentProcessId === null) {
-            alert('No processing jobs are currently active.');
-            return;
-        }
+    completeDocumentGeneration(data) {
+        this.hideAllSections();
+        this.showSection(this.documentLaboratorySection);
+        this.documentOpportunities.style.display = 'none';
+        this.documentGenerationProgress.style.display = 'none';
+        this.documentResults.style.display = 'block';
 
-        if (!confirm('Are you sure you want to stop all active processing jobs?')) {
-            return;
-        }
+        const generatedDocumentsList = document.getElementById('generated-documents-list');
+        generatedDocumentsList.innerHTML = '';
 
-        try {
-            const response = await fetch('/api/management/stop-processing', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+        data.documentsGenerated.forEach(doc => {
+            const docCard = document.createElement('div');
+            docCard.className = 'generated-document-card';
+            docCard.innerHTML = `
+                <div class="document-title">${doc.title}</div>
+                <div class="document-meta">
+                    <span>File: ${doc.fileName}</span>
+                    <span>Words: ${doc.wordCount}</span>
+                </div>
+            `;
+            generatedDocumentsList.appendChild(docCard);
+        });
 
-            const result = await response.json();
-            
-            if (response.ok) {
-                alert(result.message);
-                this.resetInterface();
-            } else {
-                alert('Error: ' + result.error);
-            }
-        } catch (error) {
-            console.error('Error stopping processing:', error);
-            alert('Error stopping processing');
-        }
+        this.enhancedDownloadBtn.href = `/api/download/${this.currentProcessId}`;
     }
-}
+
+    documentGenerationError(error) {
+        this.showError(`Document generation failed: ${error}`);
+    }
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

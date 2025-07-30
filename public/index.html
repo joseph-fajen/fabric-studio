@@ -1090,6 +1090,295 @@
         body > .current-lines {
             display: none;
         }
+
+        /* Document Laboratory Styles */
+        .document-opportunities {
+            margin-top: 25px;
+        }
+
+        .opportunities-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .opportunities-header h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-reef-primary);
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(32, 178, 170, 0.3);
+        }
+
+        .opportunities-subtitle {
+            color: var(--text-reef-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .document-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .document-tier {
+            background: var(--reef-bg-primary);
+            backdrop-filter: var(--reef-blur-gentle);
+            border: 2px solid var(--reef-border-subtle);
+            border-radius: var(--border-radius-coral);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .document-tier:hover {
+            border-color: var(--reef-border-glow);
+            background: var(--reef-bg-secondary);
+        }
+
+        .tier-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .tier-icon {
+            font-size: 1.8rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .tier-info h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-reef-primary);
+            margin-bottom: 4px;
+        }
+
+        .tier-audience {
+            font-size: 0.9rem;
+            color: var(--text-reef-tertiary);
+        }
+
+        .tier-documents {
+            min-height: 60px;
+        }
+
+        .document-option {
+            background: var(--reef-bg-secondary);
+            border: 2px solid var(--reef-border-subtle);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .document-option:hover {
+            border-color: var(--reef-border-glow);
+            transform: translateY(-2px);
+        }
+
+        .document-option.selected {
+            border-color: var(--sea-green);
+            background: var(--sea-green-light);
+            box-shadow: 0 0 15px rgba(32, 178, 170, 0.3);
+        }
+
+        .document-option .checkbox {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--reef-border);
+            border-radius: 4px;
+            background: var(--reef-bg-primary);
+            transition: all 0.3s ease;
+        }
+
+        .document-option.selected .checkbox {
+            background: var(--sea-green);
+            border-color: var(--sea-green);
+        }
+
+        .document-option.selected .checkbox::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .document-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-reef-primary);
+            margin-bottom: 4px;
+            padding-right: 35px;
+        }
+
+        .document-details {
+            font-size: 0.85rem;
+            color: var(--text-reef-secondary);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .document-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--text-reef-tertiary);
+        }
+
+        .document-controls {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid var(--reef-border-subtle);
+        }
+
+        /* Document Generation Progress Styles */
+        .document-generation-progress {
+            margin-top: 25px;
+        }
+
+        .generation-status {
+            background: var(--reef-bg-secondary);
+            border: 2px solid var(--reef-border);
+            border-radius: var(--border-radius-coral);
+            padding: 20px;
+        }
+
+        .generation-current {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .generation-current span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-reef-primary);
+            margin-bottom: 10px;
+        }
+
+        .generation-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--reef-bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .generation-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--sea-green), var(--tropical-blue));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .generation-stats {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-reef-secondary);
+        }
+
+        /* Document Results Styles */
+        .document-results {
+            margin-top: 25px;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .results-header h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-reef-primary);
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(255, 127, 80, 0.3);
+        }
+
+        .results-header p {
+            color: var(--text-reef-secondary);
+            font-size: 1rem;
+        }
+
+        .generated-documents-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .generated-document-card {
+            background: var(--reef-bg-secondary);
+            border: 2px solid var(--reef-border-glow);
+            border-radius: var(--border-radius-pearl);
+            padding: 15px;
+            position: relative;
+        }
+
+        .generated-document-card .document-title {
+            padding-right: 0;
+            margin-bottom: 8px;
+        }
+
+        .generated-document-card .document-meta {
+            justify-content: space-between;
+        }
+
+        .document-tier-badge {
+            display: inline-block;
+            background: var(--coral-primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .enhanced-download {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid var(--reef-border-subtle);
+        }
+
+        /* Animation for document laboratory appearance */
+        .document-laboratory-section.visible {
+            animation: surfaceFromDepth 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .document-tiers {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .generated-documents-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .document-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .document-controls button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1239,6 +1528,119 @@
                 </div>
             </div>
         </div>
+
+        <!-- Document Laboratory Section -->
+        <div id="document-laboratory-section" class="progress-section">
+            <div class="coral-card coral-card-elevated">
+                <div class="progress-header">
+                    <h3>🧬 Document Laboratory Detected Advanced Content</h3>
+                    <p>Your content analysis reveals opportunities for professional document generation across 4 specialized tiers</p>
+                </div>
+
+                <!-- Document Opportunities Display -->
+                <div id="document-opportunities" class="document-opportunities" style="display: none;">
+                    <div class="opportunities-header">
+                        <h4>Recommended Document Portfolio</h4>
+                        <p class="opportunities-subtitle">Select documents to generate based on your content analysis</p>
+                    </div>
+                    
+                    <div class="document-tiers">
+                        <!-- Technical Implementation Tier -->
+                        <div class="document-tier" data-tier="technical">
+                            <div class="tier-header">
+                                <div class="tier-icon">👩‍💻</div>
+                                <div class="tier-info">
+                                    <h5>Technical Implementation</h5>
+                                    <span class="tier-audience">Developers • DevOps • Engineers</span>
+                                </div>
+                            </div>
+                            <div class="tier-documents"></div>
+                        </div>
+
+                        <!-- Strategic Business Tier -->
+                        <div class="document-tier" data-tier="strategic">
+                            <div class="tier-header">
+                                <div class="tier-icon">📊</div>
+                                <div class="tier-info">
+                                    <h5>Strategic Business</h5>
+                                    <span class="tier-audience">Executives • Product Managers • CTOs</span>
+                                </div>
+                            </div>
+                            <div class="tier-documents"></div>
+                        </div>
+
+                        <!-- Educational & Training Tier -->
+                        <div class="document-tier" data-tier="educational">
+                            <div class="tier-header">
+                                <div class="tier-icon">🎓</div>
+                                <div class="tier-info">
+                                    <h5>Educational & Training</h5>
+                                    <span class="tier-audience">Training Teams • HR • Developers</span>
+                                </div>
+                            </div>
+                            <div class="tier-documents"></div>
+                        </div>
+
+                        <!-- Operational Excellence Tier -->
+                        <div class="document-tier" data-tier="operational">
+                            <div class="tier-header">
+                                <div class="tier-icon">⚙️</div>
+                                <div class="tier-info">
+                                    <h5>Operational Excellence</h5>
+                                    <span class="tier-audience">Support Teams • Operations • C-Suite</span>
+                                </div>
+                            </div>
+                            <div class="tier-documents"></div>
+                        </div>
+                    </div>
+
+                    <div class="document-controls">
+                        <button id="select-all-documents" class="bio-button" style="margin-right: 15px;">Select All Recommended</button>
+                        <button id="generate-documents-btn" class="bio-button" disabled>Generate Selected Documents</button>
+                    </div>
+                </div>
+
+                <!-- Document Generation Progress -->
+                <div id="document-generation-progress" class="document-generation-progress" style="display: none;">
+                    <div class="progress-header">
+                        <h4>🧬 Document Laboratory Active</h4>
+                        <p>Generating professional documents from your content analysis...</p>
+                    </div>
+                    
+                    <div class="generation-status">
+                        <div class="generation-current">
+                            <span id="current-document-title">Initializing...</span>
+                            <div class="generation-progress-bar">
+                                <div class="generation-progress-fill" id="generation-progress-fill"></div>
+                            </div>
+                        </div>
+                        <div class="generation-stats">
+                            <span id="documents-generated">0</span> / <span id="total-documents">0</span> documents completed
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Results -->
+                <div id="document-results" class="document-results" style="display: none;">
+                    <div class="results-header">
+                        <h4>🧬 Document Laboratory Complete</h4>
+                        <p>Professional document suite generated successfully</p>
+                    </div>
+                    
+                    <div class="document-portfolio">
+                        <div id="generated-documents-list" class="generated-documents-list">
+                            <!-- Generated documents will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="enhanced-download">
+                        <a href="#" id="enhanced-download-btn" class="harvest-button reef-reflection">
+                            Harvest Enhanced Results (Patterns + Documents)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="lab-portal" id="lab-portal">
@@ -1385,10 +1787,24 @@
         const apiKeyModal = document.getElementById('api-key-modal');
         const apiKeyExit = document.getElementById('api-key-exit');
 
+        // Document Laboratory Elements
+        const documentLaboratorySection = document.getElementById('document-laboratory-section');
+        const documentOpportunities = document.getElementById('document-opportunities');
+        const documentGenerationProgress = document.getElementById('document-generation-progress');
+        const documentResults = document.getElementById('document-results');
+        const selectAllDocumentsBtn = document.getElementById('select-all-documents');
+        const generateDocumentsBtn = document.getElementById('generate-documents-btn');
+        const enhancedDownloadBtn = document.getElementById('enhanced-download-btn');
+
         // Processing state
         let isProcessing = false;
         let currentProcessId = null;
         let socket = null;
+
+        // Document Laboratory state
+        let documentOpportunityData = null;
+        let selectedDocuments = [];
+        let isGeneratingDocuments = false;
 
         // Initialize WebSocket connection
         function initializeWebSocket() {
@@ -1434,6 +1850,21 @@
                 case 'processing_stopped':
                     processError('Processing stopped by user request');
                     break;
+                case 'document_opportunities':
+                    showDocumentOpportunities(data);
+                    break;
+                case 'document_generation_started':
+                    startDocumentGeneration(data);
+                    break;
+                case 'document_progress':
+                    updateDocumentGenerationProgress(data);
+                    break;
+                case 'document_generation_complete':
+                    completeDocumentGeneration(data);
+                    break;
+                case 'document_generation_failed':
+                    documentGenerationError(data.error);
+                    break;
                 default:
                     console.log('Unknown WebSocket message type:', data.type);
             }
@@ -1454,6 +1885,11 @@
         apiKeyModal.addEventListener('click', (e) => {
             if (e.target === apiKeyModal) closeApiKeyModal();
         });
+
+        // Document Laboratory Event Listeners
+        selectAllDocumentsBtn.addEventListener('click', selectAllRecommendedDocuments);
+        generateDocumentsBtn.addEventListener('click', generateSelectedDocuments);
+        enhancedDownloadBtn.addEventListener('click', harvestEnhancedResults);
 
         // Particle interaction effects
         document.addEventListener('mousemove', (e) => {
@@ -1566,6 +2002,11 @@
             isProcessing = false;
 
             showNotification('Reef exploration complete! All patterns have been successfully processed.', 'success');
+
+            // Analyze content for document opportunities
+            setTimeout(() => {
+                analyzeDocumentOpportunities(processId);
+            }, 2000); // Small delay for user to see completion
         }
 
         function processError(message) {
@@ -1940,6 +2381,273 @@
                 closeLaboratory();
             }
         });
+
+        // Document Laboratory Functions
+        
+        // Analyze content for document opportunities
+        async function analyzeDocumentOpportunities(processId) {
+            try {
+                console.log('Analyzing document opportunities for:', processId);
+                
+                const response = await fetch(`/api/document-opportunities/${processId}`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+                
+                if (data.success && data.opportunities.length > 0) {
+                    documentOpportunityData = data;
+                    showDocumentOpportunities(data);
+                } else {
+                    console.log('No document opportunities found or analysis failed:', data.error);
+                }
+                
+            } catch (error) {
+                console.error('Error analyzing document opportunities:', error);
+            }
+        }
+
+        // Show document opportunities in the UI
+        function showDocumentOpportunities(data) {
+            // Show document laboratory section
+            documentLaboratorySection.classList.add('visible');
+            
+            // Hide other sub-sections initially
+            documentGenerationProgress.style.display = 'none';
+            documentResults.style.display = 'none';
+            
+            // Show opportunities section
+            documentOpportunities.style.display = 'block';
+            
+            // Clear existing content
+            selectedDocuments = [];
+            updateGenerateButton();
+            
+            // Populate document tiers
+            populateDocumentTiers(data.opportunities);
+            
+            showNotification(`🧬 Document Laboratory discovered ${data.opportunities.length} professional document opportunities!`, 'info');
+        }
+
+        // Populate document tiers with opportunities
+        function populateDocumentTiers(opportunities) {
+            // Group opportunities by tier
+            const tierGroups = {};
+            opportunities.forEach(opp => {
+                if (!tierGroups[opp.tier]) {
+                    tierGroups[opp.tier] = [];
+                }
+                tierGroups[opp.tier].push(opp);
+            });
+
+            // Populate each tier
+            Object.entries(tierGroups).forEach(([tier, docs]) => {
+                const tierElement = document.querySelector(`[data-tier="${tier}"] .tier-documents`);
+                if (tierElement) {
+                    tierElement.innerHTML = docs.map(doc => createDocumentOptionHTML(doc)).join('');
+                }
+            });
+
+            // Add click handlers to document options
+            document.querySelectorAll('.document-option').forEach(option => {
+                option.addEventListener('click', () => toggleDocumentSelection(option));
+            });
+        }
+
+        // Create HTML for a document option
+        function createDocumentOptionHTML(doc) {
+            const priorityColor = doc.priority === 'high' ? 'var(--coral-primary)' : 
+                                doc.priority === 'medium' ? 'var(--sea-green)' : 'var(--text-reef-tertiary)';
+                                
+            return `
+                <div class="document-option" data-document-id="${doc.id}">
+                    <div class="checkbox"></div>
+                    <div class="document-title">${doc.title}</div>
+                    <div class="document-details">${doc.purpose}</div>
+                    <div class="document-meta">
+                        <span style="color: ${priorityColor}">●</span>
+                        <span>${doc.priority.toUpperCase()} PRIORITY</span>
+                        <span>•</span>
+                        <span>${doc.estimatedLength}</span>
+                        <span>•</span>
+                        <span>${doc.complexity} complexity</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle document selection
+        function toggleDocumentSelection(optionElement) {
+            const documentId = optionElement.dataset.documentId;
+            const isSelected = optionElement.classList.contains('selected');
+            
+            if (isSelected) {
+                optionElement.classList.remove('selected');
+                selectedDocuments = selectedDocuments.filter(id => id !== documentId);
+            } else {
+                optionElement.classList.add('selected');
+                selectedDocuments.push(documentId);
+            }
+            
+            updateGenerateButton();
+        }
+
+        // Select all recommended documents
+        function selectAllRecommendedDocuments() {
+            const highPriorityOptions = document.querySelectorAll('.document-option');
+            selectedDocuments = [];
+            
+            highPriorityOptions.forEach(option => {
+                option.classList.add('selected');
+                selectedDocuments.push(option.dataset.documentId);
+            });
+            
+            updateGenerateButton();
+            showNotification('All recommended documents selected for generation', 'info');
+        }
+
+        // Update generate button state
+        function updateGenerateButton() {
+            generateDocumentsBtn.disabled = selectedDocuments.length === 0;
+            generateDocumentsBtn.textContent = selectedDocuments.length > 0 
+                ? `Generate ${selectedDocuments.length} Document${selectedDocuments.length > 1 ? 's' : ''}` 
+                : 'Generate Selected Documents';
+        }
+
+        // Generate selected documents
+        async function generateSelectedDocuments() {
+            if (selectedDocuments.length === 0 || !currentProcessId || !documentOpportunityData) {
+                return;
+            }
+
+            try {
+                // Get selected document specifications
+                const selectedSpecs = documentOpportunityData.opportunities.filter(
+                    opp => selectedDocuments.includes(opp.id)
+                );
+
+                const response = await fetch(`/api/generate-documents/${currentProcessId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        selectedDocuments: selectedSpecs
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Document generation started - progress will be handled via WebSocket
+                    isGeneratingDocuments = true;
+                } else {
+                    showNotification(`Document generation failed: ${data.error}`, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error starting document generation:', error);
+                showNotification('Failed to start document generation', 'error');
+            }
+        }
+
+        // Start document generation (WebSocket handler)
+        function startDocumentGeneration(data) {
+            // Hide opportunities, show progress
+            documentOpportunities.style.display = 'none';
+            documentGenerationProgress.style.display = 'block';
+            
+            // Update progress UI
+            document.getElementById('total-documents').textContent = data.documentCount;
+            document.getElementById('documents-generated').textContent = '0';
+            document.getElementById('current-document-title').textContent = 'Initializing document generation...';
+            document.getElementById('generation-progress-fill').style.width = '0%';
+            
+            showNotification(`🧬 Document Laboratory activated! Generating ${data.documentCount} professional documents...`, 'info');
+        }
+
+        // Update document generation progress (WebSocket handler)
+        function updateDocumentGenerationProgress(data) {
+            if (data.status === 'generating') {
+                document.getElementById('current-document-title').textContent = `Generating: ${data.title}`;
+            } else if (data.status === 'completed') {
+                const generated = parseInt(document.getElementById('documents-generated').textContent) + 1;
+                const total = parseInt(document.getElementById('total-documents').textContent);
+                
+                document.getElementById('documents-generated').textContent = generated;
+                document.getElementById('generation-progress-fill').style.width = `${(generated / total) * 100}%`;
+                
+                if (generated < total) {
+                    document.getElementById('current-document-title').textContent = `Completed: ${data.title}`;
+                }
+            } else if (data.status === 'failed') {
+                document.getElementById('current-document-title').textContent = `Failed: ${data.title} - ${data.error}`;
+            }
+        }
+
+        // Complete document generation (WebSocket handler)
+        function completeDocumentGeneration(data) {
+            isGeneratingDocuments = false;
+            
+            // Hide progress, show results
+            documentGenerationProgress.style.display = 'none';
+            documentResults.style.display = 'block';
+            
+            // Populate generated documents list
+            const documentsList = document.getElementById('generated-documents-list');
+            documentsList.innerHTML = data.documentsGenerated.map(doc => createGeneratedDocumentHTML(doc)).join('');
+            
+            // Update enhanced download link
+            enhancedDownloadBtn.href = `/api/download/${currentProcessId}`;
+            
+            showNotification(`🧬 Document Laboratory complete! Generated ${data.documentsGenerated.length} professional documents.`, 'success');
+        }
+
+        // Create HTML for a generated document
+        function createGeneratedDocumentHTML(doc) {
+            const tierColors = {
+                technical: '#2563eb',
+                strategic: '#dc2626',
+                educational: '#16a34a',
+                operational: '#ca8a04'
+            };
+            
+            const tierName = doc.id.split('-')[0];
+            const tierColor = tierColors[tierName] || '#6b7280';
+            
+            return `
+                <div class="generated-document-card">
+                    <div class="document-title">${doc.title}</div>
+                    <div class="document-meta">
+                        <span class="document-tier-badge" style="background-color: ${tierColor}">
+                            ${tierName.toUpperCase()}
+                        </span>
+                        <span>${doc.wordCount} words</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Document generation error handler
+        function documentGenerationError(error) {
+            isGeneratingDocuments = false;
+            
+            // Show error state
+            document.getElementById('current-document-title').textContent = 'Document generation failed';
+            showNotification(`Document generation failed: ${error}`, 'error');
+            
+            // Reset UI state
+            documentGenerationProgress.style.display = 'none';
+            documentOpportunities.style.display = 'block';
+        }
+
+        // Harvest enhanced results (with documents)
+        function harvestEnhancedResults() {
+            if (currentProcessId) {
+                window.location.href = `/api/download/${currentProcessId}`;
+                showNotification('Harvesting enhanced results with professional documents...', 'info');
+            }
+        }
 
         // Initialize when page loads
         window.addEventListener('load', () => {

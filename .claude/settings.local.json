@@ -5,7 +5,9 @@
       "Bash(ls:*)",
       "Bash(node:*)",
       "Bash(npm start)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Bash(fabric:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }

@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-venv \
     build-essential \
+    gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Go 1.22+ manually (fabric requires newer version)
@@ -40,8 +41,14 @@ RUN pip install yt-dlp
 # Install Fabric CLI
 RUN go install github.com/danielmiessler/fabric/cmd/fabric@latest
 
+# Create Fabric configuration directory
+RUN mkdir -p /root/.config/fabric
+
 # Copy application code
 COPY . .
+
+# Make fabric configuration script executable
+RUN chmod +x /app/configure-fabric.sh
 
 # Create outputs directory
 RUN mkdir -p outputs
@@ -53,5 +60,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:3000/health || exit 1
 
-# Start application
-CMD ["npm", "start"]
+# Start application with Fabric configuration
+CMD ["/bin/bash", "-c", "/app/configure-fabric.sh && npm start"]
