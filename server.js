@@ -17,7 +17,7 @@ const ServerManager = require('./server-manager');
 const FabricTranscriptIntegration = require('./fabric-transcript-integration');
 const { FABRIC_PATTERNS, PHASE_DESCRIPTIONS } = require('./fabric-patterns');
 const YouTubeMetadata = require('./youtube-metadata');
-const DocumentLaboratory = require('./document-laboratory');
+// const DocumentLaboratory = require('./document-laboratory'); // Commented out for main branch deployment
 
 const app = express();
 const server = http.createServer(app);
@@ -32,7 +32,7 @@ app.use(express.static('public'));
 const activeProcesses = new Map();
 const fabricTranscriptIntegration = new FabricTranscriptIntegration();
 const youtubeMetadata = new YouTubeMetadata();
-const documentLaboratory = new DocumentLaboratory(fabricTranscriptIntegration);
+// const documentLaboratory = new DocumentLaboratory(fabricTranscriptIntegration); // Commented out for main branch deployment
 
 // Test fabric availability
 let fabricAvailable = false;
@@ -613,7 +613,8 @@ app.post('/api/document-opportunities/:processId', async (req, res) => {
     }
 
     console.log(`Analyzing document opportunities for process: ${processId}`);
-    const analysis = await documentLaboratory.analyzeContentOpportunities(process.outputDir);
+    // const analysis = await documentLaboratory.analyzeContentOpportunities(process.outputDir); // Commented out for main branch deployment
+    const analysis = { success: false, opportunities: [] }; // Temporary placeholder
     
     if (analysis.success) {
       // Store analysis in process for later use
@@ -687,11 +688,12 @@ app.post('/api/generate-documents/:processId', async (req, res) => {
     };
     
     // Generate documents
-    const results = await documentLaboratory.generateDocuments(
-      process.outputDir, 
-      selectedDocuments, 
-      progressCallback
-    );
+    // const results = await documentLaboratory.generateDocuments( // Commented out for main branch deployment
+    //   process.outputDir, 
+    //   selectedDocuments, 
+    //   progressCallback
+    // );
+    const results = { success: false, error: 'Document generation not available in this deployment' }; // Temporary placeholder
     
     if (results.success) {
       // Update process with document results
@@ -863,7 +865,8 @@ async function processVideo(processId, youtubeUrl, outputDir) {
 
     // After processing, analyze for document opportunities
     console.log(`Analyzing document opportunities for process: ${processId}`);
-    const analysis = await documentLaboratory.analyzeContentOpportunities(outputDir);
+    // const analysis = await documentLaboratory.analyzeContentOpportunities(outputDir); // Commented out for main branch deployment
+    const analysis = { success: false, opportunities: [] }; // Temporary placeholder
     
     if (analysis.success && analysis.opportunities.length > 0) {
       // Store analysis in process for later use
