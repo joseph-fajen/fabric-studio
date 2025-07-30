@@ -17,6 +17,7 @@ const ServerManager = require('./server-manager');
 const FabricTranscriptIntegration = require('./fabric-transcript-integration');
 const { FABRIC_PATTERNS, PHASE_DESCRIPTIONS } = require('./fabric-patterns');
 const YouTubeMetadata = require('./youtube-metadata');
+const DocumentLaboratory = require('./document-laboratory');
 
 const app = express();
 const server = http.createServer(app);
@@ -31,6 +32,7 @@ app.use(express.static('public'));
 const activeProcesses = new Map();
 const fabricTranscriptIntegration = new FabricTranscriptIntegration();
 const youtubeMetadata = new YouTubeMetadata();
+const documentLaboratory = new DocumentLaboratory(fabricTranscriptIntegration);
 
 // Test fabric availability
 let fabricAvailable = false;
@@ -594,6 +596,182 @@ app.get('/api/download/:id', async (req, res) => {
   }
 });
 
+// Document Laboratory endpoints
+
+// Analyze content for document opportunities  
+app.post('/api/document-opportunities/:processId', async (req, res) => {
+  try {
+    const processId = req.params.processId;
+    const process = activeProcesses.get(processId);
+    
+    if (!process) {
+      return res.status(404).json({ error: 'Process not found' });
+    }
+    
+    if (!process.outputDir) {
+      return res.status(400).json({ error: 'Process output directory not available' });
+    }
+
+    console.log(`Analyzing document opportunities for process: ${processId}`);
+    const analysis = await documentLaboratory.analyzeContentOpportunities(process.outputDir);
+    
+    if (analysis.success) {
+      // Store analysis in process for later use
+      process.documentAnalysis = analysis.analysis;
+      process.documentOpportunities = analysis.opportunities;
+      
+      broadcast({
+        type: 'document_opportunities',
+        processId,
+        opportunities: analysis.opportunities,
+        analysis: analysis.analysis
+      });
+      
+      res.json({
+        success: true,
+        processId,
+        analysis: analysis.analysis,
+        opportunities: analysis.opportunities
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        error: analysis.error
+      });
+    }
+    
+  } catch (error) {
+    console.error('Error analyzing document opportunities:', error);
+    res.status(500).json({ error: 'Failed to analyze document opportunities' });
+  }
+});
+
+// Generate selected documents
+app.post('/api/generate-documents/:processId', async (req, res) => {
+  try {
+    const processId = req.params.processId;
+    const { selectedDocuments } = req.body;
+    
+    if (!selectedDocuments || !Array.isArray(selectedDocuments)) {
+      return res.status(400).json({ error: 'Selected documents array is required' });
+    }
+    
+    const process = activeProcesses.get(processId);
+    if (!process) {
+      return res.status(404).json({ error: 'Process not found' });
+    }
+    
+    if (!process.outputDir) {
+      return res.status(400).json({ error: 'Process output directory not available' });
+    }
+
+    console.log(`Generating ${selectedDocuments.length} documents for process: ${processId}`);
+    
+    // Update process status
+    process.status = 'generating_documents';
+    process.documentGenerationStartTime = new Date();
+    
+    broadcast({
+      type: 'document_generation_started',
+      processId,
+      documentCount: selectedDocuments.length
+    });
+    
+    // Progress callback for document generation
+    const progressCallback = (progress) => {
+      broadcast({
+        type: 'document_progress',
+        processId,
+        ...progress
+      });
+    };
+    
+    // Generate documents
+    const results = await documentLaboratory.generateDocuments(
+      process.outputDir, 
+      selectedDocuments, 
+      progressCallback
+    );
+    
+    if (results.success) {
+      // Update process with document results
+      process.documentsGenerated = results.documentsGenerated;
+      process.documentGenerationErrors = results.errors;
+      process.status = 'completed_with_documents';
+      process.documentGenerationEndTime = new Date();
+      
+      // Regenerate ZIP file to include documents
+      await updateZipWithDocuments(process.outputDir);
+      
+      broadcast({
+        type: 'document_generation_complete',
+        processId,
+        documentsGenerated: results.documentsGenerated,
+        errors: results.errors
+      });
+      
+      res.json({
+        success: true,
+        processId,
+        documentsGenerated: results.documentsGenerated,
+        errors: results.errors
+      });
+    } else {
+      process.status = 'document_generation_failed';
+      process.documentGenerationError = results.error;
+      
+      broadcast({
+        type: 'document_generation_failed',
+        processId,
+        error: results.error
+      });
+      
+      res.status(500).json({
+        success: false,
+        error: results.error
+      });
+    }
+    
+  } catch (error) {
+    console.error('Error generating documents:', error);
+    
+    const process = activeProcesses.get(req.params.processId);
+    if (process) {
+      process.status = 'document_generation_failed';
+      process.documentGenerationError = error.message;
+    }
+    
+    broadcast({
+      type: 'document_generation_failed',
+      processId: req.params.processId,
+      error: error.message
+    });
+    
+    res.status(500).json({ error: 'Failed to generate documents' });
+  }
+});
+
+// Get document generation status
+app.get('/api/document-status/:processId', (req, res) => {
+  const processId = req.params.processId;
+  const process = activeProcesses.get(processId);
+  
+  if (!process) {
+    return res.status(404).json({ error: 'Process not found' });
+  }
+  
+  res.json({
+    processId,
+    status: process.status,
+    documentAnalysis: process.documentAnalysis || null,
+    documentOpportunities: process.documentOpportunities || [],
+    documentsGenerated: process.documentsGenerated || [],
+    documentGenerationErrors: process.documentGenerationErrors || [],
+    documentGenerationStartTime: process.documentGenerationStartTime || null,
+    documentGenerationEndTime: process.documentGenerationEndTime || null
+  });
+});
+
 // Main processing function
 async function processVideo(processId, youtubeUrl, outputDir) {
   const process = activeProcesses.get(processId);
@@ -682,6 +860,26 @@ async function processVideo(processId, youtubeUrl, outputDir) {
     });
 
     console.log(`Process ${processId} completed successfully`);
+
+    // After processing, analyze for document opportunities
+    console.log(`Analyzing document opportunities for process: ${processId}`);
+    const analysis = await documentLaboratory.analyzeContentOpportunities(outputDir);
+    
+    if (analysis.success && analysis.opportunities.length > 0) {
+      // Store analysis in process for later use
+      process.documentAnalysis = analysis.analysis;
+      process.documentOpportunities = analysis.opportunities;
+      
+      broadcast({
+        type: 'document_opportunities',
+        processId,
+        opportunities: analysis.opportunities,
+        analysis: analysis.analysis
+      });
+      console.log(`Found ${analysis.opportunities.length} document opportunities.`);
+    } else {
+      console.log('No high-value document opportunities found.');
+    }
 
   } catch (error) {
     console.error(`Process ${processId} failed:`, error);
@@ -794,7 +992,7 @@ async function startServer() {
     const PORT = await serverManager.findAvailablePort();
     
     // Start server
-    server.listen(PORT, '127.0.0.1', async () => {
+    server.listen(PORT, '0.0.0.0', async () => {
       console.log(`🚀 YouTube Fabric Processor running on port ${PORT}`);
       console.log(`🌐 Open your browser to: http://localhost:${PORT}`);
       console.log(`🔧 Fabric available: ${fabricAvailable}`);
@@ -883,6 +1081,56 @@ async function getFolderSize(folderPath) {
     }
   } catch (error) {
     return 'Unknown';
+  }
+}
+
+// Update ZIP file to include derived documents
+async function updateZipWithDocuments(outputDir) {
+  try {
+    const zipPath = path.join(outputDir, 'youtube_analysis.zip');
+    const derivedDocumentsPath = path.join(outputDir, 'derived-documents');
+    
+    // Check if derived documents exist
+    const derivedExists = await fs.pathExists(derivedDocumentsPath);
+    if (!derivedExists) {
+      console.log('No derived documents to include in ZIP');
+      return;
+    }
+
+    // Create new archive
+    const archive = archiver('zip', {
+      zlib: { level: 9 }
+    });
+
+    const output = fs.createWriteStream(zipPath);
+    archive.pipe(output);
+
+    // Add all original pattern files
+    const files = await fs.readdir(outputDir);
+    for (const file of files) {
+      const filePath = path.join(outputDir, file);
+      const stats = await fs.stat(filePath);
+      
+      if (stats.isFile() && (file.endsWith('.txt') || file === 'index.md')) {
+        archive.file(filePath, { name: file });
+      }
+    }
+
+    // Add derived documents folder
+    archive.directory(derivedDocumentsPath, 'derived-documents');
+
+    // Finalize the archive
+    await new Promise((resolve, reject) => {
+      output.on('close', resolve);
+      output.on('error', reject);
+      archive.on('error', reject);
+      archive.finalize();
+    });
+
+    console.log(`Updated ZIP file with derived documents: ${zipPath}`);
+  } catch (error) {
+    console.error('Error updating ZIP with documents:', error);
+    throw error;
   }
 }
 
