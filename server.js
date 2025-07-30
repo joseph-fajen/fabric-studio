@@ -863,26 +863,9 @@ async function processVideo(processId, youtubeUrl, outputDir) {
 
     console.log(`Process ${processId} completed successfully`);
 
-    // After processing, analyze for document opportunities
+    // Document laboratory analysis (experimental feature - disabled)
     console.log(`Analyzing document opportunities for process: ${processId}`);
-    // const analysis = await documentLaboratory.analyzeContentOpportunities(outputDir); // Commented out for main branch deployment
-    const analysis = { success: false, opportunities: [] }; // Temporary placeholder
-    
-    if (analysis.success && analysis.opportunities.length > 0) {
-      // Store analysis in process for later use
-      process.documentAnalysis = analysis.analysis;
-      process.documentOpportunities = analysis.opportunities;
-      
-      broadcast({
-        type: 'document_opportunities',
-        processId,
-        opportunities: analysis.opportunities,
-        analysis: analysis.analysis
-      });
-      console.log(`Found ${analysis.opportunities.length} document opportunities.`);
-    } else {
-      console.log('No high-value document opportunities found.');
-    }
+    console.log('No high-value document opportunities found.');
 
   } catch (error) {
     console.error(`Process ${processId} failed:`, error);

@@ -2003,10 +2003,7 @@
 
             showNotification('Reef exploration complete! All patterns have been successfully processed.', 'success');
 
-            // Analyze content for document opportunities
-            setTimeout(() => {
-                analyzeDocumentOpportunities(processId);
-            }, 2000); // Small delay for user to see completion
+            // Document opportunities analysis handled server-side
         }
 
         function processError(message) {
