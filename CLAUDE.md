@@ -145,13 +145,17 @@ Configure fallback providers via Reef Laboratory Console:
 - Graceful degradation through simulation mode
 
 ### OAuth2 Authentication Status
-**Status**: ✅ **FULLY IMPLEMENTED AND OPERATIONAL**
-1. **OAuth2 YouTube Data API**: ✅ Primary method - bypasses all bot detection
-2. **yt-dlp with enhanced options**: ✅ Fallback method working
-3. **youtube-dl**: Available as tertiary fallback
-4. **Fabric CLI**: Available as final fallback
+**Status**: ⚠️ **RAILWAY DEPLOYMENT LIMITATIONS DISCOVERED**
+1. **OAuth2 YouTube Data API**: ⚠️ Authentication works, but API has permission restrictions for third-party caption downloads
+2. **yt-dlp with enhanced options**: ❌ Blocked by YouTube bot detection on Railway servers
+3. **youtube-dl**: ❌ Not installed on Railway, also would be blocked by bot detection
+4. **Fabric CLI**: ❌ Blocked by YouTube bot detection on Railway servers
 
-**Current Performance**: Real transcript download successful with 199K+ character dense content processing.
+**Current Status**: 
+- ✅ **Local Development**: All methods work properly with OAuth2 tokens
+- ❌ **Railway Production**: All transcript download methods blocked by YouTube's aggressive bot detection
+- ✅ **OAuth2 Token Persistence**: Implemented environment variable-based storage for Railway's ephemeral filesystem
+- ⚠️ **Production Workaround Needed**: Consider transcript upload/paste functionality for Railway deployment
 
 ### Testing
 - Use `/health` endpoint for basic functionality
@@ -159,9 +163,9 @@ Configure fallback providers via Reef Laboratory Console:
 - Monitor WebSocket connection for real-time feedback
 
 ## Recent Session Work
-**Latest Session Summary**: `session-summaries/SESSION-SUMMARY-2025-07-30-03.md` - **BREAKTHROUGH SESSION**: Complete OAuth2 implementation from Google Cloud Console setup through real YouTube processing. Successfully processed 199K character dense transcript with 9/13 pattern success rate. OAuth2 authentication fully operational with automatic token refresh.
+**Latest Session Summary**: `session-summaries/SESSION-SUMMARY-2025-07-31-01.md` - **RAILWAY DEPLOYMENT DEBUGGING SESSION**: Fixed OAuth2 Railway deployment issues including domain mismatch and token persistence. Discovered fundamental YouTube bot detection limitations preventing server-based transcript downloads on Railway. OAuth2 authentication working but hitting API permission barriers.
 
-**Previous Session**: `session-summaries/SESSION-SUMMARY-2025-07-30-02.md` - Critical debugging session that resolved Fabric CLI configuration issues and YouTube API error handling. Diagnosed all transcript download method failures and identified OAuth2 implementation as the path forward for production YouTube access.
+**Previous Session**: `session-summaries/SESSION-SUMMARY-2025-07-30-03.md` - **BREAKTHROUGH SESSION**: Complete OAuth2 implementation from Google Cloud Console setup through real YouTube processing. Successfully processed 199K character dense transcript with 9/13 pattern success rate. OAuth2 authentication fully operational with automatic token refresh.
 
 ## Video Length Recommendations
 **IMPORTANT**: This application is optimized for shorter videos. Fabric patterns are designed for complete content analysis and lose significant effectiveness when content is chunked.
