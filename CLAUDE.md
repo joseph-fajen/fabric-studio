@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 YouTube Fabric Processor is a Node.js web application that processes YouTube videos through 13 fabric patterns to extract insights, summaries, and knowledge. It achieves 70-second processing times through a revolutionary "transcript-first" architecture.
 
+**STRATEGIC EVOLUTION**: Project is evolving to Universal Content Intelligence Platform to solve cloud deployment constraints while expanding market opportunity. See `STRATEGIC-ARCHITECTURE-DECISION.md` for complete analysis and implementation plan.
+
 ## Development Commands
 
 ### Start Application
@@ -163,9 +165,9 @@ Configure fallback providers via Reef Laboratory Console:
 - Monitor WebSocket connection for real-time feedback
 
 ## Recent Session Work
-**Latest Session Summary**: `session-summaries/SESSION-SUMMARY-2025-07-31-01.md` - **RAILWAY DEPLOYMENT DEBUGGING SESSION**: Fixed OAuth2 Railway deployment issues including domain mismatch and token persistence. Discovered fundamental YouTube bot detection limitations preventing server-based transcript downloads on Railway. OAuth2 authentication working but hitting API permission barriers.
+**Latest Session Summary**: `session-summaries/SESSION-SUMMARY-2025-08-01-01.md` - **STRATEGIC ARCHITECTURE EVOLUTION SESSION**: Comprehensive analysis of deployment constraints and architectural evolution. Developed strategic pivot from YouTube-specific tool to Universal Content Intelligence Platform. Created detailed implementation plan for transcript-upload approach while preserving local YouTube functionality.
 
-**Previous Session**: `session-summaries/SESSION-SUMMARY-2025-07-30-03.md` - **BREAKTHROUGH SESSION**: Complete OAuth2 implementation from Google Cloud Console setup through real YouTube processing. Successfully processed 199K character dense transcript with 9/13 pattern success rate. OAuth2 authentication fully operational with automatic token refresh.
+**Previous Session**: `session-summaries/SESSION-SUMMARY-2025-07-31-01.md` - **RAILWAY DEPLOYMENT DEBUGGING SESSION**: Fixed OAuth2 Railway deployment issues including domain mismatch and token persistence. Discovered fundamental YouTube bot detection limitations preventing server-based transcript downloads on Railway. OAuth2 authentication working but hitting API permission barriers.
 
 ## Video Length Recommendations
 **IMPORTANT**: This application is optimized for shorter videos. Fabric patterns are designed for complete content analysis and lose significant effectiveness when content is chunked.
