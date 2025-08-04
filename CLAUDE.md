@@ -2,11 +2,26 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## IMPORTANT: YOUTUBE-LOCAL BRANCH
+
+**🎯 BRANCH PURPOSE**: This `youtube-local` branch preserves the **ORIGINAL YOUTUBE FABRIC PROCESSOR** functionality for local development and use. This branch contains the complete, working YouTube processing system as it was before architectural evolution.
+
+**🚀 USE THIS BRANCH FOR**: 
+- Local YouTube video processing with full functionality
+- Complete YouTube transcript downloading with 4-tier fallback system
+- Original YouTube-focused architecture and workflows
+- Users who want the proven, working YouTube Fabric Processor
+
+**⚠️ DEPLOYMENT STATUS**: 
+- ✅ **Fully functional locally** with all YouTube processing features
+- ❌ **Railway/cloud deployment limited** due to YouTube bot detection
+- ✅ **Complete preservation** of all original YouTube functionality
+
 ## Project Overview
 
 YouTube Fabric Processor is a Node.js web application that processes YouTube videos through 13 fabric patterns to extract insights, summaries, and knowledge. It achieves 70-second processing times through a revolutionary "transcript-first" architecture.
 
-**STRATEGIC EVOLUTION**: Project is evolving to Universal Content Intelligence Platform to solve cloud deployment constraints while expanding market opportunity. See `STRATEGIC-ARCHITECTURE-DECISION.md` for complete analysis and implementation plan.
+**BRANCH CONTEXT**: This branch maintains the original YouTube-focused architecture while the main project evolves to a Universal Content Intelligence Platform. See other branches for expanded functionality.
 
 ## Development Commands
 
