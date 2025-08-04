@@ -7,6 +7,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const TranscriptDownloader = require('./transcript-downloader');
 const TranscriptChunker = require('./transcript-chunker');
+const TranscriptFormatParser = require('./transcript-format-parser');
 
 const execAsync = promisify(exec);
 
@@ -14,6 +15,7 @@ class FabricTranscriptIntegration {
   constructor() {
     this.transcriptDownloader = new TranscriptDownloader();
     this.transcriptChunker = new TranscriptChunker();
+    this.formatParser = new TranscriptFormatParser();
     this.maxConcurrent = 3; // Reduced to avoid API rate limits
     this.timeoutMs = 60000; // Increased for API calls
     this.fabricPath = null; // Will be detected dynamically
@@ -170,11 +172,30 @@ class FabricTranscriptIntegration {
       // Add metadata header to transcript for context
       let processableText = '';
       if (videoMetadata) {
-        processableText += `# YouTube Video Analysis\n\n`;
-        processableText += `**Video Title**: ${videoMetadata.title || 'Unknown'}\n`;
-        processableText += `**Channel**: ${videoMetadata.uploader || 'Unknown'}\n`;
-        processableText += `**URL**: ${videoMetadata.url || 'Unknown'}\n\n`;
-        processableText += `## Video Transcript\n\n`;
+        if (videoMetadata.url && videoMetadata.url.includes('youtube')) {
+          // YouTube content
+          processableText += `# YouTube Video Analysis\n\n`;
+          processableText += `**Video Title**: ${videoMetadata.title || 'Unknown'}\n`;
+          processableText += `**Channel**: ${videoMetadata.uploader || 'Unknown'}\n`;
+          processableText += `**URL**: ${videoMetadata.url || 'Unknown'}\n\n`;
+          processableText += `## Video Transcript\n\n`;
+        } else {
+          // Direct transcript content
+          processableText += `# Content Analysis\n\n`;
+          processableText += `**Content Type**: ${videoMetadata.contentType || 'Transcript'}\n`;
+          if (videoMetadata.format && videoMetadata.format.originalFormat) {
+            processableText += `**Original Format**: ${videoMetadata.format.originalFormat.toUpperCase()}\n`;
+          }
+          if (videoMetadata.format && videoMetadata.format.detectedSpeakers.length > 0) {
+            processableText += `**Speakers**: ${videoMetadata.format.detectedSpeakers.join(', ')}\n`;
+          }
+          if (videoMetadata.format && videoMetadata.format.estimatedDuration) {
+            const minutes = Math.floor(videoMetadata.format.estimatedDuration / 60);
+            const seconds = Math.floor(videoMetadata.format.estimatedDuration % 60);
+            processableText += `**Estimated Duration**: ${minutes}:${seconds.toString().padStart(2, '0')}\n`;
+          }
+          processableText += `\n## Content Transcript\n\n`;
+        }
       }
       processableText += transcript;
       
@@ -449,6 +470,170 @@ Key insights would include:
       simulated: true,
       method: 'simulation'
     };
+  }
+
+  // Process transcript content directly (no YouTube download needed)
+  async processTranscriptContent(transcript, patterns, progressCallback, metadata = null) {
+    const startTime = Date.now();
+    
+    try {
+      console.log('📝 Processing transcript content directly...');
+      console.log(`📊 Processing ${patterns.length} patterns with direct transcript (${transcript.length} chars)`);
+
+      // Step 1: Parse and normalize transcript format
+      console.log('🔍 Analyzing transcript format...');
+      if (progressCallback) {
+        progressCallback({
+          current: 0,
+          total: patterns.length + 2, // +2 for format parsing and ready
+          pattern: 'format_analysis',
+          phase: 'preprocessing',
+          description: 'Analyzing transcript format and structure...'
+        });
+      }
+
+      const parsedResult = await this.formatParser.parseTranscript(transcript, {
+        keepNoise: false,
+        keepRepetition: false
+      });
+
+      const processedTranscript = parsedResult.content;
+      const formatMetadata = parsedResult.metadata;
+      
+      // Enhance metadata with format information
+      const enhancedMetadata = {
+        ...metadata,
+        format: formatMetadata,
+        contentType: this.formatParser.estimateContentType(processedTranscript, formatMetadata),
+        processingRecommendations: this.formatParser.getFormatRecommendations(parsedResult.originalFormat, formatMetadata)
+      };
+
+      console.log(`✅ Format detected: ${parsedResult.originalFormat} (${(parsedResult.confidence * 100).toFixed(1)}% confidence)`);
+      console.log(`📈 Content processed: ${formatMetadata.characterCount} → ${formatMetadata.processedCharacterCount} chars`);
+      if (formatMetadata.detectedSpeakers.length > 0) {
+        console.log(`🎭 Speakers detected: ${formatMetadata.detectedSpeakers.join(', ')}`);
+      }
+      if (formatMetadata.estimatedDuration) {
+        const minutes = Math.floor(formatMetadata.estimatedDuration / 60);
+        const seconds = Math.floor(formatMetadata.estimatedDuration % 60);
+        console.log(`⏰ Estimated duration: ${minutes}:${seconds.toString().padStart(2, '0')}`);
+      }
+
+      // Step 2: Transcript ready for processing
+      if (progressCallback) {
+        progressCallback({
+          current: 1,
+          total: patterns.length + 2,
+          pattern: 'transcript_ready',
+          phase: 'ready',
+          description: `${parsedResult.originalFormat.toUpperCase()} transcript processed and ready for analysis...`
+        });
+      }
+
+      // Step 3: Process all patterns with the processed transcript
+      const results = {};
+      const batches = this.createBatches(patterns, this.maxConcurrent);
+      let completed = 0;
+
+      for (const batch of batches) {
+        // Process batch in parallel
+        const batchPromises = batch.map(async (pattern) => {
+          try {
+            const result = await this.executePatternWithTranscript(
+              pattern.name, 
+              processedTranscript,
+              enhancedMetadata
+            );
+            
+            completed++;
+            if (progressCallback) {
+              progressCallback({
+                current: completed + 2, // +2 for format parsing and transcript ready
+                total: patterns.length + 2,
+                pattern: pattern.name,
+                phase: pattern.phase,
+                description: pattern.description
+              });
+            }
+            
+            return {
+              pattern,
+              result: {
+                content: result,
+                pattern: pattern.name,
+                phase: pattern.phase,
+                description: pattern.description
+              }
+            };
+          } catch (error) {
+            console.error(`Pattern ${pattern.name} failed:`, error.message);
+            completed++;
+            
+            if (progressCallback) {
+              progressCallback({
+                current: completed + 2,
+                total: patterns.length + 2,
+                pattern: pattern.name,
+                phase: pattern.phase,
+                description: `Error: ${error.message}`
+              });
+            }
+            
+            return {
+              pattern,
+              result: {
+                content: `# Error executing ${pattern.name}\n\n${error.message}\n\nThis pattern failed to process the transcript content. The transcript was provided directly but the fabric pattern execution encountered an issue.`,
+                pattern: pattern.name,
+                phase: pattern.phase,
+                description: pattern.description,
+                error: true
+              }
+            };
+          }
+        });
+
+        // Wait for batch completion
+        const batchResults = await Promise.all(batchPromises);
+        
+        // Store results
+        batchResults.forEach(({ pattern, result }) => {
+          results[pattern.filename] = result;
+        });
+
+        console.log(`✅ Completed batch: ${completed}/${patterns.length} patterns`);
+      }
+
+      const totalTime = Date.now() - startTime;
+      const successCount = Object.values(results).filter(r => !r.error).length;
+      const failedPatterns = Object.entries(results).filter(([_, r]) => r.error).map(([filename, r]) => r.pattern);
+      
+      if (failedPatterns.length > 0) {
+        console.log(`❌ Failed patterns: ${failedPatterns.join(', ')}`);
+      }
+      
+      console.log(`🎉 Direct transcript processing complete! ${successCount}/${patterns.length} patterns successful in ${Math.round(totalTime/1000)}s`);
+
+      return {
+        results,
+        completed: Object.keys(results).length,
+        total: patterns.length,
+        successful: successCount,
+        processingTime: totalTime,
+        optimized: true,
+        method: 'transcript-direct',
+        transcript: {
+          originalFormat: parsedResult.originalFormat,
+          confidence: parsedResult.confidence,
+          metadata: formatMetadata,
+          contentType: enhancedMetadata.contentType,
+          recommendations: enhancedMetadata.processingRecommendations
+        }
+      };
+
+    } catch (error) {
+      console.error('Direct transcript processing failed:', error);
+      throw new Error(`Direct transcript processing failed: ${error.message}`);
+    }
   }
 
   // Main processing method with fallbacks

@@ -23,6 +23,13 @@ class YouTubeTranscriptAPI {
   }
 
   async downloadTranscript(youtubeUrl, outputDir) {
+    // Skip if googleapis is not available
+    try {
+      require('googleapis');
+    } catch (error) {
+      throw new Error('YouTube Data API not available - googleapis module not installed');
+    }
+    
     const videoId = this.extractVideoId(youtubeUrl);
     if (!videoId) {
       throw new Error('Invalid YouTube URL');

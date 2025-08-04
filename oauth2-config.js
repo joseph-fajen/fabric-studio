@@ -5,7 +5,14 @@
  * via the official YouTube Data API v3, bypassing bot detection issues.
  */
 
-const { google } = require('googleapis');
+// Optional googleapis dependency - gracefully handle when not available
+let google = null;
+try {
+    google = require('googleapis').google;
+} catch (error) {
+    console.log('googleapis not available - YouTube OAuth2 functionality disabled');
+}
+
 const path = require('path');
 const fs = require('fs').promises;
 
@@ -31,6 +38,12 @@ class OAuth2Manager {
      */
     async initializeOAuth2Client() {
         try {
+            // Skip initialization if googleapis is not available
+            if (!google) {
+                console.log('OAuth2 initialization skipped - googleapis not available');
+                return;
+            }
+            
             // Try to load from environment variables first (for Railway deployment)
             if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
                 this.credentials = {
@@ -73,8 +86,8 @@ class OAuth2Manager {
      * Generate authorization URL for user authentication
      */
     getAuthUrl() {
-        if (!this.oauth2Client) {
-            throw new Error('OAuth2 client not initialized');
+        if (!google || !this.oauth2Client) {
+            throw new Error('OAuth2 client not available - googleapis module not installed');
         }
 
         return this.oauth2Client.generateAuthUrl({
@@ -192,7 +205,7 @@ class OAuth2Manager {
      * Check if user is authenticated
      */
     isAuthenticated() {
-        if (!this.oauth2Client) return false;
+        if (!google || !this.oauth2Client) return false;
         
         const credentials = this.oauth2Client.credentials;
         return credentials && credentials.access_token;
@@ -202,6 +215,10 @@ class OAuth2Manager {
      * Get authenticated YouTube API client
      */
     getYouTubeClient() {
+        if (!google) {
+            throw new Error('googleapis module not available');
+        }
+        
         if (!this.isAuthenticated()) {
             throw new Error('User not authenticated. Please log in first.');
         }

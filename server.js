@@ -94,7 +94,8 @@ app.get('/health', (req, res) => {
     status: 'ok', 
     fabricAvailable,
     patterns: FABRIC_PATTERNS.length,
-    server: 'YouTube Fabric Processor v1.0.0'
+    server: 'Universal Content Intelligence Platform v1.0.0',
+    supportedContentTypes: ['youtube', 'transcript']
   });
 });
 
@@ -107,28 +108,52 @@ app.get('/api/patterns', (req, res) => {
   });
 });
 
-// Process YouTube video
+// Process content (YouTube video or direct transcript)
 app.post('/api/process', async (req, res) => {
-  const { youtubeUrl } = req.body;
+  const { youtubeUrl, transcript, filename, contentType } = req.body;
   
-  if (!youtubeUrl) {
-    return res.status(400).json({ error: 'YouTube URL is required' });
-  }
-
-  // Validate YouTube URL
-  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
-  if (!youtubeRegex.test(youtubeUrl)) {
-    return res.status(400).json({ error: 'Invalid YouTube URL format' });
+  // Validate input based on content type
+  if (contentType === 'youtube') {
+    if (!youtubeUrl) {
+      return res.status(400).json({ error: 'YouTube URL is required for YouTube content' });
+    }
+    
+    // Validate YouTube URL
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+    if (!youtubeRegex.test(youtubeUrl)) {
+      return res.status(400).json({ error: 'Invalid YouTube URL format' });
+    }
+  } else if (contentType === 'transcript') {
+    if (!transcript || !transcript.trim()) {
+      return res.status(400).json({ error: 'Transcript content is required for transcript processing' });
+    }
+    
+    // Validate transcript content
+    const validationResult = validateTranscriptContent(transcript);
+    if (!validationResult.valid) {
+      return res.status(400).json({ error: validationResult.error });
+    }
+  } else {
+    return res.status(400).json({ error: 'Content type must be either "youtube" or "transcript"' });
   }
 
   const processId = uuidv4();
   
   try {
-    // Extract YouTube metadata for descriptive naming
-    console.log('Extracting YouTube metadata...');
-    const metadata = await youtubeMetadata.extractMetadata(youtubeUrl);
-    const descriptiveFolderName = youtubeMetadata.generateFolderName(metadata, processId);
-    const outputDir = path.join(__dirname, 'outputs', descriptiveFolderName);
+    let metadata, descriptiveFolderName, outputDir;
+    
+    if (contentType === 'youtube') {
+      // Extract YouTube metadata for descriptive naming
+      console.log('Extracting YouTube metadata...');
+      metadata = await youtubeMetadata.extractMetadata(youtubeUrl);
+      descriptiveFolderName = youtubeMetadata.generateFolderName(metadata, processId);
+    } else {
+      // Create metadata for transcript content
+      metadata = createTranscriptMetadata(transcript, filename);
+      descriptiveFolderName = generateContentFolderName(metadata, processId);
+    }
+    
+    outputDir = path.join(__dirname, 'outputs', descriptiveFolderName);
     
     // Ensure output directory exists
     await fs.ensureDir(outputDir);
@@ -136,7 +161,10 @@ app.post('/api/process', async (req, res) => {
     // Store process info with metadata
     activeProcesses.set(processId, {
       id: processId,
-      url: youtubeUrl,
+      url: youtubeUrl || null,
+      transcript: contentType === 'transcript' ? transcript : null,
+      filename: filename || null,
+      contentType,
       status: 'starting',
       startTime: new Date(),
       outputDir,
@@ -148,17 +176,22 @@ app.post('/api/process', async (req, res) => {
     res.json({
       processId,
       status: 'started',
-      message: 'Processing started',
+      message: 'Content processing started',
       fabricAvailable,
-      patterns: FABRIC_PATTERNS.length
+      patterns: FABRIC_PATTERNS.length,
+      contentType
     });
 
     // Start processing in background
-    processVideo(processId, youtubeUrl, outputDir);
+    if (contentType === 'youtube') {
+      processVideo(processId, youtubeUrl, outputDir);
+    } else {
+      processTranscriptContent(processId, transcript, filename, outputDir);
+    }
 
   } catch (error) {
-    console.error('Error starting process:', error);
-    res.status(500).json({ error: 'Failed to start processing' });
+    console.error('Error starting content processing:', error);
+    res.status(500).json({ error: 'Failed to start content processing' });
   }
 });
 
@@ -197,6 +230,7 @@ app.get('/api/management/status', (req, res) => {
         id: p.id,
         status: p.status,
         url: p.url,
+        contentType: p.contentType,
         startTime: p.startTime,
         currentStep: p.currentStep,
         totalSteps: p.totalSteps,
@@ -375,7 +409,7 @@ app.post('/api/management/stop-processing', (req, res) => {
     // Broadcast stop signal to all WebSocket clients
     broadcast({
       type: 'processing_stopped',
-      message: 'All processing stopped by user request'
+      message: 'All content processing stopped by user request'
     });
     
     res.json({ 
@@ -405,7 +439,7 @@ app.post('/api/management/clear-all-data', async (req, res) => {
     // Broadcast clear signal to all WebSocket clients
     broadcast({
       type: 'data_cleared',
-      message: 'All data cleared by user request'
+      message: 'All content analysis data cleared by user request'
     });
     
     res.json({ 
@@ -574,7 +608,7 @@ app.get('/api/download/:id', async (req, res) => {
   }
 
   try {
-    const zipPath = path.join(process.outputDir, 'youtube_analysis.zip');
+    const zipPath = path.join(process.outputDir, 'content_analysis.zip');
     
     // Create ZIP file if it doesn't exist
     if (!await fs.pathExists(zipPath)) {
@@ -582,9 +616,15 @@ app.get('/api/download/:id', async (req, res) => {
     }
     
     // Generate descriptive download filename
-    const downloadName = process.metadata 
-      ? youtubeMetadata.generateDownloadName(process.metadata, processId)
-      : `youtube_analysis_${processId.substring(0, 8)}.zip`;
+    let downloadName;
+    if (process.contentType === 'youtube' && process.metadata) {
+      downloadName = youtubeMetadata.generateDownloadName(process.metadata, processId);
+    } else if (process.contentType === 'transcript') {
+      const baseName = process.filename ? process.filename.replace(/\.[^/.]+$/, '') : 'content';
+      downloadName = `${baseName}_analysis_${processId.substring(0, 8)}.zip`;
+    } else {
+      downloadName = `content_analysis_${processId.substring(0, 8)}.zip`;
+    }
     
     // Send file
     res.download(zipPath, downloadName, (err) => {
@@ -791,7 +831,8 @@ async function processVideo(processId, youtubeUrl, outputDir) {
     broadcast({
       type: 'process_started',
       processId,
-      url: youtubeUrl,
+      url: youtubeUrl || null,
+      contentType: process.contentType,
       totalSteps: FABRIC_PATTERNS.length
     });
 
@@ -887,14 +928,22 @@ async function processVideo(processId, youtubeUrl, outputDir) {
 
 // Save results to individual text files
 async function saveResults(outputDir, results, metadata, youtubeUrl) {
-  // Create enhanced index file with metadata
+  // Create index file with metadata
   let indexContent;
-  if (metadata) {
+  
+  if (metadata && metadata.contentType === 'transcript') {
+    // Create index for transcript content
+    indexContent = createTranscriptIndexContent(metadata);
+  } else if (metadata && youtubeUrl) {
+    // Use YouTube metadata
     indexContent = youtubeMetadata.createIndexContent(metadata, youtubeUrl);
   } else {
     // Fallback to basic index
-    indexContent = `# YouTube Video Analysis Results\n\n`;
-    indexContent += `**YouTube URL**: ${youtubeUrl}\n`;
+    const contentType = youtubeUrl ? 'YouTube Video' : 'Content';
+    indexContent = `# ${contentType} Analysis Results\n\n`;
+    if (youtubeUrl) {
+      indexContent += `**YouTube URL**: ${youtubeUrl}\n`;
+    }
     indexContent += `**Generated**: ${new Date().toISOString()}\n\n`;
     indexContent += `## Files Generated\n\n`;
   }
@@ -955,7 +1004,7 @@ async function createZipFile(outputDir, zipPath, results) {
     // Add all files in the output directory
     archive.directory(outputDir, false, (entry) => {
       // Exclude the zip file itself
-      if (entry.name === 'youtube_analysis.zip') {
+      if (entry.name === 'content_analysis.zip' || entry.name === 'youtube_analysis.zip') {
         return false;
       }
       return entry;
@@ -981,10 +1030,11 @@ async function startServer() {
     
     // Start server
     server.listen(PORT, '0.0.0.0', async () => {
-      console.log(`🚀 YouTube Fabric Processor running on port ${PORT}`);
+      console.log(`🚀 Universal Content Intelligence Platform running on port ${PORT}`);
       console.log(`🌐 Open your browser to: http://localhost:${PORT}`);
       console.log(`🔧 Fabric available: ${fabricAvailable}`);
       console.log(`📝 Patterns loaded: ${FABRIC_PATTERNS.length}`);
+      console.log(`🎯 Content types supported: YouTube URLs, Transcript Upload/Paste`);
       
       // Save PID for process management
       await serverManager.savePid();
@@ -1013,6 +1063,233 @@ async function startServer() {
 
 // Start the server
 startServer();
+
+// Content validation and processing helper functions
+
+// Validate transcript content for safety and format
+function validateTranscriptContent(transcript) {
+  // Basic safety checks
+  if (!transcript || typeof transcript !== 'string') {
+    return { valid: false, error: 'Invalid transcript content' };
+  }
+  
+  // Check minimum length
+  if (transcript.trim().length < 50) {
+    return { valid: false, error: 'Transcript content too short (minimum 50 characters)' };
+  }
+  
+  // Check maximum length (10MB limit)
+  if (transcript.length > 10 * 1024 * 1024) {
+    return { valid: false, error: 'Transcript content too large (maximum 10MB)' };
+  }
+  
+  // Check for suspicious patterns
+  const suspiciousPatterns = [
+    /<script[^>]*>/i,
+    /javascript:/i,
+    /data:text\/html/i,
+    /vbscript:/i
+  ];
+  
+  for (const pattern of suspiciousPatterns) {
+    if (pattern.test(transcript)) {
+      return { valid: false, error: 'Transcript content contains potentially unsafe elements' };
+    }
+  }
+  
+  return { valid: true };
+}
+
+// Create metadata for transcript content
+function createTranscriptMetadata(transcript, filename) {
+  const wordCount = transcript.trim().split(/\s+/).length;
+  const charCount = transcript.length;
+  const estimatedDuration = Math.ceil(wordCount / 150); // Assuming 150 words per minute
+  
+  // Try to extract title from filename or content
+  let title = 'Uploaded Content';
+  if (filename) {
+    title = filename.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
+  } else {
+    // Try to extract first meaningful line as title
+    const lines = transcript.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+    if (lines.length > 0) {
+      title = lines[0].substring(0, 100); // First line, max 100 chars
+    }
+  }
+  
+  return {
+    title,
+    filename: filename || 'transcript.txt',
+    wordCount,
+    charCount,
+    estimatedDuration,
+    contentType: 'transcript',
+    uploadDate: new Date().toISOString(),
+    source: 'upload'
+  };
+}
+
+// Generate folder name for transcript content
+function generateContentFolderName(metadata, processId) {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+  const shortId = processId.substring(0, 8);
+  
+  // Clean title for filesystem
+  let cleanTitle = metadata.title
+    .replace(/[^a-zA-Z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .substring(0, 50);
+  
+  if (!cleanTitle) {
+    cleanTitle = 'content';
+  }
+  
+  return `${timestamp}_${cleanTitle}_${shortId}`;
+}
+
+// Create index content for transcript processing
+function createTranscriptIndexContent(metadata) {
+  let indexContent = `# Content Analysis Results\n\n`;
+  
+  indexContent += `**Content Title**: ${metadata.title}\n`;
+  if (metadata.filename) {
+    indexContent += `**Original Filename**: ${metadata.filename}\n`;
+  }
+  indexContent += `**Content Type**: Uploaded/Pasted Transcript\n`;
+  indexContent += `**Word Count**: ${metadata.wordCount?.toLocaleString() || 'Unknown'}\n`;
+  indexContent += `**Character Count**: ${metadata.charCount?.toLocaleString() || 'Unknown'}\n`;
+  if (metadata.estimatedDuration) {
+    indexContent += `**Estimated Duration**: ${metadata.estimatedDuration} minutes\n`;
+  }
+  indexContent += `**Processing Date**: ${new Date().toLocaleString()}\n`;
+  indexContent += `**Upload Date**: ${metadata.uploadDate ? new Date(metadata.uploadDate).toLocaleString() : 'Unknown'}\n\n`;
+  
+  indexContent += `## Processing Information\n\n`;
+  indexContent += `This content was processed using the Universal Content Intelligence Platform's fabric patterns. `;
+  indexContent += `The transcript was directly processed without requiring video download, providing the same comprehensive `;
+  indexContent += `analysis capabilities as YouTube videos but with enhanced speed and reliability.\n\n`;
+  
+  indexContent += `## Analysis Files Generated\n\n`;
+  indexContent += `The following analysis files have been generated using 13 specialized fabric patterns organized into 4 phases:\n\n`;
+  
+  // Add phase descriptions
+  indexContent += `### Phase 1: Core Analysis\n`;
+  indexContent += `- **01_youtube_summary.txt** - Comprehensive summary of main points\n`;
+  indexContent += `- **02_extract_wisdom.txt** - Key insights and wisdom extracted\n`;
+  indexContent += `- **03_create_summary.txt** - Structured executive summary\n\n`;
+  
+  indexContent += `### Phase 2: Structured Extraction\n`;
+  indexContent += `- **04_extract_ideas.txt** - Main ideas and concepts\n`;
+  indexContent += `- **05_extract_questions.txt** - Key questions and inquiries\n`;
+  indexContent += `- **06_extract_book_ideas.txt** - Book-worthy ideas and themes\n`;
+  indexContent += `- **07_extract_references.txt** - Referenced materials and sources\n\n`;
+  
+  indexContent += `### Phase 3: Practical Applications\n`;
+  indexContent += `- **08_create_quiz.txt** - Comprehension quiz questions\n`;
+  indexContent += `- **09_analyze_paper.txt** - Academic analysis framework\n`;
+  indexContent += `- **10_create_flashcards.txt** - Study flashcards\n`;
+  indexContent += `- **11_write_essay.txt** - Essay analysis and structure\n\n`;
+  
+  indexContent += `### Phase 4: Advanced Insights\n`;
+  indexContent += `- **12_extract_sponsors.txt** - Sponsor and brand analysis\n`;
+  indexContent += `- **13_analyze_claims.txt** - Fact-checking and claim analysis\n\n`;
+  
+  indexContent += `## Download\n\n`;
+  indexContent += `All files are packaged in **content_analysis.zip** for easy download and sharing.\n\n`;
+  
+  indexContent += `---\n`;
+  indexContent += `*Generated by Universal Content Intelligence Platform*\n`;
+  
+  return indexContent;
+}
+
+// Process transcript content directly
+async function processTranscriptContent(processId, transcript, filename, outputDir) {
+  const process = activeProcesses.get(processId);
+  
+  try {
+    process.status = 'processing';
+    process.currentStep = 0;
+    process.totalSteps = FABRIC_PATTERNS.length;
+    
+    // Broadcast initial status
+    broadcast({
+      type: 'process_started',
+      processId,
+      contentType: 'transcript',
+      filename: filename || 'transcript',
+      totalSteps: FABRIC_PATTERNS.length
+    });
+
+    // Progress callback
+    const progressCallback = (progress) => {
+      process.currentStep = progress.current;
+      process.currentPattern = progress.pattern;
+      process.currentPhase = progress.phase;
+      process.currentDescription = progress.description;
+      
+      // Broadcast progress
+      broadcast({
+        type: 'progress',
+        processId,
+        ...progress
+      });
+    };
+
+    // Process transcript through fabric patterns
+    console.log('🚀 Processing transcript content directly...');
+    const processingResult = await fabricTranscriptIntegration.processTranscriptContent(
+      transcript,
+      FABRIC_PATTERNS,
+      progressCallback,
+      process.metadata
+    );
+
+    // Save results to files with metadata
+    await saveResults(outputDir, processingResult.results, process.metadata, null);
+    
+    // Update process status
+    process.status = 'completed';
+    process.endTime = new Date();
+    process.results = processingResult.results;
+    process.completed = processingResult.completed;
+    process.successful = processingResult.successful || processingResult.completed;
+    process.simulated = processingResult.simulated || false;
+    process.method = processingResult.method || 'transcript-direct';
+    process.processingTime = processingResult.processingTime;
+    process.transcriptInfo = processingResult.transcript || null;
+    
+    // Broadcast completion
+    broadcast({
+      type: 'process_completed',
+      processId,
+      completed: processingResult.completed,
+      total: processingResult.total,
+      successful: processingResult.successful || processingResult.completed,
+      simulated: process.simulated,
+      method: process.method,
+      processingTime: process.processingTime,
+      transcriptInfo: process.transcriptInfo
+    });
+
+    console.log(`Process ${processId} completed successfully`);
+
+  } catch (error) {
+    console.error(`Process ${processId} failed:`, error);
+    
+    process.status = 'failed';
+    process.error = error.message;
+    process.endTime = new Date();
+    
+    // Broadcast error
+    broadcast({
+      type: 'process_failed',
+      processId,
+      error: error.message
+    });
+  }
+}
 
 // Helper functions for management API
 function formatUptime(uptime) {
@@ -1075,7 +1352,7 @@ async function getFolderSize(folderPath) {
 // Update ZIP file to include derived documents
 async function updateZipWithDocuments(outputDir) {
   try {
-    const zipPath = path.join(outputDir, 'youtube_analysis.zip');
+    const zipPath = path.join(outputDir, 'content_analysis.zip');
     const derivedDocumentsPath = path.join(outputDir, 'derived-documents');
     
     // Check if derived documents exist

@@ -1,4 +1,4 @@
-# YouTube Fabric Processor - Railway Deployment
+# Universal Content Intelligence Platform - Railway Deployment
 FROM node:18-slim
 
 # Install system dependencies
@@ -6,9 +6,6 @@ RUN apt-get update && apt-get install -y \
     curl \
     wget \
     git \
-    python3 \
-    python3-pip \
-    python3-venv \
     build-essential \
     gettext-base \
     && rm -rf /var/lib/apt/lists/*
@@ -32,15 +29,6 @@ COPY package*.json ./
 
 # Install Node.js dependencies
 RUN npm install --production
-
-# Install yt-dlp globally and in virtual environment
-RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install yt-dlp
-# Also install globally as backup
-RUN pip3 install --break-system-packages yt-dlp
-# Verify installation
-RUN yt-dlp --version || echo "yt-dlp installation verification failed"
 
 # Install Fabric CLI
 RUN go install github.com/danielmiessler/fabric/cmd/fabric@latest
