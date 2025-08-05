@@ -40,7 +40,7 @@ RUN mkdir -p /root/.config/fabric
 COPY . .
 
 # Make fabric configuration script executable
-RUN chmod +x /app/configure-fabric.sh
+RUN chmod +x /app/scripts/configure-fabric.sh
 
 # Create outputs directory
 RUN mkdir -p outputs
@@ -53,4 +53,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:3000/health || exit 1
 
 # Start application with Fabric configuration
-CMD ["/bin/bash", "-c", "/app/configure-fabric.sh && npm start"]
+CMD ["/bin/bash", "-c", "/app/scripts/configure-fabric.sh && npm start"]
