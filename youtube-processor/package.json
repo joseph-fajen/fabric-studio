@@ -1,0 +1,27 @@
+{
+  "name": "youtube-fabric-processor",
+  "version": "1.0.0",
+  "description": "YouTube-specific processing functionality for Fabric Studio",
+  "main": "transcript-downloader.js",
+  "scripts": {
+    "test": "echo 'Testing YouTube processor functionality'",
+    "install:deps": "pip install yt-dlp"
+  },
+  "dependencies": {
+    "googleapis": "^154.1.0",
+    "fs-extra": "^11.1.1",
+    "path": "^0.12.7"
+  },
+  "keywords": ["youtube", "transcript", "fabric", "processing", "oauth2"],
+  "author": "Joseph Fajen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joseph-fajen/youtube-fabric-processor.git",
+    "directory": "youtube-processor"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "note": "This module contains YouTube-specific functionality for local development only. Cloud deployment is not supported due to YouTube bot detection."
+}

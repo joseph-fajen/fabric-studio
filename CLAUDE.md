@@ -16,10 +16,10 @@ npm start              # Production mode on port 3000
 npm run dev           # Development mode with nodemon
 ```
 
-### Branch Information
-- **Main Branch** (`main`): Universal Content Intelligence Platform with transcript upload/paste
-- **YouTube Branch** (`youtube-local`): Original YouTube-specific version for local development
-- **Agent Experiment** (`agent-experiment`): Current development branch
+### Repository Structure
+- **Main Branch** (`main`): Fabric Studio with universal content processing and YouTube modules in `youtube-processor/` directory
+- **YouTube Branch** (`youtube-local`): Complete original YouTube-specific version for local development
+- **Development Branch** (`agent-experiment`): Current development and testing branch
 
 ### Switch Between Versions
 ```bash
@@ -77,11 +77,11 @@ npm run setup                   # Install all dependencies
 - `fabric-patterns.js` - Defines 13 fabric patterns in 4 phases
 - `public/` - Universal web interface with transcript upload and real-time progress tracking
 
-#### YouTube-Specific (youtube-local branch)
-- `transcript-downloader.js` - Robust YouTube transcript extraction with 4-tier fallback system
-- `youtube-transcript-api.js` - YouTube Data API v3 integration for official transcript access
-- `youtube-metadata.js` - Video metadata extraction and folder naming
-- `oauth2-routes.js` - YouTube OAuth2 authentication for local development
+#### YouTube-Specific (youtube-local branch and youtube-processor/ directory)
+- `youtube-processor/transcript-downloader.js` - Robust YouTube transcript extraction with 4-tier fallback system
+- `youtube-transcript-api.js` - YouTube Data API v3 integration for official transcript access  
+- `youtube-processor/youtube-metadata.js` - Video metadata extraction and folder naming
+- `youtube-processor/oauth2-routes.js` - YouTube OAuth2 authentication for local development
 
 ### Legacy/Unused Files
 - `fabric-integration.js` - Original sequential processing (backup only)
