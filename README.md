@@ -1,12 +1,12 @@
-# Fabric Studio (Universal Content Intelligence Platform)
+# Fabric Studio
 
-A high-performance web application that transforms any text content into comprehensive insights using 13 fabric patterns from Daniel Miessler's Fabric framework. Originally designed for YouTube videos, it has evolved to process diverse content types including meeting transcripts, podcast notes, research papers, and educational materials. Achieves 38-second processing times through a revolutionary "transcript-first" architecture.
+A high-performance web application that transforms any text content into comprehensive insights using 13 fabric patterns from Daniel Miessler's Fabric framework. Originally designed for YouTube videos, it has evolved to process diverse content types including meeting transcripts, podcast notes, research papers, and educational materials. Achieves 38-second processing times through a "transcript-first" architecture.
 
 ## Features
 
 - **Universal Content Processing**: Support for transcripts, meeting notes, educational content, research papers, and more
-- **Lightning Fast**: Process 13 fabric patterns in ~38 seconds (46% faster than original target)
-- **Multi-Input Interface**: File upload (.txt, .vtt, .srt), direct text paste, or YouTube URL processing
+- **Lightning Fast**: Process 13 fabric patterns in ~38 seconds
+- **Multi-Input Interface**: File upload (.txt, .vtt, .srt), or direct text paste. If using `youtube-processor` version locally, you can paste YouTube URLs. For cloud deployed instance, YouTube URLs are not supported. However, you can acquire the YouTube video transcript using whatever method you prefer, then upload or paste the transcript file. 
 - **Intelligent Format Detection**: Automatic detection and parsing of VTT, SRT, speaker-labeled, timestamped, and plain text formats
 - **Real-Time Progress**: WebSocket-powered progress tracking with live format detection and processing updates
 - **Professional Output**: 13 markdown files plus enhanced metadata and ZIP download
@@ -23,7 +23,7 @@ A high-performance web application that transforms any text content into compreh
 - **Anthropic API Key** (recommended) or OpenAI API Key
 
 **Optional (for YouTube processing only):**
-- **Python** (for yt-dlp transcript downloader) - only needed for `youtube-local` branch
+- **Python** (for yt-dlp transcript downloader) - only needed for `youtube-processor` version running locally. 
 
 ### 2. Clone and Install
 ```bash
@@ -59,12 +59,12 @@ npm start
 
 ## Usage
 
-The Universal Content Intelligence Platform offers three ways to process content:
+Fabric Studio offers three ways to process content:
 
 ### Method 1: File Upload (Recommended)
-1. **Upload Transcript File**: Support for .txt, .vtt, .srt files
+1. **Upload Transcript File**: Support for .txt, .md, .vtt, .srt files
 2. **Automatic Format Detection**: System identifies and optimizes format automatically
-3. **Start Processing**: Click "Begin Deep Analysis" 
+3. **Start Processing**: Click "Start Analysis" 
 4. **Monitor Progress**: Watch real-time format detection and pattern execution
 5. **Download Results**: Get ZIP file with all 13 analysis files
 
@@ -74,7 +74,7 @@ The Universal Content Intelligence Platform offers three ways to process content
 3. **Process Content**: Same analysis pipeline as file upload
 4. **Download Results**: Complete analysis package delivered
 
-### Method 3: YouTube Processing (Local Development)
+### Method 3: YouTube Processing (Local Deployment Only)
 For YouTube URL processing, use the preserved functionality in the `youtube-processor/` directory or switch to the `youtube-local` branch:
 
 **Option A: Using youtube-local branch (Recommended)**
@@ -384,7 +384,7 @@ pip install yt-dlp
 
 ## Key Dependencies
 
-### Universal Platform (Main Branch)
+### Fabric Studio Universal Platform (Main Branch)
 - **Node.js** 14+ - Runtime environment
 - **Fabric CLI** - AI pattern processing engine
 - **Express.js** - Web server framework
@@ -397,9 +397,9 @@ pip install yt-dlp
 
 ## Recent Updates
 
-- **Phase 1 Complete**: Universal Content Intelligence Platform successfully implemented
+- **Phase 1 Complete**: Fabric Studio successfully implemented
 - **38-Second Processing**: 46% performance improvement over original target
-- **Multi-Input Interface**: File upload, text paste, and optional YouTube processing
+- **Multi-Input Interface**: File upload, text paste, and optional YouTube processing (local deployment only)
 - **Format Detection**: Advanced TranscriptFormatParser with confidence scoring
 - **Production Ready**: Railway deployment optimization with minimal dependencies
 - **Branch Strategy**: Clear separation between universal platform and YouTube functionality
