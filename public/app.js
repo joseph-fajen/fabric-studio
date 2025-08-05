@@ -10,6 +10,9 @@ class YouTubeFabricProcessor {
         this.setupEventListeners();
         this.checkSystemStatus();
         this.checkAuthStatus();
+        
+        // Initial validation after everything is set up
+        setTimeout(() => this.validateInput(), 100);
     }
 
     initializeElements() {
@@ -21,9 +24,15 @@ class YouTubeFabricProcessor {
         this.loginBtn = document.getElementById('login-btn');
         this.logoutBtn = document.getElementById('logout-btn');
         
-        // Input elements
+        // Input elements - Universal Content Intelligence Platform
         this.urlInput = document.getElementById('youtube-url');
+        this.transcriptFile = document.getElementById('transcript-file');
+        this.transcriptText = document.getElementById('transcript-text');
         this.processBtn = document.getElementById('process-btn');
+        
+        // Method selection elements
+        this.methodTabs = document.querySelectorAll('.method-tab');
+        this.inputMethods = document.querySelectorAll('.input-method');
         
         // Management elements
         this.managementToggle = document.getElementById('management-toggle');
@@ -32,6 +41,7 @@ class YouTubeFabricProcessor {
         
         // Status elements
         this.statusSection = document.getElementById('status-section');
+        this.progressSection = document.getElementById('progress-section');
         this.statusBadge = document.getElementById('status-badge');
         this.progressFill = document.getElementById('progress-fill');
         this.progressCurrent = document.getElementById('progress-current');
@@ -101,33 +111,69 @@ class YouTubeFabricProcessor {
         // document.getElementById('shutdown-server-btn').addEventListener('click', () => this.shutdownServer());
         // document.getElementById('stop-processing-btn').addEventListener('click', () => this.stopProcessing());
         
-        // URL input validation
-        this.urlInput.addEventListener('input', () => this.validateUrl());
-        this.urlInput.addEventListener('paste', () => {
-            // Delay validation to allow paste to complete
-            setTimeout(() => this.validateUrl(), 100);
-        });
+        // Input validation for all methods
+        if (this.urlInput) {
+            this.urlInput.addEventListener('input', () => this.validateInput());
+            this.urlInput.addEventListener('paste', () => {
+                setTimeout(() => this.validateInput(), 100);
+            });
+        }
+        
+        if (this.transcriptFile) {
+            this.transcriptFile.addEventListener('change', () => this.validateInput());
+        }
+        
+        if (this.transcriptText) {
+            this.transcriptText.addEventListener('input', () => this.validateInput());
+            this.transcriptText.addEventListener('paste', () => {
+                setTimeout(() => this.validateInput(), 100);
+            });
+        }
+        
+        // Method tab switching
+        if (this.methodTabs) {
+            this.methodTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    this.switchInputMethod(tab.dataset.method);
+                });
+            });
+        }
     }
 
-    validateUrl() {
-        const url = this.urlInput.value.trim();
-        const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+    validateInput() {
+        const activeMethod = this.getActiveInputMethod();
+        let hasValidContent = false;
+        let buttonText = 'Begin Deep Analysis';
         
-        if (url === '') {
-            this.processBtn.disabled = false;
-            this.processBtn.textContent = 'Process Video';
-            return;
+        switch (activeMethod) {
+            case 'upload':
+                hasValidContent = this.transcriptFile && this.transcriptFile.files.length > 0;
+                buttonText = hasValidContent ? 'Begin Deep Analysis' : 'Upload File First';
+                break;
+            case 'paste':
+                const textContent = this.transcriptText ? this.transcriptText.value.trim() : '';
+                hasValidContent = textContent.length > 0;
+                buttonText = hasValidContent ? 'Begin Deep Analysis' : 'Paste Content First';
+                break;
+            case 'youtube':
+                const url = this.urlInput ? this.urlInput.value.trim() : '';
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+                hasValidContent = url && youtubeRegex.test(url);
+                buttonText = hasValidContent ? 'Process YouTube Video' : 'Enter Valid YouTube URL';
+                break;
         }
         
-        if (youtubeRegex.test(url)) {
-            this.processBtn.disabled = false;
-            this.processBtn.textContent = 'Process Video';
-            this.urlInput.style.borderColor = '#27ae60';
-        } else {
-            this.processBtn.disabled = true;
-            this.processBtn.textContent = 'Invalid YouTube URL';
-            this.urlInput.style.borderColor = '#e74c3c';
+        if (this.processBtn) {
+            this.processBtn.disabled = !hasValidContent;
+            this.processBtn.textContent = buttonText;
         }
+    }
+    
+    getActiveInputMethod() {
+        const activeTab = document.querySelector('.method-tab.active');
+        const method = activeTab ? activeTab.dataset.method : 'upload';
+        // Only support upload and paste in cloud deployment
+        return ['upload', 'paste'].includes(method) ? method : 'upload';
     }
 
     async checkSystemStatus() {
@@ -151,10 +197,57 @@ class YouTubeFabricProcessor {
     async startProcessing() {
         if (this.isProcessing) return;
         
-        const url = this.urlInput.value.trim();
-        if (!url) {
-            alert('Please enter a YouTube URL');
-            return;
+        const activeMethod = this.getActiveInputMethod();
+        let payload = null;
+        let contentSource = '';
+        
+        // Prepare payload based on active input method
+        switch (activeMethod) {
+            case 'upload':
+                if (!this.transcriptFile || this.transcriptFile.files.length === 0) {
+                    alert('Please upload a transcript file first');
+                    return;
+                }
+                const file = this.transcriptFile.files[0];
+                const fileContent = await this.readFileContent(file);
+                payload = {
+                    contentType: 'transcript',
+                    transcript: fileContent,
+                    filename: file.name
+                };
+                contentSource = `uploaded file: ${file.name}`;
+                break;
+                
+            case 'paste':
+                const textContent = this.transcriptText ? this.transcriptText.value.trim() : '';
+                if (!textContent) {
+                    alert('Please paste your content first');
+                    return;
+                }
+                payload = {
+                    contentType: 'transcript',
+                    transcript: textContent
+                };
+                contentSource = 'pasted content';
+                break;
+                
+            case 'youtube':
+                const url = this.urlInput ? this.urlInput.value.trim() : '';
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+                if (!url || !youtubeRegex.test(url)) {
+                    alert('Please enter a valid YouTube URL');
+                    return;
+                }
+                payload = {
+                    contentType: 'youtube',
+                    youtubeUrl: url
+                };
+                contentSource = `YouTube: ${url}`;
+                break;
+                
+            default:
+                alert('Please select a valid input method');
+                return;
         }
 
         this.isProcessing = true;
@@ -162,17 +255,17 @@ class YouTubeFabricProcessor {
         this.processBtn.textContent = 'Starting...';
         
         this.hideAllSections();
-        this.showSection(this.statusSection);
-        this.updateStatusBadge('starting', 'Starting');
+        this.showSection(this.progressSection);
+        this.updateStatusBadge('starting', `Starting analysis of ${contentSource}`);
         
         try {
-            // Start processing
+            // Start processing with appropriate payload
             const response = await fetch('/api/process', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ youtubeUrl: url })
+                body: JSON.stringify(payload)
             });
             
             const data = await response.json();
@@ -183,11 +276,35 @@ class YouTubeFabricProcessor {
             
             this.currentProcessId = data.processId;
             this.setupWebSocket();
-            this.updateStatusBadge('processing', 'Processing');
+            this.updateStatusBadge('processing', 'Processing with Fabric patterns');
             
         } catch (error) {
             this.showError(error.message);
         }
+    }
+    
+    async readFileContent(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (e) => reject(new Error('Failed to read file'));
+            reader.readAsText(file);
+        });
+    }
+    
+    switchInputMethod(method) {
+        // Update tab active states
+        this.methodTabs.forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.method === method);
+        });
+        
+        // Update input method visibility
+        this.inputMethods.forEach(inputMethod => {
+            inputMethod.classList.toggle('active', inputMethod.id === `method-${method}`);
+        });
+        
+        // Re-validate input for new method
+        this.validateInput();
     }
 
     setupWebSocket() {
@@ -246,13 +363,17 @@ class YouTubeFabricProcessor {
     }
 
     updateProgress(data) {
-        const percentage = (data.current / data.total) * 100;
-        this.progressFill.style.width = `${percentage}%`;
-        this.progressCurrent.textContent = data.current;
+        // Update progress bar if elements exist
+        if (this.progressFill) {
+            const percentage = (data.current / data.total) * 100;
+            this.progressFill.style.width = `${percentage}%`;
+        }
+        if (this.progressCurrent) {
+            this.progressCurrent.textContent = data.current;
+        }
         
-        // Update current pattern info
-        this.currentPatternName.textContent = data.pattern.replace(/_/g, ' ');
-        this.currentPatternDescription.textContent = data.description;
+        // Pattern info is displayed through visual highlighting instead of text updates
+        // This prevents overwriting the static pattern names in the UI
         
         // Update pattern visual indicators
         this.updatePatternIndicators(data.pattern, data.phase);
@@ -260,7 +381,7 @@ class YouTubeFabricProcessor {
 
     updatePatternIndicators(currentPattern, currentPhase) {
         // Reset all patterns
-        document.querySelectorAll('.pattern-item').forEach(item => {
+        document.querySelectorAll('.pattern-organism').forEach(item => {
             item.classList.remove('active', 'completed');
         });
         
@@ -289,18 +410,31 @@ class YouTubeFabricProcessor {
         this.isProcessing = false;
         this.updateStatusBadge('completed', 'Completed');
         
-        // Update final progress
-        this.progressFill.style.width = '100%';
-        this.progressCurrent.textContent = data.total;
+        // Update final progress if elements exist
+        if (this.progressFill) {
+            this.progressFill.style.width = '100%';
+        }
+        if (this.progressCurrent) {
+            this.progressCurrent.textContent = data.total;
+        }
         
         // Mark all patterns as completed
-        document.querySelectorAll('.pattern-item').forEach(item => {
+        document.querySelectorAll('.pattern-organism').forEach(item => {
             item.classList.remove('active');
             item.classList.add('completed');
         });
         
-        // Show document laboratory section instead of results section
-        this.showSection(this.documentLaboratorySection);
+        // Show simple results section with download access
+        this.showSection(this.resultsSection);
+        
+        // Update results count and enable download
+        if (this.resultsCount) {
+            this.resultsCount.textContent = '13';
+        }
+        if (this.downloadBtn) {
+            this.downloadBtn.disabled = false;
+            this.downloadBtn.textContent = 'Download Results ZIP';
+        }
         
         // Add simulation notice if applicable
         if (data.simulated) {
@@ -308,16 +442,15 @@ class YouTubeFabricProcessor {
             notice.className = 'simulation-notice';
             notice.style.cssText = 'background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 14px;';
             notice.textContent = 'Note: This was a simulation run. Install Fabric CLI for actual processing: go install github.com/danielmiessler/fabric@latest';
-            this.documentLaboratorySection.insertBefore(notice, this.documentLaboratorySection.firstChild);
+            if (this.resultsSection) {
+                this.resultsSection.insertBefore(notice, this.resultsSection.firstChild);
+            }
         }
         
         // Close WebSocket
         if (this.ws) {
             this.ws.close();
         }
-
-        // Trigger document opportunity analysis
-        this.analyzeDocumentOpportunities();
     }
 
     
@@ -337,11 +470,16 @@ class YouTubeFabricProcessor {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `youtube_enhanced_analysis_${this.currentProcessId.substring(0, 8)}.zip`;
+            a.download = `content_analysis_${this.currentProcessId.substring(0, 8)}.zip`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
+            
+            // Show success notification
+            if (typeof showNotification === 'function') {
+                showNotification('Results downloaded successfully!', 'success');
+            }
             
         } catch (error) {
             alert('Download failed: ' + error.message);
@@ -657,6 +795,77 @@ class YouTubeFabricProcessor {
                 errorDiv.parentNode.removeChild(errorDiv);
             }
         }, 8000);
+    }
+    
+    // Utility methods for Universal Content Intelligence Platform
+    hideAllSections() {
+        const sections = [
+            this.statusSection,
+            this.progressSection,
+            this.resultsSection,
+            this.documentLaboratorySection,
+            this.errorSection
+        ];
+        
+        sections.forEach(section => {
+            if (section) {
+                section.style.display = 'none';
+                section.classList.add('hidden');
+            }
+        });
+    }
+    
+    showSection(section) {
+        if (section) {
+            section.style.display = 'block';
+            section.classList.remove('hidden');
+        }
+    }
+    
+    updateStatusBadge(status, message) {
+        if (this.statusBadge) {
+            this.statusBadge.textContent = message;
+            this.statusBadge.className = `status-badge ${status}`;
+        }
+    }
+    
+    showError(message) {
+        this.isProcessing = false;
+        if (this.processBtn) {
+            this.processBtn.disabled = false;
+            this.processBtn.textContent = 'Begin Deep Analysis';
+        }
+        
+        this.hideAllSections();
+        if (this.errorSection && this.errorMessage) {
+            this.showSection(this.errorSection);
+            this.errorMessage.textContent = message;
+        } else {
+            // Fallback to alert if error section not available
+            alert('Error: ' + message);
+        }
+        
+        // Close WebSocket if open
+        if (this.ws) {
+            this.ws.close();
+        }
+    }
+    
+    resetInterface() {
+        this.isProcessing = false;
+        this.currentProcessId = null;
+        
+        if (this.processBtn) {
+            this.processBtn.disabled = false;
+        }
+        
+        this.hideAllSections();
+        this.validateInput(); // Re-validate current input
+        
+        // Close WebSocket if open
+        if (this.ws) {
+            this.ws.close();
+        }
     }
 }
 

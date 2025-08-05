@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Content Intelligence Platform - Coral Reef Laboratory</title>
+    <title>Fabric Studio - Text Analysis Made Simple</title>
     <style>
         * {
             margin: 0;
@@ -1917,8 +1917,8 @@
     
     <div class="container">
         <header class="header">
-            <h1>Universal Content Intelligence Platform</h1>
-            <p>Dive deep into the coral reef laboratory where any content transforms into vibrant insights through 13 specialized fabric patterns</p>
+            <h1>Fabric Studio</h1>
+            <p>Powered by Daniel Miessler's Fabric framework, this studio makes advanced text analysis accessible to everyone. Transform dense documents into 13 distinct insight files with just a few clicks.</p>
         </header>
 
         <!-- OAuth2 Authentication Section (Hidden by default) -->
@@ -1977,7 +1977,6 @@
                 <div class="method-tabs">
                     <button id="tab-upload" class="method-tab active" data-method="upload">📁 Upload File</button>
                     <button id="tab-paste" class="method-tab" data-method="paste">📝 Paste Text</button>
-                    <button id="tab-youtube" class="method-tab" data-method="youtube">📺 YouTube URL</button>
                 </div>
             </div>
 
@@ -2024,29 +2023,6 @@
                 </div>
             </div>
 
-            <!-- YouTube URL Method (Optional) -->
-            <div id="method-youtube" class="input-method">
-                <div class="input-group">
-                    <label for="youtube-url" class="input-label">YouTube Video URL (Optional Feature)</label>
-                    <input 
-                        type="url" 
-                        id="youtube-url" 
-                        class="url-input" 
-                        placeholder="https://www.youtube.com/watch?v=..."
-                        autocomplete="new-password"
-                        name="youtube-video-url"
-                        data-lpignore="true"
-                        data-form-type=""
-                    />
-                    <div class="reef-info-note">
-                        <div class="info-icon">⚠️</div>
-                        <div class="info-content">
-                            <strong>YouTube Processing Note:</strong>
-                            <p>YouTube URL processing requires authentication and may have limitations. For best results, download the transcript manually and use the upload/paste options above.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Content Preview -->
             <div id="content-preview" class="content-preview" style="display: none;">
@@ -2070,19 +2046,19 @@
                     </ul>
                     <p style="color: rgba(255, 255, 255, 0.9);"><strong>Content density matters more than duration</strong> - a dense 30-minute lecture may process like a 90-minute casual conversation.</p>
                     <div style="margin-top: 12px; padding: 12px; background: rgba(32, 178, 170, 0.15); border: 1px solid rgba(32, 178, 170, 0.3); border-radius: 8px; color: rgba(255, 255, 255, 0.95);">
-                        <strong>🚀 The Magic:</strong> Upload any transcript, paste your content, or use YouTube URLs to get professional-grade analysis from 13 specialized Fabric patterns - the same patterns used by thousands of knowledge workers worldwide!
+                        <strong>🚀 The Magic:</strong> Upload any transcript or paste your content to get professional-grade analysis from 13 specialized Fabric patterns - the same patterns used by thousands of knowledge workers worldwide!
                     </div>
                 </div>
             </div>
 
-            <button id="process-btn" class="bio-button reef-reflection" disabled>Begin Deep Analysis</button>
+            <button id="process-btn" class="bio-button reef-reflection" disabled>Start Analysis</button>
         </main>
 
         <div id="progress-section" class="progress-section">
             <div class="coral-card">
                 <div class="progress-header">
-                    <h3>Exploring the Reef Depths</h3>
-                    <p>Your content is being processed through our coral reef laboratory using 13 specialized patterns across 4 evolutionary phases</p>
+                    <h3>Analysis in Progress</h3>
+                    <p>Your content is being analyzed through Fabric Studio using 13 specialized patterns across 4 processing phases</p>
                 </div>
 
                 <div class="reef-phases">
@@ -2180,9 +2156,9 @@
         <div id="results-section" class="results-section">
             <div class="coral-card">
                 <div class="treasure-card">
-                    <h3 class="treasure-title">Reef Exploration Complete!</h3>
-                    <p class="treasure-description">Your YouTube video has been thoroughly explored through our coral reef laboratory. All 13 fabric patterns have been processed and are ready for harvest.</p>
-                    <a href="#" id="download-btn" class="harvest-button reef-reflection">Harvest Results</a>
+                    <h3 class="treasure-title">Analysis Complete!</h3>
+                    <p class="treasure-description">Your content has been thoroughly analyzed through Fabric Studio. All 13 fabric patterns have been processed and are ready for download.</p>
+                    <a href="#" id="download-btn" class="harvest-button reef-reflection">Download Insights</a>
                 </div>
             </div>
         </div>
@@ -2202,7 +2178,7 @@
         <div id="document-laboratory-section" class="progress-section">
             <div class="coral-card coral-card-elevated">
                 <div class="progress-header">
-                    <h3>🧬 Document Laboratory Detected Advanced Content</h3>
+                    <h3>🧬 Document Studio Detected Advanced Content</h3>
                     <p>Your content analysis reveals opportunities for professional document generation across 4 specialized tiers</p>
                 </div>
 
@@ -2272,7 +2248,7 @@
                 <!-- Document Generation Progress -->
                 <div id="document-generation-progress" class="document-generation-progress" style="display: none;">
                     <div class="progress-header">
-                        <h4>🧬 Document Laboratory Active</h4>
+                        <h4>🧬 Document Studio Active</h4>
                         <p>Generating professional documents from your content analysis...</p>
                     </div>
                     
@@ -2292,7 +2268,7 @@
                 <!-- Enhanced Results -->
                 <div id="document-results" class="document-results" style="display: none;">
                     <div class="results-header">
-                        <h4>🧬 Document Laboratory Complete</h4>
+                        <h4>🧬 Document Studio Complete</h4>
                         <p>Professional document suite generated successfully</p>
                     </div>
                     
@@ -2304,7 +2280,7 @@
                     
                     <div class="enhanced-download">
                         <a href="#" id="enhanced-download-btn" class="harvest-button reef-reflection">
-                            Harvest Enhanced Results (Patterns + Documents)
+                            Download Enhanced Results (Patterns + Documents)
                         </a>
                     </div>
                 </div>
@@ -2319,7 +2295,7 @@
     <div id="lab-modal" class="lab-depths">
         <div class="laboratory">
             <div class="lab-header">
-                <h2 class="lab-title">Reef Laboratory Console</h2>
+                <h2 class="lab-title">Fabric Studio Console</h2>
                 <button id="lab-exit" class="lab-exit">×</button>
             </div>
             
@@ -2446,7 +2422,6 @@
     <script>
         // DOM Elements
         const processBtn = document.getElementById('process-btn');
-        const urlInput = document.getElementById('youtube-url');
         const transcriptFile = document.getElementById('transcript-file');
         const transcriptText = document.getElementById('transcript-text');
         const dropzone = document.getElementById('dropzone');
@@ -2496,7 +2471,7 @@
             transcriptText.addEventListener('paste', handleTextPaste);
 
             // YouTube URL input (only when that method is active)
-            urlInput.addEventListener('input', handleUrlInput);
+            // urlInput.addEventListener('input', handleUrlInput); // Removed - YouTube URL not supported in cloud deployment
 
             // Initialize with upload method active
             switchInputMethod('upload');
@@ -2516,16 +2491,8 @@
                 container.classList.toggle('active', container.id === `method-${method}`);
             });
 
-            // Show/hide auth section based on method
-            if (method === 'youtube') {
-                authSection.style.display = 'block';
-                // Reinitialize auth if needed
-                if (typeof checkAuthStatus === 'function') {
-                    checkAuthStatus();
-                }
-            } else {
-                authSection.style.display = 'none';
-            }
+            // Hide auth section (YouTube not supported in cloud deployment)
+            authSection.style.display = 'none';
 
             // Clear content and reset
             currentContent = '';
@@ -2636,10 +2603,7 @@
             }, 100);
         }
 
-        function handleUrlInput(e) {
-            const url = e.target.value.trim();
-            updateProcessButton();
-        }
+        // handleUrlInput removed - YouTube URL not supported in cloud deployment
 
         function updateTextStats() {
             if (currentMethod !== 'paste') return;
@@ -2691,16 +2655,12 @@
                 case 'paste':
                     hasContent = currentContent && currentContent.trim().length > 50;
                     break;
-                case 'youtube':
-                    const url = urlInput.value.trim();
-                    hasContent = url && isValidYouTubeUrl(url);
-                    break;
             }
 
             processBtn.disabled = !hasContent || isProcessing;
             
             if (hasContent && !isProcessing) {
-                processBtn.textContent = 'Begin Deep Analysis';
+                processBtn.textContent = 'Start Analysis';
                 processBtn.classList.remove('bio-button-disabled');
             } else if (isProcessing) {
                 processBtn.textContent = 'Processing...';
@@ -2716,7 +2676,7 @@
         const apiKeyModal = document.getElementById('api-key-modal');
         const apiKeyExit = document.getElementById('api-key-exit');
 
-        // Document Laboratory Elements
+        // Document Studio Elements
         const documentLaboratorySection = document.getElementById('document-laboratory-section');
         const documentOpportunities = document.getElementById('document-opportunities');
         const documentGenerationProgress = document.getElementById('document-generation-progress');
@@ -2730,13 +2690,16 @@
         let currentProcessId = null;
         let socket = null;
 
-        // Document Laboratory state
+        // Document Studio state
         let documentOpportunityData = null;
         let selectedDocuments = [];
         let isGeneratingDocuments = false;
 
-        // Initialize WebSocket connection
+        // WebSocket connection handled by app.js Universal Content Intelligence Platform
         function initializeWebSocket() {
+            // Disabled - WebSocket handled by app.js to prevent duplicate connections
+            return;
+            
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             const wsUrl = `${protocol}//${window.location.host}`;
             
@@ -2801,10 +2764,10 @@
 
         // Event Listeners
         processBtn.addEventListener('click', beginDeepAnalysis);
-        urlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') beginDeepAnalysis();
-        });
-        downloadBtn.addEventListener('click', harvestResults);
+        // urlInput.addEventListener('keypress', (e) => {
+        //     if (e.key === 'Enter') beginDeepAnalysis();
+        // }); // Removed - YouTube URL not supported in cloud deployment
+        // downloadBtn.addEventListener('click', harvestResults); // Removed - handled by app.js
         labPortal.addEventListener('click', openLaboratory);
         labExit.addEventListener('click', closeLaboratory);
         labModal.addEventListener('click', (e) => {
@@ -2815,7 +2778,7 @@
             if (e.target === apiKeyModal) closeApiKeyModal();
         });
 
-        // Document Laboratory Event Listeners
+        // Document Studio Event Listeners
         selectAllDocumentsBtn.addEventListener('click', selectAllRecommendedDocuments);
         generateDocumentsBtn.addEventListener('click', generateSelectedDocuments);
         enhancedDownloadBtn.addEventListener('click', harvestEnhancedResults);
@@ -2832,19 +2795,16 @@
             });
         });
 
-        // Processing functions
+        // Processing functions - Delegate to Universal Content Intelligence Platform
         async function beginDeepAnalysis() {
-            const url = urlInput.value.trim();
+            // Use the Universal Content Intelligence Platform handler from app.js
+            if (window.app && window.app.startProcessing) {
+                return window.app.startProcessing();
+            }
             
-            if (!url) {
-                showNotification('Please enter a YouTube URL to begin reef exploration', 'error');
-                return;
-            }
-
-            if (!isValidYouTubeUrl(url)) {
-                showNotification('Please enter a valid YouTube URL for proper reef analysis', 'error');
-                return;
-            }
+            // This function is now handled by the Universal Content Intelligence Platform
+            showNotification('Universal Content Intelligence Platform loading...', 'info');
+            return;
 
             if (isProcessing) return;
 
@@ -2853,8 +2813,8 @@
 
             // Update UI
             processBtn.disabled = true;
-            processBtn.textContent = 'Diving Deep...';
-            urlInput.disabled = true;
+            processBtn.textContent = 'Analyzing...';
+            // urlInput.disabled = true; // Removed - YouTube URL not supported
 
             // Show progress section
             progressSection.classList.add('visible');
@@ -2876,7 +2836,7 @@
                 
                 if (response.ok) {
                     currentProcessId = data.processId;
-                    showNotification('Deep analysis initiated! Monitoring reef progress...', 'success');
+                    showNotification('Analysis initiated! Processing your content...', 'success');
                 } else {
                     throw new Error(data.message || data.error || 'Failed to start processing');
                 }
@@ -2921,16 +2881,15 @@
             // Show results section
             resultsSection.classList.add('visible');
             
-            // Update download link
-            downloadBtn.href = `/api/download/${processId}`;
+            // Download handled by app.js click handler (no href needed)
             
             // Reset button
             processBtn.disabled = false;
-            processBtn.textContent = 'Begin Deep Analysis';
-            urlInput.disabled = false;
+            processBtn.textContent = 'Start Analysis';
+            // urlInput.disabled = false; // Removed - YouTube URL not supported
             isProcessing = false;
 
-            showNotification('Reef exploration complete! All patterns have been successfully processed.', 'success');
+            showNotification('Analysis complete! All patterns have been successfully processed.', 'success');
 
             // Document opportunities analysis handled server-side
         }
@@ -2942,20 +2901,16 @@
             isProcessing = false;
             updateProcessButton();
             
-            // Re-enable inputs based on current method
-            if (currentMethod === 'youtube') {
-                urlInput.disabled = false;
-            } else {
-                transcriptText.disabled = false;
-                transcriptFile.disabled = false;
-            }
+            // Re-enable inputs (YouTube not supported in cloud deployment)
+            transcriptText.disabled = false;
+            transcriptFile.disabled = false;
         }
 
         function harvestResults() {
             if (currentProcessId) {
                 // Trigger download
                 window.location.href = `/api/download/${currentProcessId}`;
-                showNotification('Harvesting your reef exploration results...', 'info');
+                showNotification('Downloading your analysis results...', 'info');
             }
         }
 
@@ -2971,7 +2926,7 @@
             });
         }
 
-        // Laboratory functions
+        // Studio functions
         function openLaboratory() {
             labModal.classList.add('visible');
         }
@@ -3021,14 +2976,14 @@
         }
 
         function cleanReef() {
-            if (confirm('Clean old specimens from the reef laboratory?')) {
+            if (confirm('Clean old files from Fabric Studio?')) {
                 fetch('/api/management/cleanup-old', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        showNotification(`Reef cleaning complete: ${data.message}`, 'success');
+                        showNotification(`File cleanup complete: ${data.message}`, 'success');
                     })
                     .catch(error => {
-                        showNotification('Reef cleaning failed', 'error');
+                        showNotification('File cleanup failed', 'error');
                     });
             }
         }
@@ -3046,25 +3001,25 @@
         }
 
         function resetLaboratory() {
-            if (confirm('Reset the entire laboratory? This will clear all data and stop all processes.')) {
+            if (confirm('Reset Fabric Studio? This will clear all data and stop all processes.')) {
                 fetch('/api/management/clear-all-data', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        showNotification(`Laboratory reset complete: ${data.message}`, 'success');
+                        showNotification(`Studio reset complete: ${data.message}`, 'success');
                         resetReefState(); // Reset UI state
                     })
                     .catch(error => {
-                        showNotification('Laboratory reset failed', 'error');
+                        showNotification('Studio reset failed', 'error');
                     });
             }
         }
 
         function restartReef() {
-            if (confirm('Restart the reef system? Active explorations will be interrupted.')) {
+            if (confirm('Restart the server? Active processes will be interrupted.')) {
                 fetch('/api/management/restart', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        showNotification('Reef system restart initiated', 'warning');
+                        showNotification('Server restart initiated', 'warning');
                     })
                     .catch(error => {
                         showNotification('Restart failed', 'error');
@@ -3073,11 +3028,11 @@
         }
 
         function shutdownLab() {
-            if (confirm('Shutdown the reef laboratory? This will halt all operations.')) {
+            if (confirm('Shutdown Fabric Studio? This will halt all operations.')) {
                 fetch('/api/management/shutdown', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        showNotification('Laboratory shutdown initiated', 'warning');
+                        showNotification('Studio shutdown initiated', 'warning');
                     })
                     .catch(error => {
                         showNotification('Shutdown failed', 'error');
@@ -3251,10 +3206,7 @@
         }
 
         // Utility functions
-        function isValidYouTubeUrl(url) {
-            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
-            return youtubeRegex.test(url);
-        }
+        // isValidYouTubeUrl removed - YouTube URL not supported in cloud deployment
 
         function showNotification(message, type) {
             // Create notification element
@@ -3307,14 +3259,14 @@
         `;
         document.head.appendChild(style);
 
-        // Handle escape key for laboratory
+        // Handle escape key for studio console
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeLaboratory();
             }
         });
 
-        // Document Laboratory Functions
+        // Document Studio Functions
         
         // Analyze content for document opportunities
         async function analyzeDocumentOpportunities(processId) {
@@ -3341,7 +3293,7 @@
 
         // Show document opportunities in the UI
         function showDocumentOpportunities(data) {
-            // Show document laboratory section
+            // Show document studio section
             documentLaboratorySection.classList.add('visible');
             
             // Hide other sub-sections initially
@@ -3358,7 +3310,7 @@
             // Populate document tiers
             populateDocumentTiers(data.opportunities);
             
-            showNotification(`🧬 Document Laboratory discovered ${data.opportunities.length} professional document opportunities!`, 'info');
+            showNotification(`🧬 Document Studio discovered ${data.opportunities.length} professional document opportunities!`, 'info');
         }
 
         // Populate document tiers with opportunities
@@ -3495,7 +3447,7 @@
             document.getElementById('current-document-title').textContent = 'Initializing document generation...';
             document.getElementById('generation-progress-fill').style.width = '0%';
             
-            showNotification(`🧬 Document Laboratory activated! Generating ${data.documentCount} professional documents...`, 'info');
+            showNotification(`🧬 Document Studio activated! Generating ${data.documentCount} professional documents...`, 'info');
         }
 
         // Update document generation progress (WebSocket handler)
@@ -3532,7 +3484,7 @@
             // Update enhanced download link
             enhancedDownloadBtn.href = `/api/download/${currentProcessId}`;
             
-            showNotification(`🧬 Document Laboratory complete! Generated ${data.documentsGenerated.length} professional documents.`, 'success');
+            showNotification(`🧬 Document Studio complete! Generated ${data.documentsGenerated.length} professional documents.`, 'success');
         }
 
         // Create HTML for a generated document
@@ -3573,11 +3525,11 @@
             documentOpportunities.style.display = 'block';
         }
 
-        // Harvest enhanced results (with documents)
+        // Download enhanced results (with documents)
         function harvestEnhancedResults() {
             if (currentProcessId) {
                 window.location.href = `/api/download/${currentProcessId}`;
-                showNotification('Harvesting enhanced results with professional documents...', 'info');
+                showNotification('Downloading enhanced results with professional documents...', 'info');
             }
         }
 

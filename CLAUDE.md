@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Universal Content Intelligence Platform is a Node.js web application that transforms any text content into comprehensive insights using 13 fabric patterns. Originally designed for YouTube videos, it has evolved to process diverse content types including meeting transcripts, podcast notes, research papers, and educational materials. It achieves 70-second processing times through a revolutionary "transcript-first" architecture.
+**Fabric Studio** is a Node.js web application that transforms any text content into comprehensive insights using 13 fabric patterns from Daniel Miessler's Fabric framework. Originally designed for YouTube videos, it has evolved to process diverse content types including meeting transcripts, podcast notes, research papers, and educational materials. It achieves 70-second processing times through a revolutionary "transcript-first" architecture.
 
-**STRATEGIC EVOLUTION COMPLETE**: Phase 1 Implementation completed - transformed from YouTube-specific tool to Universal Content Intelligence Platform. The system now supports both transcript upload/paste functionality and YouTube processing (preserved on `youtube-local` branch for local development). See `STRATEGIC-ARCHITECTURE-DECISION.md` for complete strategic analysis.
+**STRATEGIC EVOLUTION COMPLETE**: Phase 1 Implementation completed - transformed from YouTube-specific tool to **Fabric Studio**. The cloud-deployable version supports transcript upload/paste functionality optimized for Railway deployment, while YouTube processing is preserved on `youtube-local` branch for local development. See `STRATEGIC-ARCHITECTURE-DECISION.md` for complete strategic analysis.
 
 ## Development Commands
 

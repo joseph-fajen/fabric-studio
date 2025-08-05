@@ -1173,27 +1173,27 @@ function createTranscriptIndexContent(metadata) {
   indexContent += `## Analysis Files Generated\n\n`;
   indexContent += `The following analysis files have been generated using 13 specialized fabric patterns organized into 4 phases:\n\n`;
   
-  // Add phase descriptions
-  indexContent += `### Phase 1: Core Analysis\n`;
-  indexContent += `- **01_youtube_summary.txt** - Comprehensive summary of main points\n`;
-  indexContent += `- **02_extract_wisdom.txt** - Key insights and wisdom extracted\n`;
-  indexContent += `- **03_create_summary.txt** - Structured executive summary\n\n`;
+  // Group patterns by phase and generate accurate file list
+  const phases = {};
+  FABRIC_PATTERNS.forEach(pattern => {
+    if (!phases[pattern.phase]) {
+      phases[pattern.phase] = [];
+    }
+    phases[pattern.phase].push(pattern);
+  });
   
-  indexContent += `### Phase 2: Structured Extraction\n`;
-  indexContent += `- **04_extract_ideas.txt** - Main ideas and concepts\n`;
-  indexContent += `- **05_extract_questions.txt** - Key questions and inquiries\n`;
-  indexContent += `- **06_extract_book_ideas.txt** - Book-worthy ideas and themes\n`;
-  indexContent += `- **07_extract_references.txt** - Referenced materials and sources\n\n`;
-  
-  indexContent += `### Phase 3: Practical Applications\n`;
-  indexContent += `- **08_create_quiz.txt** - Comprehension quiz questions\n`;
-  indexContent += `- **09_analyze_paper.txt** - Academic analysis framework\n`;
-  indexContent += `- **10_create_flashcards.txt** - Study flashcards\n`;
-  indexContent += `- **11_write_essay.txt** - Essay analysis and structure\n\n`;
-  
-  indexContent += `### Phase 4: Advanced Insights\n`;
-  indexContent += `- **12_extract_sponsors.txt** - Sponsor and brand analysis\n`;
-  indexContent += `- **13_analyze_claims.txt** - Fact-checking and claim analysis\n\n`;
+  // Generate phase-organized file list with correct filenames
+  Object.keys(phases).sort().forEach(phase => {
+    const phaseNum = parseInt(phase);
+    const phaseDesc = PHASE_DESCRIPTIONS[phaseNum];
+    indexContent += `### Phase ${phaseNum}: ${phaseDesc}\n`;
+    
+    phases[phase].forEach(pattern => {
+      indexContent += `- **${pattern.filename}** - ${pattern.description}\n`;
+    });
+    
+    indexContent += `\n`;
+  });
   
   indexContent += `## Download\n\n`;
   indexContent += `All files are packaged in **content_analysis.zip** for easy download and sharing.\n\n`;
