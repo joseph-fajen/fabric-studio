@@ -36,18 +36,18 @@ Document specific next steps and priorities:
 - Documentation gaps to address
 
 ### Step 4: Handoff Summary
-Create comprehensive transition document in session-summaries folder:
+Create comprehensive transition document in docs/sessions folder:
 ```bash
-# Create session-summaries folder if it doesn't exist
-mkdir -p session-summaries
+# Create docs/sessions folder if it doesn't exist
+mkdir -p docs/sessions
 
 # Create session summary with current date and session number
 DATE=$(date +%Y-%m-%d)
 SESSION_NUM=1
-while [ -f "session-summaries/SESSION-SUMMARY-${DATE}-$(printf "%02d" $SESSION_NUM).md" ]; do
+while [ -f "docs/sessions/SESSION-SUMMARY-${DATE}-$(printf "%02d" $SESSION_NUM).md" ]; do
     SESSION_NUM=$((SESSION_NUM + 1))
 done
-FILENAME="session-summaries/SESSION-SUMMARY-${DATE}-$(printf "%02d" $SESSION_NUM).md"
+FILENAME="docs/sessions/SESSION-SUMMARY-${DATE}-$(printf "%02d" $SESSION_NUM).md"
 
 cat > "$FILENAME" << 'EOF'
 # Session Summary - ${DATE} (Session $(printf "%02d" $SESSION_NUM))
