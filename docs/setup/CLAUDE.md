@@ -72,19 +72,30 @@ npm run setup                   # Install all dependencies
 
 #### Universal Platform Core
 - `server.js` - Main Express server with WebSocket support and dual processing paths
-- `fabric-transcript-integration.js` - **Primary processing engine** (universal content processing)
-- `transcript-format-parser.js` - **Universal format parser** (VTT, SRT, speaker-labeled, timestamped, plain text)
-- `fabric-patterns.js` - Defines 13 fabric patterns in 4 phases
+- `src/core/fabric-transcript-integration.js` - **Primary processing engine** (universal content processing)
+- `src/core/transcript-format-parser.js` - **Universal format parser** (VTT, SRT, speaker-labeled, timestamped, plain text)
+- `src/core/fabric-patterns.js` - Defines 13 fabric patterns in 4 phases
+- `src/utils/server-manager.js` - Enhanced server startup and management
+- `src/auth/oauth2-routes.js` - OAuth2 authentication routes
+- `src/metadata/youtube-metadata.js` - Video metadata extraction and processing
 - `public/` - Universal web interface with transcript upload and real-time progress tracking
 
 #### YouTube-Specific (youtube-local branch and youtube-processor/ directory)
-- `youtube-processor/transcript-downloader.js` - Robust YouTube transcript extraction with 4-tier fallback system
-- `youtube-transcript-api.js` - YouTube Data API v3 integration for official transcript access  
+- `src/transcript/transcript-downloader.js` - Robust YouTube transcript extraction with 4-tier fallback system
+- `src/transcript/youtube-transcript-api.js` - YouTube Data API v3 integration for official transcript access  
+- `youtube-processor/transcript-downloader.js` - Standalone YouTube transcript extraction module
 - `youtube-processor/youtube-metadata.js` - Video metadata extraction and folder naming
 - `youtube-processor/oauth2-routes.js` - YouTube OAuth2 authentication for local development
 
-### Legacy/Unused Files
-- `fabric-integration.js` - Original sequential processing (backup only)
+#### Configuration and Scripts
+- `config/` - Configuration files and templates
+- `scripts/` - Utility scripts for setup and management
+- `tests/` - Test files and validation scripts
+- `docs/` - Documentation organized by category
+
+### Legacy/Historical Files
+- `archive/legacy/fabric-integration.js` - Original sequential processing (backup only)
+- `archive/` - Design iterations and development history
 
 ## Processing Architecture
 

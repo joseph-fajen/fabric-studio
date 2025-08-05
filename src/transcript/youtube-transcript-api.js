@@ -7,7 +7,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const https = require('https');
 const http = require('http');
-const oauth2Manager = require('./oauth2-config');
+const oauth2Manager = require('../auth/oauth2-config');
 
 const execAsync = promisify(exec);
 

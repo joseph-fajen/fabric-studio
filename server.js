@@ -11,13 +11,13 @@ const archiver = require('archiver');
 const { v4: uuidv4 } = require('uuid');
 
 // Import server manager
-const ServerManager = require('./server-manager');
+const ServerManager = require('./src/utils/server-manager');
 
 // Import our modules
-const FabricTranscriptIntegration = require('./fabric-transcript-integration');
-const { FABRIC_PATTERNS, PHASE_DESCRIPTIONS } = require('./fabric-patterns');
-const YouTubeMetadata = require('./youtube-metadata');
-const oauth2Routes = require('./oauth2-routes');
+const FabricTranscriptIntegration = require('./src/core/fabric-transcript-integration');
+const { FABRIC_PATTERNS, PHASE_DESCRIPTIONS } = require('./src/core/fabric-patterns');
+const YouTubeMetadata = require('./src/metadata/youtube-metadata');
+const oauth2Routes = require('./src/auth/oauth2-routes');
 // const DocumentLaboratory = require('./document-laboratory'); // Commented out for main branch deployment
 
 const app = express();

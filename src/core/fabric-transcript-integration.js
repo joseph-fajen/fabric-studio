@@ -5,7 +5,7 @@ const { exec } = require('child_process');
 const { promisify } = require('util');
 const fs = require('fs-extra');
 const path = require('path');
-const TranscriptDownloader = require('./transcript-downloader');
+const TranscriptDownloader = require('../transcript/transcript-downloader');
 const TranscriptChunker = require('./transcript-chunker');
 const TranscriptFormatParser = require('./transcript-format-parser');
 

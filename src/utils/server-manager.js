@@ -117,26 +117,27 @@ class ServerManager {
       issues.push(`Node.js version ${nodeVersion} is too old. Requires Node.js 14+`);
     }
     
-    // Check required directories
-    const requiredDirs = ['public', 'outputs', 'temp'];
+    // Check required directories (from project root)
+    const projectRoot = path.join(__dirname, '../../');
+    const requiredDirs = ['public', 'outputs', 'temp', 'logs'];
     for (const dir of requiredDirs) {
-      const dirPath = path.join(__dirname, dir);
+      const dirPath = path.join(projectRoot, dir);
       if (!await fs.pathExists(dirPath)) {
         console.log(`Creating missing directory: ${dir}`);
         await fs.ensureDir(dirPath);
       }
     }
     
-    // Check required files
+    // Check required files (from project root)
     const requiredFiles = [
-      'fabric-transcript-integration.js',
-      'fabric-patterns.js',
-      'youtube-metadata.js',
+      'src/core/fabric-transcript-integration.js',
+      'src/core/fabric-patterns.js',
+      'src/metadata/youtube-metadata.js',
       'public/index.html'
     ];
     
     for (const file of requiredFiles) {
-      const filePath = path.join(__dirname, file);
+      const filePath = path.join(projectRoot, file);
       if (!await fs.pathExists(filePath)) {
         issues.push(`Missing required file: ${file}`);
       }

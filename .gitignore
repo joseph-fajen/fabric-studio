@@ -38,9 +38,8 @@ outputs/
 .env.production.local
 
 # Logs
-logs
+logs/
 *.log
-server.log
 
 # Runtime data
 pids

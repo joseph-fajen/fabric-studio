@@ -139,6 +139,43 @@ The YouTube-specific functionality is available in the `youtube-processor/` dire
 
 ## Repository Structure
 
+```
+/
+├── README.md                    # Main project overview
+├── server.js                    # Main application entry point
+├── package.json                 # Node.js dependencies
+├── 
+├── src/                         # Core application source code
+│   ├── core/                    # Core processing modules
+│   │   ├── fabric-transcript-integration.js
+│   │   ├── fabric-patterns.js
+│   │   ├── transcript-format-parser.js
+│   │   ├── transcript-chunker.js
+│   │   └── document-laboratory.js
+│   ├── transcript/              # Transcript processing modules
+│   ├── metadata/                # Metadata and document templates
+│   ├── auth/                    # Authentication modules
+│   └── utils/                   # Utility modules
+├── 
+├── public/                      # Static web assets
+├── config/                      # Configuration files
+├── scripts/                     # Utility scripts
+├── tests/                       # Test files
+├── docs/                        # Documentation
+│   ├── setup/                   # Setup and installation guides
+│   ├── deployment/              # Deployment documentation
+│   ├── architecture/            # Architecture documentation
+│   └── sessions/                # Session summaries
+├── 
+├── youtube-processor/           # YouTube-specific modules
+├── archive/                     # Historical files
+└── [Runtime directories]
+    ├── temp/                    # Temporary processing files
+    ├── outputs/                 # Processing results
+    ├── logs/                    # Application logs
+    └── node_modules/            # Dependencies
+```
+
 ### Main Branch: Fabric Studio (Production Ready)
 - **Focus**: Universal content processing with transcript upload/paste functionality
 - **YouTube Support**: Preserved in `youtube-processor/` directory for integration
