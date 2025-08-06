@@ -34,10 +34,7 @@ class FabricStudio {
         this.methodTabs = document.querySelectorAll('.method-tab');
         this.inputMethods = document.querySelectorAll('.input-method');
         
-        // Management elements
-        this.managementToggle = document.getElementById('management-toggle');
-        this.managementModal = document.getElementById('management-modal');
-        this.closeManagement = document.getElementById('close-management');
+        // Management elements (removed - using lab-portal instead)
         
         // Status elements
         this.statusSection = document.getElementById('status-section');
@@ -86,16 +83,7 @@ class FabricStudio {
         this.generateDocumentsBtn.addEventListener('click', () => this.generateSelectedDocuments());
         this.enhancedDownloadBtn.addEventListener('click', () => this.downloadEnhancedResults());
         
-        // Management panel
-        this.managementToggle.addEventListener('click', () => this.openManagementPanel());
-        this.closeManagement.addEventListener('click', () => this.closeManagementPanel());
-        
-        // Close modal on outside click
-        this.managementModal.addEventListener('click', (e) => {
-            if (e.target === this.managementModal) {
-                this.closeManagementPanel();
-            }
-        });
+        // Management panel (removed - using lab-portal instead)
         
         // Tab switching (temporarily disabled)
         // document.querySelectorAll('.tab-btn').forEach(btn => {

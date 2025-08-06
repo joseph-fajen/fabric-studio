@@ -1,0 +1,42 @@
+---
+# Fabric CLI Configuration Template for Railway Deployment
+# Environment variables will be substituted during container startup
+
+# Default AI Model Configuration
+DefaultModel: claude-3-5-sonnet-20241022
+
+# Model Fallback Order (optimized for fabric processing)
+Models:
+  - claude-3-5-sonnet-20241022
+  - gpt-4o
+  - gpt-4o-mini
+  - claude-3-5-haiku-20241022
+  - gpt-4-turbo
+  - gpt-3.5-turbo
+
+# API Provider Configuration
+Vendors:
+  Anthropic:
+    ApiKey: ${ANTHROPIC_API_KEY}
+    BaseURL: https://api.anthropic.com/v1
+    
+  OpenAI:
+    ApiKey: ${OPENAI_API_KEY}
+    BaseURL: https://api.openai.com/v1
+
+# Pattern Configuration
+Patterns:
+  UpdateOnStart: true
+  UserPatterns: ""
+
+# CLI Configuration
+CLI:
+  Defaults:
+    Model: claude-3-5-sonnet-20241022
+    Temperature: 0.7
+    TopP: 1.0
+    Stream: false
+
+# Output Configuration  
+Output:
+  MaxTokens: 4096

@@ -1836,29 +1836,6 @@
             line-height: 1.6;
         }
 
-        /* Management Panel Styles */
-        .management-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: var(--reef-bg-elevated);
-            border: 1px solid var(--reef-border);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.5rem;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .management-toggle:hover {
-            background: var(--reef-bg-modal);
-            transform: scale(1.1);
-        }
 
         .management-modal {
             position: fixed;
@@ -1915,6 +1892,13 @@
         .management-body {
             padding: 20px;
             color: var(--text-reef-secondary);
+        }
+
+        /* YouTube Transcript Tools hover effects */
+        .resource-category a:hover {
+            color: var(--text-reef-accent) !important;
+            text-decoration: underline;
+            transform: translateX(2px);
         }
     </style>
 </head>
@@ -2070,12 +2054,11 @@
                         <div class="resource-category">
                             <h4 style="color: var(--sea-green); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">🎥 YouTube Transcript Tools</h4>
                             <div style="font-size: 0.9rem; line-height: 1.5;">
-                                <a href="https://www.transcribr.io/" target="_blank" style="display: block; color: var(--text-reef-accent); text-decoration: none; margin-bottom: 6px; hover: text-decoration: underline;">• Transcribr.io</a>
-                                <a href="https://tactiq.io/tools/youtube-transcript" target="_blank" style="display: block; color: var(--text-reef-accent); text-decoration: none; margin-bottom: 6px;">• Tactiq YouTube Transcript</a>
-                                <a href="https://notegpt.io/youtube-transcript-generator" target="_blank" style="display: block; color: var(--text-reef-accent); text-decoration: none; margin-bottom: 6px;">• NoteGPT Transcript Generator</a>
-                                <a href="https://www.youtube-transcript.io/" target="_blank" style="display: block; color: var(--text-reef-accent); text-decoration: none; margin-bottom: 6px;">• YouTube-Transcript.io</a>
-                                <a href="https://youtubetotranscript.com/" target="_blank" style="display: block; color: var(--text-reef-accent); text-decoration: none; margin-bottom: 6px;">• YouTube to Transcript</a>
-                                <a href="https://kome.ai/tools/youtube-transcript-generator" target="_blank" style="display: block; color: var(--text-reef-accent); text-decoration: none;">• Kome.ai Transcript Generator</a>
+                                <a href="https://www.transcribr.io/" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• Transcribr.io</a>
+                                <a href="https://tactiq.io/tools/youtube-transcript" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• Tactiq YouTube Transcript</a>
+                                <a href="https://notegpt.io/youtube-transcript-generator" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• NoteGPT Transcript Generator</a>
+                                <a href="https://youtubetotranscript.com/" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• YouTube to Transcript</a>
+                                <a href="https://kome.ai/tools/youtube-transcript-generator" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; transition: color 0.2s ease;">• Kome.ai Transcript Generator</a>
                             </div>
                         </div>
                         
@@ -3585,23 +3568,6 @@
         });
     </script>
     
-    <!-- Management Panel Toggle -->
-    <div id="management-toggle" class="management-toggle">
-        ⚙️
-    </div>
-
-    <!-- Management Modal -->
-    <div id="management-modal" class="management-modal" style="display: none;">
-        <div class="management-content">
-            <div class="management-header">
-                <h3>🧪 System Management</h3>
-                <button id="close-management" class="close-management">✕</button>
-            </div>
-            <div class="management-body">
-                <p>System management panel - feature coming soon!</p>
-            </div>
-        </div>
-    </div>
 
     <!-- Main application JavaScript -->
     <script src="app.js"></script>
