@@ -16,6 +16,7 @@ This guide provides complete instructions for deploying Fabric Studio to Railway
 ```bash
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
 PORT=3000  # Railway sets this automatically
+ADMIN_MODE=false  # Disable admin console for production (default)
 ```
 
 **Optional for enhanced functionality:**
@@ -162,15 +163,17 @@ GET /api/management/history
 
 ### Administrative Operations
 ```bash
-# Clean old outputs (automatic after 24 hours)
+# Clean old outputs (automatic after 24 hours) - Admin Mode Required
 POST /api/management/cleanup-old
 
-# Graceful shutdown
+# Graceful shutdown - Admin Mode Required
 POST /api/management/shutdown
 
-# Server restart
+# Server restart - Admin Mode Required  
 POST /api/management/restart
 ```
+
+⚠️ **Security Note**: Administrative operations require `ADMIN_MODE=true` environment variable. For production deployments, keep admin mode disabled (default) to prevent unauthorized access.
 
 ### Performance Metrics
 The platform includes built-in monitoring:

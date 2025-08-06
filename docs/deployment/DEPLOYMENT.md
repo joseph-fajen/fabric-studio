@@ -48,7 +48,10 @@ FABRIC_MODEL=claude-3-5-sonnet-20241022
 PORT=3000
 NODE_ENV=production
 MAX_CONCURRENT=3
+ADMIN_MODE=false
 ```
+
+⚠️ **Security Note**: `ADMIN_MODE` should be `false` or unset for production deployments to disable the admin console.
 
 **Optional variables:**
 ```

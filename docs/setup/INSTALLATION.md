@@ -74,6 +74,14 @@ npm start
 
 The application will automatically find an available port (starting from 3000) and display the URL. No conflicts with other local servers!
 
+#### Development with Admin Console
+For developers needing admin console access (server management, API configuration, etc.):
+```bash
+npm run dev:admin
+```
+
+⚠️ **Security Note**: Admin console is disabled by default for production deployments. Only enable for local development.
+
 ## Performance Modes
 
 The application automatically selects the best processing method:

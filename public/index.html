@@ -2026,24 +2026,24 @@
 
             <!-- Processing Recommendations -->
             <div class="reef-info-note">
-                <div class="info-icon">💎</div>
+                <div class="info-icon"></div>
                 <div class="info-content">
                     <strong>Content Processing Recommendations:</strong>
                     <ul>
-                        <li>✅ <strong>Excellent Results</strong>: Meeting recordings, lectures, podcasts (15-45 min content)</li>
-                        <li>⚠️ <strong>Great Results</strong>: Long-form content, interviews, webinars (45-90 min content)</li>
-                        <li>🔄 <strong>Good Results</strong>: Extended content, full courses (90+ min content)</li>
+                        <li> <strong>Excellent Results</strong>: Meeting recordings, lectures, podcasts (15-45 min content)</li>
+                        <li> <strong>Great Results</strong>: Long-form content, interviews, webinars (45-90 min content)</li>
+                        <li> <strong>Good Results</strong>: Extended content, full courses (90+ min content)</li>
                     </ul>
                     <p style="color: rgba(255, 255, 255, 0.9);"><strong>Content density matters more than duration</strong> - a dense 30-minute lecture may process like a 90-minute casual conversation.</p>
                     <div style="margin-top: 12px; padding: 12px; background: rgba(32, 178, 170, 0.15); border: 1px solid rgba(32, 178, 170, 0.3); border-radius: 8px; color: rgba(255, 255, 255, 0.95);">
-                        <strong>🚀 The Magic:</strong> Upload any transcript or paste your content to get professional-grade analysis from 13 specialized Fabric patterns - the same patterns used by thousands of knowledge workers worldwide!
+                        <strong> The Magic:</strong> Upload any transcript or paste your content to get professional-grade analysis from 13 specialized Fabric patterns - the same patterns used by thousands of knowledge workers worldwide!
                     </div>
                 </div>
             </div>
 
             <!-- Content Resources Section -->
             <div class="reef-info-note resources-section" style="margin-top: 25px; margin-bottom: 25px;">
-                <div class="info-icon">📚</div>
+                <div class="info-icon"></div>
                 <div class="info-content">
                     <strong>Content Resources</strong>
                     <p style="color: rgba(255, 255, 255, 0.9); margin-top: 8px; margin-bottom: 16px;">
@@ -2052,7 +2052,7 @@
                     
                     <div class="resources-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
                         <div class="resource-category">
-                            <h4 style="color: var(--sea-green); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">🎥 YouTube Transcript Tools</h4>
+                            <h4 style="color: var(--sea-green); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">YouTube Transcript Tools</h4>
                             <div style="font-size: 0.9rem; line-height: 1.5;">
                                 <a href="https://www.transcribr.io/" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• Transcribr.io</a>
                                 <a href="https://tactiq.io/tools/youtube-transcript" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• Tactiq YouTube Transcript</a>
@@ -2063,7 +2063,7 @@
                         </div>
                         
                         <div class="resource-category">
-                            <h4 style="color: var(--coral-primary); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">💼 Meeting & Collaboration</h4>
+                            <h4 style="color: var(--coral-primary); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">Meeting & Collaboration</h4>
                             <div style="font-size: 0.9rem; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
                                 <p style="margin-bottom: 8px;"><strong>Video Conferencing:</strong> Zoom, Teams, Google Meet, Webex recordings</p>
                                 <p style="margin-bottom: 8px;"><strong>Professional Services:</strong> Otter.ai, Rev.com, Trint, Descript</p>
@@ -3561,10 +3561,31 @@
             }
         }
 
+        // Check admin mode and show/hide console button
+        async function checkAdminMode() {
+            try {
+                const response = await fetch('/api/admin-status');
+                const data = await response.json();
+                
+                const labPortal = document.getElementById('lab-portal');
+                if (data.adminMode) {
+                    labPortal.style.display = 'flex';
+                    console.log('Admin console enabled');
+                } else {
+                    labPortal.style.display = 'none';
+                    console.log('Admin console disabled');
+                }
+            } catch (error) {
+                console.warn('Could not check admin status, hiding console:', error);
+                document.getElementById('lab-portal').style.display = 'none';
+            }
+        }
+        
         // Initialize when page loads
         window.addEventListener('load', () => {
             initializeUniversalInterface();
             initializeWebSocket();
+            checkAdminMode();
         });
     </script>
     

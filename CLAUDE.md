@@ -234,6 +234,7 @@ Each processed content creates a timestamped folder in `outputs/` containing:
 - `PORT` - Server port (default: 3000)
 - `FABRIC_MODEL` - AI model for processing
 - `MAX_CONCURRENT` - Parallel pattern limit
+- `ADMIN_MODE` - Enable/disable Fabric Studio Console access (default: false, set to 'true' to enable)
 - `YOUTUBE_API_KEY` - YouTube Data API v3 key for enhanced transcript downloading
 - `ANTHROPIC_API_KEY` - Anthropic API key for Fabric CLI configuration
 
@@ -255,6 +256,31 @@ Configure fallback providers via Reef Laboratory Console:
 - ✅ Anthropic: claude-3-5-sonnet-20241022, claude-3-5-haiku-20241022
 - ✅ OpenAI: gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-3.5-turbo
 - ❌ Google: Gemini models not yet available in fabric
+
+### Admin Mode Security
+
+**Fabric Studio Console** provides powerful management functions including server restart/shutdown, data deletion, and API key management. For security, console access is controlled by the `ADMIN_MODE` environment variable.
+
+#### Console Access Control
+- **Production (Secure)**: `ADMIN_MODE=false` or unset - Console button (🧪) hidden, management endpoints return 403
+- **Development (Admin)**: `ADMIN_MODE=true` - Full console access enabled
+
+#### Protected Functions
+When admin mode is disabled, the following management functions are blocked:
+- **Server Controls**: Restart, shutdown, stop processing
+- **Data Management**: Clear all data, cleanup old files, delete specific folders  
+- **API Configuration**: View, modify, or clear stored API keys
+- **System Management**: Fallback model configuration, API testing
+
+#### Read-Only Functions (Always Available)
+- Server status and health checks
+- Processing history viewing
+- Basic system monitoring
+
+#### Deployment Recommendations
+- **Cloud Deployments**: Always run with `ADMIN_MODE=false` for public-facing instances
+- **Local Development**: Use `ADMIN_MODE=true` for full development capabilities
+- **Railway/Heroku**: Ensure `ADMIN_MODE` is not set or set to `false` in production environment variables
 
 ## Development Guidelines
 

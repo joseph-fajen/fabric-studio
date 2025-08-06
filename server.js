@@ -38,6 +38,10 @@ const fabricTranscriptIntegration = new FabricTranscriptIntegration();
 const youtubeMetadata = new YouTubeMetadata();
 // const documentLaboratory = new DocumentLaboratory(fabricTranscriptIntegration); // Commented out for main branch deployment
 
+// Admin mode configuration
+const ADMIN_MODE = process.env.ADMIN_MODE === 'true';
+console.log(`🔧 Admin Mode: ${ADMIN_MODE ? 'ENABLED' : 'DISABLED'}`);
+
 // Test fabric availability
 let fabricAvailable = false;
 fabricTranscriptIntegration.testFabricAvailability()
@@ -96,6 +100,14 @@ app.get('/health', (req, res) => {
     patterns: FABRIC_PATTERNS.length,
     server: 'Fabric Studio v1.0.0',
     supportedContentTypes: ['youtube', 'transcript']
+  });
+});
+
+// Admin mode status endpoint
+app.get('/api/admin-status', (req, res) => {
+  res.json({
+    adminMode: ADMIN_MODE,
+    message: ADMIN_MODE ? 'Console access enabled' : 'Console access disabled'
   });
 });
 
@@ -207,7 +219,18 @@ app.get('/api/process/:id', (req, res) => {
   res.json(process);
 });
 
-// Management API endpoints
+// Admin mode middleware
+function requireAdminMode(req, res, next) {
+  if (!ADMIN_MODE) {
+    return res.status(403).json({ 
+      error: 'Admin console disabled', 
+      message: 'Management functions are not available when admin mode is disabled' 
+    });
+  }
+  next();
+}
+
+// Management API endpoints (protected by admin mode)
 app.get('/api/management/status', (req, res) => {
   const uptime = process.uptime();
   const memoryUsage = process.memoryUsage();
@@ -357,7 +380,7 @@ app.post('/api/management/cleanup-old', async (req, res) => {
 });
 
 // Server control endpoints
-app.post('/api/management/shutdown', (req, res) => {
+app.post('/api/management/shutdown', requireAdminMode, (req, res) => {
   console.log('Shutdown requested via web interface');
   res.json({ message: 'Server shutting down gracefully...' });
   

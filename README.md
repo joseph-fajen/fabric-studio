@@ -11,7 +11,7 @@ A high-performance web application that transforms any text content into compreh
 - **Real-Time Progress**: WebSocket-powered progress tracking with live format detection and processing updates
 - **Professional Output**: 13 markdown files plus enhanced metadata and ZIP download
 - **Production Ready**: Railway deployment ready with minimal dependencies
-- **Management Console**: Comprehensive server management with status monitoring, processing history, and system controls
+- **Admin Console**: Comprehensive server management with status monitoring, processing history, and system controls (disabled by default for security)
 
 ## Quick Start
 
@@ -55,6 +55,10 @@ fabric --setup
 npm start
 # Application runs on port 3000 (or next available port)
 # Access at http://localhost:3000
+
+# For developers needing admin console access:
+npm run dev:admin
+# Enables admin console with server management features
 ```
 
 ## Usage
@@ -260,17 +264,17 @@ Each processed content creates a timestamped folder containing 13 analysis files
 - `GET /api/process/:id` - Check processing status with real-time updates
 - `GET /api/download/:id` - Download complete results ZIP package
 
-### Management API
+### Management API (Admin Mode Required)
 - `GET /api/management/status` - Server status and active processes
 - `GET /api/management/history` - Processing history and analytics
-- `POST /api/management/cleanup-old` - Clean old output folders
-- `POST /api/management/restart` - Server restart functionality
-- `POST /api/management/shutdown` - Graceful server shutdown
+- `POST /api/management/cleanup-old` - Clean old output folders (🔒 Admin only)
+- `POST /api/management/restart` - Server restart functionality (🔒 Admin only)
+- `POST /api/management/shutdown` - Graceful server shutdown (🔒 Admin only)
 
-### API Key Management
-- `GET /api/management/config/api-keys` - API key configuration status
-- `POST /api/management/config/api-keys` - Configure fallback API providers
-- `POST /api/management/config/test-apis` - Test API connections
+### API Key Management (Admin Mode Required)
+- `GET /api/management/config/api-keys` - API key configuration status (🔒 Admin only)
+- `POST /api/management/config/api-keys` - Configure fallback API providers (🔒 Admin only)
+- `POST /api/management/config/test-apis` - Test API connections (🔒 Admin only)
 
 ## Performance Metrics
 
@@ -288,6 +292,7 @@ Each processed content creates a timestamped folder containing 13 analysis files
 - `PORT` - Server port (default: 3000)
 - `FABRIC_MODEL` - AI model for processing (default: claude-3-5-sonnet-20241022)
 - `MAX_CONCURRENT` - Parallel pattern limit (default: 3)
+- `ADMIN_MODE` - Enable admin console (default: false, set to 'true' for development)
 
 ### YouTube-Specific (youtube-local branch only)
 - `YOUTUBE_API_KEY` - YouTube Data API v3 key for enhanced transcript downloading
@@ -321,10 +326,51 @@ npm start
 git checkout main
 npm run dev
 
+# Universal platform with admin console
+npm run dev:admin
+
 # YouTube processing
 git checkout youtube-local
 npm run dev
 ```
+
+## Security
+
+### Admin Console Access Control
+**Fabric Studio Console** provides powerful management functions including server restart/shutdown, data deletion, and API key management. For security, console access is controlled by the `ADMIN_MODE` environment variable.
+
+#### Production Deployment (Secure)
+- **Default**: Admin console is **disabled** for security
+- **Console button**: Hidden from users  
+- **Management endpoints**: Return 403 Forbidden
+- **Recommended for**: All cloud deployments and public-facing instances
+
+#### Development Mode (Admin Access)
+```bash
+# Enable admin console for development
+npm run dev:admin
+
+# Or set environment variable
+ADMIN_MODE=true npm start
+```
+
+#### Protected Functions
+When admin mode is disabled, the following are blocked:
+- **Server Controls**: 🔒 Restart, shutdown, stop processing
+- **Data Management**: 🔒 Clear all data, cleanup files, delete folders
+- **API Configuration**: 🔒 View, modify, or clear stored API keys
+- **System Management**: 🔒 Fallback configuration, API testing
+
+#### Always Available (Read-Only)
+- ✅ Server status and health monitoring
+- ✅ Processing history viewing
+- ✅ Basic system information
+
+#### Security Best Practices
+- **Production**: Always deploy with `ADMIN_MODE=false` or unset
+- **Cloud Platforms**: Ensure admin mode is disabled in environment variables
+- **Development**: Use `npm run dev:admin` for local admin access
+- **API Keys**: Management console provides secure key storage and testing
 
 ## Troubleshooting
 
