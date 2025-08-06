@@ -1,9 +1,9 @@
-// Test script for YouTube Fabric Processor
+// Test script for Fabric Studio
 
 const { FABRIC_PATTERNS } = require('./fabric-patterns');
 const FabricIntegration = require('./fabric-integration');
 
-console.log('🧪 Testing YouTube Fabric Processor');
+console.log('🧪 Testing Fabric Studio');
 console.log('===================================');
 
 // Test 1: Pattern validation

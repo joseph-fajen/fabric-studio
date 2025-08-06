@@ -1,5 +1,5 @@
 {
-  "name": "youtube-fabric-processor",
+  "name": "fabric-studio",
   "version": "1.0.0",
   "description": "YouTube-specific processing functionality for Fabric Studio",
   "main": "transcript-downloader.js",
@@ -17,7 +17,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/joseph-fajen/youtube-fabric-processor.git",
+    "url": "https://github.com/joseph-fajen/fabric-studio.git",
     "directory": "youtube-processor"
   },
   "engines": {

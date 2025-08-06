@@ -1,6 +1,6 @@
 # Archive Directory
 
-This directory contains historical files from the YouTube Fabric Processor development process.
+This directory contains historical files from the Fabric Studio development process.
 
 ## Directory Structure
 

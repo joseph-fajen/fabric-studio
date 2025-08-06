@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# YouTube Fabric Processor Startup Script
+# Fabric Studio Startup Script
 
-echo "🎬 YouTube Fabric Processor"
+echo "🎬 Fabric Studio"
 echo "=========================="
 echo ""
 

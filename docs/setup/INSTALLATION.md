@@ -1,4 +1,4 @@
-# YouTube Fabric Processor - Installation Guide
+# Fabric Studio - Installation Guide
 
 ## Overview
 
@@ -16,8 +16,8 @@ This application processes YouTube videos through fabric patterns to extract ins
 ### 1. Clone and Install Dependencies
 
 ```bash
-git clone https://github.com/joseph-fajen/youtube-fabric-processor.git
-cd youtube-fabric-processor
+git clone https://github.com/joseph-fajen/fabric-studio.git
+cd fabric-studio
 npm install
 ```
 
@@ -235,7 +235,7 @@ fabric -p youtube_summary "https://youtu.be/example"
 ## Project Structure
 
 ```
-youtube-fabric-processor/
+fabric-studio/
 ├── public/                 # Web interface files
 │   ├── index.html         # Main HTML interface
 │   ├── styles.css         # Professional styling
@@ -271,4 +271,4 @@ youtube-fabric-processor/
 - Error handling graceful
 - Both simulation and full modes operational
 
-The YouTube Fabric Processor is ready for use!
+The Fabric Studio is ready for use!

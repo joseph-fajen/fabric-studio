@@ -1,4 +1,4 @@
-# Session Summary: YouTube Fabric Processor Debugging & Chunking Implementation
+# Session Summary: Fabric Studio Debugging & Chunking Implementation
 **Date**: July 17, 2025  
 **Session Focus**: Debugging pattern failures and implementing chunking for long videos
 

@@ -1,4 +1,4 @@
-# Universal Content Intelligence Platform - Railway Deployment
+# Fabric Studio - Railway Deployment
 FROM node:18-slim
 
 # Install system dependencies

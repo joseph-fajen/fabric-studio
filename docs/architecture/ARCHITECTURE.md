@@ -1,4 +1,4 @@
-# YouTube Fabric Processor - Architecture Documentation
+# Fabric Studio - Architecture Documentation
 
 ## Overview
 
@@ -241,7 +241,7 @@ Total:                  71 seconds
 ## File Structure
 
 ```
-youtube-fabric-processor/
+fabric-studio/
 ├── server.js                          # Main Express server
 ├── fabric-transcript-integration.js   # Optimized fabric processing
 ├── transcript-downloader.js           # YouTube transcript extraction

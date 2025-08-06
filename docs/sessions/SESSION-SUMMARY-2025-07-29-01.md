@@ -2,7 +2,7 @@
 
 ## Critical Issue Resolved: Transcript Download Failure
 
-**Primary Problem:** YouTube Fabric Processor was stuck in simulation mode due to YouTube bot detection blocking transcript downloads. User emphasized: "downloading the transcript is ABSOLUTELY ESSENTIAL to the entire point of the app."
+**Primary Problem:** Fabric Studio was stuck in simulation mode due to YouTube bot detection blocking transcript downloads. User emphasized: "downloading the transcript is ABSOLUTELY ESSENTIAL to the entire point of the app."
 
 **Root Cause:** YouTube implemented enhanced bot detection that blocked yt-dlp and youtube-dl, preventing real video content processing.
 

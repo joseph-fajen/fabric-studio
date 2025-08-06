@@ -7,7 +7,7 @@ const { FABRIC_PATTERNS } = require('./fabric-patterns');
 
 // Test transcripts in various formats
 const testTranscripts = {
-  plaintext: `This is a plain text transcript for testing the Universal Content Intelligence Platform.
+  plaintext: `This is a plain text transcript for testing Fabric Studio.
 The content discusses artificial intelligence, machine learning, and the future of technology.
 
 Key points include:

@@ -1,6 +1,6 @@
-// YouTube Fabric Processor Client-side JavaScript
+// Fabric Studio Client-side JavaScript
 
-class YouTubeFabricProcessor {
+class FabricStudio {
     constructor() {
         this.ws = null;
         this.currentProcessId = null;
@@ -24,7 +24,7 @@ class YouTubeFabricProcessor {
         this.loginBtn = document.getElementById('login-btn');
         this.logoutBtn = document.getElementById('logout-btn');
         
-        // Input elements - Universal Content Intelligence Platform
+        // Input elements - Fabric Studio
         this.urlInput = document.getElementById('youtube-url');
         this.transcriptFile = document.getElementById('transcript-file');
         this.transcriptText = document.getElementById('transcript-text');
@@ -797,7 +797,7 @@ class YouTubeFabricProcessor {
         }, 8000);
     }
     
-    // Utility methods for Universal Content Intelligence Platform
+    // Utility methods for Fabric Studio
     hideAllSections() {
         const sections = [
             this.statusSection,
@@ -871,5 +871,5 @@ class YouTubeFabricProcessor {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new YouTubeFabricProcessor();
+    window.app = new FabricStudio();
 });

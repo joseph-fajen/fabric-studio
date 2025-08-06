@@ -1,4 +1,4 @@
-# Strategic Architecture Decision: YouTube Fabric Processor Evolution
+# Strategic Architecture Decision: Fabric Studio Evolution
 
 **Date**: August 1, 2025  
 **Participants**: Joseph Fajen, AI Leadership Team  
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-This document outlines the strategic architectural evolution of the YouTube Fabric Processor from a YouTube-specific tool to a Universal Content Intelligence Platform. The analysis addresses deployment constraints discovered during cloud deployment and presents a practical path forward that preserves existing investment while expanding market opportunity.
+This document outlines the strategic architectural evolution of Fabric Studio from a YouTube-specific tool to a universal content processing platform. The analysis addresses deployment constraints discovered during cloud deployment and presents a practical path forward that preserves existing investment while expanding market opportunity.
 
 ## Current State Analysis
 
@@ -67,7 +67,7 @@ This document outlines the strategic architectural evolution of the YouTube Fabr
 ### Architecture Decision
 
 **Approach**: Single repository with strategic branch management
-- **Main Branch**: Evolves to Universal Content Intelligence Platform
+- **Main Branch**: Evolves to universal Fabric Studio
 - **YouTube-Local Branch**: Preserves working YouTube version for local use
 - **Shared Core**: Fabric processing engine remains unified
 
@@ -86,7 +86,7 @@ git checkout main
 #### Phase 2: Universal Platform Development (Week 2)
 **Frontend Modifications**:
 - Replace YouTube URL input with transcript upload/paste interface
-- Update branding from "YouTube Fabric Processor" to "Universal Content Intelligence Platform"
+- Maintain "Fabric Studio" branding for universal content processing
 - Maintain existing WebSocket progress tracking and UI elements
 
 **Backend Modifications**:
@@ -113,7 +113,7 @@ git checkout main
 ### Market Positioning Evolution
 
 **From**: "YouTube-to-insights" tool (limited, reactive to platform changes)  
-**To**: "Universal content insights engine" (platform-agnostic, future-proof)
+**To**: "Universal Fabric Studio" (platform-agnostic, future-proof)
 
 **Expanded Market Opportunities**:
 - **Meeting Transcripts**: Zoom, Teams, Google Meet recordings
@@ -168,7 +168,7 @@ This reframes the technical constraint as a strategic opportunity rather than a 
 
 **Main Repository README** (Universal Platform):
 ```markdown
-# Universal Content Intelligence Platform
+# Fabric Studio
 Transform any text content into comprehensive insights using 13 AI analysis patterns.
 
 ## Features
@@ -183,7 +183,7 @@ Local YouTube video processing is available on the `youtube-local` branch
 
 **YouTube-Local Branch Documentation**:
 ```markdown
-# YouTube Fabric Processor (Local Development Version)
+# Fabric Studio (Local Development Version)
 This branch contains the original YouTube-focused implementation for local use.
 Includes OAuth2 authentication and direct YouTube transcript extraction.
 ```
@@ -240,7 +240,7 @@ Includes OAuth2 authentication and direct YouTube transcript extraction.
 
 ## Conclusion
 
-The evolution from YouTube Fabric Processor to Universal Content Intelligence Platform represents a strategic pivot that transforms a deployment constraint into a market expansion opportunity. By preserving the core innovation (efficient fabric pattern processing) while removing platform dependencies, we create a more resilient and valuable solution.
+The evolution of Fabric Studio to support universal content processing represents a strategic pivot that transforms a deployment constraint into a market expansion opportunity. By preserving the core innovation (efficient fabric pattern processing) while removing platform dependencies, we create a more resilient and valuable solution.
 
 The single-repository approach with branch management maintains technical coherence while enabling both personal utility (YouTube-local) and business value (universal platform). This strategy demonstrates sophisticated architectural thinking and positions the project for sustained success.
 

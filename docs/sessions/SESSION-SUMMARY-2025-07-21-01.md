@@ -9,7 +9,7 @@
 - **Git cleanup**: Migrated existing session summaries to new folder structure
 
 ## Current Status
-- YouTube Fabric Processor: Operational with 70-second processing target
+- Fabric Studio: Operational with 70-second processing target
 - Session handoff command: Optimized and streamlined (5 steps vs 6)
 - File organization: SESSION-SUMMARY files now properly organized in session-summaries/
 - Git repository: Clean state with session handoff improvements committed

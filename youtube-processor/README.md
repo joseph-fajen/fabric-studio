@@ -1,6 +1,6 @@
 # YouTube Processor
 
-This directory contains the original YouTube-specific functionality from the YouTube Fabric Processor project. These files enable direct YouTube URL processing with transcript download capabilities.
+This directory contains the original YouTube-specific functionality from the Fabric Studio project. These files enable direct YouTube URL processing with transcript download capabilities.
 
 ## ⚠️ Local Development Only
 
@@ -156,4 +156,4 @@ For YouTube-specific issues:
 
 ---
 
-**Note**: This YouTube processing functionality represents the preserved original capabilities of the YouTube Fabric Processor. For new deployments, consider using the universal content processing features on the main branch for better reliability and cloud compatibility.
+**Note**: This YouTube processing functionality represents the preserved original capabilities of Fabric Studio. For new deployments, consider using the universal content processing features on the main branch for better reliability and cloud compatibility.

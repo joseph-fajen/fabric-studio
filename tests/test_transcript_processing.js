@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Test script for Universal Content Intelligence Platform transcript processing
+// Test script for Fabric Studio transcript processing
 
 const axios = require('axios');
 
-const testTranscript = `This is a test transcript for the Universal Content Intelligence Platform.
+const testTranscript = `This is a test transcript for Fabric Studio.
 We are testing the new transcript processing feature that allows users to upload
 or paste content directly instead of requiring YouTube URLs.
 
@@ -26,7 +26,7 @@ async function testTranscriptProcessing() {
   const baseUrl = 'http://localhost:3000';
   
   try {
-    console.log('🧪 Testing Universal Content Intelligence Platform...');
+    console.log('🧪 Testing Fabric Studio...');
     
     // Test health endpoint
     console.log('1. Testing health endpoint...');

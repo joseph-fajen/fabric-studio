@@ -1,4 +1,4 @@
-# OAuth2 Setup Guide for YouTube Fabric Processor
+# OAuth2 Setup Guide for Fabric Studio
 
 This guide will walk you through setting up Google OAuth2 authentication to enable real YouTube transcript access.
 
@@ -9,7 +9,7 @@ This guide will walk you through setting up Google OAuth2 authentication to enab
 1. **Go to**: https://console.cloud.google.com/
 2. **Select or Create Project**:
    - If you have existing project: Select it from dropdown
-   - If creating new: Click "New Project" → Name it "YouTube Fabric Processor"
+   - If creating new: Click "New Project" → Name it "Fabric Studio"
 
 ### 1.2 Enable YouTube Data API v3
 
@@ -22,7 +22,7 @@ This guide will walk you through setting up Google OAuth2 authentication to enab
 1. **Go to**: APIs & Services → OAuth consent screen
 2. **Choose**: External (for public use) or Internal (for organization use)
 3. **Fill out required fields**:
-   - **App name**: YouTube Fabric Processor
+   - **App name**: Fabric Studio
    - **User support email**: Your email
    - **Developer contact**: Your email
    - **App domain** (optional): Your domain
@@ -42,7 +42,7 @@ This guide will walk you through setting up Google OAuth2 authentication to enab
 1. **Go to**: APIs & Services → Credentials
 2. **Click**: "CREATE CREDENTIALS" → "OAuth client ID"
 3. **Application type**: Web application
-4. **Name**: YouTube Fabric Processor
+4. **Name**: Fabric Studio
 5. **Authorized redirect URIs**:
    - `http://localhost:3000/auth/google/callback` (for local development)
    - `https://carefree-mindfulness-production.up.railway.app/auth/google/callback` (for production)

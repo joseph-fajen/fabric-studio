@@ -1,6 +1,6 @@
 # Railway Deployment Guide
 
-This guide provides step-by-step instructions for deploying YouTube Fabric Processor to Railway for zero-setup user access.
+This guide provides step-by-step instructions for deploying Fabric Studio to Railway for zero-setup user access.
 
 ## Quick Deploy to Railway
 
@@ -11,8 +11,8 @@ This guide provides step-by-step instructions for deploying YouTube Fabric Proce
 
 ### 1. Fork or Clone Repository
 ```bash
-git clone https://github.com/joseph-fajen/youtube-fabric-processor.git
-cd youtube-fabric-processor
+git clone https://github.com/joseph-fajen/fabric-studio.git
+cd fabric-studio
 ```
 
 ### 2. Deploy to Railway

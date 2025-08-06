@@ -1,4 +1,4 @@
-// Transcript Format Parser - Universal Content Intelligence Platform
+// Transcript Format Parser - Fabric Studio
 // Handles multiple transcript formats: plain text, VTT, SRT, speaker-labeled
 
 const fs = require('fs-extra');

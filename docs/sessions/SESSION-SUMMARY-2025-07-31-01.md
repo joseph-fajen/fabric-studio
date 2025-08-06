@@ -25,7 +25,7 @@
 
 ## Current Status
 
-### YouTube Fabric Processor Status
+### Fabric Studio Status
 - **Local Development**: ✅ Fully operational with OAuth2 authentication
 - **Railway Production**: ⚠️ OAuth2 authentication working, but transcript download blocked by bot detection
 - **Processing Mode**: Currently falls back to simulation mode on Railway due to transcript download failures

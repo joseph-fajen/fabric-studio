@@ -27,8 +27,8 @@ A high-performance web application that transforms any text content into compreh
 
 ### 2. Clone and Install
 ```bash
-git clone https://github.com/joseph-fajen/youtube-fabric-processor.git
-cd youtube-fabric-processor
+git clone https://github.com/joseph-fajen/fabric-studio.git
+cd fabric-studio
 npm install
 ```
 
@@ -412,7 +412,7 @@ MIT License - See LICENSE file for details
 
 ## Strategic Evolution Summary
 
-**Fabric Studio** represents the successful evolution from a YouTube-specific tool to a Universal Content Intelligence Platform:
+**Fabric Studio** represents the successful evolution from a YouTube-specific tool to a universal content processing platform:
 
 ### ✅ Phase 1 Complete: Universal Platform
 - **Main Branch**: Production-ready Fabric Studio with universal content processing

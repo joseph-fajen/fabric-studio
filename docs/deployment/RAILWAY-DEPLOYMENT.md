@@ -1,7 +1,7 @@
 # Railway Deployment Guide
-## Universal Content Intelligence Platform
+## Fabric Studio
 
-This guide provides complete instructions for deploying the Universal Content Intelligence Platform to Railway with zero YouTube dependencies.
+This guide provides complete instructions for deploying Fabric Studio to Railway with zero YouTube dependencies.
 
 ## 🚀 Quick Deployment
 
@@ -60,7 +60,7 @@ YOUTUBE_API_KEY=your_youtube_api_key        # Only if YouTube API needed
 
 ### Container Structure
 ```
-Universal Content Intelligence Platform
+Fabric Studio
 ├── Node.js 18 Runtime
 ├── Fabric CLI (Go-based)
 ├── 13 Fabric Patterns
@@ -237,4 +237,4 @@ docker build -t ucip . && docker run -e ANTHROPIC_API_KEY=sk-ant-... -p 3000:300
 railway up
 ```
 
-This deployment guide ensures the Universal Content Intelligence Platform runs smoothly on Railway with zero YouTube dependencies while maintaining full transcript processing capabilities.
+This deployment guide ensures the Fabric Studio runs smoothly on Railway with zero YouTube dependencies while maintaining full transcript processing capabilities.
