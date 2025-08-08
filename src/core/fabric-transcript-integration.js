@@ -41,6 +41,7 @@ class FabricTranscriptIntegration {
     // Try common installation locations
     const commonPaths = [
       'fabric', // Use PATH
+      '/go/bin/fabric', // Railway deployment path (fix for production)
       `${process.env.HOME}/go/bin/fabric`,
       '/usr/local/bin/fabric',
       '/opt/homebrew/bin/fabric',
@@ -210,6 +211,7 @@ class FabricTranscriptIntegration {
           console.log(`Processing pattern: ${patternName} with model: ${currentModel} (attempt ${attemptCount + 1}/${this.maxRetries + 1})`);
           
           const command = `cat "${tempFile}" | ${this.fabricPath} -p ${patternName} --model ${currentModel}`;
+          console.log(`Executing command: ${command}`); // Railway debugging
           
           const { stdout, stderr } = await execAsync(command, { 
             timeout: this.timeoutMs,
@@ -233,7 +235,8 @@ class FabricTranscriptIntegration {
           return result;
           
         } catch (modelError) {
-          console.warn(`Model ${currentModel} failed for pattern ${patternName}:`, modelError.message);
+          console.error(`Model ${currentModel} failed for pattern ${patternName}: ${modelError.message}`);
+          console.error(`Full error details:`, modelError); // Railway debugging
           
           // Check if this is an API overload error
           const isAPIOverload = modelError.message.includes('529') || 

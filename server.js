@@ -26,7 +26,7 @@ const wss = new WebSocket.Server({ server });
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '15mb' })); // Allow larger transcript uploads (Railway deployment fix)
 app.use(express.static('public'));
 
 // OAuth2 authentication routes
@@ -649,11 +649,24 @@ app.get('/api/download/:id', async (req, res) => {
       downloadName = `content_analysis_${processId.substring(0, 8)}.zip`;
     }
     
-    // Send file
+    // Check file exists and has content before download
+    const stats = await fs.stat(zipPath);
+    if (stats.size === 0) {
+      console.error('ZIP file is empty:', zipPath);
+      return res.status(500).json({ error: 'ZIP file is empty' });
+    }
+    
+    // Send file with proper headers
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${downloadName}"`);
+    res.setHeader('Content-Length', stats.size);
+    
     res.download(zipPath, downloadName, (err) => {
       if (err) {
         console.error('Download error:', err);
-        res.status(500).json({ error: 'Download failed' });
+        if (!res.headersSent) {
+          res.status(500).json({ error: 'Download failed' });
+        }
       }
     });
 
