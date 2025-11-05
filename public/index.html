@@ -2492,7 +2492,7 @@
             dropzone.addEventListener('dragover', handleDragOver);
             dropzone.addEventListener('dragleave', handleDragLeave);
             dropzone.addEventListener('drop', handleFileDrop);
-            transcriptFile.addEventListener('change', handleFileSelect);
+            // Note: file change event is handled by app.js FabricStudio class to avoid conflicts
 
             // Text input
             transcriptText.addEventListener('input', handleTextInput);
@@ -2582,7 +2582,10 @@
             reader.onload = (e) => {
                 currentContent = e.target.result;
                 detectAndPreviewContent(currentContent, fileExt);
-                updateProcessButton();
+                // Trigger button validation via app.js if available
+                if (window.app && typeof window.app.validateInput === 'function') {
+                    window.app.validateInput();
+                }
             };
             reader.onerror = () => {
                 showNotification('Error reading file. Please try again.', 'error');

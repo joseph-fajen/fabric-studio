@@ -108,7 +108,13 @@ class FabricStudio {
         }
         
         if (this.transcriptFile) {
-            this.transcriptFile.addEventListener('change', () => this.validateInput());
+            this.transcriptFile.addEventListener('change', () => {
+                // Call inline script's handleFile if available to show file info
+                if (this.transcriptFile.files.length > 0 && typeof handleFile === 'function') {
+                    handleFile(this.transcriptFile.files[0]);
+                }
+                this.validateInput();
+            });
         }
         
         if (this.transcriptText) {
@@ -135,7 +141,9 @@ class FabricStudio {
         
         switch (activeMethod) {
             case 'upload':
-                hasValidContent = this.transcriptFile && this.transcriptFile.files.length > 0;
+                // Check both file input and global currentContent (for drag-and-drop)
+                hasValidContent = (this.transcriptFile && this.transcriptFile.files.length > 0) ||
+                                 (typeof window.currentContent === 'string' && window.currentContent.trim().length > 0);
                 buttonText = hasValidContent ? 'Begin Deep Analysis' : 'Upload File First';
                 break;
             case 'paste':
@@ -192,18 +200,29 @@ class FabricStudio {
         // Prepare payload based on active input method
         switch (activeMethod) {
             case 'upload':
-                if (!this.transcriptFile || this.transcriptFile.files.length === 0) {
+                let fileContent, fileName;
+
+                // Check if file was uploaded via input or drag-and-drop
+                if (this.transcriptFile && this.transcriptFile.files.length > 0) {
+                    // File uploaded via input element
+                    const file = this.transcriptFile.files[0];
+                    fileContent = await this.readFileContent(file);
+                    fileName = file.name;
+                } else if (typeof window.currentContent === 'string' && window.currentContent.trim().length > 0) {
+                    // File loaded via drag-and-drop (stored in global currentContent)
+                    fileContent = window.currentContent;
+                    fileName = window.currentFile ? window.currentFile.name : 'transcript.txt';
+                } else {
                     alert('Please upload a transcript file first');
                     return;
                 }
-                const file = this.transcriptFile.files[0];
-                const fileContent = await this.readFileContent(file);
+
                 payload = {
                     contentType: 'transcript',
                     transcript: fileContent,
-                    filename: file.name
+                    filename: fileName
                 };
-                contentSource = `uploaded file: ${file.name}`;
+                contentSource = `uploaded file: ${fileName}`;
                 break;
                 
             case 'paste':
