@@ -522,50 +522,102 @@
             left: 100%;
         }
 
-        /* Universal Content Input Interface Styles */
-        .input-method-selector {
+        /* Unified Content Input Interface Styles */
+        .unified-input-container {
             margin-bottom: 32px;
+            position: relative;
         }
 
         .method-tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
+            gap: 4px;
+            margin-bottom: 0;
+            padding-left: 4px;
+            position: relative;
+            z-index: 10;
         }
 
         .method-tab {
-            flex: 1;
-            padding: 12px 20px;
-            background: var(--reef-bg-primary);
-            border: 2px solid var(--reef-border-subtle);
-            border-radius: var(--border-radius-pearl);
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--reef-border-subtle);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
             color: var(--text-reef-secondary);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            top: 1px;
+            /* Push down to overlap border */
         }
 
         .method-tab:hover {
-            background: var(--reef-bg-secondary);
-            border-color: var(--reef-border);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-reef-primary);
         }
 
         .method-tab.active {
-            background: var(--sea-green);
-            border-color: var(--sea-green);
-            color: white;
-            box-shadow: 0 0 20px rgba(32, 178, 170, 0.3);
+            background: rgba(32, 178, 170, 0.12);
+            /* Matches container bg */
+            border-color: var(--reef-border);
+            border-bottom: 1px solid rgba(32, 178, 170, 0.12);
+            /* Hide bottom border */
+            color: var(--text-reef-accent);
+            box-shadow: 0 -4px 15px rgba(32, 178, 170, 0.1);
+        }
+
+        .tab-icon {
+            font-size: 1.1em;
         }
 
         .input-method {
             display: none;
+            background: rgba(32, 178, 170, 0.12);
+            border: 1px solid var(--reef-border);
+            border-radius: 0 16px 16px 16px;
+            /* Top-left square for tab connection */
+            padding: 24px;
+            position: relative;
+            z-index: 5;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--reef-shadow-soft);
         }
 
         .input-method.active {
             display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Adjust internal elements to fit the new container */
+        .input-group.no-label {
+            margin-bottom: 0;
+        }
+
+        /* Override dropzone background to blend or stand out slightly */
+        .dropzone {
+            background: rgba(0, 0, 0, 0.2);
+            border-color: var(--reef-border-subtle);
+        }
+
+        .dropzone:hover,
+        .dropzone.drag-over {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: var(--sea-green);
+        }
+
+        /* Adjust textarea to blend */
+        .transcript-textarea {
+            background: rgba(0, 0, 0, 0.2);
+            border-color: var(--reef-border-subtle);
+        }
+
+        .transcript-textarea:focus {
+            background: rgba(0, 0, 0, 0.3);
         }
 
         /* Drag and Drop Zone */
@@ -2078,47 +2130,48 @@
         </div>
 
         <main class="coral-card coral-card-elevated">
-            <!-- Input Method Selection -->
-            <div class="input-method-selector">
-                <h3 style="color: var(--text-reef-accent); margin-bottom: 16px; font-size: 18px;">Choose Your Content
-                    Input Method</h3>
+            <!-- Unified Input Container -->
+            <div class="unified-input-container">
+                <!-- Tab Navigation -->
                 <div class="method-tabs">
-                    <button id="tab-upload" class="method-tab active" data-method="upload">📁 Upload File</button>
-                    <button id="tab-paste" class="method-tab" data-method="paste">📝 Paste Text</button>
+                    <button id="tab-upload" class="method-tab active" data-method="upload">
+                        <span class="tab-icon">📁</span> Upload File
+                    </button>
+                    <button id="tab-paste" class="method-tab" data-method="paste">
+                        <span class="tab-icon">📝</span> Paste Text
+                    </button>
                 </div>
-            </div>
 
-            <!-- File Upload Method -->
-            <div id="method-upload" class="input-method active">
-                <div class="input-group">
-                    <label for="transcript-file" class="input-label">Upload Transcript File</label>
-                    <div id="dropzone" class="dropzone">
-                        <input type="file" id="transcript-file" class="file-input" accept=".txt,.vtt,.srt,.md,.rtf"
-                            hidden />
-                        <div class="dropzone-content">
-                            <div class="dropzone-icon">📄</div>
-                            <div class="dropzone-text">
-                                <strong>Drop your transcript file here</strong>
-                                <p>or <span id="browse-link" class="file-browse-link">browse to select</span></p>
-                                <small>Supports: TXT, VTT, SRT, MD, RTF (max 10MB)</small>
+                <!-- File Upload Method -->
+                <div id="method-upload" class="input-method active">
+                    <div class="input-group no-label">
+                        <div id="dropzone" class="dropzone">
+                            <input type="file" id="transcript-file" class="file-input" accept=".txt,.vtt,.srt,.md,.rtf"
+                                hidden />
+                            <div class="dropzone-content">
+                                <div class="dropzone-icon">📄</div>
+                                <div class="dropzone-text">
+                                    <strong>Drop your transcript file here</strong>
+                                    <p>or <span id="browse-link" class="file-browse-link">browse to select</span></p>
+                                    <small>Supports: TXT, VTT, SRT, MD, RTF (max 10MB)</small>
+                                </div>
                             </div>
                         </div>
+                        <div id="file-info" class="file-info" style="display: none;"></div>
                     </div>
-                    <div id="file-info" class="file-info" style="display: none;"></div>
                 </div>
-            </div>
 
-            <!-- Paste Text Method -->
-            <div id="method-paste" class="input-method">
-                <div class="input-group">
-                    <label for="transcript-text" class="input-label">Paste Your Content</label>
-                    <textarea id="transcript-text" class="transcript-textarea"
-                        placeholder="Paste your transcript, meeting notes, lecture content, or any text you'd like to analyze..."
-                        rows="8"></textarea>
-                    <div class="text-stats">
-                        <span id="char-count">0 characters</span>
-                        <span id="word-count">0 words</span>
-                        <span id="time-estimate">~0 min estimated</span>
+                <!-- Paste Text Method -->
+                <div id="method-paste" class="input-method">
+                    <div class="input-group no-label">
+                        <textarea id="transcript-text" class="transcript-textarea"
+                            placeholder="Paste your transcript, meeting notes, lecture content, or any text you'd like to analyze..."
+                            rows="12"></textarea>
+                        <div class="text-stats">
+                            <span id="char-count">0 characters</span>
+                            <span id="word-count">0 words</span>
+                            <span id="time-estimate">~0 min estimated</span>
+                        </div>
                     </div>
                 </div>
             </div>
