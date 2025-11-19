@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,40 +24,40 @@
             --aqua-glow: rgba(0, 255, 255, 0.3);
             --bioluminescent: rgba(173, 255, 47, 0.6);
             --sandy-beige: rgba(245, 222, 179, 0.2);
-            
+
             /* Living Glass Backgrounds */
             --reef-bg-primary: rgba(255, 255, 255, 0.08);
             --reef-bg-secondary: rgba(255, 255, 255, 0.12);
             --reef-bg-tertiary: rgba(255, 255, 255, 0.16);
             --reef-bg-elevated: rgba(255, 255, 255, 0.2);
             --reef-bg-modal: rgba(255, 255, 255, 0.25);
-            
+
             /* Organic Borders */
             --reef-border: rgba(255, 255, 255, 0.25);
             --reef-border-subtle: rgba(255, 255, 255, 0.15);
             --reef-border-strong: rgba(255, 255, 255, 0.35);
             --reef-border-glow: rgba(32, 178, 170, 0.4);
-            
+
             /* Bioluminescent Text */
             --text-reef-primary: rgba(255, 255, 255, 0.96);
             --text-reef-secondary: rgba(255, 255, 255, 0.82);
             --text-reef-tertiary: rgba(255, 255, 255, 0.68);
             --text-reef-muted: rgba(255, 255, 255, 0.54);
             --text-reef-accent: rgba(32, 178, 170, 0.95);
-            
+
             /* Organic Shadows */
             --reef-shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.15);
             --reef-shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.2);
             --reef-shadow-deep: 0 16px 80px rgba(0, 0, 0, 0.3);
             --reef-shadow-bioluminescent: 0 0 40px rgba(32, 178, 170, 0.2);
             --reef-shadow-coral: 0 0 30px rgba(255, 127, 80, 0.15);
-            
+
             /* Flowing Blur Effects */
             --reef-blur-gentle: blur(8px);
             --reef-blur-medium: blur(16px);
             --reef-blur-deep: blur(24px);
             --reef-blur-mystical: blur(40px);
-            
+
             /* Organic Dimensions */
             --border-radius-coral: 20px;
             --border-radius-anemone: 32px;
@@ -66,12 +67,12 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-            background: radial-gradient(ellipse at top, 
-                #1a3b5c 0%, 
-                #2c5f7e 20%, 
-                #1e4a6b 40%, 
-                #0f2a44 70%, 
-                #081c2e 100%);
+            background: radial-gradient(ellipse at top,
+                    #1a3b5c 0%,
+                    #2c5f7e 20%,
+                    #1e4a6b 40%,
+                    #0f2a44 70%,
+                    #081c2e 100%);
             background-attachment: fixed;
             color: var(--text-reef-primary);
             line-height: 1.6;
@@ -89,7 +90,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
                 radial-gradient(circle at 15% 25%, var(--coral-primary) 0%, transparent 45%),
                 radial-gradient(circle at 85% 75%, var(--sea-green) 0%, transparent 40%),
                 radial-gradient(circle at 45% 85%, var(--tropical-blue) 0%, transparent 35%),
@@ -100,8 +101,17 @@
         }
 
         @keyframes coralBreathing {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.02); }
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.02);
+            }
         }
 
         /* Floating Bioluminescent Particles */
@@ -112,7 +122,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 20% 30%, var(--bioluminescent) 1px, transparent 1px),
                 radial-gradient(circle at 70% 60%, var(--aqua-glow) 1px, transparent 1px),
                 radial-gradient(circle at 40% 80%, var(--coral-secondary) 1px, transparent 1px),
@@ -124,19 +134,24 @@
         }
 
         @keyframes bioFlow {
-            0%, 100% { 
+
+            0%,
+            100% {
                 transform: translateX(0px) translateY(0px) rotate(0deg);
                 opacity: 0.4;
             }
-            25% { 
+
+            25% {
                 transform: translateX(-15px) translateY(-8px) rotate(2deg);
                 opacity: 0.6;
             }
-            50% { 
+
+            50% {
                 transform: translateX(8px) translateY(12px) rotate(-1deg);
                 opacity: 0.5;
             }
-            75% { 
+
+            75% {
                 transform: translateX(12px) translateY(-5px) rotate(1deg);
                 opacity: 0.7;
             }
@@ -148,8 +163,13 @@
         }
 
         @keyframes currentFlow {
-            0% { background-position: 0% 0%, 0% 0%; }
-            100% { background-position: 200px 200px, -150px 150px; }
+            0% {
+                background-position: 0% 0%, 0% 0%;
+            }
+
+            100% {
+                background-position: 200px 200px, -150px 150px;
+            }
         }
 
         .container {
@@ -182,11 +202,14 @@
         }
 
         @keyframes coralGrowth {
-            0%, 100% { 
+
+            0%,
+            100% {
                 border-radius: 60% 40% 70% 30%;
                 transform: translateX(-50%) scale(1) rotate(0deg);
             }
-            50% { 
+
+            50% {
                 border-radius: 40% 60% 30% 70%;
                 transform: translateX(-50%) scale(1.1) rotate(5deg);
             }
@@ -197,12 +220,12 @@
             font-weight: 800;
             letter-spacing: -0.02em;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, 
-                var(--text-reef-primary) 0%, 
-                var(--coral-primary) 25%,
-                var(--sea-green) 50%, 
-                var(--tropical-blue) 75%,
-                var(--text-reef-secondary) 100%);
+            background: linear-gradient(135deg,
+                    var(--text-reef-primary) 0%,
+                    var(--coral-primary) 25%,
+                    var(--sea-green) 50%,
+                    var(--tropical-blue) 75%,
+                    var(--text-reef-secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -211,8 +234,15 @@
         }
 
         @keyframes textGlow {
-            0%, 100% { text-shadow: 0 0 50px var(--sea-green); }
-            50% { text-shadow: 0 0 70px var(--coral-primary), 0 0 90px var(--sea-green); }
+
+            0%,
+            100% {
+                text-shadow: 0 0 50px var(--sea-green);
+            }
+
+            50% {
+                text-shadow: 0 0 70px var(--coral-primary), 0 0 90px var(--sea-green);
+            }
         }
 
         .header p {
@@ -225,8 +255,15 @@
         }
 
         @keyframes subtleGlow {
-            0%, 100% { color: var(--text-reef-secondary); }
-            50% { color: var(--text-reef-accent); }
+
+            0%,
+            100% {
+                color: var(--text-reef-secondary);
+            }
+
+            50% {
+                color: var(--text-reef-accent);
+            }
         }
 
         /* Living Coral Card */
@@ -251,18 +288,27 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                var(--coral-primary) 25%,
-                var(--sea-green) 50%,
-                var(--tropical-blue) 75%,
-                transparent 100%);
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    var(--coral-primary) 25%,
+                    var(--sea-green) 50%,
+                    var(--tropical-blue) 75%,
+                    transparent 100%);
             animation: reefShimmer 8s ease-in-out infinite;
         }
 
         @keyframes reefShimmer {
-            0%, 100% { opacity: 0.6; transform: translateX(-100%); }
-            50% { opacity: 1; transform: translateX(100%); }
+
+            0%,
+            100% {
+                opacity: 0.6;
+                transform: translateX(-100%);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(100%);
+            }
         }
 
         .coral-card::after {
@@ -272,10 +318,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.05) 0%, 
-                transparent 50%, 
-                rgba(32, 178, 170, 0.03) 100%);
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.05) 0%,
+                    transparent 50%,
+                    rgba(32, 178, 170, 0.03) 100%);
             pointer-events: none;
             border-radius: var(--border-radius-anemone);
         }
@@ -295,17 +341,24 @@
             border: 2px solid var(--reef-border-strong);
             border-radius: var(--border-radius-organic);
             padding: 50px;
-            box-shadow: var(--reef-shadow-deep), 
-                        0 0 80px rgba(32, 178, 170, 0.2),
-                        inset 0 2px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: var(--reef-shadow-deep),
+                0 0 80px rgba(32, 178, 170, 0.2),
+                inset 0 2px 0 rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
             animation: organicPulse 12s ease-in-out infinite;
         }
 
         @keyframes organicPulse {
-            0%, 100% { border-radius: var(--border-radius-organic); }
-            50% { border-radius: 45px 25px 40px 30px; }
+
+            0%,
+            100% {
+                border-radius: var(--border-radius-organic);
+            }
+
+            50% {
+                border-radius: 45px 25px 40px 30px;
+            }
         }
 
         .coral-card-elevated::before {
@@ -315,19 +368,26 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 30% 20%, 
-                rgba(255, 127, 80, 0.08) 0%, 
-                transparent 40%),
-                radial-gradient(circle at 70% 80%, 
-                rgba(32, 178, 170, 0.06) 0%, 
-                transparent 40%);
+            background: radial-gradient(circle at 30% 20%,
+                    rgba(255, 127, 80, 0.08) 0%,
+                    transparent 40%),
+                radial-gradient(circle at 70% 80%,
+                    rgba(32, 178, 170, 0.06) 0%,
+                    transparent 40%);
             pointer-events: none;
             animation: organicAmbient 18s ease-in-out infinite;
         }
 
         @keyframes organicAmbient {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* Input Elements with Coral Texture */
@@ -410,17 +470,17 @@
             border-color: var(--reef-border-glow);
             background: var(--reef-bg-secondary);
             box-shadow: 0 0 0 4px rgba(32, 178, 170, 0.2),
-                        inset 0 3px 12px rgba(0, 0, 0, 0.15),
-                        0 0 40px rgba(32, 178, 170, 0.15);
+                inset 0 3px 12px rgba(0, 0, 0, 0.15),
+                0 0 40px rgba(32, 178, 170, 0.15);
             transform: translateY(-2px);
         }
 
         /* Bioluminescent Button */
         .bio-button {
-            background: linear-gradient(135deg, 
-                var(--sea-green) 0%, 
-                var(--tropical-blue) 50%,
-                var(--coral-primary) 100%);
+            background: linear-gradient(135deg,
+                    var(--sea-green) 0%,
+                    var(--tropical-blue) 50%,
+                    var(--coral-primary) 100%);
             backdrop-filter: var(--reef-blur-gentle);
             -webkit-backdrop-filter: var(--reef-blur-gentle);
             border: 2px solid rgba(32, 178, 170, 0.6);
@@ -432,8 +492,8 @@
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            box-shadow: var(--reef-shadow-soft), 
-                        0 0 30px rgba(32, 178, 170, 0.3);
+            box-shadow: var(--reef-shadow-soft),
+                0 0 30px rgba(32, 178, 170, 0.3);
             position: relative;
             overflow: hidden;
             font-family: inherit;
@@ -446,10 +506,10 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.4) 50%, 
-                transparent 100%);
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    transparent 100%);
             transition: left 0.6s ease;
         }
 
@@ -608,7 +668,7 @@
             border-color: var(--reef-border-glow);
             background: var(--reef-bg-secondary);
             box-shadow: 0 0 0 4px rgba(32, 178, 170, 0.2),
-                        inset 0 3px 12px rgba(0, 0, 0, 0.15);
+                inset 0 3px 12px rgba(0, 0, 0, 0.15);
         }
 
         /* Text Statistics */
@@ -680,8 +740,8 @@
 
         .bio-button:disabled:hover {
             transform: none;
-            box-shadow: var(--reef-shadow-soft), 
-                        0 0 30px rgba(32, 178, 170, 0.3);
+            box-shadow: var(--reef-shadow-soft),
+                0 0 30px rgba(32, 178, 170, 0.3);
         }
 
         .bio-button-disabled {
@@ -731,9 +791,9 @@
 
         .bio-button:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: var(--reef-shadow-medium), 
-                        0 0 50px rgba(32, 178, 170, 0.5),
-                        0 0 80px rgba(255, 127, 80, 0.3);
+            box-shadow: var(--reef-shadow-medium),
+                0 0 50px rgba(32, 178, 170, 0.5),
+                0 0 80px rgba(255, 127, 80, 0.3);
             border-color: rgba(32, 178, 170, 0.9);
         }
 
@@ -749,8 +809,15 @@
         }
 
         @keyframes disabledPulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 0.4; }
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
         }
 
         /* Current Flow Progress Section */
@@ -769,6 +836,7 @@
                 opacity: 0;
                 transform: translateY(40px) scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -802,9 +870,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-                rgba(32, 178, 170, 0.1) 0%, 
-                transparent 50%);
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+                    rgba(32, 178, 170, 0.1) 0%,
+                    transparent 50%);
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
@@ -822,8 +890,15 @@
         }
 
         @keyframes activeGrowth {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
         }
 
         .phase-polyp.completed {
@@ -865,8 +940,15 @@
         }
 
         @keyframes nucleusPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
         }
 
         .phase-polyp.completed .phase-nucleus {
@@ -923,11 +1005,14 @@
         }
 
         @keyframes symbiontPulse {
-            0%, 100% { 
+
+            0%,
+            100% {
                 transform: scale(1);
                 box-shadow: 0 0 15px rgba(32, 178, 170, 0.6);
             }
-            50% { 
+
+            50% {
                 transform: scale(1.3);
                 box-shadow: 0 0 25px rgba(32, 178, 170, 0.8);
             }
@@ -973,8 +1058,8 @@
             border-radius: var(--border-radius-anemone);
             padding: 40px;
             text-align: center;
-            box-shadow: var(--reef-shadow-medium), 
-                        0 0 60px rgba(255, 127, 80, 0.15);
+            box-shadow: var(--reef-shadow-medium),
+                0 0 60px rgba(255, 127, 80, 0.15);
             position: relative;
             overflow: hidden;
         }
@@ -986,16 +1071,25 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 50% 50%, 
-                rgba(255, 127, 80, 0.1) 0%, 
-                transparent 60%);
+            background: radial-gradient(circle at 50% 50%,
+                    rgba(255, 127, 80, 0.1) 0%,
+                    transparent 60%);
             animation: treasureGlow 8s ease-in-out infinite;
             pointer-events: none;
         }
 
         @keyframes treasureGlow {
-            0%, 100% { opacity: 0.6; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+
+            0%,
+            100% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
         }
 
         .treasure-title {
@@ -1014,9 +1108,9 @@
         }
 
         .harvest-button {
-            background: linear-gradient(135deg, 
-                var(--coral-primary) 0%, 
-                rgba(255, 127, 80, 0.9) 100%);
+            background: linear-gradient(135deg,
+                    var(--coral-primary) 0%,
+                    rgba(255, 127, 80, 0.9) 100%);
             backdrop-filter: var(--reef-blur-gentle);
             -webkit-backdrop-filter: var(--reef-blur-gentle);
             border: 2px solid rgba(255, 127, 80, 0.6);
@@ -1029,15 +1123,15 @@
             transition: all 0.4s ease;
             text-decoration: none;
             display: inline-block;
-            box-shadow: var(--reef-shadow-soft), 
-                        0 0 30px rgba(255, 127, 80, 0.3);
+            box-shadow: var(--reef-shadow-soft),
+                0 0 30px rgba(255, 127, 80, 0.3);
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .harvest-button:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: var(--reef-shadow-medium), 
-                        0 0 50px rgba(255, 127, 80, 0.5);
+            box-shadow: var(--reef-shadow-medium),
+                0 0 50px rgba(255, 127, 80, 0.5);
             border-color: rgba(255, 127, 80, 0.9);
         }
 
@@ -1094,8 +1188,13 @@
         }
 
         @keyframes depthDive {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .laboratory {
@@ -1109,8 +1208,8 @@
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
-            box-shadow: var(--reef-shadow-deep), 
-                        0 0 100px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--reef-shadow-deep),
+                0 0 100px rgba(0, 0, 0, 0.4);
             position: relative;
             animation: labAscent 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
@@ -1120,6 +1219,7 @@
                 opacity: 0;
                 transform: scale(0.8) translateY(50px);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1) translateY(0);
@@ -1133,10 +1233,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.1) 0%, 
-                transparent 50%, 
-                rgba(32, 178, 170, 0.05) 100%);
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.1) 0%,
+                    transparent 50%,
+                    rgba(32, 178, 170, 0.05) 100%);
             border-radius: var(--border-radius-organic);
             pointer-events: none;
         }
@@ -1287,16 +1387,21 @@
         /* Current Flow Loading */
         .current-loading {
             background: linear-gradient(90deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(32, 178, 170, 0.2) 50%,
-                rgba(255, 255, 255, 0.1) 100%);
+                    rgba(255, 255, 255, 0.1) 0%,
+                    rgba(32, 178, 170, 0.2) 50%,
+                    rgba(255, 255, 255, 0.1) 100%);
             background-size: 200% 100%;
             animation: currentShimmer 2s ease-in-out infinite;
         }
 
         @keyframes currentShimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
         }
 
         /* Reef Reflection Effects */
@@ -1313,9 +1418,9 @@
             width: 50%;
             height: 100%;
             background: linear-gradient(90deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.2) 50%,
-                transparent 100%);
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.2) 50%,
+                    transparent 100%);
             transform: skewX(-20deg);
             transition: left 0.8s ease;
         }
@@ -1359,7 +1464,7 @@
             position: relative;
         }
 
-        body > .current-lines {
+        body>.current-lines {
             display: none;
         }
 
@@ -1637,16 +1742,16 @@
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            
+
             .generated-documents-list {
                 grid-template-columns: 1fr;
             }
-            
+
             .document-controls {
                 flex-direction: column;
                 gap: 10px;
             }
-            
+
             .document-controls button {
                 width: 100%;
             }
@@ -1778,10 +1883,13 @@
         }
 
         @keyframes coralPulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 0.4;
                 transform: scale(1);
             }
+
             50% {
                 opacity: 1;
                 transform: scale(1.2);
@@ -1793,11 +1901,11 @@
             .auth-content {
                 padding: 20px;
             }
-            
+
             .auth-header h3 {
                 font-size: 1.2rem;
             }
-            
+
             .benefit-item {
                 font-size: 0.9rem;
             }
@@ -1902,13 +2010,15 @@
         }
     </style>
 </head>
+
 <body>
     <div class="current-lines"></div>
-    
+
     <div class="container">
         <header class="header">
             <h1>Fabric Studio</h1>
-            <p>Powered by Daniel Miessler's Fabric framework, this studio makes advanced text analysis accessible to everyone. Transform dense documents into 13 distinct insight files with just a few clicks.</p>
+            <p>Powered by Daniel Miessler's Fabric framework, this studio makes advanced text analysis accessible to
+                everyone. Transform dense documents into 13 distinct insight files with just a few clicks.</p>
         </header>
 
         <!-- OAuth2 Authentication Section (Hidden by default) -->
@@ -1919,11 +2029,12 @@
                     <span>Checking authentication status...</span>
                 </div>
             </div>
-            
+
             <div id="auth-unauthenticated" class="auth-content" style="display: none;">
                 <div class="auth-header">
                     <h3>🔑 YouTube Authentication Required</h3>
-                    <p>To access real YouTube transcripts and bypass bot detection, please authenticate with your Google account.</p>
+                    <p>To access real YouTube transcripts and bypass bot detection, please authenticate with your Google
+                        account.</p>
                 </div>
                 <div class="auth-benefits">
                     <div class="benefit-item">
@@ -1943,9 +2054,10 @@
                     <span class="button-icon">🚀</span>
                     Authenticate with Google
                 </button>
-                <p class="auth-note">Without authentication, the system will use simulation mode with placeholder content.</p>
+                <p class="auth-note">Without authentication, the system will use simulation mode with placeholder
+                    content.</p>
             </div>
-            
+
             <div id="auth-authenticated" class="auth-content" style="display: none;">
                 <div class="auth-header">
                     <h3>✅ Authenticated Successfully</h3>
@@ -1963,7 +2075,8 @@
         <main class="coral-card coral-card-elevated">
             <!-- Input Method Selection -->
             <div class="input-method-selector">
-                <h3 style="color: var(--text-reef-accent); margin-bottom: 16px; font-size: 18px;">Choose Your Content Input Method</h3>
+                <h3 style="color: var(--text-reef-accent); margin-bottom: 16px; font-size: 18px;">Choose Your Content
+                    Input Method</h3>
                 <div class="method-tabs">
                     <button id="tab-upload" class="method-tab active" data-method="upload">📁 Upload File</button>
                     <button id="tab-paste" class="method-tab" data-method="paste">📝 Paste Text</button>
@@ -1975,18 +2088,13 @@
                 <div class="input-group">
                     <label for="transcript-file" class="input-label">Upload Transcript File</label>
                     <div id="dropzone" class="dropzone">
-                        <input 
-                            type="file" 
-                            id="transcript-file" 
-                            class="file-input" 
-                            accept=".txt,.vtt,.srt,.md,.rtf"
-                            hidden
-                        />
+                        <input type="file" id="transcript-file" class="file-input" accept=".txt,.vtt,.srt,.md,.rtf"
+                            hidden />
                         <div class="dropzone-content">
                             <div class="dropzone-icon">📄</div>
                             <div class="dropzone-text">
                                 <strong>Drop your transcript file here</strong>
-                                <p>or <span class="file-browse-link">browse to select</span></p>
+                                <p>or <span id="browse-link" class="file-browse-link">browse to select</span></p>
                                 <small>Supports: TXT, VTT, SRT, MD, RTF (max 10MB)</small>
                             </div>
                         </div>
@@ -1999,12 +2107,9 @@
             <div id="method-paste" class="input-method">
                 <div class="input-group">
                     <label for="transcript-text" class="input-label">Paste Your Content</label>
-                    <textarea 
-                        id="transcript-text" 
-                        class="transcript-textarea" 
+                    <textarea id="transcript-text" class="transcript-textarea"
                         placeholder="Paste your transcript, meeting notes, lecture content, or any text you'd like to analyze..."
-                        rows="8"
-                    ></textarea>
+                        rows="8"></textarea>
                     <div class="text-stats">
                         <span id="char-count">0 characters</span>
                         <span id="word-count">0 words</span>
@@ -2030,13 +2135,20 @@
                 <div class="info-content">
                     <strong>Content Processing Recommendations:</strong>
                     <ul>
-                        <li> <strong>Excellent Results</strong>: Meeting recordings, lectures, podcasts (15-45 min content)</li>
-                        <li> <strong>Great Results</strong>: Long-form content, interviews, webinars (45-90 min content)</li>
+                        <li> <strong>Excellent Results</strong>: Meeting recordings, lectures, podcasts (15-45 min
+                            content)</li>
+                        <li> <strong>Great Results</strong>: Long-form content, interviews, webinars (45-90 min content)
+                        </li>
                         <li> <strong>Good Results</strong>: Extended content, full courses (90+ min content)</li>
                     </ul>
-                    <p style="color: rgba(255, 255, 255, 0.9);"><strong>Content density matters more than duration</strong> - a dense 30-minute lecture may process like a 90-minute casual conversation.</p>
-                    <div style="margin-top: 12px; padding: 12px; background: rgba(32, 178, 170, 0.15); border: 1px solid rgba(32, 178, 170, 0.3); border-radius: 8px; color: rgba(255, 255, 255, 0.95);">
-                        <strong> The Magic:</strong> Upload any transcript or paste your content to get professional-grade analysis from 13 specialized Fabric patterns - the same patterns used by thousands of knowledge workers worldwide!
+                    <p style="color: rgba(255, 255, 255, 0.9);"><strong>Content density matters more than
+                            duration</strong> - a dense 30-minute lecture may process like a 90-minute casual
+                        conversation.</p>
+                    <div
+                        style="margin-top: 12px; padding: 12px; background: rgba(32, 178, 170, 0.15); border: 1px solid rgba(32, 178, 170, 0.3); border-radius: 8px; color: rgba(255, 255, 255, 0.95);">
+                        <strong> The Magic:</strong> Upload any transcript or paste your content to get
+                        professional-grade analysis from 13 specialized Fabric patterns - the same patterns used by
+                        thousands of knowledge workers worldwide!
                     </div>
                 </div>
             </div>
@@ -2047,34 +2159,57 @@
                 <div class="info-content">
                     <strong>Content Resources</strong>
                     <p style="color: rgba(255, 255, 255, 0.9); margin-top: 8px; margin-bottom: 16px;">
-                        Unlock the full potential of Fabric Studio by discovering the best sources for high-quality content to analyze.
+                        Unlock the full potential of Fabric Studio by discovering the best sources for high-quality
+                        content to analyze.
                     </p>
-                    
-                    <div class="resources-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+
+                    <div class="resources-grid"
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
                         <div class="resource-category">
-                            <h4 style="color: var(--sea-green); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">YouTube Transcript Tools</h4>
+                            <h4
+                                style="color: var(--sea-green); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">
+                                YouTube Transcript Tools</h4>
                             <div style="font-size: 0.9rem; line-height: 1.5;">
-                                <a href="https://www.transcribr.io/" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• Transcribr.io</a>
-                                <a href="https://tactiq.io/tools/youtube-transcript" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• Tactiq YouTube Transcript</a>
-                                <a href="https://notegpt.io/youtube-transcript-generator" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• NoteGPT Transcript Generator</a>
-                                <a href="https://youtubetotranscript.com/" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">• YouTube to Transcript</a>
-                                <a href="https://kome.ai/tools/youtube-transcript-generator" target="_blank" style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; transition: color 0.2s ease;">• Kome.ai Transcript Generator</a>
+                                <a href="https://www.transcribr.io/" target="_blank"
+                                    style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">•
+                                    Transcribr.io</a>
+                                <a href="https://tactiq.io/tools/youtube-transcript" target="_blank"
+                                    style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">•
+                                    Tactiq YouTube Transcript</a>
+                                <a href="https://notegpt.io/youtube-transcript-generator" target="_blank"
+                                    style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">•
+                                    NoteGPT Transcript Generator</a>
+                                <a href="https://youtubetotranscript.com/" target="_blank"
+                                    style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; margin-bottom: 6px; transition: color 0.2s ease;">•
+                                    YouTube to Transcript</a>
+                                <a href="https://kome.ai/tools/youtube-transcript-generator" target="_blank"
+                                    style="display: block; color: rgba(255, 255, 255, 0.9); text-decoration: none; transition: color 0.2s ease;">•
+                                    Kome.ai Transcript Generator</a>
                             </div>
                         </div>
-                        
+
                         <div class="resource-category">
-                            <h4 style="color: var(--coral-primary); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">Meeting & Collaboration</h4>
+                            <h4
+                                style="color: var(--coral-primary); font-size: 1rem; margin-bottom: 12px; font-weight: 600;">
+                                Meeting & Collaboration</h4>
                             <div style="font-size: 0.9rem; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
-                                <p style="margin-bottom: 8px;"><strong>Video Conferencing:</strong> Zoom, Teams, Google Meet, Webex recordings</p>
-                                <p style="margin-bottom: 8px;"><strong>Professional Services:</strong> Otter.ai, Rev.com, Trint, Descript</p>
-                                <p style="margin-bottom: 8px;"><strong>Educational Platforms:</strong> Coursera, Udemy, Khan Academy</p>
-                                <p style="margin-bottom: 0;"><strong>Podcast Content:</strong> Spotify, Apple Podcasts, dedicated transcription services</p>
+                                <p style="margin-bottom: 8px;"><strong>Video Conferencing:</strong> Zoom, Teams, Google
+                                    Meet, Webex recordings</p>
+                                <p style="margin-bottom: 8px;"><strong>Professional Services:</strong> Otter.ai,
+                                    Rev.com, Trint, Descript</p>
+                                <p style="margin-bottom: 8px;"><strong>Educational Platforms:</strong> Coursera, Udemy,
+                                    Khan Academy</p>
+                                <p style="margin-bottom: 0;"><strong>Podcast Content:</strong> Spotify, Apple Podcasts,
+                                    dedicated transcription services</p>
                             </div>
                         </div>
                     </div>
-                    
-                    <div style="margin-top: 16px; padding: 12px; background: rgba(32, 178, 170, 0.12); border: 1px solid rgba(32, 178, 170, 0.25); border-radius: 8px; color: rgba(255, 255, 255, 0.95); font-size: 0.9rem;">
-                        💡 <strong>Pro Tip:</strong> Whether you're processing meeting transcripts, educational content, or research materials - these curated resources will help you source meaningful content for comprehensive AI-powered insights.
+
+                    <div
+                        style="margin-top: 16px; padding: 12px; background: rgba(32, 178, 170, 0.12); border: 1px solid rgba(32, 178, 170, 0.25); border-radius: 8px; color: rgba(255, 255, 255, 0.95); font-size: 0.9rem;">
+                        💡 <strong>Pro Tip:</strong> Whether you're processing meeting transcripts, educational content,
+                        or research materials - these curated resources will help you source meaningful content for
+                        comprehensive AI-powered insights.
                     </div>
                 </div>
             </div>
@@ -2086,7 +2221,8 @@
             <div class="coral-card">
                 <div class="progress-header">
                     <h3>Analysis in Progress</h3>
-                    <p>Your content is being analyzed through Fabric Studio using 13 specialized patterns across 4 processing phases</p>
+                    <p>Your content is being analyzed through Fabric Studio using 13 specialized patterns across 4
+                        processing phases</p>
                 </div>
 
                 <div class="reef-phases">
@@ -2185,7 +2321,8 @@
             <div class="coral-card">
                 <div class="treasure-card">
                     <h3 class="treasure-title">Analysis Complete!</h3>
-                    <p class="treasure-description">Your content has been thoroughly analyzed through Fabric Studio. All 13 fabric patterns have been processed and are ready for download.</p>
+                    <p class="treasure-description">Your content has been thoroughly analyzed through Fabric Studio. All
+                        13 fabric patterns have been processed and are ready for download.</p>
                     <a href="#" id="download-btn" class="harvest-button reef-reflection">Download Insights</a>
                 </div>
             </div>
@@ -2207,16 +2344,18 @@
             <div class="coral-card coral-card-elevated">
                 <div class="progress-header">
                     <h3>🧬 Document Studio Detected Advanced Content</h3>
-                    <p>Your content analysis reveals opportunities for professional document generation across 4 specialized tiers</p>
+                    <p>Your content analysis reveals opportunities for professional document generation across 4
+                        specialized tiers</p>
                 </div>
 
                 <!-- Document Opportunities Display -->
                 <div id="document-opportunities" class="document-opportunities" style="display: none;">
                     <div class="opportunities-header">
                         <h4>Recommended Document Portfolio</h4>
-                        <p class="opportunities-subtitle">Select documents to generate based on your content analysis</p>
+                        <p class="opportunities-subtitle">Select documents to generate based on your content analysis
+                        </p>
                     </div>
-                    
+
                     <div class="document-tiers">
                         <!-- Technical Implementation Tier -->
                         <div class="document-tier" data-tier="technical">
@@ -2268,8 +2407,10 @@
                     </div>
 
                     <div class="document-controls">
-                        <button id="select-all-documents" class="bio-button" style="margin-right: 15px;">Select All Recommended</button>
-                        <button id="generate-documents-btn" class="bio-button" disabled>Generate Selected Documents</button>
+                        <button id="select-all-documents" class="bio-button" style="margin-right: 15px;">Select All
+                            Recommended</button>
+                        <button id="generate-documents-btn" class="bio-button" disabled>Generate Selected
+                            Documents</button>
                     </div>
                 </div>
 
@@ -2279,7 +2420,7 @@
                         <h4>🧬 Document Studio Active</h4>
                         <p>Generating professional documents from your content analysis...</p>
                     </div>
-                    
+
                     <div class="generation-status">
                         <div class="generation-current">
                             <span id="current-document-title">Initializing...</span>
@@ -2288,7 +2429,8 @@
                             </div>
                         </div>
                         <div class="generation-stats">
-                            <span id="documents-generated">0</span> / <span id="total-documents">0</span> documents completed
+                            <span id="documents-generated">0</span> / <span id="total-documents">0</span> documents
+                            completed
                         </div>
                     </div>
                 </div>
@@ -2299,13 +2441,13 @@
                         <h4>🧬 Document Studio Complete</h4>
                         <p>Professional document suite generated successfully</p>
                     </div>
-                    
+
                     <div class="document-portfolio">
                         <div id="generated-documents-list" class="generated-documents-list">
                             <!-- Generated documents will be populated here -->
                         </div>
                     </div>
-                    
+
                     <div class="enhanced-download">
                         <a href="#" id="enhanced-download-btn" class="harvest-button reef-reflection">
                             Download Enhanced Results (Patterns + Documents)
@@ -2326,7 +2468,7 @@
                 <h2 class="lab-title">Fabric Studio Console</h2>
                 <button id="lab-exit" class="lab-exit">×</button>
             </div>
-            
+
             <div class="lab-content">
                 <div class="lab-section">
                     <h3 class="section-header">API Key Configuration</h3>
@@ -2336,16 +2478,17 @@
                         <button class="control-organism" onclick="viewCurrentKeys()">View Current Configuration</button>
                     </div>
                 </div>
-                
+
                 <div class="lab-section">
                     <h3 class="section-header">Server Status</h3>
                     <div class="lab-controls">
                         <button class="control-organism" onclick="checkReefStatus()">Check Server Status</button>
-                        <button class="control-organism" onclick="viewExplorationHistory()">View Processing History</button>
+                        <button class="control-organism" onclick="viewExplorationHistory()">View Processing
+                            History</button>
                         <button class="control-organism" onclick="monitorCurrents()">Monitor System Health</button>
                     </div>
                 </div>
-                
+
                 <div class="lab-section">
                     <h3 class="section-header">File Management</h3>
                     <div class="lab-controls">
@@ -2354,7 +2497,7 @@
                         <button class="control-organism danger" onclick="resetLaboratory()">Clear All Data</button>
                     </div>
                 </div>
-                
+
                 <div class="lab-section">
                     <h3 class="section-header">Server Controls</h3>
                     <div class="lab-controls">
@@ -2373,71 +2516,53 @@
                 <h2 class="lab-title">API Key Configuration</h2>
                 <button id="api-key-exit" class="lab-exit">×</button>
             </div>
-            
+
             <div class="lab-content">
                 <div class="lab-section">
                     <h3 class="section-header">LLM Provider API Keys</h3>
                     <p style="color: var(--text-reef-secondary); margin-bottom: 25px; font-size: 0.95rem;">
                         Configure API keys for fallback model support. Keys are stored securely on the server.
                     </p>
-                    
+
                     <div class="input-group">
                         <label for="anthropic-key" class="input-label">Anthropic API Key (Claude Models)</label>
-                        <input 
-                            type="password" 
-                            id="anthropic-key" 
-                            class="url-input" 
-                            placeholder="sk-ant-api03-..."
-                            style="font-family: monospace; font-size: 0.9rem;"
-                        />
+                        <input type="password" id="anthropic-key" class="url-input" placeholder="sk-ant-api03-..."
+                            style="font-family: monospace; font-size: 0.9rem;" />
                     </div>
-                    
+
                     <div class="input-group">
                         <label for="openai-key" class="input-label">OpenAI API Key (GPT Models)</label>
-                        <input 
-                            type="password" 
-                            id="openai-key" 
-                            class="url-input" 
-                            placeholder="sk-proj-..."
-                            style="font-family: monospace; font-size: 0.9rem;"
-                        />
+                        <input type="password" id="openai-key" class="url-input" placeholder="sk-proj-..."
+                            style="font-family: monospace; font-size: 0.9rem;" />
                     </div>
-                    
+
                     <div class="input-group">
                         <label for="google-key" class="input-label">Google API Key (Gemini Models)</label>
-                        <input 
-                            type="password" 
-                            id="google-key" 
-                            class="url-input" 
-                            placeholder="AIzaSy..."
-                            style="font-family: monospace; font-size: 0.9rem;"
-                        />
+                        <input type="password" id="google-key" class="url-input" placeholder="AIzaSy..."
+                            style="font-family: monospace; font-size: 0.9rem;" />
                     </div>
-                    
+
                     <div class="lab-controls" style="margin-top: 30px;">
-                        <button class="control-organism" onclick="saveApiKeys()" style="background: var(--sea-green); color: white;">Save Configuration</button>
+                        <button class="control-organism" onclick="saveApiKeys()"
+                            style="background: var(--sea-green); color: white;">Save Configuration</button>
                         <button class="control-organism" onclick="loadApiKeys()">Load Current Keys</button>
                         <button class="control-organism danger" onclick="clearApiKeys()">Clear All Keys</button>
                     </div>
                 </div>
-                
+
                 <div class="lab-section">
                     <h3 class="section-header">Fallback Model Configuration</h3>
                     <p style="color: var(--text-reef-secondary); margin-bottom: 25px; font-size: 0.95rem;">
                         Configure the order of model fallbacks when API calls fail.
                     </p>
-                    
+
                     <div class="input-group">
                         <label for="fallback-models" class="input-label">Fallback Model Order</label>
-                        <textarea 
-                            id="fallback-models" 
-                            class="url-input" 
-                            rows="6" 
+                        <textarea id="fallback-models" class="url-input" rows="6"
                             placeholder="claude-3-5-sonnet-20241022&#10;gpt-4o&#10;OpenAI o3&#10;gpt-4o-mini&#10;claude-3-5-haiku-20241022&#10;gpt-4-turbo"
-                            style="font-family: monospace; font-size: 0.9rem; resize: vertical;"
-                        ></textarea>
+                            style="font-family: monospace; font-size: 0.9rem; resize: vertical;"></textarea>
                     </div>
-                    
+
                     <div class="lab-controls" style="margin-top: 20px;">
                         <button class="control-organism" onclick="saveFallbackConfig()">Save Fallback Order</button>
                         <button class="control-organism" onclick="resetToDefaults()">Reset to Defaults</button>
@@ -2460,18 +2585,18 @@
         const progressSection = document.getElementById('progress-section');
         const resultsSection = document.getElementById('results-section');
         const downloadBtn = document.getElementById('download-btn');
-        
+
         // Method tabs and containers
         const methodTabs = document.querySelectorAll('.method-tab');
         const inputMethods = document.querySelectorAll('.input-method');
-        
+
         // Stats elements
         const charCount = document.getElementById('char-count');
         const wordCount = document.getElementById('word-count');
         const timeEstimate = document.getElementById('time-estimate');
         const previewFormat = document.getElementById('preview-format');
         const previewSize = document.getElementById('preview-size');
-        
+
         // Global state
         let currentContent = '';
         let currentMethod = 'upload';
@@ -2544,7 +2669,7 @@
         function handleFileDrop(e) {
             e.preventDefault();
             dropzone.classList.remove('drag-over');
-            
+
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 handleFile(files[0]);
@@ -2614,7 +2739,7 @@
             currentContent = e.target.value;
             updateTextStats();
             updateProcessButton();
-            
+
             if (currentContent.length > 100) {
                 detectAndPreviewContent(currentContent, 'paste');
             } else {
@@ -2655,11 +2780,11 @@
 
             const preview = content.substring(0, 500) + (content.length > 500 ? '...' : '');
             const format = detectContentFormat(content, source);
-            
+
             previewText.textContent = preview;
             previewFormat.textContent = `Format: ${format}`;
             previewSize.textContent = `Size: ${(content.length / 1024).toFixed(1)} KB`;
-            
+
             contentPreview.style.display = 'block';
         }
 
@@ -2678,7 +2803,7 @@
 
         function updateProcessButton() {
             let hasContent = false;
-            
+
             switch (currentMethod) {
                 case 'upload':
                     hasContent = currentContent && currentContent.trim().length > 0;
@@ -2689,7 +2814,7 @@
             }
 
             processBtn.disabled = !hasContent || isProcessing;
-            
+
             if (hasContent && !isProcessing) {
                 processBtn.textContent = 'Start Analysis';
                 processBtn.classList.remove('bio-button-disabled');
@@ -2730,30 +2855,30 @@
         function initializeWebSocket() {
             // Disabled - WebSocket handled by app.js to prevent duplicate connections
             return;
-            
+
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             const wsUrl = `${protocol}//${window.location.host}`;
-            
+
             socket = new WebSocket(wsUrl);
-            
-            socket.onopen = function(event) {
+
+            socket.onopen = function (event) {
                 console.log('WebSocket connected');
             };
-            
-            socket.onmessage = function(event) {
+
+            socket.onmessage = function (event) {
                 const data = JSON.parse(event.data);
                 handleWebSocketMessage(data);
             };
-            
-            socket.onclose = function(event) {
+
+            socket.onclose = function (event) {
                 console.log('WebSocket disconnected');
                 // Only attempt to reconnect if we were processing something
                 if (isProcessing) {
                     setTimeout(initializeWebSocket, 5000);
                 }
             };
-            
-            socket.onerror = function(error) {
+
+            socket.onerror = function (error) {
                 console.error('WebSocket error:', error);
             };
         }
@@ -2832,7 +2957,7 @@
             if (window.app && window.app.startProcessing) {
                 return window.app.startProcessing();
             }
-            
+
             // This function is now handled by Fabric Studio
             showNotification('Fabric Studio loading...', 'info');
             return;
@@ -2864,7 +2989,7 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (response.ok) {
                     currentProcessId = data.processId;
                     showNotification('Analysis initiated! Processing your content...', 'success');
@@ -2895,7 +3020,7 @@
                     // Check if all patterns in this phase are completed
                     const patternsInPhase = phaseElement.querySelectorAll('.pattern-organism');
                     const completedPatterns = phaseElement.querySelectorAll('.pattern-organism.completed');
-                    
+
                     if (patternsInPhase.length === completedPatterns.length) {
                         phaseElement.classList.remove('active');
                         phaseElement.classList.add('completed');
@@ -2908,12 +3033,12 @@
 
         function processComplete(processId) {
             currentProcessId = processId;
-            
+
             // Show results section
             resultsSection.classList.add('visible');
-            
+
             // Download handled by app.js click handler (no href needed)
-            
+
             // Reset button
             processBtn.disabled = false;
             processBtn.textContent = 'Start Analysis';
@@ -2927,11 +3052,11 @@
 
         function processError(message) {
             showNotification(`Processing error: ${message}`, 'error');
-            
+
             // Reset UI state
             isProcessing = false;
             updateProcessButton();
-            
+
             // Re-enable inputs (YouTube not supported in cloud deployment)
             transcriptText.disabled = false;
             transcriptFile.disabled = false;
@@ -2950,7 +3075,7 @@
             document.querySelectorAll('.phase-polyp').forEach(polyp => {
                 polyp.classList.remove('active', 'completed');
             });
-            
+
             // Reset all patterns
             document.querySelectorAll('.pattern-organism').forEach(organism => {
                 organism.classList.remove('active', 'completed');
@@ -3095,40 +3220,40 @@
                 },
                 body: JSON.stringify(apiKeys)
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification('API keys saved successfully', 'success');
-                } else {
-                    showNotification('Failed to save API keys: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showNotification('Error saving API keys: ' + error.message, 'error');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('API keys saved successfully', 'success');
+                    } else {
+                        showNotification('Failed to save API keys: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Error saving API keys: ' + error.message, 'error');
+                });
         }
 
         function loadApiKeys() {
             fetch('/api/management/config/api-keys')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Show masked versions of keys
-                    document.getElementById('anthropic-key').placeholder = data.keys.anthropic ? '••••••••••••••••' : 'sk-ant-api03-...';
-                    document.getElementById('openai-key').placeholder = data.keys.openai ? '••••••••••••••••' : 'sk-proj-...';
-                    document.getElementById('google-key').placeholder = data.keys.google ? '••••••••••••••••' : 'AIzaSy...';
-                    
-                    // Load fallback model configuration
-                    if (data.fallbackModels) {
-                        document.getElementById('fallback-models').value = data.fallbackModels.join('\n');
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show masked versions of keys
+                        document.getElementById('anthropic-key').placeholder = data.keys.anthropic ? '••••••••••••••••' : 'sk-ant-api03-...';
+                        document.getElementById('openai-key').placeholder = data.keys.openai ? '••••••••••••••••' : 'sk-proj-...';
+                        document.getElementById('google-key').placeholder = data.keys.google ? '••••••••••••••••' : 'AIzaSy...';
+
+                        // Load fallback model configuration
+                        if (data.fallbackModels) {
+                            document.getElementById('fallback-models').value = data.fallbackModels.join('\n');
+                        }
+                    } else {
+                        showNotification('Failed to load API keys: ' + data.message, 'error');
                     }
-                } else {
-                    showNotification('Failed to load API keys: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showNotification('Error loading API keys: ' + error.message, 'error');
-            });
+                })
+                .catch(error => {
+                    showNotification('Error loading API keys: ' + error.message, 'error');
+                });
         }
 
         function clearApiKeys() {
@@ -3136,22 +3261,22 @@
                 fetch('/api/management/config/api-keys', {
                     method: 'DELETE'
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showNotification('API keys cleared successfully', 'success');
-                        // Clear the form
-                        document.getElementById('anthropic-key').value = '';
-                        document.getElementById('openai-key').value = '';
-                        document.getElementById('google-key').value = '';
-                        loadApiKeys(); // Refresh placeholders
-                    } else {
-                        showNotification('Failed to clear API keys: ' + data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    showNotification('Error clearing API keys: ' + error.message, 'error');
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showNotification('API keys cleared successfully', 'success');
+                            // Clear the form
+                            document.getElementById('anthropic-key').value = '';
+                            document.getElementById('openai-key').value = '';
+                            document.getElementById('google-key').value = '';
+                            loadApiKeys(); // Refresh placeholders
+                        } else {
+                            showNotification('Failed to clear API keys: ' + data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showNotification('Error clearing API keys: ' + error.message, 'error');
+                    });
             }
         }
 
@@ -3159,41 +3284,41 @@
             fetch('/api/management/config/test-apis', {
                 method: 'POST'
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const results = data.results;
-                    const workingApis = Object.keys(results).filter(key => results[key].working).length;
-                    const totalApis = Object.keys(results).length;
-                    
-                    showNotification(`API Test Results: ${workingApis}/${totalApis} providers working`, 
-                        workingApis > 0 ? 'success' : 'error');
-                } else {
-                    showNotification('Failed to test API connections: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showNotification('Error testing API connections: ' + error.message, 'error');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const results = data.results;
+                        const workingApis = Object.keys(results).filter(key => results[key].working).length;
+                        const totalApis = Object.keys(results).length;
+
+                        showNotification(`API Test Results: ${workingApis}/${totalApis} providers working`,
+                            workingApis > 0 ? 'success' : 'error');
+                    } else {
+                        showNotification('Failed to test API connections: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Error testing API connections: ' + error.message, 'error');
+                });
         }
 
         function viewCurrentKeys() {
             fetch('/api/management/config/api-keys')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const keys = data.keys;
-                    const configured = Object.keys(keys).filter(key => keys[key]).length;
-                    const total = Object.keys(keys).length;
-                    
-                    showNotification(`API Configuration: ${configured}/${total} keys configured`, 'info');
-                } else {
-                    showNotification('Failed to load API configuration: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showNotification('Error loading API configuration: ' + error.message, 'error');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const keys = data.keys;
+                        const configured = Object.keys(keys).filter(key => keys[key]).length;
+                        const total = Object.keys(keys).length;
+
+                        showNotification(`API Configuration: ${configured}/${total} keys configured`, 'info');
+                    } else {
+                        showNotification('Failed to load API configuration: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Error loading API configuration: ' + error.message, 'error');
+                });
         }
 
         function saveFallbackConfig() {
@@ -3209,17 +3334,17 @@
                 },
                 body: JSON.stringify({ fallbackModels })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification('Fallback model configuration saved successfully', 'success');
-                } else {
-                    showNotification('Failed to save fallback configuration: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showNotification('Error saving fallback configuration: ' + error.message, 'error');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('Fallback model configuration saved successfully', 'success');
+                    } else {
+                        showNotification('Failed to save fallback configuration: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Error saving fallback configuration: ' + error.message, 'error');
+                });
         }
 
         function resetToDefaults() {
@@ -3231,7 +3356,7 @@
                 'claude-3-5-haiku-20241022',
                 'gpt-4-turbo'
             ];
-            
+
             document.getElementById('fallback-models').value = defaultModels.join('\n');
             showNotification('Fallback models reset to defaults', 'info');
         }
@@ -3257,7 +3382,7 @@
                 box-shadow: var(--reef-shadow-medium);
                 animation: slideInFromRight 0.3s ease-out;
             `;
-            
+
             if (type === 'error') {
                 notification.style.borderColor = 'rgba(255, 127, 80, 0.6)';
                 notification.style.background = 'rgba(255, 127, 80, 0.1)';
@@ -3265,10 +3390,10 @@
                 notification.style.borderColor = 'rgba(32, 178, 170, 0.6)';
                 notification.style.background = 'rgba(32, 178, 170, 0.1)';
             }
-            
+
             notification.textContent = message;
             document.body.appendChild(notification);
-            
+
             // Auto-remove after 4 seconds
             setTimeout(() => {
                 notification.style.animation = 'slideOutToRight 0.3s ease-in forwards';
@@ -3298,25 +3423,25 @@
         });
 
         // Document Studio Functions
-        
+
         // Analyze content for document opportunities
         async function analyzeDocumentOpportunities(processId) {
             try {
                 console.log('Analyzing document opportunities for:', processId);
-                
+
                 const response = await fetch(`/api/document-opportunities/${processId}`, {
                     method: 'POST'
                 });
 
                 const data = await response.json();
-                
+
                 if (data.success && data.opportunities.length > 0) {
                     documentOpportunityData = data;
                     showDocumentOpportunities(data);
                 } else {
                     console.log('No document opportunities found or analysis failed:', data.error);
                 }
-                
+
             } catch (error) {
                 console.error('Error analyzing document opportunities:', error);
             }
@@ -3326,21 +3451,21 @@
         function showDocumentOpportunities(data) {
             // Show document studio section
             documentLaboratorySection.classList.add('visible');
-            
+
             // Hide other sub-sections initially
             documentGenerationProgress.style.display = 'none';
             documentResults.style.display = 'none';
-            
+
             // Show opportunities section
             documentOpportunities.style.display = 'block';
-            
+
             // Clear existing content
             selectedDocuments = [];
             updateGenerateButton();
-            
+
             // Populate document tiers
             populateDocumentTiers(data.opportunities);
-            
+
             showNotification(`🧬 Document Studio discovered ${data.opportunities.length} professional document opportunities!`, 'info');
         }
 
@@ -3371,9 +3496,9 @@
 
         // Create HTML for a document option
         function createDocumentOptionHTML(doc) {
-            const priorityColor = doc.priority === 'high' ? 'var(--coral-primary)' : 
-                                doc.priority === 'medium' ? 'var(--sea-green)' : 'var(--text-reef-tertiary)';
-                                
+            const priorityColor = doc.priority === 'high' ? 'var(--coral-primary)' :
+                doc.priority === 'medium' ? 'var(--sea-green)' : 'var(--text-reef-tertiary)';
+
             return `
                 <div class="document-option" data-document-id="${doc.id}">
                     <div class="checkbox"></div>
@@ -3395,7 +3520,7 @@
         function toggleDocumentSelection(optionElement) {
             const documentId = optionElement.dataset.documentId;
             const isSelected = optionElement.classList.contains('selected');
-            
+
             if (isSelected) {
                 optionElement.classList.remove('selected');
                 selectedDocuments = selectedDocuments.filter(id => id !== documentId);
@@ -3403,7 +3528,7 @@
                 optionElement.classList.add('selected');
                 selectedDocuments.push(documentId);
             }
-            
+
             updateGenerateButton();
         }
 
@@ -3411,12 +3536,12 @@
         function selectAllRecommendedDocuments() {
             const highPriorityOptions = document.querySelectorAll('.document-option');
             selectedDocuments = [];
-            
+
             highPriorityOptions.forEach(option => {
                 option.classList.add('selected');
                 selectedDocuments.push(option.dataset.documentId);
             });
-            
+
             updateGenerateButton();
             showNotification('All recommended documents selected for generation', 'info');
         }
@@ -3424,8 +3549,8 @@
         // Update generate button state
         function updateGenerateButton() {
             generateDocumentsBtn.disabled = selectedDocuments.length === 0;
-            generateDocumentsBtn.textContent = selectedDocuments.length > 0 
-                ? `Generate ${selectedDocuments.length} Document${selectedDocuments.length > 1 ? 's' : ''}` 
+            generateDocumentsBtn.textContent = selectedDocuments.length > 0
+                ? `Generate ${selectedDocuments.length} Document${selectedDocuments.length > 1 ? 's' : ''}`
                 : 'Generate Selected Documents';
         }
 
@@ -3452,14 +3577,14 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (data.success) {
                     // Document generation started - progress will be handled via WebSocket
                     isGeneratingDocuments = true;
                 } else {
                     showNotification(`Document generation failed: ${data.error}`, 'error');
                 }
-                
+
             } catch (error) {
                 console.error('Error starting document generation:', error);
                 showNotification('Failed to start document generation', 'error');
@@ -3471,13 +3596,13 @@
             // Hide opportunities, show progress
             documentOpportunities.style.display = 'none';
             documentGenerationProgress.style.display = 'block';
-            
+
             // Update progress UI
             document.getElementById('total-documents').textContent = data.documentCount;
             document.getElementById('documents-generated').textContent = '0';
             document.getElementById('current-document-title').textContent = 'Initializing document generation...';
             document.getElementById('generation-progress-fill').style.width = '0%';
-            
+
             showNotification(`🧬 Document Studio activated! Generating ${data.documentCount} professional documents...`, 'info');
         }
 
@@ -3488,10 +3613,10 @@
             } else if (data.status === 'completed') {
                 const generated = parseInt(document.getElementById('documents-generated').textContent) + 1;
                 const total = parseInt(document.getElementById('total-documents').textContent);
-                
+
                 document.getElementById('documents-generated').textContent = generated;
                 document.getElementById('generation-progress-fill').style.width = `${(generated / total) * 100}%`;
-                
+
                 if (generated < total) {
                     document.getElementById('current-document-title').textContent = `Completed: ${data.title}`;
                 }
@@ -3503,18 +3628,18 @@
         // Complete document generation (WebSocket handler)
         function completeDocumentGeneration(data) {
             isGeneratingDocuments = false;
-            
+
             // Hide progress, show results
             documentGenerationProgress.style.display = 'none';
             documentResults.style.display = 'block';
-            
+
             // Populate generated documents list
             const documentsList = document.getElementById('generated-documents-list');
             documentsList.innerHTML = data.documentsGenerated.map(doc => createGeneratedDocumentHTML(doc)).join('');
-            
+
             // Update enhanced download link
             enhancedDownloadBtn.href = `/api/download/${currentProcessId}`;
-            
+
             showNotification(`🧬 Document Studio complete! Generated ${data.documentsGenerated.length} professional documents.`, 'success');
         }
 
@@ -3526,10 +3651,10 @@
                 educational: '#16a34a',
                 operational: '#ca8a04'
             };
-            
+
             const tierName = doc.id.split('-')[0];
             const tierColor = tierColors[tierName] || '#6b7280';
-            
+
             return `
                 <div class="generated-document-card">
                     <div class="document-title">${doc.title}</div>
@@ -3546,11 +3671,11 @@
         // Document generation error handler
         function documentGenerationError(error) {
             isGeneratingDocuments = false;
-            
+
             // Show error state
             document.getElementById('current-document-title').textContent = 'Document generation failed';
             showNotification(`Document generation failed: ${error}`, 'error');
-            
+
             // Reset UI state
             documentGenerationProgress.style.display = 'none';
             documentOpportunities.style.display = 'block';
@@ -3569,7 +3694,7 @@
             try {
                 const response = await fetch('/api/admin-status');
                 const data = await response.json();
-                
+
                 const labPortal = document.getElementById('lab-portal');
                 if (data.adminMode) {
                     labPortal.style.display = 'flex';
@@ -3583,7 +3708,7 @@
                 document.getElementById('lab-portal').style.display = 'none';
             }
         }
-        
+
         // Initialize when page loads
         window.addEventListener('load', () => {
             initializeUniversalInterface();
@@ -3591,9 +3716,10 @@
             checkAdminMode();
         });
     </script>
-    
+
 
     <!-- Main application JavaScript -->
     <script src="app.js"></script>
 </body>
+
 </html>

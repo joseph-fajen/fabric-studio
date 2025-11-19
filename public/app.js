@@ -5,12 +5,12 @@ class FabricStudio {
         this.ws = null;
         this.currentProcessId = null;
         this.isProcessing = false;
-        
+
         this.initializeElements();
         this.setupEventListeners();
         this.checkSystemStatus();
         this.checkAuthStatus();
-        
+
         // Initial validation after everything is set up
         setTimeout(() => this.validateInput(), 100);
     }
@@ -23,19 +23,19 @@ class FabricStudio {
         this.authUserInfo = document.getElementById('auth-user-info');
         this.loginBtn = document.getElementById('login-btn');
         this.logoutBtn = document.getElementById('logout-btn');
-        
+
         // Input elements - Fabric Studio
         this.urlInput = document.getElementById('youtube-url');
         this.transcriptFile = document.getElementById('transcript-file');
         this.transcriptText = document.getElementById('transcript-text');
         this.processBtn = document.getElementById('process-btn');
-        
+
         // Method selection elements
         this.methodTabs = document.querySelectorAll('.method-tab');
         this.inputMethods = document.querySelectorAll('.input-method');
-        
+
         // Management elements (removed - using lab-portal instead)
-        
+
         // Status elements
         this.statusSection = document.getElementById('status-section');
         this.progressSection = document.getElementById('progress-section');
@@ -45,12 +45,12 @@ class FabricStudio {
         this.progressTotal = document.getElementById('progress-total');
         this.currentPatternName = document.querySelector('.pattern-name');
         this.currentPatternDescription = document.querySelector('.pattern-description');
-        
+
         // Results elements
         this.resultsSection = document.getElementById('results-section');
         this.resultsCount = document.getElementById('results-count');
         this.downloadBtn = document.getElementById('download-btn');
-        
+
         // Document Laboratory elements
         this.documentLaboratorySection = document.getElementById('document-laboratory-section');
         this.documentOpportunities = document.getElementById('document-opportunities');
@@ -59,12 +59,12 @@ class FabricStudio {
         this.selectAllDocumentsBtn = document.getElementById('select-all-documents');
         this.generateDocumentsBtn = document.getElementById('generate-documents-btn');
         this.enhancedDownloadBtn = document.getElementById('enhanced-download-btn');
-        
+
         // Error elements
         this.errorSection = document.getElementById('error-section');
         this.errorMessage = document.getElementById('error-message');
         this.retryBtn = document.getElementById('retry-btn');
-        
+
         // Footer elements
         this.fabricStatus = document.getElementById('fabric-status');
     }
@@ -73,32 +73,32 @@ class FabricStudio {
         // OAuth2 authentication listeners
         this.loginBtn.addEventListener('click', () => this.handleLogin());
         this.logoutBtn.addEventListener('click', () => this.handleLogout());
-        
+
         this.processBtn.addEventListener('click', () => this.startProcessing());
         this.downloadBtn.addEventListener('click', () => this.downloadEnhancedResults());
         this.retryBtn.addEventListener('click', () => this.resetInterface());
-        
+
         // Document Laboratory event listeners
         this.selectAllDocumentsBtn.addEventListener('click', () => this.selectAllRecommendedDocuments());
         this.generateDocumentsBtn.addEventListener('click', () => this.generateSelectedDocuments());
         this.enhancedDownloadBtn.addEventListener('click', () => this.downloadEnhancedResults());
-        
+
         // Management panel (removed - using lab-portal instead)
-        
+
         // Tab switching (temporarily disabled)
         // document.querySelectorAll('.tab-btn').forEach(btn => {
         //     btn.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
         // });
-        
+
         // Management controls (temporarily disabled)
         // document.getElementById('refresh-history').addEventListener('click', () => this.loadHistory());
         // document.getElementById('cleanup-old-btn').addEventListener('click', () => this.cleanupOldFiles());
-        
+
         // Control panel buttons (temporarily disabled)
         // document.getElementById('restart-server-btn').addEventListener('click', () => this.restartServer());
         // document.getElementById('shutdown-server-btn').addEventListener('click', () => this.shutdownServer());
         // document.getElementById('stop-processing-btn').addEventListener('click', () => this.stopProcessing());
-        
+
         // Input validation for all methods
         if (this.urlInput) {
             this.urlInput.addEventListener('input', () => this.validateInput());
@@ -106,7 +106,7 @@ class FabricStudio {
                 setTimeout(() => this.validateInput(), 100);
             });
         }
-        
+
         if (this.transcriptFile) {
             this.transcriptFile.addEventListener('change', () => {
                 // Call inline script's handleFile if available to show file info
@@ -116,14 +116,14 @@ class FabricStudio {
                 this.validateInput();
             });
         }
-        
+
         if (this.transcriptText) {
             this.transcriptText.addEventListener('input', () => this.validateInput());
             this.transcriptText.addEventListener('paste', () => {
                 setTimeout(() => this.validateInput(), 100);
             });
         }
-        
+
         // Method tab switching
         if (this.methodTabs) {
             this.methodTabs.forEach(tab => {
@@ -132,13 +132,75 @@ class FabricStudio {
                 });
             });
         }
+
+        this.initializeUploadHandlers();
+    }
+
+    initializeUploadHandlers() {
+        const dropzone = document.getElementById('dropzone');
+        const browseLink = document.getElementById('browse-link');
+        const fileInput = document.getElementById('transcript-file');
+        const fileInfo = document.getElementById('file-info');
+
+        if (browseLink && fileInput) {
+            browseLink.addEventListener('click', () => {
+                fileInput.click();
+            });
+        }
+
+        if (dropzone && fileInput) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, () => {
+                    dropzone.classList.add('drag-over');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, () => {
+                    dropzone.classList.remove('drag-over');
+                });
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    this.validateInput();
+                    this.updateFileInfo(files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    this.updateFileInfo(fileInput.files[0]);
+                }
+            });
+        }
+    }
+
+    updateFileInfo(file) {
+        const fileInfo = document.getElementById('file-info');
+        if (fileInfo) {
+            fileInfo.style.display = 'block';
+            fileInfo.innerHTML = `
+                <div class="file-info-name">${file.name}</div>
+                <div class="file-info-details">${(file.size / 1024).toFixed(1)} KB</div>
+            `;
+        }
     }
 
     validateInput() {
         const activeMethod = this.getActiveInputMethod();
         let hasValidContent = false;
         let buttonText = 'Begin Deep Analysis';
-        
+
         switch (activeMethod) {
             case 'upload':
                 // Check both file input and global currentContent (for drag-and-drop)
@@ -158,13 +220,13 @@ class FabricStudio {
                 buttonText = hasValidContent ? 'Process YouTube Video' : 'Enter Valid YouTube URL';
                 break;
         }
-        
+
         if (this.processBtn) {
             this.processBtn.disabled = !hasValidContent;
             this.processBtn.textContent = buttonText;
         }
     }
-    
+
     getActiveInputMethod() {
         const activeTab = document.querySelector('.method-tab.active');
         const method = activeTab ? activeTab.dataset.method : 'upload';
@@ -176,7 +238,7 @@ class FabricStudio {
         try {
             const response = await fetch('/health');
             const data = await response.json();
-            
+
             if (data.fabricAvailable) {
                 this.fabricStatus.textContent = 'Fabric integration ready';
                 this.fabricStatus.style.color = '#27ae60';
@@ -192,11 +254,11 @@ class FabricStudio {
 
     async startProcessing() {
         if (this.isProcessing) return;
-        
+
         const activeMethod = this.getActiveInputMethod();
         let payload = null;
         let contentSource = '';
-        
+
         // Prepare payload based on active input method
         switch (activeMethod) {
             case 'upload':
@@ -224,7 +286,7 @@ class FabricStudio {
                 };
                 contentSource = `uploaded file: ${fileName}`;
                 break;
-                
+
             case 'paste':
                 const textContent = this.transcriptText ? this.transcriptText.value.trim() : '';
                 if (!textContent) {
@@ -237,7 +299,7 @@ class FabricStudio {
                 };
                 contentSource = 'pasted content';
                 break;
-                
+
             case 'youtube':
                 const url = this.urlInput ? this.urlInput.value.trim() : '';
                 const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
@@ -251,7 +313,7 @@ class FabricStudio {
                 };
                 contentSource = `YouTube: ${url}`;
                 break;
-                
+
             default:
                 alert('Please select a valid input method');
                 return;
@@ -260,11 +322,11 @@ class FabricStudio {
         this.isProcessing = true;
         this.processBtn.disabled = true;
         this.processBtn.textContent = 'Starting...';
-        
+
         this.hideAllSections();
         this.showSection(this.progressSection);
         this.updateStatusBadge('starting', `Starting analysis of ${contentSource}`);
-        
+
         try {
             // Start processing with appropriate payload
             const response = await fetch('/api/process', {
@@ -274,22 +336,22 @@ class FabricStudio {
                 },
                 body: JSON.stringify(payload)
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to start processing');
             }
-            
+
             this.currentProcessId = data.processId;
             this.setupWebSocket();
             this.updateStatusBadge('processing', 'Processing with Fabric patterns');
-            
+
         } catch (error) {
             this.showError(error.message);
         }
     }
-    
+
     async readFileContent(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -298,18 +360,18 @@ class FabricStudio {
             reader.readAsText(file);
         });
     }
-    
+
     switchInputMethod(method) {
         // Update tab active states
         this.methodTabs.forEach(tab => {
             tab.classList.toggle('active', tab.dataset.method === method);
         });
-        
+
         // Update input method visibility
         this.inputMethods.forEach(inputMethod => {
             inputMethod.classList.toggle('active', inputMethod.id === `method-${method}`);
         });
-        
+
         // Re-validate input for new method
         this.validateInput();
     }
@@ -317,22 +379,22 @@ class FabricStudio {
     setupWebSocket() {
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${wsProtocol}//${window.location.host}`;
-        
+
         this.ws = new WebSocket(wsUrl);
-        
+
         this.ws.onopen = () => {
             console.log('WebSocket connected');
         };
-        
+
         this.ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             this.handleWebSocketMessage(data);
         };
-        
+
         this.ws.onclose = () => {
             console.log('WebSocket disconnected');
         };
-        
+
         this.ws.onerror = (error) => {
             console.error('WebSocket error:', error);
         };
@@ -343,11 +405,11 @@ class FabricStudio {
             case 'process_started':
                 this.progressTotal.textContent = data.totalSteps;
                 break;
-                
+
             case 'progress':
                 this.updateProgress(data);
                 break;
-                
+
             case 'process_completed':
                 this.handleProcessCompleted(data);
                 break;
@@ -378,10 +440,10 @@ class FabricStudio {
         if (this.progressCurrent) {
             this.progressCurrent.textContent = data.current;
         }
-        
+
         // Pattern info is displayed through visual highlighting instead of text updates
         // This prevents overwriting the static pattern names in the UI
-        
+
         // Update pattern visual indicators
         this.updatePatternIndicators(data.pattern, data.phase);
     }
@@ -391,19 +453,19 @@ class FabricStudio {
         document.querySelectorAll('.pattern-organism').forEach(item => {
             item.classList.remove('active', 'completed');
         });
-        
+
         // Mark current pattern as active
         const currentItem = document.querySelector(`[data-pattern="${currentPattern}"]`);
         if (currentItem) {
             currentItem.classList.add('active');
         }
-        
+
         // Mark completed patterns
-        const allPatterns = ['youtube_summary', 'extract_core_message', 'extract_wisdom', 
-                           'extract_insights', 'extract_ideas', 'extract_patterns', 
-                           'extract_recommendations', 'extract_predictions', 'extract_references', 
-                           'extract_questions', 'create_tags', 'create_5_sentence_summary', 'to_flashcards'];
-        
+        const allPatterns = ['youtube_summary', 'extract_core_message', 'extract_wisdom',
+            'extract_insights', 'extract_ideas', 'extract_patterns',
+            'extract_recommendations', 'extract_predictions', 'extract_references',
+            'extract_questions', 'create_tags', 'create_5_sentence_summary', 'to_flashcards'];
+
         const currentIndex = allPatterns.indexOf(currentPattern);
         for (let i = 0; i < currentIndex; i++) {
             const item = document.querySelector(`[data-pattern="${allPatterns[i]}"]`);
@@ -416,7 +478,7 @@ class FabricStudio {
     handleProcessCompleted(data) {
         this.isProcessing = false;
         this.updateStatusBadge('completed', 'Completed');
-        
+
         // Update final progress if elements exist
         if (this.progressFill) {
             this.progressFill.style.width = '100%';
@@ -424,16 +486,16 @@ class FabricStudio {
         if (this.progressCurrent) {
             this.progressCurrent.textContent = data.total;
         }
-        
+
         // Mark all patterns as completed
         document.querySelectorAll('.pattern-organism').forEach(item => {
             item.classList.remove('active');
             item.classList.add('completed');
         });
-        
+
         // Show simple results section with download access
         this.showSection(this.resultsSection);
-        
+
         // Update results count and enable download
         if (this.resultsCount) {
             this.resultsCount.textContent = '13';
@@ -442,7 +504,7 @@ class FabricStudio {
             this.downloadBtn.disabled = false;
             this.downloadBtn.textContent = 'Download Results ZIP';
         }
-        
+
         // Add simulation notice if applicable
         if (data.simulated) {
             const notice = document.createElement('div');
@@ -453,25 +515,25 @@ class FabricStudio {
                 this.resultsSection.insertBefore(notice, this.resultsSection.firstChild);
             }
         }
-        
+
         // Close WebSocket
         if (this.ws) {
             this.ws.close();
         }
     }
 
-    
+
 
     async downloadEnhancedResults() {
         if (!this.currentProcessId) return;
-        
+
         try {
             const response = await fetch(`/api/download/${this.currentProcessId}`);
-            
+
             if (!response.ok) {
                 throw new Error('Download failed');
             }
-            
+
             // Create download link
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
@@ -482,12 +544,12 @@ class FabricStudio {
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
-            
+
             // Show success notification
             if (typeof showNotification === 'function') {
                 showNotification('Results downloaded successfully!', 'success');
             }
-            
+
         } catch (error) {
             alert('Download failed: ' + error.message);
         }
@@ -650,12 +712,12 @@ class FabricStudio {
         try {
             const response = await fetch('/auth/status');
             const authStatus = await response.json();
-            
+
             this.updateAuthUI(authStatus);
-            
+
             // Check for auth callback parameters
             this.handleAuthCallback();
-            
+
         } catch (error) {
             console.error('Error checking auth status:', error);
             this.showAuthError('Failed to check authentication status');
@@ -665,12 +727,12 @@ class FabricStudio {
     updateAuthUI(authStatus) {
         // Hide loading state
         this.authStatus.style.display = 'none';
-        
+
         if (authStatus.authenticated) {
             // Show authenticated state
             this.authUnauthenticated.style.display = 'none';
             this.authAuthenticated.style.display = 'block';
-            
+
             // Update user info
             this.authUserInfo.innerHTML = `
                 <div class="user-detail">
@@ -718,10 +780,10 @@ class FabricStudio {
             // Disable login button
             this.loginBtn.disabled = true;
             this.loginBtn.innerHTML = '<div class="bio-loading-pulse"></div> Redirecting to Google...';
-            
+
             // Redirect to OAuth2 flow
             window.location.href = '/auth/google';
-            
+
         } catch (error) {
             console.error('Login error:', error);
             this.showAuthError('Failed to initiate login');
@@ -735,7 +797,7 @@ class FabricStudio {
             // Disable logout button
             this.logoutBtn.disabled = true;
             this.logoutBtn.textContent = 'Logging out...';
-            
+
             const response = await fetch('/auth/logout', {
                 method: 'POST',
                 headers: {
@@ -750,7 +812,7 @@ class FabricStudio {
             } else {
                 throw new Error('Logout failed');
             }
-            
+
         } catch (error) {
             console.error('Logout error:', error);
             this.showAuthError('Failed to logout');
@@ -770,10 +832,10 @@ class FabricStudio {
                 ✅ ${message}
             </div>
         `;
-        
+
         const authSection = document.getElementById('auth-section');
         authSection.appendChild(successDiv);
-        
+
         // Remove after 5 seconds
         setTimeout(() => {
             if (successDiv.parentNode) {
@@ -792,10 +854,10 @@ class FabricStudio {
                 ❌ ${message}
             </div>
         `;
-        
+
         const authSection = document.getElementById('auth-section');
         authSection.appendChild(errorDiv);
-        
+
         // Remove after 8 seconds
         setTimeout(() => {
             if (errorDiv.parentNode) {
@@ -803,7 +865,7 @@ class FabricStudio {
             }
         }, 8000);
     }
-    
+
     // Utility methods for Fabric Studio
     hideAllSections() {
         const sections = [
@@ -813,7 +875,7 @@ class FabricStudio {
             this.documentLaboratorySection,
             this.errorSection
         ];
-        
+
         sections.forEach(section => {
             if (section) {
                 section.style.display = 'none';
@@ -821,28 +883,28 @@ class FabricStudio {
             }
         });
     }
-    
+
     showSection(section) {
         if (section) {
             section.style.display = 'block';
             section.classList.remove('hidden');
         }
     }
-    
+
     updateStatusBadge(status, message) {
         if (this.statusBadge) {
             this.statusBadge.textContent = message;
             this.statusBadge.className = `status-badge ${status}`;
         }
     }
-    
+
     showError(message) {
         this.isProcessing = false;
         if (this.processBtn) {
             this.processBtn.disabled = false;
             this.processBtn.textContent = 'Begin Deep Analysis';
         }
-        
+
         this.hideAllSections();
         if (this.errorSection && this.errorMessage) {
             this.showSection(this.errorSection);
@@ -851,24 +913,24 @@ class FabricStudio {
             // Fallback to alert if error section not available
             alert('Error: ' + message);
         }
-        
+
         // Close WebSocket if open
         if (this.ws) {
             this.ws.close();
         }
     }
-    
+
     resetInterface() {
         this.isProcessing = false;
         this.currentProcessId = null;
-        
+
         if (this.processBtn) {
             this.processBtn.disabled = false;
         }
-        
+
         this.hideAllSections();
         this.validateInput(); // Re-validate current input
-        
+
         // Close WebSocket if open
         if (this.ws) {
             this.ws.close();
