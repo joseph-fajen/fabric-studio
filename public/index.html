@@ -499,6 +499,11 @@
             font-family: inherit;
         }
 
+        /* Force pointer cursor when enabled to override any conflicting styles */
+        #process-btn:not(:disabled) {
+            cursor: pointer !important;
+        }
+
         .bio-button::before {
             content: '';
             position: absolute;
