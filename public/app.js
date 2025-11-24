@@ -481,7 +481,7 @@ class FabricStudio {
 
         // Update button state
         if (this.processBtn) {
-            this.processBtn.textContent = 'Analysis Complete';
+            this.processBtn.textContent = 'Run Again';
             this.processBtn.disabled = false;
         }
 
@@ -525,6 +525,11 @@ class FabricStudio {
         // Close WebSocket
         if (this.ws) {
             this.ws.close();
+        }
+
+        // Scroll to results
+        if (this.resultsSection) {
+            this.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
 
