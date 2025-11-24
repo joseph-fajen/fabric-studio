@@ -205,7 +205,7 @@ class FabricStudio {
             case 'upload':
                 // Check both file input and global currentContent (for drag-and-drop)
                 hasValidContent = (this.transcriptFile && this.transcriptFile.files.length > 0) ||
-                                 (typeof window.currentContent === 'string' && window.currentContent.trim().length > 0);
+                    (typeof window.currentContent === 'string' && window.currentContent.trim().length > 0);
                 buttonText = hasValidContent ? 'Begin Deep Analysis' : 'Upload File First';
                 break;
             case 'paste':
@@ -321,7 +321,7 @@ class FabricStudio {
 
         this.isProcessing = true;
         this.processBtn.disabled = true;
-        this.processBtn.textContent = 'Starting...';
+        this.processBtn.textContent = 'Processing...';
 
         this.hideAllSections();
         this.showSection(this.progressSection);
@@ -478,6 +478,12 @@ class FabricStudio {
     handleProcessCompleted(data) {
         this.isProcessing = false;
         this.updateStatusBadge('completed', 'Completed');
+
+        // Update button state
+        if (this.processBtn) {
+            this.processBtn.textContent = 'Analysis Complete';
+            this.processBtn.disabled = false;
+        }
 
         // Update final progress if elements exist
         if (this.progressFill) {
